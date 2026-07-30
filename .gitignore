@@ -4,6 +4,9 @@
 # Copilot
 .copilot/
 
+# Course reset/resume workspace
+work/
+
 # Visual Studio Code settings
 .vscode/
 !.vscode/settings.json
