@@ -1,0 +1,16 @@
+{
+  "name": "dotnet-modernization-for-beginners",
+  "version": "1.0.0",
+  "description": "Modernize a tested ASP.NET MVC 5 and EF6 application from .NET Framework 4.8 to ASP.NET Core and EF Core on .NET 10, then prepare and deploy a reviewed Azure learning environment with GitHub Copilot modernization.",
+  "scripts": {
+    "qa": "npm run qa:markdown && npm run qa:course",
+    "qa:course": "pwsh -NoLogo -NoProfile -File ./scripts/Test-CourseContent.ps1",
+    "qa:markdown": "markdownlint-cli2"
+  },
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "@mermaid-js/mermaid-cli": "11.16.0",
+    "markdownlint-cli2": "0.23.2"
+  }
+}

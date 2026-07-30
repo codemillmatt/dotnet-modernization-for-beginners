@@ -7,6 +7,9 @@
 # Course reset/resume workspace
 work/
 
+# Documentation QA dependencies
+node_modules/
+
 # Visual Studio Code settings
 .vscode/
 !.vscode/settings.json
