@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using BookCatalog.Core.Models;
 
 namespace BookCatalog.Web.Models
 {
