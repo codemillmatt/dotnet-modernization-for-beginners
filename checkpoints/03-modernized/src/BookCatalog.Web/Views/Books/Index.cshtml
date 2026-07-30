@@ -1,0 +1,39 @@
+@model IReadOnlyList<Book>
+@{
+    ViewData["Title"] = "Books";
+}
+
+<h1>Books</h1>
+<p><a asp-action="Create">Add a book</a></p>
+
+<table>
+    <caption>Active books ordered by title</caption>
+    <thead>
+        <tr>
+            <th scope="col">Title</th>
+            <th scope="col">Author</th>
+            <th scope="col">Year</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var book in Model)
+    {
+        <tr>
+            <td>@book.Title</td>
+            <td>@book.Author</td>
+            <td>@book.PublishedYear</td>
+            <td>
+                <a asp-action="Details" asp-route-id="@book.Id">View</a>
+                <a asp-action="Edit" asp-route-id="@book.Id">Edit</a>
+                <a asp-action="Delete" asp-route-id="@book.Id">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@if (!string.IsNullOrWhiteSpace(ViewBag.UserAgent as string))
+{
+    <p class="metadata">Browser: @ViewBag.UserAgent</p>
+}

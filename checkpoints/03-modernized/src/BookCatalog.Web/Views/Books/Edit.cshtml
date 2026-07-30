@@ -1,0 +1,13 @@
+@model Book
+@{
+    ViewData["Title"] = "Edit book";
+}
+
+<h1>Edit book</h1>
+<form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+    <input asp-for="Id" type="hidden" />
+    <div asp-validation-summary="ModelOnly"></div>
+    <partial name="_BookFields" model="Model" />
+    <button type="submit">Save</button>
+    <a asp-action="Index">Cancel</a>
+</form>

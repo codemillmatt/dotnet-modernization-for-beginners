@@ -1,0 +1,45 @@
+html {
+  font-family: system-ui, sans-serif;
+}
+
+body {
+  margin: 0 auto;
+  max-width: 70rem;
+  padding: 1rem;
+}
+
+nav {
+  display: flex;
+  gap: 1rem;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th,
+td {
+  border: 1px solid #777;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+form > div {
+  margin-block: 0.75rem;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+}
+
+.field-validation-error,
+.validation-summary-errors {
+  color: #b00020;
+}
+
+.metadata {
+  color: #555;
+  font-size: 0.875rem;
+}
