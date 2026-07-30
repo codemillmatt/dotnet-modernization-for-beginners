@@ -56,6 +56,7 @@ try {
     $migrationConnection = "Server=tcp:$($outputs.sqlServerFullyQualifiedDomainName.value),1433;Database=$($outputs.databaseName.value);Authentication=Active Directory Default;Encrypt=True;TrustServerCertificate=False;"
     Push-Location $modernized
     try {
+        dotnet tool restore
         dotnet restore .\BookCatalog.slnx
         dotnet test .\BookCatalog.slnx --configuration Release
         dotnet ef database update `

@@ -1,23 +1,29 @@
-# Shared Legacy Application
+# Shared legacy baseline
 
-This is the shared legacy application used by **Chapters 1, 2, and 3**. It evolves across those chapters:
+This immutable source is the starting state for Chapters 01–03.
 
-- **Chapter 1:** You assess this app as-is (no modifications)
-- **Chapter 2:** You modernize it from .NET Framework 4.8 → .NET 10
-- **Chapter 3:** You deploy the modernized output to Azure
+## Projects
 
-**Stack:**
-- ASP.NET MVC 5
-- Entity Framework 6
-- .NET Framework 4.8
-- SQL Server / LocalDB for data persistence
+- `BookCatalog.Core`: .NET Framework 4.8 model dependency.
+- `BookCatalog.Web`: ASP.NET MVC 5, EF6, `System.Web`, and LocalDB.
+- `BookCatalog.CharacterizationTests`: nine Windows/LocalDB behavior tests.
 
-**Important:**
-- Do **not** modify this folder directly outside of following the chapter instructions.
-- Trinity (the agent responsible for code samples) owns this folder.
-- If you're starting mid-tutorial, ensure you have the correct baseline for your chapter.
+The tests cover CRUD, validation, routing, response behavior, initialization and
+seed data, configuration, anti-forgery metadata, errors, and the active-book EF
+query. Run them before asking the agent to change code:
 
----
+```powershell
+nuget restore .\BookCatalog.sln
+msbuild .\BookCatalog.sln /p:Configuration=Release
+dotnet test .\tests\BookCatalog.CharacterizationTests\BookCatalog.CharacterizationTests.csproj --configuration Release
+```
 
-**Maintainer:** Trinity  
-**Last Updated:** 2026-05-21
+Requirements: supported Visual Studio, .NET Framework 4.8 Developer Pack, ASP.NET
+and web development tools, IIS Express, and SQL Server Express LocalDB.
+
+`Web.config` enables debug output and detailed errors only to expose legacy
+signals in a local learning application. Never deploy it unchanged.
+
+Do not edit this folder directly. Use
+`scripts/Reset-Course.ps1 -Checkpoint legacy-baseline` and work under ignored
+`work/`.

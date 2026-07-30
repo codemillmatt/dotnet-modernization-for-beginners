@@ -43,6 +43,38 @@ public sealed class BookCatalogBehaviorTests(CustomWebApplicationFactory factory
     }
 
     [Fact]
+    public async Task SqlServerQueryPreservesActiveOrderingWhenAvailable()
+    {
+        if (!OperatingSystem.IsWindows())
+        {
+            return;
+        }
+
+        var databaseName = $"BookCatalogModernizedTests{Guid.NewGuid():N}";
+        var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+            .UseSqlServer($"Server=(localdb)\\MSSQLLocalDB;Database={databaseName};Trusted_Connection=True;TrustServerCertificate=True")
+            .Options;
+
+        await using var database = new ApplicationDbContext(options);
+        try
+        {
+            await database.Database.MigrateAsync();
+            var books = await database.Books
+                .Where(book => book.IsActive)
+                .OrderBy(book => book.Title)
+                .Select(book => book.Title)
+                .ToListAsync();
+
+            Assert.Equal(6, books.Count);
+            Assert.Equal(books.OrderBy(title => title, StringComparer.CurrentCulture), books);
+        }
+        finally
+        {
+            await database.Database.EnsureDeletedAsync();
+        }
+    }
+
+    [Fact]
     public async Task CrudActionsPersistChanges()
     {
         await using var scope = factory.Services.CreateAsyncScope();

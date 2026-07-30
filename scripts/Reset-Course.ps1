@@ -2,6 +2,7 @@
 param(
     [Parameter(Mandatory)]
     [ValidateSet(
+        'legacy-baseline',
         '00-orientation',
         '01-assessment',
         '02-planning',
@@ -51,6 +52,9 @@ function Copy-UpgradeArtifacts {
 }
 
 switch ($Checkpoint) {
+    'legacy-baseline' {
+        Copy-Tree -Source (Join-Path $repository 'shared-legacy-app') -Target $destination
+    }
     '00-orientation' {
         Copy-Tree -Source (Join-Path $repository '00-introduction\code') -Target $destination
         Copy-Tree -Source (Join-Path $repository 'checkpoints\00-orientation\artifacts') -Target (Join-Path $destination 'artifacts')

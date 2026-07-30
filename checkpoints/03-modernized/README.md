@@ -12,7 +12,8 @@ dotnet test .\BookCatalog.slnx --configuration Release --no-build
 
 The tests cover the baseline contract: CRUD, validation, routing and responses,
 database seed data, configuration, anti-forgery behavior, errors, and the active
-book query.
+book query. Windows runs also exercise the query and migration with SQL Server
+LocalDB; cross-platform runs use the in-memory provider for fast behavior tests.
 
 For local SQL Server testing, run the application once with the Development
 environment. Development-only settings apply the checked-in EF Core migration

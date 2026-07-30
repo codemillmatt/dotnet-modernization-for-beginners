@@ -1,24 +1,16 @@
-# SimpleLegacyApp — Chapter 00 demo
+# SimpleLegacyApp: Chapter 00 evidence sample
 
-A tiny .NET Framework 4.8 console app used by [Chapter 00](../README.md) to run your **first** GitHub Copilot modernization agent assessment.
+This .NET Framework 4.8 console app deliberately contains three different
+modernization signals:
 
-## What's inside (and why)
+| File | Signal | Why it matters |
+|---|---|---|
+| `Program.cs` | `ConfigurationManager` and `HttpContext.Current` | Configuration and request lifetime change |
+| `Serialization.cs` | `BinaryFormatter` | Removed, insecure serialization design |
+| `App.config` | Legacy configuration | Must map deliberately to modern providers |
 
-| File | Modernization signal |
-|------|----------------------|
-| `SimpleLegacyApp.csproj` | Targets `net48` — the source framework the agent will assess. |
-| `Program.cs` | Uses `System.Web.HttpContext.Current` → **blocker** in .NET 10. |
-| `Serialization.cs` | Uses `BinaryFormatter` → **warning** (deprecated, removed in modern .NET). |
-| `App.config` | Legacy `ConfigurationManager` settings → informational (move to `appsettings.json`). |
+Open `SimpleLegacyApp.sln`, build, and run it before assessment. Record the
+observable output without entering production data.
 
-These three signals map 1:1 to the **blocker / warning / informational** categories you'll learn to read in the assessment report.
-
-## Open in Visual Studio 2026
-
-1. Open `SimpleLegacyApp.sln`.
-2. Right-click the project → **GitHub Copilot → Assess for Modernization**.
-3. Pick **.NET 10** as the target.
-
-Then jump back to the [chapter walkthrough](../README.md#-your-first-assessment).
-
-> ⚠️ **Windows required to build.** This project targets .NET Framework 4.8, which only builds on Windows. The Codespaces devcontainer (.NET 10 on Linux) cannot build it. The modernization agent itself is available on macOS and Linux via VS Code or GitHub Copilot CLI, but you'd need a different source project.
+The sample is intentionally unsafe legacy code. Do not copy its serialization
+approach into another application.
