@@ -3,7 +3,6 @@ param(
     [Parameter(Mandatory)]
     [ValidateSet(
         'legacy-baseline',
-        '00-orientation',
         '01-assessment',
         '02-planning',
         '03-modernized',
@@ -12,7 +11,11 @@ param(
         '06-azure',
         '07-capstone'
     )]
-    [string] $Checkpoint
+    [string] $Checkpoint,
+
+    # The agent names its state folder after the scenario it selects. Check
+    # .github/upgrades/ in your own run and pass the folder name you find there.
+    [string] $ScenarioId = 'dotnet-version-upgrade'
 )
 
 $ErrorActionPreference = 'Stop'
@@ -47,17 +50,13 @@ function Copy-UpgradeArtifacts {
         [string] $Source
     )
 
-    $target = Join-Path $destination '.github\upgrades\dotnet-version-upgrade'
+    $target = Join-Path $destination ".github\upgrades\$ScenarioId"
     Copy-Tree -Source $Source -Target $target
 }
 
 switch ($Checkpoint) {
     'legacy-baseline' {
         Copy-Tree -Source (Join-Path $repository 'shared-legacy-app') -Target $destination
-    }
-    '00-orientation' {
-        Copy-Tree -Source (Join-Path $repository '00-introduction\code') -Target $destination
-        Copy-Tree -Source (Join-Path $repository 'checkpoints\00-orientation\artifacts') -Target (Join-Path $destination 'artifacts')
     }
     '01-assessment' {
         Copy-Tree -Source (Join-Path $repository 'shared-legacy-app') -Target $destination

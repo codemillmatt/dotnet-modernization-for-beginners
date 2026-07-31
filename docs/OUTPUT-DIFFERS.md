@@ -1,3 +1,10 @@
+---
+title: When your output differs
+parent: Reference
+nav_order: 5
+permalink: /reference/output-differs/
+---
+
 # If your output differs
 
 Agent output is expected to vary with tool version, SDK, solution shape, source

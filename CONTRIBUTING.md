@@ -1,3 +1,9 @@
+---
+title: Contributing
+nav_order: 30
+permalink: /contributing/
+---
+
 # Contributing
 
 Keep learner instructions reproducible, evidence-based, accessible, and free of

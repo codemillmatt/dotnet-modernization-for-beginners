@@ -1,3 +1,10 @@
+---
+title: Lab versus production
+parent: Reference
+nav_order: 8
+permalink: /reference/production-readiness/
+---
+
 # Lab architecture versus production
 
 The checked-in Bicep is reproducible learning infrastructure, not a production

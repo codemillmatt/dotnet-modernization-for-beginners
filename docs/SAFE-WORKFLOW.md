@@ -1,49 +1,70 @@
-# Safe human-in-the-loop workflow
+---
+title: Working safely with the agent
+parent: Reference
+nav_order: 7
+permalink: /reference/safe-workflow/
+---
 
-The modernization agent can read files, edit code, run commands, and propose
-cloud resources. Treat it like a capable contributor whose work requires review.
+# Working safely with the agent
 
-## Before assessment
+The agent reads files, edits code, runs commands, and proposes cloud resources. Treat it
+like a capable new contributor: give it a safe place to work, then review its output.
 
-1. Confirm repository trust and organizational Copilot policy.
-2. Read your organization's privacy and data-handling rules. Do not send
+Set this up once. Then get on with the course.
+
+## Set it up once
+
+1. Check your organization's Copilot policy and data-handling rules. Don't send
    credentials, production data, customer data, or regulated information.
-3. Create a dedicated branch from a reviewed baseline.
-4. Require a clean working tree: `git status --short` must be empty.
-5. Build and run characterization tests.
-6. Commit the baseline tests and record the command output.
+2. Work on a branch from a reviewed baseline.
+3. Start with a clean working tree — `git status --short` should be empty.
+4. Build, and run your tests. Commit that baseline.
+5. Let the agent commit after each task. This is the setting that makes everything else
+   recoverable.
 
-## At every stage boundary
+That's it. You now have an undo button for every task the agent will run.
 
-1. Read generated Markdown before approving the next stage.
-2. Inspect every changed file with `git diff --stat` and `git diff`.
-3. Read each proposed terminal command. Check its directory, scope, destructive
-   flags, network effects, credentials, and cost before approval.
-4. Run independent build and behavior validation; agent narration is not proof.
-5. Commit one coherent task only after validation passes.
+## Review at stage boundaries
 
-Commit `.github/upgrades/` with the branch. Those files are state, review
-evidence, and a recovery point.
+You don't need to review every keystroke. You do need to read four things:
 
-## Steering and recovery
+- **The generated Markdown** before approving the next stage — `assessment.md`, `plan.md`
+- **The diff** — `git diff --stat` for shape, `git diff` for anything that surprises you
+- **Any terminal command you don't recognize** — what does it change, and is it reversible?
+- **Your own test results** — the agent's summary of a test run is a summary, not the run
+
+Commit `.github/upgrades/` along with your branch. It's state, review evidence, and a
+recovery point all at once.
+{: .tip }
+
+## Recovery, weakest move to strongest
 
 | Situation | Response |
 |---|---|
-| Wrong assumption | **Reject**, state the constraint and evidence, then ask for a revised artifact |
-| Task is too broad | **Revise** the plan: split the task and add separate validation gates |
-| Transient command failure | Inspect the error, correct the condition, then **retry** only the failed step |
-| Need more review | Say **pause** or remain in Guided Mode |
-| Unsafe or unexplained command | Deny it; ask what it changes and for a non-destructive alternative |
-| Failed task | Restore the task checkpoint with `git restore` or revert the task commit |
-| Corrupt agent state | Preserve evidence, remove only the scenario folder, then restart from an immutable checkpoint |
+| Wrong assumption | Say what's actually true and ask for a revised artifact |
+| Task too broad | Split it in `plan.md` and give each piece its own validation |
+| Transient failure | Fix the condition, retry only the failed step |
+| Need more control | Say `pause` to switch to Guided |
+| A command you don't like | Deny it, and ask what it was trying to accomplish |
+| Task made a mess | `git revert <commit-sha>`, then re-scope and re-run |
+| Agent state is corrupt | Delete only the scenario folder and restart from a checkpoint |
 
-Never use broad reset commands on a working tree containing uncommitted learner
-work. The provided reset script only recreates ignored `work/`.
+Never run a broad `git reset --hard` on a tree with uncommitted work in it. The course's
+reset script only ever rewrites the ignored `work/` folder.
+{: .warning }
 
-## Generated-code risks
+## What to look for in generated code
 
-Review for behavior drift, authorization changes, overposting, data loss,
-insecure defaults, dependency vulnerabilities, secret exposure, logging of
-sensitive data, and unbounded cloud cost. Generated infrastructure varies by
-tool version and tenant; validate it with Bicep lint/build, `what-if`, policy,
-and a human architecture review.
+Behavior drift, authorization changes, overposting, data loss, insecure defaults, new
+dependency vulnerabilities, secrets in configuration, sensitive values in logs, and
+unbounded cloud cost.
+
+Generated infrastructure deserves the same scrutiny as generated code, plus
+`az bicep build`, `what-if`, and a look at whether the role assignments are actually
+least-privilege.
+
+## Related
+
+- [Proving behavior didn't change](VALIDATION.md)
+- [Lab versus production](PRODUCTION-READINESS.md)
+- [Troubleshooting](TROUBLESHOOTING.md)

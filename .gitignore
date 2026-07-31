@@ -143,3 +143,12 @@ secrets.json
 *.mdf
 *.ldf
 *.sdf
+# ---------------------------------------------------------------
+# Jekyll / GitHub Pages
+# ---------------------------------------------------------------
+_site/
+.jekyll-cache/
+.jekyll-metadata
+vendor/
+.bundle/
+Gemfile.lock

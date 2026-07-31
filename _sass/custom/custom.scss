@@ -1,0 +1,15 @@
+// The site title wraps to three lines in the sidebar. Just the Docs pins the
+// header to $header-height with a matching max-height, which clips the first
+// line. The sidebar is a flex column, so letting the header size to its content
+// simply gives the nav less room.
+.site-header {
+  height: auto;
+  max-height: none;
+  min-height: $header-height;
+}
+
+.site-title {
+  height: auto;
+  padding-top: $sp-3;
+  padding-bottom: $sp-3;
+}

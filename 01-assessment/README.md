@@ -1,136 +1,191 @@
-# Chapter 01: Assessment and evidence interpretation
+---
+title: "01 · Assessment"
+nav_order: 3
+permalink: /assessment/
+---
 
-This chapter assesses BookCatalog only. Planning begins in Chapter 02 and source
-changes begin in Chapter 03.
+# 01 · Assessment
 
-## Outcomes
+By the end of this chapter you'll be able to read an assessment report critically, spot
+what the agent got wrong, and correct it before it makes a single plan.
 
-You will:
+**Time: ~45 minutes** · **You need:** the `assessment.md` you generated in Chapter 00
 
-- establish a tested, multi-project legacy baseline on a dedicated branch;
-- inspect project, package, API, configuration, data, and test evidence;
-- triage findings across compatibility, severity, business, exposure,
-  confidence, and validation;
-- produce an evidence-backed worksheet and prioritized risk register.
+## What you'll do
 
-## State contract
+- Walk through every section of a real assessment report
+- Separate three things beginners collapse into one: compatibility, severity, priority
+- Add context the agent can't discover from your code
+- Choose an upgrade strategy and understand what it costs you
 
-- **Start:** `shared-legacy-app` with no generated scenario state.
-- **End:** Source unchanged; reviewed assessment, worksheet, and risk register.
-- **Known-good end:** `checkpoints/01-assessment`.
-- **Verify:** Legacy build and nine characterization tests pass; `git diff` shows
-  only learner and `.github/upgrades/` artifacts.
-- **Reset start:** `.\scripts\Reset-Course.ps1 -Checkpoint legacy-baseline`.
-- **Resume end:** `.\scripts\Reset-Course.ps1 -Checkpoint 01-assessment`.
-- **If output differs:** Trace evidence and use
-  [the output guide](../docs/OUTPUT-DIFFERS.md).
+Diagram: you are at stage one of three.
 
-## 1. Explain: assessment boundaries
-
-Assessment inventories modernization evidence. It does not estimate a schedule,
-select a final architecture, or prove behavior. BookCatalog now includes:
-
-- a `BookCatalog.Core` dependency;
-- an ASP.NET MVC 5/EF6 web project;
-- characterization tests covering CRUD, validation, routes/responses, LocalDB
-  initialization and seed data, configuration, anti-forgery metadata, errors,
-  and the active-book query.
-
-These projects make dependency order and preserved behavior visible.
-
-## 2. Predict: create a hypothesis
-
-Copy `../templates/assessment-worksheet.md` and
-`../templates/risk-register.md` into your learner workspace. Predict the
-highest-risk evidence in:
-
-- project format and target frameworks;
-- `Global.asax`, routes, and filters;
-- controller binding, anti-forgery, and errors;
-- Razor views;
-- `web.config`;
-- EF6 initialization, seed data, and query behavior;
-- the dependent model and test projects.
-
-Do not predict effort from symbol count.
-
-## 3. Perform: establish evidence and assess
-
-Create a branch and baseline commit before invoking the agent:
-
-```powershell
-.\scripts\Reset-Course.ps1 -Checkpoint legacy-baseline
-Set-Location .\work
-git status --short
-nuget restore .\BookCatalog.sln
-msbuild .\BookCatalog.sln /p:Configuration=Release
-dotnet test .\tests\BookCatalog.CharacterizationTests\BookCatalog.CharacterizationTests.csproj --configuration Release
+```mermaid
+flowchart LR
+    A["Assessment (you are here)"] --> B["Planning"]
+    B --> C["Execution"]
 ```
 
-If the working tree is not clean, stop and preserve the work safely.
+## Before you start
 
-Open `work/BookCatalog.sln`, start **Modernize**, request stable .NET 10 in
-Guided Mode, and include the entire solution. Read each command. Stop after
-`assessment.md` is generated; do not answer strategy questions yet.
+You need an `assessment.md` under `.github/upgrades/{scenarioId}/`. If you don't have one,
+go back to [Chapter 00](../00-setup/README.md) or jump to the checkpoint:
 
-## 4. Inspect: apply the decision matrix
+```powershell
+.\scripts\Reset-Course.ps1 -Checkpoint 01-assessment
+```
 
-Use this model for representative findings:
+## Steps
 
-| Category | Severity is separate because… | Validation implication |
+### 1. Read the report top to bottom
+
+Open `assessment.md`. You'll typically find these sections:
+
+| Section | What it tells you |
+|---|---|
+| Executive Summary | The agent's overall read: how big, how risky |
+| Projects Compatibility | Per-project target framework and blockers |
+| Package Compatibility | Every NuGet package, and whether a .NET 10 version exists |
+| API Compatibility | APIs you call that don't exist on the target |
+| Top API Migration Challenges | The handful that will actually cost you time |
+| Project Relationship Graph | What depends on what — the ordering constraint |
+
+Your report will not look exactly like anyone else's. Section names and ordering change
+between tool versions, and content changes with your code. See
+[when your output differs](../docs/OUTPUT-DIFFERS.md).
+{: .note }
+
+![Placeholder for a screenshot of assessment.md open in Visual Studio](../assets/img/placeholder.png)
+
+### 2. Separate compatibility, severity, and priority
+
+This is the single most useful habit in the whole course, and the agent will not do it
+for you.
+
+- **Compatibility** is a fact about the package or API. Does a .NET 10 version exist? Yes
+  or no. The agent determines this reliably.
+- **Severity** is about *your* application. `System.Web.HttpContext` is incompatible for
+  everyone, but if you touch it in one helper method it's a small job and if it's threaded
+  through 40 controllers it isn't.
+- **Priority** is about your calendar. A high-severity item on a feature you're deleting
+  next quarter is not urgent. A low-severity item blocking every other task is.
+
+The agent knows compatibility. It can estimate severity. **It cannot know priority** —
+that's yours, and it's the main thing you're adding in this chapter.
+
+Work through the report with the
+[assessment worksheet](../templates/assessment-worksheet.md). One row per finding, one
+column each for those three ideas.
+
+### 3. Look at what BookCatalog actually surfaces
+
+Expect the assessment to flag roughly these, in some form:
+
+| Finding | Compatibility | Why it matters |
 |---|---|---|
-| Binary incompatibility | A low-business-value binary may be removable rather than urgent | Build/load the path that remains |
-| Source incompatibility | It can block compilation after retargeting | Retargeted build plus behavior test |
-| Behavioral change | It may compile and still be the largest business risk | Characterization, integration, failure, and data tests |
+| `System.Web` / `HttpContext.Current` | Not available on .NET 10 | ASP.NET MVC 5 is built on it. This is the structural work |
+| Entity Framework 6 | EF6 runs on modern .NET, but EF Core is the forward path | A real decision, not a mechanical swap |
+| `packages.config` | Superseded by `PackageReference` | Mechanical, but must happen before much else |
+| `Web.config` | Replaced by `appsettings.json` plus the options pattern | Configuration and DI change together |
+| ASP.NET MVC 5 → ASP.NET Core MVC | Different framework, similar shape | Most of the visible churn |
 
-Then evaluate packages with an explicit disposition: keep, upgrade,
-framework-provided replacement, replace, defer, or remove. ASP.NET MVC 5
-packages are replaced by redesigned ASP.NET Core capabilities; they are not
-simply compatible packages to keep.
+Notice the pattern: two of these are mechanical, three involve a judgment call. That ratio
+is normal, and it's why review exists.
 
-For each high-risk report row:
+### 4. Correct the assessment
 
-1. trace it to source;
-2. record all six interpretation dimensions;
-3. identify potential false positives and false negatives;
-4. cite the test that currently covers it, or register a test gap.
+`assessment.md` is **editable**, and editing it is the supported way to give the agent
+context it cannot find in your source. It has no idea that:
 
-Compare coverage—not wording—with
-`../checkpoints/01-assessment/artifacts/assessment.md`.
+- One project is scheduled for deletion
+- A package is pinned because of a vendor contract
+- A "test" project has no real coverage
+- A controller is dead code behind a feature flag
 
-## 5. Validate independently
+Add a section and say so plainly:
 
-- Run the complete legacy test suite again.
-- Search source for `System.Web`, EF initialization, configuration, write
-  actions, and external calls not explained by the report.
-- Confirm no application source changed.
-- Confirm the report includes all three projects and the dependency direction.
-- Confirm every critical risk has validation and a rollback trigger.
+```markdown
+## Context from the team
 
-## 6. Troubleshoot a variation
+- BookCatalog.Web/Controllers/LegacyReportController.cs is dead code behind a disabled
+  feature flag. Do not spend effort porting it.
+- The characterization tests in BookCatalog.CharacterizationTests are the behavioral
+  contract. They must pass after every task.
+```
 
-Choose one MVC finding the tool describes as mechanical. Explain a plausible
-behavior difference in routing, model binding, anti-forgery, error handling, or
-request lifetime. Add it to the worksheet and ask the agent to revise the
-assessment. Preserve the original and revised diff.
+Then tell the agent to reread it:
 
-If the agent omits tests from scope, reject the scope and restart assessment
-with the full solution.
+```text
+I've updated assessment.md with additional context. Please review it before we plan.
+```
 
-## 7. Transfer
+Edit the report, don't argue with the chat transcript. Chat scrolls away; the file
+persists and gets loaded again next session.
+{: .tip }
 
-Find a package in another application. Decide whether it should be kept,
-upgraded, replaced, framework-provided, deferred, or removed, and cite target
-framework and behavior evidence.
+### 5. Choose an upgrade strategy
 
-## 8. Knowledge check and reflection
+At the end of assessment the agent recommends a strategy. There are three, and they are
+the product's own vocabulary — not something this course invented.
 
-1. Can a source incompatibility stop a build? Why?
-2. Why can an informational behavioral finding outrank a compile error?
-3. What evidence is missing from API counts?
-4. Which assessment statement did you revise, and what proof changed it?
+| Strategy | What it does | Choose it when |
+|---|---|---|
+| **Bottom-up** | Upgrade leaf dependencies first, work up toward the entry point | The default. Each step compiles against already-upgraded code |
+| **Top-down** | Start at the entry point and work down | You need the app runnable early, and you'll tolerate stubs |
+| **All-at-once** | Change everything, then fix the fallout | Small solutions, or a codebase too tangled to slice |
 
-**Learner artifacts:** Completed assessment worksheet and prioritized risk
-register.
+For BookCatalog, bottom-up means `BookCatalog.Core` first, then `BookCatalog.Web`. The
+tests can run after the first project moves.
 
-Continue to [Chapter 02: Customization and planning](../02-planning/README.md).
+You can override the recommendation:
+
+```text
+Use a bottom-up strategy. Upgrade BookCatalog.Core first, then BookCatalog.Web.
+```
+
+The agent records your confirmed decisions in `upgrade-options.md` alongside the
+assessment. Read that file — it's the contract the plan gets built from.
+
+## What just happened
+
+You did the thing that makes assessment worth running as its own stage: you **disagreed
+with a machine before it acted**.
+
+Assessment produced facts. You supplied judgment — which findings matter, which are noise,
+what the agent can't see, and what order to work in. None of that costs anything to change
+right now. All of it gets expensive once code starts moving.
+
+## Try changing it
+
+Push on the report and watch it respond:
+
+```text
+Re-analyze package compatibility only. I want to see whether any of these have prerelease
+.NET 10 versions.
+```
+
+```text
+What would change if I targeted .NET 8 instead of .NET 10?
+```
+
+Compare the answers against the original report. You're building an instinct for what the
+agent is confident about versus what it's estimating.
+
+## If something goes wrong
+
+| Problem | What to do |
+|---|---|
+| Assessment finds nothing interesting | Confirm you pointed it at the solution, not a single project |
+| A package shows as incompatible but you know it works | Add that to your context section and say why |
+| The report is enormous | Start with Top API Migration Challenges and the relationship graph. Skip the exhaustive package table on a first pass |
+| The agent ignored your edits | Confirm you saved the file, then explicitly tell it to reread `assessment.md` |
+
+## Check yourself
+
+1. Name a finding that's fully incompatible but low priority for your app, and say why.
+2. Where does the agent record the strategy you chose?
+3. What can you tell the agent in `assessment.md` that it could never learn from your code?
+
+---
+
+Next → [Chapter 02: Planning](../02-planning/README.md)

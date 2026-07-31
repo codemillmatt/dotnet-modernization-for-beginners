@@ -1,3 +1,10 @@
+---
+title: What you need to run this
+parent: Reference
+nav_order: 4
+permalink: /reference/environment/
+---
+
 # Supported environment
 
 **Last validated: 2026-07-30**
@@ -11,6 +18,7 @@ and use the linked vendor pages as the source of truth.
 | Visual Studio | Visual Studio 2026, or Visual Studio 2022 17.14.17 or later | **Help → About Microsoft Visual Studio** |
 | Workloads | .NET desktop development and ASP.NET and web development | Visual Studio Installer → **Modify** |
 | Optional components | GitHub Copilot and GitHub Copilot app modernization | Right-click a project and verify **Modernize** appears |
+| Copilot subscription | Copilot Free works starting with Visual Studio 2026 version 18.1. Earlier versions need Pro, Pro+, Business, or Enterprise. The Copilot CLI surface requires a paid plan | The signed-in account in Visual Studio |
 | Legacy targeting | .NET Framework 4.8 Developer Pack, IIS Express, SQL Server Express LocalDB | `msbuild -version`; `sqllocaldb info` |
 | Modern target | Stable .NET 10 SDK, any installed 10.0 feature band accepted by `global.json` | `dotnet --list-sdks` and `dotnet --version` |
 | Source control | Current Git | `git --version` |
@@ -20,6 +28,15 @@ and use the linked vendor pages as the source of truth.
 The official modernization install guidance lists Visual Studio 2026 or Visual
 Studio 2022 17.14.17+, the .NET desktop workload, and both Copilot components:
 [install GitHub Copilot modernization](https://learn.microsoft.com/dotnet/core/porting/github-copilot-app-modernization/install?pivots=visualstudio).
+
+## Which editor
+
+This course uses Visual Studio on Windows because that's where the tooling is most
+complete today.
+
+A **VS Code version of this course is coming soon.** The agent already runs in VS Code and
+in the Copilot CLI; the stages, the artifacts, and the workflow are identical, and only the
+UI differs. See [other surfaces](CROSS-SURFACE.md).
 
 ## SDK selection
 

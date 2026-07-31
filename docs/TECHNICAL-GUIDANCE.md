@@ -1,3 +1,10 @@
+---
+title: Reading the assessment
+parent: Reference
+nav_order: 6
+permalink: /reference/technical-guidance/
+---
+
 # Technical interpretation guide
 
 ## Compatibility is not priority

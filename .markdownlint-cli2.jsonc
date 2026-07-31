@@ -4,6 +4,11 @@
     "MD024": {
       "siblings_only": true
     },
+    // Pages front matter carries a `title`; the level-one heading is still required
+    // by scripts/Test-CourseContent.ps1, so don't treat it as a duplicate title.
+    "MD025": {
+      "front_matter_title": ""
+    },
     "MD033": false,
     "MD036": false,
     "MD060": false
@@ -12,6 +17,9 @@
     "**/*.md",
     "!node_modules/**",
     "!work/**",
-    "!.github/agents/**"
+    "!vendor/**",
+    "!_site/**",
+    "!.github/agents/**",
+    "!.github/extensions/**"
   ]
 }

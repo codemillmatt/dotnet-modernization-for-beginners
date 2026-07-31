@@ -15,7 +15,7 @@ function Test-ExcludedPath {
     param([Parameter(Mandatory)][string] $Path)
 
     $relative = Get-RelativePath -Path $Path
-    return $relative -match '^(?:\.git|\.github/agents|node_modules|work)(?:/|$)' -or
+    return $relative -match '^(?:\.git|\.github/agents|\.github/extensions|_site|node_modules|vendor|work)(?:/|$)' -or
         $relative -match '/(?:bin|obj|publish)/'
 }
 
@@ -134,7 +134,13 @@ foreach ($file in $markdownFiles) {
     foreach ($match in [regex]::Matches($content, '(?ms)^```mermaid\s*\r?\n(?<diagram>.*?)^```\s*$')) {
         $prefix = $content.Substring(0, $match.Index)
         $lineNumber = ([regex]::Matches($prefix, '\n')).Count + 1
-        $previous = if ($lineNumber -gt 1) { $lines[$lineNumber - 2] } else { '' }
+        $previous = ''
+        for ($back = $lineNumber - 2; $back -ge 0; $back--) {
+            if (-not [string]::IsNullOrWhiteSpace($lines[$back])) {
+                $previous = $lines[$back]
+                break
+            }
+        }
         if ($previous -notmatch '(?i)diagram') {
             $errors.Add("$relative Mermaid block near line $lineNumber needs a preceding text description containing 'Diagram'.")
         }

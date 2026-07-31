@@ -1,33 +1,66 @@
+---
+title: Home
+nav_order: 1
+permalink: /
+---
+
 # .NET Modernization for Beginners
 
-Modernize a tested ASP.NET MVC 5 and EF6 application from .NET Framework 4.8
-to ASP.NET Core and EF Core on .NET 10, then prepare and deploy a reviewed Azure
-learning environment with GitHub Copilot modernization.
+Upgrade a real ASP.NET MVC 5 and Entity Framework 6 application from .NET Framework 4.8
+to .NET 10, then migrate it to Azure — using GitHub Copilot modernization to do the work
+while you stay in control.
 
-This is a beginner course **for developers already comfortable with C#,
-ASP.NET, Git, and NuGet**. It teaches modernization decisions and evidence, not
-just tool clicks.
+You'll spend most of this course with your hands on the keyboard, driving the agent.
 
-## Outcomes
+**Total time: about 5 hours 45 minutes.** You can stop after any chapter.
 
-You will:
+## Who this is for
 
-- assess compatibility without confusing category, severity, and priority;
-- customize agent scope, sequencing, framework, data, and validation decisions;
-- review generated artifacts, commands, code, dependencies, and infrastructure;
-- preserve and prove CRUD, routing, validation, configuration, security, and
-  data behavior;
-- recover from divergent agent output with commits and immutable checkpoints;
-- deploy reviewed Bicep with managed runtime identity and a separate schema
-  migration identity;
-- identify what the economical lab architecture still lacks for production;
-- apply the workflow to an unfamiliar application.
+You already know C#, ASP.NET, Git, and NuGet. You have never run a structured
+modernization workflow. That's exactly the right starting point.
+
+## What you'll learn
+
+GitHub Copilot modernization works in three stages: **assessment**, **planning**, and
+**execution**. This course teaches you what each stage does, why you run them separately,
+and — most importantly — how to change what the agent decides at every one of them.
+
+Diagram: the three modernization stages and the artifacts each one writes.
+
+```mermaid
+flowchart LR
+    subgraph S1["1 · Assessment"]
+        direction TB
+        A["What is in here?"] --> A1["assessment.md<br/>upgrade-options.md"]
+    end
+    subgraph S2["2 · Planning"]
+        direction TB
+        B["What order, and on whose terms?"] --> B1["plan.md<br/>scenario-instructions.md"]
+    end
+    subgraph S3["3 · Execution"]
+        direction TB
+        C["Make the changes"] --> C1["tasks.md<br/>per-task files"]
+    end
+    S1 --> S2 --> S3
+```
+
+## The course
+
+| Chapter | You'll end up with | Time |
+|---|---|---|
+| [00 · Set up and first run](00-setup/README.md) | An assessment you generated and read | ~30 min |
+| [01 · Assessment](01-assessment/README.md) | A corrected assessment with your own context in it | ~45 min |
+| [02 · Planning](02-planning/README.md) | A default plan and your plan, side by side | ~45 min |
+| [03 · Execution](03-execution/README.md) | An upgraded app, green tests, one recovered failure | ~60 min |
+| [04 · Teaching the agent](04-teaching-the-agent/README.md) | An instruction file containing your own diff | ~30 min |
+| [05 · Migrating to Azure](05-azure-migration/README.md) | Agent-generated Azure code and Bicep | ~60 min |
+| [06 · Deploy and validate](06-deploy-and-validate/README.md) | A validated sandbox deployment, then deleted | ~45 min |
+| [07 · Bring your own app](07-your-own-app/README.md) | A scoped plan for an app you care about | ~30 min |
 
 ## Start here
 
-1. Read the [supported environment contract](docs/ENVIRONMENT.md).
-2. Read the [safe human-in-the-loop workflow](docs/SAFE-WORKFLOW.md).
-3. Clone the canonical repository and run preflight:
+1. Check you have [what you need](docs/ENVIRONMENT.md).
+2. Clone the repository and run preflight:
 
    ```powershell
    git clone https://github.com/codemillmatt/dotnet-modernization-for-beginners.git
@@ -35,72 +68,62 @@ You will:
    .\scripts\Test-Prerequisites.ps1
    ```
 
-4. Begin [Chapter 00](00-introduction/README.md).
+3. Go to [Chapter 00](00-setup/README.md).
 
-Do not skip the baseline tests. Build success and an HTTP 200 response do not
-prove equivalent behavior.
+## Which tools you need
 
-## Course
+This course uses **Visual Studio on Windows**. That's where GitHub Copilot modernization
+is most complete today.
 
-| Chapter | Active outcome | Learner artifact |
-|---|---|---|
-| 00 [Orientation and preflight](00-introduction/README.md) | Explain the workflow and establish baseline evidence | Baseline observation |
-| 01 [Assessment](01-assessment/README.md) | Triage evidence across six dimensions | Assessment worksheet and risk register |
-| 02 [Customization and planning](02-planning/README.md) | Defend a safer customized plan | Upgrade plan with gates |
-| 03 [Upgrade execution](03-upgrade-execution/README.md) | Review, steer, validate, and roll back changes | Reviewed change log |
-| 04 [Behavioral validation](04-behavioral-validation/README.md) | Prove application and data equivalence | Validation evidence |
-| 05 [Cloud readiness](05-cloud-readiness/README.md) | Decide architecture, identity, data, and operations | Architecture decision record |
-| 06 [Azure deployment](06-azure-deployment/README.md) | Provision, migrate, deploy, validate, roll back, and clean up | Deployment evidence |
-| 07 [Independent capstone](07-capstone/README.md) | Transfer the method to another application | Transfer plan and rubric |
+A **VS Code version of this course is coming soon.** The agent already works in VS Code
+and in the Copilot CLI — the artifacts and the workflow are the same, only the UI differs.
+See [working on other surfaces](docs/CROSS-SURFACE.md).
 
-See the detailed [course map](docs/COURSE-MAP.md), [glossary](docs/GLOSSARY.md),
-[cross-surface notes](docs/CROSS-SURFACE.md), and
-[output-difference guide](docs/OUTPUT-DIFFERS.md).
+![Placeholder graphic announcing that a Visual Studio Code version of this course is coming soon](assets/img/placeholder.png)
 
-## Reproducible states
+Good news on cost: **Copilot Free works** starting with Visual Studio 2026 version 18.1.
 
-The repository includes:
+## If you get stuck
 
-- the legacy baseline with a dependent project and characterization tests;
-- representative assessment and planning artifacts;
-- a buildable, tested .NET 10 checkpoint with EF Core migrations;
-- a cloud-ready overlay with Bicep and deployment scripts;
-- validation, architecture, deployment, and capstone model artifacts.
+Nothing you generate will look exactly like the examples here — agent output varies with
+tool version, SDK, and your own answers. That's expected and fine. See
+[when your output differs](docs/OUTPUT-DIFFERS.md) and
+[troubleshooting](docs/TROUBLESHOOTING.md).
 
-Checkpoints are immutable. Copy one to ignored `work/`:
+Every chapter has a known-good checkpoint you can jump to:
 
 ```powershell
 .\scripts\Reset-Course.ps1 -Checkpoint 03-modernized
 ```
 
-See [checkpoint contents and verification](checkpoints/README.md).
+Checkpoints are read-only reference states. The script copies one into an ignored `work/`
+folder, so it can never overwrite what you've done. See
+[checkpoint contents](checkpoints/README.md).
 
-## Scope, cost, and support
+## Reference
 
-The primary path uses Visual Studio on supported Windows. VS Code and Copilot CLI
-produce the same durable artifacts but have different UI. .NET 10 is stable.
-Supported .NET Framework releases remain serviced as Windows components; this
-course modernizes for platform capabilities and lifecycle choices, not because
-supported security fixes are “scarce.”
+- [What you need to run this](docs/ENVIRONMENT.md)
+- [Prompt and file cheat sheet](docs/CHEAT-SHEET.md)
+- [Troubleshooting](docs/TROUBLESHOOTING.md)
+- [Reading the assessment](docs/TECHNICAL-GUIDANCE.md)
+- [Working safely with the agent](docs/SAFE-WORKFLOW.md)
+- [Proving behavior didn't change](docs/VALIDATION.md)
+- [Lab versus production](docs/PRODUCTION-READINESS.md)
+- [Other surfaces: VS Code and CLI](docs/CROSS-SURFACE.md)
+- [Glossary](docs/GLOSSARY.md)
 
-Azure resources can incur charges. Prices, quotas, policies, capacity, and SKU
-availability vary. Estimate immediately before deployment, use a sandbox,
-configure a budget, and run cleanup. The sample architecture is intentionally
-not presented as production-ready.
+## Official documentation
 
-## Official technical sources
-
-- [GitHub Copilot modernization overview](https://learn.microsoft.com/dotnet/core/porting/github-copilot-app-modernization-overview)
+- [GitHub Copilot modernization overview](https://learn.microsoft.com/dotnet/core/porting/github-copilot-app-modernization/overview)
+- [Predefined Azure migration tasks](https://learn.microsoft.com/dotnet/azure/migration/appmod/predefined-tasks)
 - [.NET porting guidance](https://learn.microsoft.com/dotnet/core/porting/)
 - [ASP.NET MVC migration guidance](https://learn.microsoft.com/aspnet/core/migration/mvc)
 - [EF6 to EF Core porting guidance](https://learn.microsoft.com/ef/efcore-and-ef6/porting/)
-- [Azure Well-Architected Framework](https://learn.microsoft.com/azure/well-architected/)
-- [Bicep documentation](https://learn.microsoft.com/azure/azure-resource-manager/bicep/)
 
 ## Help and contributions
 
 - [Open an issue](https://github.com/codemillmatt/dotnet-modernization-for-beginners/issues)
-- Read [CONTRIBUTING.md](CONTRIBUTING.md)
-- Review [SECURITY.md](SECURITY.md)
+- Report agent bugs at [dotnet/modernize-dotnet](https://github.com/dotnet/modernize-dotnet)
+- Read [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md)
 
 MIT licensed; see [LICENSE](LICENSE).

@@ -1,29 +1,46 @@
+---
+title: Course map
+parent: Reference
+nav_order: 11
+permalink: /reference/course-map/
+---
+
 # Course map
 
-Every chapter uses the same loop: explain, predict, perform, inspect, validate,
-troubleshoot, transfer, and reflect.
+Eight chapters, about five and three-quarter hours. You can stop after any of them.
 
-| Chapter | Start | Learner-produced output | Known-good end |
+| Chapter | You start with | You end with | Checkpoint |
 |---|---|---|---|
-| 00 Orientation | Fresh clone and `00-introduction/code` | Baseline observation notes | `checkpoints/00-orientation` |
-| 01 Assessment | `shared-legacy-app` on a clean branch | Assessment worksheet and risk register | `checkpoints/01-assessment` |
-| 02 Customization and planning | Chapter 01 artifacts | Customized plan with acceptance and rollback gates | `checkpoints/02-planning` |
-| 03 Upgrade execution | Approved plan and passing legacy tests | Reviewed change log with test evidence | `checkpoints/03-modernized` |
-| 04 Behavioral validation | Modernized checkpoint | Equivalence evidence and deferred-risk list | `checkpoints/04-validated` |
-| 05 Cloud readiness | Validated application | Cloud architecture decision record | `checkpoints/05-cloud-ready` |
-| 06 Azure deployment | Reviewed cloud-ready overlay | Deployment evidence, rollback record, and cleanup proof | `checkpoints/06-azure` |
-| 07 Independent capstone | Learner-selected application | Transfer plan and self-assessment | `checkpoints/07-capstone` |
+| [00 Set up and first run](../00-setup/README.md) | A clone and a working Visual Studio | An assessment you generated and read | `legacy-baseline` |
+| [01 Assessment](../01-assessment/README.md) | That assessment | A corrected assessment and a chosen strategy | `01-assessment` |
+| [02 Planning](../02-planning/README.md) | A reviewed assessment | The default plan and your plan, diffed | `02-planning` |
+| [03 Execution](../03-execution/README.md) | An approved plan | An app on .NET 10, green tests, one recovered failure | `03-modernized` |
+| [04 Teaching the agent](../04-teaching-the-agent/README.md) | A running or finished upgrade | An instruction file containing your own diff | `03-modernized` |
+| [05 Migrating to Azure](../05-azure-migration/README.md) | An upgraded app | Agent-generated Azure code and Bicep | `05-cloud-ready` |
+| [06 Deploy and validate](../06-deploy-and-validate/README.md) | Generated infrastructure | A validated sandbox deployment, then deleted | `06-azure` |
+| [07 Bring your own app](../07-your-own-app/README.md) | An app you care about | An assessment and a decision | `07-capstone` |
 
-## Course contract
+Reset to any checkpoint at any time:
 
-- **Primary interface:** Visual Studio. Equivalent artifacts and checkpoints work
-  with VS Code and GitHub Copilot CLI; see [cross-surface guidance](CROSS-SURFACE.md).
-- **Supported scenario:** ASP.NET MVC 5 and EF6 to ASP.NET Core and EF Core on
-  .NET 10, followed by an Azure App Service learning deployment.
-- **Audience:** Developers who know C#, ASP.NET, Git, and NuGet but are new to a
-  systematic modernization workflow.
-- **Not promised:** Production certification, fixed effort, fixed Azure cost, or
-  byte-for-byte agent output.
+```powershell
+.\scripts\Reset-Course.ps1 -Checkpoint 03-modernized
+```
 
-Run `scripts/Reset-Course.ps1` to resume from any checkpoint. The script writes
-to ignored `work/`; immutable source checkpoints are never edited.
+The script writes into the ignored `work/` folder. It never touches your own work. See
+[checkpoint contents](../checkpoints/README.md).
+
+## What the course covers
+
+**Scenario:** ASP.NET MVC 5 and Entity Framework 6 on .NET Framework 4.8, upgraded to
+.NET 10, then migrated to Azure App Service.
+
+**Audience:** developers who know C#, ASP.NET, Git, and NuGet, and who have never run a
+structured modernization workflow.
+
+**Surface:** Visual Studio on Windows. A VS Code version is coming soon.
+
+## What it doesn't cover
+
+- Production certification. See [lab versus production](PRODUCTION-READINESS.md)
+- Fixed effort or fixed Azure cost
+- Byte-for-byte agent output. See [when your output differs](OUTPUT-DIFFERS.md)

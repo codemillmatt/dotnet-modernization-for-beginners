@@ -1,3 +1,9 @@
+---
+title: Security
+nav_order: 31
+permalink: /security/
+---
+
 <!-- BEGIN MICROSOFT SECURITY.MD V1.0.0 BLOCK -->
 
 # Security
