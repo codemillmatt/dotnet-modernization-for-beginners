@@ -31,7 +31,8 @@ Continue to planning.
 ```
 
 ```text
-Use a bottom-up strategy. Upgrade BookCatalog.Core first, then BookCatalog.Web.
+Use an all-at-once strategy. It's one project, so sequence the work inside it:
+package format first, then configuration, then System.Web.
 ```
 
 ```text
@@ -40,8 +41,9 @@ files, and views.
 ```
 
 ```text
-Add a validation step to every task that builds the solution and runs the characterization
-tests.
+This solution has no automated tests. Add a validation step to every task that builds the
+solution, and for any task that touches controllers or views, add an explicit manual check
+of the affected page.
 ```
 
 ```text
@@ -69,11 +71,14 @@ Move my application secrets to Azure Key Vault using managed identity.
 
 ## State files: .NET version upgrade
 
-Everything lives under `.github/upgrades/{scenarioId}/`.
+Everything lives under `.github/upgrades/scenarios/{scenarioId}/`.
 
 | File | What it is | Editable? |
 |---|---|---|
+| `scenario.json` | Which scenario ran, when, and against what target | ❌ Run metadata |
 | `assessment.md` | The analysis of your solution | ✅ Add context the agent can't see |
+| `assessment.json` | The same findings, structured | ❌ Read for tooling |
+| `assessment.csv` | One row per incident: severity, story points, file, line, snippet | ❌ Read — sort it to build a work queue |
 | `upgrade-options.md` | Your confirmed decisions | ✅ Override in chat |
 | `plan.md` | The ordered task list | ✅ Reorder, split, add, remove, annotate |
 | `scenario-instructions.md` | The agent's persistent memory | ✅ The main steering lever |
@@ -135,7 +140,7 @@ git diff --stat
 git revert <commit-sha>
 
 dotnet build .\BookCatalog.slnx --configuration Release
-dotnet test .\tests\BookCatalog.CharacterizationTests\BookCatalog.CharacterizationTests.csproj
+dotnet run --project .\src\BookCatalog.Web
 
 az bicep build --file .\infra\main.bicep
 az webapp log tail --name <app-name> --resource-group <rg-name>

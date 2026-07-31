@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Reflection;
-using BookCatalog.Core.Models;
+using BookCatalog.Web.Models;
 using BookCatalog.Web.Controllers;
 using BookCatalog.Web.Data;
 using Microsoft.AspNetCore.Http;

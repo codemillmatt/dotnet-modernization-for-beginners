@@ -47,11 +47,13 @@ jobs:
         run: |
           dotnet tool restore
           dotnet restore checkpoints/03-modernized/BookCatalog.slnx
+          dotnet restore checkpoints/04-validated/BookCatalog.Validation.slnx
 
-      - name: Build and test
-        run: |
-          dotnet build checkpoints/03-modernized/BookCatalog.slnx --configuration Release --no-restore
-          dotnet test checkpoints/03-modernized/BookCatalog.slnx --configuration Release --no-build
+      - name: Build the modernized checkpoint
+        run: dotnet build checkpoints/03-modernized/BookCatalog.slnx --configuration Release --no-restore
+
+      - name: Run the worked validation suite
+        run: dotnet test checkpoints/04-validated/BookCatalog.Validation.slnx --configuration Release
 
       - name: Format-check, lint, and compile Bicep
         run: |
@@ -86,10 +88,12 @@ jobs:
           & $msbuild .\shared-legacy-app\BookCatalog.sln /p:Configuration=Release /m
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-      - name: Run legacy characterization tests
+      - name: Confirm the sample ships no test project
         shell: pwsh
         run: |
-          sqllocaldb start MSSQLLocalDB
-          dotnet test .\shared-legacy-app\tests\BookCatalog.CharacterizationTests\BookCatalog.CharacterizationTests.csproj `
-            --configuration Release `
-            --no-build
+          # The legacy sample is deliberately untested. Chapter 03 asks learners to write
+          # the characterization tests themselves, so a test project appearing here would
+          # silently invalidate that exercise.
+          $tests = Get-ChildItem .\shared-legacy-app -Recurse -Filter *.csproj |
+            Where-Object { (Get-Content $_.FullName -Raw) -match 'Microsoft\.NET\.Test\.Sdk' }
+          if ($tests) { throw "Unexpected test project in shared-legacy-app: $($tests.FullName)" }

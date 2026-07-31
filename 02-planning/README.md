@@ -44,7 +44,7 @@ Tell the agent to continue:
 Continue to planning.
 ```
 
-It writes `plan.md` into `.github/upgrades/{scenarioId}/`. A plan is an **ordered list of
+It writes `plan.md` into `.github/upgrades/scenarios/{scenarioId}/`. A plan is an **ordered list of
 tasks**, each with a scope, a rationale, and a validation step.
 
 ![Placeholder for a screenshot of plan.md open beside Copilot Chat](../assets/img/placeholder.png)
@@ -54,7 +54,7 @@ tasks**, each with a scope, a rationale, and a validation step.
 This is the trick that makes the rest of the chapter work:
 
 ```powershell
-Copy-Item .github\upgrades\<scenarioId>\plan.md .\plan-default.md
+Copy-Item .github\upgrades\scenarios\<scenarioId>\plan.md .\plan-default.md
 ```
 
 Replace `<scenarioId>` with the folder name you found in Chapter 00.
@@ -85,15 +85,18 @@ file in the folder — it's a checklist. It's the one file that isn't.
 
 Read `plan.md` against your worksheet from Chapter 01 and look for four things.
 
-**Wrong order.** Does anything depend on work scheduled after it? BookCatalog's
-`BookCatalog.Web` cannot compile until `BookCatalog.Core` targets .NET 10.
+**Wrong order.** Does anything depend on work scheduled after it? In BookCatalog the
+classic mistake is starting the `System.Web` rewrite while the project is still on
+`packages.config` — every one of those code edits then has to be re-landed after the
+project file format changes underneath it.
 
 **Tasks that are too big.** "Migrate ASP.NET MVC 5 to ASP.NET Core" is not one task. It's
 routing, plus filters, plus static files, plus views, plus startup and DI. A task large
 enough to fail halfway leaves you with a mess that's hard to attribute.
 
-**Missing validation.** Every task should end by building and running your tests. If a
-task doesn't, add it.
+**Missing validation.** Every task should end with a check you can actually run. On a
+codebase with tests, that's the test suite. On BookCatalog, it's a build plus a specific
+manual step — and vague validation is worse than none, because it feels like coverage.
 
 **Unstated decisions.** If the plan says "migrate data access" without saying whether you
 land on EF Core or stay on EF6, decide now and write it down.
@@ -111,8 +114,8 @@ migration first means nothing downstream has to handle both formats.
 Or drive it from chat:
 
 ```text
-Reorder the plan so BookCatalog.Core is fully upgraded and its tests pass before any work
-starts on BookCatalog.Web.
+Reorder the plan so the packages.config to PackageReference migration and the SDK-style
+project conversion both complete before any System.Web work starts.
 ```
 
 ```text
@@ -121,14 +124,20 @@ files, and views.
 ```
 
 ```text
-Add a validation step to every task that builds the solution and runs the characterization
-tests.
+This solution has no automated tests. Add a validation step to every task that builds the
+solution, and for any task that touches controllers or views, add an explicit manual check
+of the affected page.
 ```
+
+That last prompt is the one to internalize. The agent will happily accept "run the tests"
+as a validation step on a codebase with no tests, and then report the step as satisfied.
+Tell it what evidence actually exists.
+{: .warning }
 
 ### 5. Diff the two plans
 
 ```powershell
-git diff --no-index .\plan-default.md .github\upgrades\<scenarioId>\plan.md
+git diff --no-index .\plan-default.md .github\upgrades\scenarios\<scenarioId>\plan.md
 ```
 
 Read the diff and answer one question for each hunk: **what did I know that the agent

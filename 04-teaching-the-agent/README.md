@@ -33,7 +33,7 @@ Have a running upgrade, or reset to a finished one:
 ### 1. Open the agent's memory
 
 ```text
-.github/upgrades/{scenarioId}/scenario-instructions.md
+.github/upgrades/scenarios/{scenarioId}/scenario-instructions.md
 ```
 
 Microsoft describes this file as the agent's persistent memory: it's loaded into context

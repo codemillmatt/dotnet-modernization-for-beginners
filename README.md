@@ -51,7 +51,7 @@ flowchart LR
 | [00 · Set up and first run](00-setup/README.md) | An assessment you generated and read | ~30 min |
 | [01 · Assessment](01-assessment/README.md) | A corrected assessment with your own context in it | ~45 min |
 | [02 · Planning](02-planning/README.md) | A default plan and your plan, side by side | ~45 min |
-| [03 · Execution](03-execution/README.md) | An upgraded app, green tests, one recovered failure | ~60 min |
+| [03 · Execution](03-execution/README.md) | An upgraded app, one recovered failure, and the tests the codebase never had | ~60 min |
 | [04 · Teaching the agent](04-teaching-the-agent/README.md) | An instruction file containing your own diff | ~30 min |
 | [05 · Migrating to Azure](05-azure-migration/README.md) | Agent-generated Azure code and Bicep | ~60 min |
 | [06 · Deploy and validate](06-deploy-and-validate/README.md) | A validated sandbox deployment, then deleted | ~45 min |

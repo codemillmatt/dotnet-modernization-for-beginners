@@ -25,7 +25,7 @@ namespace BookCatalog.Web.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("BookCatalog.Core.Models.Book", b =>
+            modelBuilder.Entity("BookCatalog.Web.Models.Book", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="../03-modernized/src/BookCatalog.Web/BookCatalog.Web.csproj" />
+  <Project Path="tests/BookCatalog.Tests/BookCatalog.Tests.csproj" />
+</Solution>

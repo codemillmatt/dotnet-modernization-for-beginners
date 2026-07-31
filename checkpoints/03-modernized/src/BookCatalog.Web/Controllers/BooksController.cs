@@ -1,4 +1,4 @@
-using BookCatalog.Core.Models;
+using BookCatalog.Web.Models;
 using BookCatalog.Web.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

@@ -20,7 +20,7 @@ Short pages you'll come back to. None of them are required reading in order.
 - [When your output differs](OUTPUT-DIFFERS.md) — agent output varies, and that's fine
 - [Reading the assessment](TECHNICAL-GUIDANCE.md) — compatibility, severity, and priority
 - [Working safely with the agent](SAFE-WORKFLOW.md) — set it up once, then get on with it
-- [Proving behavior didn't change](VALIDATION.md) — what green tests don't tell you
+- [Proving behavior didn't change](VALIDATION.md) — validating an upgrade when you have no tests
 
 ## Before anyone asks about production
 

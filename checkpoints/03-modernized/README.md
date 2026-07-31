@@ -7,13 +7,15 @@ This immutable checkpoint is the known-good result after upgrade execution.
 ```powershell
 dotnet restore .\BookCatalog.slnx
 dotnet build .\BookCatalog.slnx --configuration Release --no-restore
-dotnet test .\BookCatalog.slnx --configuration Release --no-build
+dotnet run --project .\src\BookCatalog.Web
 ```
 
-The tests cover the baseline contract: CRUD, validation, routing and responses,
-database seed data, configuration, anti-forgery behavior, errors, and the active
-book query. Windows runs also exercise the query and migration with SQL Server
-LocalDB; cross-platform runs use the in-memory provider for fast behavior tests.
+Like the legacy sample it came from, this checkpoint is a **single project and
+ships no tests**. It's what the agent produces, and the agent does not write
+tests. Verifying it means building it and exercising it.
+
+The worked test suite lives in `checkpoints/04-validated/tests/` instead,
+because you write those — see the exercise at the end of Chapter 03.
 
 For local SQL Server testing, run the application once with the Development
 environment. Development-only settings apply the checked-in EF Core migration

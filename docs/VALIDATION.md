@@ -10,16 +10,38 @@ permalink: /reference/validation/
 A green build means it compiles. Green tests mean the things you tested still work. Neither
 means the application behaves the way it did before.
 
-This page is what to check beyond the test run.
+This page is what to check beyond the build — and what to do when there's no test run to
+go beyond.
+
+## Start here: you probably have no tests
+
+Most legacy codebases don't have them. BookCatalog, the app this course uses, has none —
+deliberately, because that's the realistic case.
+
+This has a specific consequence that's easy to miss. The agent's per-task validation loop
+**builds, then runs whatever tests it can discover**. Discover zero tests and the loop
+still reports success. Nothing lies to you; the loop simply has one fewer signal, and
+"task complete" quietly comes to mean "it compiles."
+
+So on an untested codebase you have exactly two options, and you should pick on purpose:
+
+| Option | Cost | What it buys you |
+|---|---|---|
+| Validate manually | Free to start, expensive every time you repeat it | Enough for a small app you can click through in ten minutes |
+| Write characterization tests first | Hours up front | The agent self-heals against your behavior, not just the compiler |
+
+For a single-controller app, manual is defensible. Past that it stops scaling, and the
+second option is the professional answer.
 
 ## Characterization tests come first
 
 A characterization test records what the application does *today*, correct or not. It isn't
-a specification — it's a snapshot you can compare against.
+a specification — it's a snapshot you can compare against. If the legacy app sorts badly,
+your test asserts the bad sort. You are pinning behavior, not endorsing it.
 
-The agent runs whatever tests you already have. **It does not write them for you.** If a
-part of your app has no tests and you're about to change it, write them before you start.
-That's the whole safety net.
+The agent runs whatever tests you already have. **It does not write them for you.** Nothing
+in the modernization tooling generates a test suite. If a part of your app has no tests and
+you're about to change it, write them before you start. That's the whole safety net.
 
 Write them against observable behavior, not internals:
 
@@ -29,7 +51,44 @@ Write them against observable behavior, not internals:
 - Query results for known data
 - Anything with money or dates in it
 
-## Green tests are necessary, not sufficient
+### Writing them for a .NET Framework web app
+
+The awkward part is that you're testing the *old* app, so the test project targets
+.NET Framework too, and the modern in-process host builders aren't available.
+
+Three approaches, cheapest first:
+
+1. **Test the model and the data layer directly.** Instantiate your `DbContext` against
+   LocalDB, run the same queries the controllers run, assert on the results. No web host
+   needed. This catches EF6 → EF Core translation differences, which are the changes most
+   likely to hurt you.
+2. **Test controllers as plain classes.** An MVC 5 controller action is a method returning
+   `ActionResult`. Call it, cast the result, assert on the model and the view name. You
+   miss the pipeline — routing, filters, model binding — but you cover the logic.
+3. **Test over HTTP.** Start IIS Express, drive it with `HttpClient`, assert on status
+   codes and response bodies. Slowest and most brittle, and the only one that covers
+   routing, anti-forgery, and error pages — the exact areas
+   [that change silently](#what-changes-behavior-in-an-aspnet-mvc-5-to-aspnet-core-move).
+
+Do 1 and 2 for everything, and 3 for the handful of routes you'd be fired for breaking.
+
+Your tests will need rewriting after the upgrade, and that's fine. Approach 1 mostly
+survives. Approach 3 survives almost entirely. Approach 2 needs the most rework, because
+that's where the framework API surface actually changed. A test you throw away after it
+caught one real regression has paid for itself.
+{: .note }
+
+### A worked solution
+
+`checkpoints/04-validated/tests/` holds ten tests against the **modernized** BookCatalog:
+seed data, route output and ordering, full CRUD round-trip, invalid-model rejection, the
+validation contract on the model itself, 404 behavior, anti-forgery enforcement,
+configuration binding, and a health check.
+
+That's the target. Write your own first, then read those and notice what you didn't think
+to pin down — the failure paths and the anti-forgery behavior are the ones people miss.
+
+## Even green tests are not sufficient
 
 Three categories of change routinely pass every test and still break production.
 
@@ -85,7 +144,8 @@ These compile cleanly and behave differently. Test each one you rely on.
 ## A validation pass that's worth the time
 
 1. **Build clean.** Warnings you didn't have before are findings.
-2. **Run every test.** All of them, not the ones you think are relevant.
+2. **Run every test you have.** All of them, not the ones you think are relevant. If you
+   have none, say so out loud rather than skipping the line — the absence is the finding.
 3. **Run against a real database** at least once.
 4. **Read the migration SQL.**
 5. **Reconcile data.** Counts, records, one aggregate.
@@ -122,6 +182,11 @@ pass before moving on. That inner loop catches the mechanical failures.
 What it can't catch is the thing that compiles, passes your tests, and is still wrong. That
 gap is exactly the size of your test coverage — which is why the coverage conversation
 happens before the upgrade, not after.
+
+On a codebase with no tests, that gap is the entire application. The loop still runs, still
+self-heals, still reports each task complete. It's just grading its own work against a
+compiler. Knowing precisely what the green checkmark covers is the difference between using
+this tool well and trusting it blindly.
 
 ## Related
 

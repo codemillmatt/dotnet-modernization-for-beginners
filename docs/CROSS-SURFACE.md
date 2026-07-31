@@ -36,7 +36,7 @@ starting with Visual Studio 2026 version 18.1.
 | Run tests | Test Explorer or terminal | Testing view or terminal | Terminal |
 | Watch progress | **Output → AppModernizationExtension** | Output channel | Terminal |
 
-The state files are the same on every surface: `.github/upgrades/{scenarioId}/` for the
+The state files are the same on every surface: `.github/upgrades/scenarios/{scenarioId}/` for the
 version upgrade, `.appmod/.migration/` for Azure migration. So are the Git commits, the
 tests, and the checkpoints in this repository.
 

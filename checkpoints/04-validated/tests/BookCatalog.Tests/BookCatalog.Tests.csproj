@@ -16,8 +16,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\BookCatalog.Core\BookCatalog.Core.csproj" />
-    <ProjectReference Include="..\..\src\BookCatalog.Web\BookCatalog.Web.csproj" />
+    <ProjectReference Include="..\..\..\03-modernized\src\BookCatalog.Web\BookCatalog.Web.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Using Include="Xunit" />

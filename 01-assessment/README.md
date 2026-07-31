@@ -28,7 +28,7 @@ flowchart LR
 
 ## Before you start
 
-You need an `assessment.md` under `.github/upgrades/{scenarioId}/`. If you don't have one,
+You need an `assessment.md` under `.github/upgrades/scenarios/{scenarioId}/`. If you don't have one,
 go back to [Chapter 00](../00-setup/README.md) or jump to the checkpoint:
 
 ```powershell
@@ -39,16 +39,27 @@ go back to [Chapter 00](../00-setup/README.md) or jump to the checkpoint:
 
 ### 1. Read the report top to bottom
 
-Open `assessment.md`. You'll typically find these sections:
+Open `assessment.md`. A real report has this shape:
 
 | Section | What it tells you |
 |---|---|
-| Executive Summary | The agent's overall read: how big, how risky |
-| Projects Compatibility | Per-project target framework and blockers |
-| Package Compatibility | Every NuGet package, and whether a .NET 10 version exists |
-| API Compatibility | APIs you call that don't exist on the target |
-| Top API Migration Challenges | The handful that will actually cost you time |
-| Project Relationship Graph | What depends on what — the ordering constraint |
+| Executive Summary → Highlevel Metrics | Project count, package count, lines of code, issue count, and an **estimated LOC to modify** |
+| Executive Summary → Projects Compatibility | Per-project target framework, a difficulty rating, and issue counts split into package vs. API |
+| Executive Summary → Package Compatibility | Every NuGet package bucketed as compatible, incompatible, or upgrade-recommended |
+| Executive Summary → API Compatibility | Every API you call, bucketed as binary incompatible, source incompatible, behavioral change, or compatible |
+| Aggregate NuGet packages details | Current version and suggested version, package by package |
+| Top API Migration Challenges | The technologies costing you the most, each with a written migration path |
+| Projects Relationship Graph | A Mermaid diagram of what depends on what |
+| Project Details | The whole thing again, per project |
+
+Learn the vocabulary now, because the agent uses it consistently:
+
+- **Binary incompatible** — the API is gone. Code changes required.
+- **Source incompatible** — it exists but the call site must change and be recompiled.
+- **Behavioral change** — it compiles and runs, but does something different. These are the
+  dangerous ones, because nothing fails loudly.
+- **Story points** — the agent's effort estimate per issue. Useful for sequencing, not for
+  promising a delivery date.
 
 Your report will not look exactly like anyone else's. Section names and ordering change
 between tool versions, and content changes with your code. See
@@ -56,6 +67,11 @@ between tool versions, and content changes with your code. See
 {: .note }
 
 ![Placeholder for a screenshot of assessment.md open in Visual Studio](../assets/img/placeholder.png)
+
+Now open `assessment.csv` in the same folder. Same findings, one row per incident, with
+`Severity`, `Story Points`, `Path`, `Line`, and the offending `Snippet`. Sort by severity
+and you have a work queue. Filter by `Incident ID` and you can count how many times a
+single API bites you. The Markdown is for reading; the CSV is for deciding.
 
 ### 2. Separate compatibility, severity, and priority
 
@@ -70,8 +86,9 @@ for you.
 - **Priority** is about your calendar. A high-severity item on a feature you're deleting
   next quarter is not urgent. A low-severity item blocking every other task is.
 
-The agent knows compatibility. It can estimate severity. **It cannot know priority** —
-that's yours, and it's the main thing you're adding in this chapter.
+The agent knows compatibility. It can estimate severity — that's what `Mandatory`,
+`Potential`, and story points are. **It cannot know priority** — that's yours, and it's
+the main thing you're adding in this chapter.
 
 Work through the report with the
 [assessment worksheet](../templates/assessment-worksheet.md). One row per finding, one
@@ -86,18 +103,23 @@ Expect the assessment to flag roughly these, in some form:
 | `System.Web` / `HttpContext.Current` | Not available on .NET 10 | ASP.NET MVC 5 is built on it. This is the structural work |
 | Entity Framework 6 | EF6 runs on modern .NET, but EF Core is the forward path | A real decision, not a mechanical swap |
 | `packages.config` | Superseded by `PackageReference` | Mechanical, but must happen before much else |
-| `Web.config` | Replaced by `appsettings.json` plus the options pattern | Configuration and DI change together |
+| `Web.config` / `ConfigurationManager` | Replaced by `appsettings.json` plus the options pattern | Configuration and DI change together |
 | ASP.NET MVC 5 → ASP.NET Core MVC | Different framework, similar shape | Most of the visible churn |
 
 Notice the pattern: two of these are mechanical, three involve a judgment call. That ratio
 is normal, and it's why review exists.
+
+Also notice what the report *doesn't* say. There's no row for "this app has no tests."
+Compatibility analysis is static — it reads your code, not your confidence. The biggest
+risk in this upgrade is invisible to the tool that just scanned it.
+{: .warning }
 
 ### 4. Correct the assessment
 
 `assessment.md` is **editable**, and editing it is the supported way to give the agent
 context it cannot find in your source. It has no idea that:
 
-- One project is scheduled for deletion
+- A project is scheduled for deletion
 - A package is pinned because of a vendor contract
 - A "test" project has no real coverage
 - A controller is dead code behind a feature flag
@@ -107,10 +129,10 @@ Add a section and say so plainly:
 ```markdown
 ## Context from the team
 
-- BookCatalog.Web/Controllers/LegacyReportController.cs is dead code behind a disabled
-  feature flag. Do not spend effort porting it.
-- The characterization tests in BookCatalog.CharacterizationTests are the behavioral
-  contract. They must pass after every task.
+- Views/Books/Delete.cshtml is reached only by admins. Behavior there is lower risk than
+  the Index and Create paths, which every user hits.
+- There are no automated tests. Treat every task's validation step as manual until I say
+  otherwise, and never mark a task done on "it compiles" alone.
 ```
 
 Then tell the agent to reread it:
@@ -134,13 +156,20 @@ the product's own vocabulary — not something this course invented.
 | **Top-down** | Start at the entry point and work down | You need the app runnable early, and you'll tolerate stubs |
 | **All-at-once** | Change everything, then fix the fallout | Small solutions, or a codebase too tangled to slice |
 
-For BookCatalog, bottom-up means `BookCatalog.Core` first, then `BookCatalog.Web`. The
-tests can run after the first project moves.
+BookCatalog is a single project, so all three collapse to the same thing. That's worth
+noticing rather than skipping: **the strategy question is about ordering projects, and a
+monolith has no project ordering to argue about.**
 
-You can override the recommendation:
+Which does not mean sequencing stops mattering. It means the sequencing problem moves
+*inside* the project, where the agent has to decide whether `packages.config` migration
+comes before or after the `System.Web` work, and whether views move before or after
+controllers. Chapter 02 is where you'll see those choices and change them.
+
+You can still state the strategy explicitly, and you should — it's recorded as a decision:
 
 ```text
-Use a bottom-up strategy. Upgrade BookCatalog.Core first, then BookCatalog.Web.
+Use an all-at-once strategy. It's one project, so sequence the work inside it:
+package format first, then configuration, then System.Web.
 ```
 
 The agent records your confirmed decisions in `upgrade-options.md` alongside the

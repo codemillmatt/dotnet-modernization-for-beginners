@@ -28,7 +28,7 @@ they are separate. Almost everything you learned about *where things live* chang
 | Aspect | .NET version upgrade | Azure migration |
 |---|---|---|
 | Entry point | **Modernize** / `@Modernize` | **Migrate to Azure** |
-| State folder | `.github/upgrades/{scenarioId}/` | `.appmod/.migration/` |
+| State folder | `.github/upgrades/scenarios/{scenarioId}/` | `.appmod/.migration/` |
 | Artifacts | `assessment.md`, `plan.md`, `tasks.md`, `scenario-instructions.md` | `plan.md`, `progress.md` |
 | Unit of work | Tasks the agent generates from your code | A catalog of predefined tasks you pick from |
 | Question it answers | Does this run on .NET 10? | Does this run *well* in Azure? |

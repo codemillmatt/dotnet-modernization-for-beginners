@@ -19,11 +19,11 @@ you've already done. Don't edit the checkpoint folders themselves.
 
 | Checkpoint | Use it to start | What's in it | How to verify it |
 |---|---|---|---|
-| `legacy-baseline` | Chapter 00 | The untouched .NET Framework 4.8 BookCatalog solution | `msbuild` then `dotnet test` — 9 tests pass |
+| `legacy-baseline` | Chapter 00 | The untouched .NET Framework 4.8 BookCatalog solution — one project, no tests | `nuget restore` then `msbuild`, then run it and load `/Books` |
 | `01-assessment` | Chapter 02 | A model assessment and worksheet | Trace each finding back to source |
 | `02-planning` | Chapter 03 | Options, plan, and a customized comparison | Check ordering, acceptance, and rollback |
-| `03-modernized` | Chapters 04 and 05 | The full .NET 10 application with tests and an EF migration | `dotnet build` and `dotnet test` |
-| `04-validated` | Reference | A model validation evidence document | Reproduce every command it cites |
+| `03-modernized` | Chapters 04 and 05 | The upgraded .NET 10 application with an EF Core migration — still one project, still no tests | `dotnet build .\BookCatalog.slnx` |
+| `04-validated` | Chapter 03 exercise | A worked characterization-test suite against the modernized app, plus model validation evidence | `dotnet test .\BookCatalog.Validation.slnx` — 10 tests pass |
 | `05-cloud-ready` | Chapter 06 | Bicep, migration identity, runtime grants, deploy and cleanup scripts | `az bicep build` and a PowerShell parse |
 | `06-azure` | Reference | Sample deployment evidence and an architecture record | Replace the placeholders with your own evidence |
 | `07-capstone` | Chapter 07 stretch track | The self-assessment rubric | Score against evidence you can cite |

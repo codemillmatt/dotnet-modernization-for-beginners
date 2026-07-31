@@ -15,7 +15,7 @@ Copilot access
 ## What you'll do
 
 - Confirm your machine has what the agent needs
-- Get the legacy app building with green tests
+- Get the legacy app building and running
 - Start the agent and ask it to upgrade to .NET 10
 - Stop at the end of assessment and read the report
 
@@ -49,38 +49,58 @@ which are your undo button for everything that follows.
 
 ### Get a green baseline
 
-Copy the legacy app into a working folder and prove it builds and passes its tests:
+Copy the legacy app into a working folder and prove it builds and runs:
 
 ```powershell
 .\scripts\Reset-Course.ps1 -Checkpoint legacy-baseline
 Set-Location .\work
 nuget restore .\BookCatalog.sln
 msbuild .\BookCatalog.sln /p:Configuration=Release
-dotnet test .\tests\BookCatalog.CharacterizationTests\BookCatalog.CharacterizationTests.csproj --configuration Release
 ```
 
-You should see **9 passing tests**.
+You should see **Build succeeded**. Now press <kbd>F5</kbd> in Visual Studio, browse to
+`/Books`, and confirm the list loads with seed data. Create a book, edit it, delete it.
+
+That's your baseline: it compiles, it runs, and CRUD works.
 
 This matters more than it looks. Microsoft's guidance is blunt about it: verify your
-solution builds and its tests pass before you start. If the solution is already broken,
-the agent can't tell your pre-existing failures apart from problems it introduced — and
-neither can you.
+solution builds and works before you start. If the solution is already broken, the agent
+can't tell your pre-existing failures apart from problems it introduced — and neither
+can you.
 
-Those 9 tests are **characterization tests**. They record what the app does today so you
-can prove it still does the same thing tomorrow. The agent runs whatever tests you already
-have, but it will not write them for you. Bringing tests is your job. There's more on this
-in [proving behavior didn't change](../docs/VALIDATION.md).
+### There are no tests, and that is the point
+
+BookCatalog ships with zero automated tests, which makes it exactly like most of the
+legacy code you'll be asked to modernize.
+
+This is worth sitting with, because it shapes everything that follows. **The agent runs
+whatever tests you already have. It will not write them for you.** Nothing in the
+modernization tooling generates a test suite. So on an untested codebase, every claim of
+"the upgrade worked" rests on somebody manually clicking through the app.
+
+You have two honest options:
+
+1. **Validate by hand** — build, run, click through the behavior you care about. This is
+   what the course does by default, and it's what you'll do in Chapter 03.
+2. **Write characterization tests first** — capture today's behavior in code, then let the
+   agent run them after every task. Slower to start, dramatically safer.
+
+Option 2 is the professional answer, and Chapter 03 has an exercise that walks you through
+it. For now, know why the gap exists. More in
+[proving behavior didn't change](../docs/VALIDATION.md).
 
 ### Meet the app
 
-`BookCatalog` is small but realistic:
+`BookCatalog` is small but realistic — a single ASP.NET MVC 5 project:
 
-- `BookCatalog.Core` — a .NET Framework 4.8 class library holding the model
 - `BookCatalog.Web` — ASP.NET MVC 5, Entity Framework 6, `System.Web`, LocalDB
-- `BookCatalog.CharacterizationTests` — the 9 tests
+- Models, controllers, and views all live in that one project
+- Packages come from `packages.config`, not `PackageReference`
 
-Three projects with real dependencies between them is the point. It gives the agent an
-ordering problem to solve, which is exactly what you'll review in Chapter 02.
+One project sounds easy. It isn't. Everything is coupled to `System.Web`, the package
+format predates SDK-style projects, and EF6's initializer runs on app start. A monolith
+gives the agent a *sequencing* problem inside a single project instead of across several
+— which is exactly what you'll review in Chapter 02.
 
 ## Steps
 
@@ -132,16 +152,25 @@ found. Shall I proceed with upgrade options?"*
 The agent wrote its state into your repository. Look for:
 
 ```text
-.github/upgrades/{scenarioId}/assessment.md
+.github/upgrades/scenarios/dotnet-version-upgrade/
+├── assessment.md      ← the human-readable report; start here
+├── assessment.json    ← the same findings, structured
+├── assessment.csv     ← one row per incident, with file and line number
+└── scenario.json      ← which scenario ran, when, and against what target
 ```
 
-`{scenarioId}` is a folder named after the scenario the agent selected. Open
-`.github/upgrades/` and see what it actually created — you'll use that real path for the
-rest of the course.
+`dotnet-version-upgrade` is the scenario the agent selected for a .NET version upgrade.
+A different scenario writes a different folder name, so open
+`.github/upgrades/scenarios/` and confirm what yours is actually called.
 {: .note }
 
 Open `assessment.md` and read it. Don't act on it yet. You're looking for shape: what
 sections exist, what it found, what it thinks is hard.
+
+`assessment.csv` is the one people miss. It's every finding as a flat row — issue ID,
+severity, story points, file, line, and the offending snippet. When you want to sort by
+severity or count how many times one API shows up, open the CSV, not the Markdown.
+{: .tip }
 
 If your machine is slow or your solution is large, this can take several minutes. Watch
 progress in **View → Output → AppModernizationExtension**.
@@ -155,7 +184,7 @@ Diagram: assessment reads your code and writes findings, but changes no source.
 ```mermaid
 flowchart LR
     S["Your source code"] --> A["Assessment"]
-    A --> R["assessment.md"]
+    A --> R["assessment.md<br/>assessment.json<br/>assessment.csv"]
     A --> O["upgrade-options.md"]
 ```
 
@@ -164,9 +193,9 @@ stages exist. You get a complete picture of what the upgrade involves *before* a
 line of your application changes — which makes right now the cheapest possible moment to
 disagree with the agent.
 
-Everything the agent knows lives under `.github/upgrades/{scenarioId}/`. Those files are
-ordinary Markdown, they sit in your repository, and you can edit them. That's how you
-steer this thing, and it's what the next four chapters are about.
+Everything the agent knows lives under `.github/upgrades/scenarios/{scenarioId}/`. Those
+files are ordinary Markdown, JSON, and CSV, they sit in your repository, and you can edit
+them. That's how you steer this thing, and it's what the next four chapters are about.
 
 Commit that folder along with your branch. It's the agent's memory and your audit trail.
 {: .tip }
@@ -187,7 +216,7 @@ what it *didn't* pick tells you as much as seeing what it did.
 | Problem | What to do |
 |---|---|
 | **Modernize** isn't on the right-click menu | Visual Studio Installer → **Modify** → confirm both **GitHub Copilot** and **GitHub Copilot app modernization** components are checked |
-| Tests fail before you start | Stop and fix the baseline. The agent can't distinguish your failures from its own |
+| The build fails before you start | Stop and fix the baseline. The agent can't distinguish your failures from its own |
 | NuGet restore fails | If you use a private feed, authenticate before starting the agent |
 | The agent can't create a branch | Confirm you're inside a Git repository with a clean working tree |
 
@@ -195,8 +224,10 @@ More failure modes are in [troubleshooting](../docs/TROUBLESHOOTING.md).
 
 ## Check yourself
 
-1. Why does the agent need passing tests *before* it starts?
+1. Why does the agent need a working baseline *before* it starts?
 2. What did assessment change in your application source code?
+3. BookCatalog has no tests. What will you use as evidence that the upgrade preserved
+   behavior?
 
 ---
 

@@ -14,7 +14,7 @@ param(
     [string] $Checkpoint,
 
     # The agent names its state folder after the scenario it selects. Check
-    # .github/upgrades/ in your own run and pass the folder name you find there.
+    # .github/upgrades/scenarios/ in your own run and pass the folder name you find there.
     [string] $ScenarioId = 'dotnet-version-upgrade'
 )
 
@@ -50,7 +50,7 @@ function Copy-UpgradeArtifacts {
         [string] $Source
     )
 
-    $target = Join-Path $destination ".github\upgrades\$ScenarioId"
+    $target = Join-Path $destination ".github\upgrades\scenarios\$ScenarioId"
     Copy-Tree -Source $Source -Target $target
 }
 

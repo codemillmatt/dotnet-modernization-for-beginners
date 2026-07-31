@@ -1,4 +1,4 @@
-namespace BookCatalog.Core.Models;
+namespace BookCatalog.Web.Models;
 
 public static class BookSeedData
 {

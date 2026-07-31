@@ -34,6 +34,35 @@ Almost always a private feed. Authenticate before you start the agent — a rest
 during assessment shows up as an apparent compatibility problem, and you'll waste time
 chasing the wrong thing.
 
+### "A compatible .NET SDK was not found"
+
+You'll see something like:
+
+```text
+Requested SDK version: 10.0.100
+global.json file: ...\global.json
+```
+
+A `global.json` pins which SDK builds the solution, and `rollForward` controls how much
+drift it tolerates. `"latestPatch"` only accepts the same **feature band** — so a file
+asking for `10.0.100` rejects SDK `10.0.203`, because `1xx` and `2xx` are different bands.
+
+Either install the requested band, or relax the pin:
+
+```json
+{
+  "sdk": {
+    "version": "10.0.100",
+    "rollForward": "latestFeature"
+  }
+}
+```
+
+Worth knowing before an upgrade, not during one. `global.json` files are easy to inherit
+from a template and forget about, and this failure looks like a broken install rather than
+a two-line config choice.
+{: .tip }
+
 ## Assessment
 
 ### The report is enormous

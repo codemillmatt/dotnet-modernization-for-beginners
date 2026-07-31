@@ -14,7 +14,7 @@ Eight chapters, about five and three-quarter hours. You can stop after any of th
 | [00 Set up and first run](../00-setup/README.md) | A clone and a working Visual Studio | An assessment you generated and read | `legacy-baseline` |
 | [01 Assessment](../01-assessment/README.md) | That assessment | A corrected assessment and a chosen strategy | `01-assessment` |
 | [02 Planning](../02-planning/README.md) | A reviewed assessment | The default plan and your plan, diffed | `02-planning` |
-| [03 Execution](../03-execution/README.md) | An approved plan | An app on .NET 10, green tests, one recovered failure | `03-modernized` |
+| [03 Execution](../03-execution/README.md) | An approved plan | An app on .NET 10, one recovered failure, and tests you wrote yourself | `03-modernized`, `04-validated` |
 | [04 Teaching the agent](../04-teaching-the-agent/README.md) | A running or finished upgrade | An instruction file containing your own diff | `03-modernized` |
 | [05 Migrating to Azure](../05-azure-migration/README.md) | An upgraded app | Agent-generated Azure code and Bicep | `05-cloud-ready` |
 | [06 Deploy and validate](../06-deploy-and-validate/README.md) | Generated infrastructure | A validated sandbox deployment, then deleted | `06-azure` |
