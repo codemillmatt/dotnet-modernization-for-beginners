@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using BookCatalog.Core.Models;
 using BookCatalog.Web.Models;
 
 namespace BookCatalog.Web.Controllers

@@ -1,0 +1,95 @@
+name: Course QA
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  documentation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7.0.1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7.0.0
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install documentation QA tools
+        run: npm ci
+
+      - name: Lint Markdown
+        run: npm run qa:markdown
+
+      - name: Check links, assets, terminology, PII, secrets, and accessibility
+        shell: pwsh
+        run: ./scripts/Test-CourseContent.ps1
+
+  modernized-checkpoint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7.0.1
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v6.0.0
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore tools and packages
+        run: |
+          dotnet tool restore
+          dotnet restore checkpoints/03-modernized/BookCatalog.slnx
+
+      - name: Build and test
+        run: |
+          dotnet build checkpoints/03-modernized/BookCatalog.slnx --configuration Release --no-restore
+          dotnet test checkpoints/03-modernized/BookCatalog.slnx --configuration Release --no-build
+
+      - name: Format-check, lint, and compile Bicep
+        run: |
+          az bicep format \
+            --file checkpoints/05-cloud-ready/infra/main.bicep \
+            --outfile "$RUNNER_TEMP/main.formatted.bicep"
+          diff -u checkpoints/05-cloud-ready/infra/main.bicep "$RUNNER_TEMP/main.formatted.bicep"
+          az bicep build --file checkpoints/05-cloud-ready/infra/main.bicep --outfile "$RUNNER_TEMP/main.json"
+
+  legacy-baseline:
+    runs-on: windows-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7.0.1
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v6.0.0
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore legacy solution
+        shell: pwsh
+        run: nuget restore .\shared-legacy-app\BookCatalog.sln
+
+      - name: Build legacy solution
+        shell: pwsh
+        run: |
+          $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+          $msbuild = & $vswhere -latest -products * -requires Microsoft.Component.MSBuild -find 'MSBuild\**\Bin\MSBuild.exe' |
+            Select-Object -First 1
+          if (-not $msbuild) { throw 'MSBuild was not found.' }
+          & $msbuild .\shared-legacy-app\BookCatalog.sln /p:Configuration=Release /m
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      - name: Run legacy characterization tests
+        shell: pwsh
+        run: |
+          sqllocaldb start MSSQLLocalDB
+          dotnet test .\shared-legacy-app\tests\BookCatalog.CharacterizationTests\BookCatalog.CharacterizationTests.csproj `
+            --configuration Release `
+            --no-build

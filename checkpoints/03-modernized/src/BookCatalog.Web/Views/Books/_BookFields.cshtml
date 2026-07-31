@@ -1,0 +1,26 @@
+@model Book
+
+<div>
+    <label asp-for="Title"></label>
+    <input asp-for="Title" />
+    <span asp-validation-for="Title"></span>
+</div>
+<div>
+    <label asp-for="Author"></label>
+    <input asp-for="Author" />
+    <span asp-validation-for="Author"></span>
+</div>
+<div>
+    <label asp-for="ISBN"></label>
+    <input asp-for="ISBN" />
+    <span asp-validation-for="ISBN"></span>
+</div>
+<div>
+    <label asp-for="PublishedYear"></label>
+    <input asp-for="PublishedYear" />
+    <span asp-validation-for="PublishedYear"></span>
+</div>
+<div>
+    <label asp-for="IsActive"></label>
+    <input asp-for="IsActive" />
+</div>

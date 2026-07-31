@@ -1,15 +1,14 @@
 # ---------------------------------------------------------------
-# Squad / Copilot / Editor local state
+# Copilot / Editor local state
 # ---------------------------------------------------------------
-# Squad: ignore runtime state (logs, inbox, sessions)
-.squad/orchestration-log/
-.squad/log/
-.squad/decisions/inbox/
-.squad/sessions/
-# Squad: SubSquad activation file (local to this machine)
-.squad-workstream
 # Copilot
 .copilot/
+
+# Course reset/resume workspace
+work/
+
+# Documentation QA dependencies
+node_modules/
 
 # Visual Studio Code settings
 .vscode/
@@ -86,6 +85,8 @@ StyleCopReport.xml
 project.lock.json
 project.fragment.lock.json
 artifacts/
+!checkpoints/**/artifacts/
+!checkpoints/**/artifacts/**
 
 # ---------------------------------------------------------------
 # ASP.NET / IIS Express
@@ -142,3 +143,12 @@ secrets.json
 *.mdf
 *.ldf
 *.sdf
+# ---------------------------------------------------------------
+# Jekyll / GitHub Pages
+# ---------------------------------------------------------------
+_site/
+.jekyll-cache/
+.jekyll-metadata
+vendor/
+.bundle/
+Gemfile.lock
