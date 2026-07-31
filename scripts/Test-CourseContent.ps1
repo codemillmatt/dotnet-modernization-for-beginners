@@ -200,15 +200,15 @@ foreach ($file in $contentFiles | Where-Object { $_.Extension.ToLowerInvariant()
 }
 
 if ($mermaidBlocks.Count -gt 0) {
-    $mmdc = Get-Command mmdc -ErrorAction SilentlyContinue
-    if (-not $mmdc) {
-        $candidate = Join-Path $repository 'node_modules\.bin\mmdc'
+    $mmdcPath = (Get-Command mmdc -ErrorAction SilentlyContinue).Source
+    if (-not $mmdcPath) {
+        $candidate = Join-Path $repository 'node_modules/.bin/mmdc'
         if (Test-Path $candidate) {
-            $mmdc = Get-Item $candidate
+            $mmdcPath = (Get-Item $candidate).FullName
         }
     }
 
-    if (-not $mmdc) {
+    if (-not $mmdcPath) {
         $errors.Add('Mermaid diagrams exist but mmdc is unavailable. Run npm ci.')
     }
     else {
@@ -219,7 +219,7 @@ if ($mermaidBlocks.Count -gt 0) {
                 $inputPath = Join-Path $temporary "$index.mmd"
                 $outputPath = Join-Path $temporary "$index.svg"
                 Set-Content $inputPath $mermaidBlocks[$index].Content
-                & $mmdc.Source --input $inputPath --output $outputPath --quiet
+                & $mmdcPath --input $inputPath --output $outputPath --quiet
                 if ($LASTEXITCODE -ne 0 -or -not (Test-Path $outputPath)) {
                     $errors.Add("Mermaid rendering failed for $($mermaidBlocks[$index].Source).")
                 }
