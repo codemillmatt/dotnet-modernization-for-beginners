@@ -214,12 +214,24 @@ if ($mermaidBlocks.Count -gt 0) {
     else {
         $temporary = Join-Path ([IO.Path]::GetTempPath()) "course-mermaid-$([guid]::NewGuid())"
         New-Item $temporary -ItemType Directory | Out-Null
+
+        # Hosted Linux runners disable unprivileged user namespaces, so Chrome
+        # cannot start its sandbox there. The only input is this repository's
+        # own diagram source.
+        $puppeteerConfig = Join-Path $repository 'puppeteer-config.json'
+
         try {
             for ($index = 0; $index -lt $mermaidBlocks.Count; $index++) {
                 $inputPath = Join-Path $temporary "$index.mmd"
                 $outputPath = Join-Path $temporary "$index.svg"
                 Set-Content $inputPath $mermaidBlocks[$index].Content
-                & $mmdcPath --input $inputPath --output $outputPath --quiet
+
+                $mermaidArgs = @('--input', $inputPath, '--output', $outputPath, '--quiet')
+                if (Test-Path $puppeteerConfig) {
+                    $mermaidArgs += @('--puppeteerConfigFile', $puppeteerConfig)
+                }
+
+                & $mmdcPath @mermaidArgs
                 if ($LASTEXITCODE -ne 0 -or -not (Test-Path $outputPath)) {
                     $errors.Add("Mermaid rendering failed for $($mermaidBlocks[$index].Source).")
                 }
