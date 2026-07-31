@@ -144,11 +144,12 @@ secrets.json
 *.ldf
 *.sdf
 # ---------------------------------------------------------------
-# Jekyll / GitHub Pages
+# Documentation site (Astro Starlight, in site/)
 # ---------------------------------------------------------------
-_site/
-.jekyll-cache/
-.jekyll-metadata
-vendor/
-.bundle/
-Gemfile.lock
+# Generated from the chapter Markdown by site/scripts/build-content.mjs
+site/src/content/docs/
+site/src/generated-sidebar.json
+site/public/assets/
+site/dist/
+site/.astro/
+.astro/

@@ -1,0 +1,72 @@
+/* Course-specific styling on top of the Starlight defaults. */
+
+:root {
+  --sl-font: 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', sans-serif;
+}
+
+/* Chapter pages lead with a "Time / You need" line and lots of wide tables.
+   Give tables room and stop them from overflowing the content column. */
+.sl-markdown-content table {
+  display: block;
+  overflow-x: auto;
+  font-size: var(--sl-text-sm);
+}
+
+.sl-markdown-content th {
+  white-space: nowrap;
+}
+
+/* Mermaid diagrams render as inline SVG. Center them and let them scale down on
+   narrow viewports instead of forcing a horizontal scrollbar on the page. */
+.sl-markdown-content .mermaid {
+  display: flex;
+  justify-content: center;
+  margin-block: 1.5rem;
+  overflow-x: auto;
+}
+
+.sl-markdown-content .mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Before the client script runs, a diagram is raw Mermaid source. Hide it so the
+   page doesn't flash a wall of `flowchart LR` text. */
+.sl-markdown-content .mermaid:not([data-processed]) {
+  visibility: hidden;
+  min-height: 3rem;
+}
+
+/* If a diagram fails to render, show its source as a readable code block rather
+   than nothing at all. */
+.sl-markdown-content .mermaid[data-processed='failed'] {
+  display: block;
+  white-space: pre;
+  font-family: var(--sl-font-mono);
+  font-size: var(--sl-text-xs);
+  padding: 1rem;
+  border-radius: 0.25rem;
+  background: var(--sl-color-gray-6);
+}
+
+/* Prompts learners copy verbatim; make them visually distinct from shell blocks. */
+.sl-markdown-content .expressive-code .frame.is-terminal {
+  --code-background: var(--sl-color-black);
+}
+
+/* The splash hero reserves a column for an illustration this course doesn't have,
+   which leaves a large dead gap above the page body. Collapse it and keep the
+   hero text in a readable measure. */
+.hero {
+  padding-block: 1rem 0;
+}
+
+.hero > .stack {
+  max-width: 60ch;
+}
+
+@media (min-width: 50rem) {
+  .hero {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

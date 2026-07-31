@@ -32,6 +32,34 @@ jobs:
         shell: pwsh
         run: ./scripts/Test-CourseContent.ps1
 
+  # The site is generated from the chapter Markdown, so a content change can break
+  # the build (a missing title, an orphan `parent`) without touching site/ at all.
+  # Build it on every pull request rather than discovering that on a push to main.
+  site:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7.0.1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7.0.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+
+      - name: Install site dependencies
+        run: npm ci
+        working-directory: site
+
+      - name: Build site
+        run: npm run build
+        working-directory: site
+
+      - name: Check internal links
+        run: npm run check-links
+        working-directory: site
+
   modernized-checkpoint:
     runs-on: ubuntu-latest
     steps:

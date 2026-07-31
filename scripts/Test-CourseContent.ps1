@@ -15,7 +15,7 @@ function Test-ExcludedPath {
     param([Parameter(Mandatory)][string] $Path)
 
     $relative = Get-RelativePath -Path $Path
-    return $relative -match '^(?:\.git|\.github/agents|\.github/extensions|_site|node_modules|vendor|work)(?:/|$)' -or
+    return $relative -match '^(?:\.git|\.github/agents|\.github/extensions|node_modules|site|work)(?:/|$)' -or
         $relative -match '/(?:bin|obj|publish)/'
 }
 

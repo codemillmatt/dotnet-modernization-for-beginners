@@ -1,0 +1,20 @@
+{
+  "name": "dotnet-modernization-course-site",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Astro Starlight site generated from the course Markdown at the repository root.",
+  "scripts": {
+    "prepare-content": "node scripts/build-content.mjs",
+    "dev": "npm run prepare-content && astro dev",
+    "build": "npm run prepare-content && astro build",
+    "preview": "astro preview",
+    "check-links": "node scripts/check-links.mjs"
+  },
+  "dependencies": {
+    "@astrojs/starlight": "0.36.2",
+    "astro": "5.15.9",
+    "mermaid": "11.16.0",
+    "sharp": "0.34.4"
+  }
+}
