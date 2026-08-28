@@ -1,11 +1,11 @@
-import { chapters, contentUrl } from "./config.js";
+import { chapters, contentUrl, supplementalPages } from "./config.js";
 import { article, chapterPager, outlineNav } from "./dom.js";
 import { buildOutline, closeDrawers, renderChapterNav, renderPager } from "./ui.js";
 
 function getRoute() {
   const route = window.location.hash.replace(/^#\/?/, "");
   const [slug = "overview", query = ""] = route.split("?");
-  const chapter = chapters.find((item) => item.slug === slug) || chapters[0];
+  const chapter = [...chapters, ...supplementalPages].find((item) => item.slug === slug) || chapters[0];
   const section = new URLSearchParams(query).get("section");
 
   return { chapter, section };
@@ -29,7 +29,7 @@ function normalizePath(path) {
 
 function chapterForPath(path) {
   const normalized = normalizePath(path);
-  return chapters.find((chapter) => normalizePath(chapter.path) === normalized);
+  return [...chapters, ...supplementalPages].find((chapter) => normalizePath(chapter.path) === normalized);
 }
 
 function escapeHtml(value) {

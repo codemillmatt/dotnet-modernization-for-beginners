@@ -182,6 +182,18 @@ a:hover {
   cursor: pointer;
 }
 
+.repository-link {
+  width: auto;
+  gap: 0.5rem;
+  padding: 0 0.75rem;
+  text-decoration: none;
+}
+
+.repository-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
 .icon-button:hover {
   border-color: var(--cp-border-strong);
   background: var(--cp-accent-soft);
@@ -227,6 +239,41 @@ a:hover {
 .course-progress {
   color: var(--cp-text);
   font-weight: 600;
+}
+
+.product-context {
+  padding: 0.5rem;
+  border: 1px solid var(--cp-border);
+  border-radius: 0.5rem;
+  background: var(--cp-surface-soft);
+  color: var(--cp-text);
+  font-size: 0.75rem;
+}
+
+.prerequisite-button {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem;
+  border: 1px solid var(--cp-border-strong);
+  border-radius: 0.5rem;
+  background: var(--cp-surface);
+  color: var(--cp-text);
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.prerequisite-button[aria-pressed="true"] {
+  border-color: var(--cp-success);
+}
+
+.prerequisite-button svg {
+  width: 1rem;
+  flex: 0 0 auto;
 }
 
 .eyebrow {
@@ -667,10 +714,6 @@ a:hover {
 
   .icon-button.mobile-only {
     display: grid;
-  }
-
-  .repository-link {
-    display: none;
   }
 
   .course-nav {

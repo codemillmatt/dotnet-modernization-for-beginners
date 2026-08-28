@@ -1,0 +1,102 @@
+name: Course validation
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  legacy-build:
+    name: Windows legacy build
+    runs-on: windows-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Add MSBuild to PATH
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Install NuGet
+        uses: NuGet/setup-nuget@v2
+
+      - name: Verify MSBuild environment
+        run: msbuild -version -nologo
+
+      - name: Verify LocalDB environment
+        run: sqllocaldb info MSSQLLocalDB
+
+      - name: Restore packages.config
+        run: nuget restore shared-legacy-app\BookCatalog.sln -ConfigFile shared-legacy-app\NuGet.Config -NonInteractive
+
+      - name: Build legacy BookCatalog
+        run: msbuild shared-legacy-app\BookCatalog.sln /m /p:Configuration=Release /p:RestorePackages=false /verbosity:minimal
+
+      - name: Run legacy behavior contract
+        shell: pwsh
+        run: |
+          $sitePath = (Resolve-Path "shared-legacy-app\src\BookCatalog.Web").Path
+          $iisExpress = Join-Path ${env:ProgramFiles} "IIS Express\iisexpress.exe"
+          if (-not (Test-Path $iisExpress)) {
+            throw "IIS Express is required for the legacy behavior contract."
+          }
+
+          $server = Start-Process $iisExpress -ArgumentList "/path:$sitePath", "/port:52000" -PassThru
+          try {
+            $ready = $false
+            foreach ($attempt in 1..30) {
+              try {
+                Invoke-WebRequest "http://localhost:52000/Books" -SkipHttpErrorCheck | Out-Null
+                $ready = $true
+                break
+              }
+              catch {
+                Start-Sleep -Seconds 2
+              }
+            }
+            if (-not $ready) {
+              throw "BookCatalog did not start within 60 seconds."
+            }
+
+            & "shared-legacy-app\scripts\Test-BookCatalogBehavior.ps1" -BaseUrl "http://localhost:52000"
+          }
+          finally {
+            Stop-Process -Id $server.Id -Force -ErrorAction SilentlyContinue
+          }
+
+  documentation-and-site:
+    name: Documentation and website
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Validate links, images, navigation, and accessibility
+        run: python scripts/validate_repo.py --check-external
+
+      - name: Validate published site layout
+        run: |
+          python scripts/prepare_site.py _site
+          python scripts/validate_repo.py --site-root _site
+
+      - name: Check JavaScript syntax
+        run: |
+          node --check webpage/app.js
+          node --check webpage/scripts/config.js
+          node --check webpage/scripts/dom.js
+          node --check webpage/scripts/reader.js
+          node --check webpage/scripts/state.js
+          node --check webpage/scripts/ui.js
