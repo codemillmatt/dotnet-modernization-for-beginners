@@ -9,9 +9,13 @@ import {
   outlineNav,
   outlinePanel,
   outlineToggle,
+  prerequisitesCheckpoint,
   progressBar
 } from "./dom.js";
-import { getCompletedChapters } from "./state.js";
+import { getCompletedChapters, getPrerequisitesComplete } from "./state.js";
+
+let activeDrawer = null;
+let drawerToggle = null;
 
 function slugify(value) {
   return value
@@ -31,7 +35,7 @@ function escapeHtml(value) {
 export function renderChapterNav(activeChapter) {
   const completed = getCompletedChapters();
   const completedCount = chapters.slice(1).filter((chapter) => completed.has(chapter.slug)).length;
-  courseProgress.textContent = `${completedCount} of ${chapters.length - 1} chapters complete`;
+  courseProgress.textContent = `${completedCount} of ${chapters.length - 1} chapter exercises completed`;
 
   chapterNav.innerHTML = `
     <ol class="chapter-list">
@@ -70,6 +74,10 @@ export function buildOutline(chapter) {
 
 export function renderPager(activeChapter) {
   const index = chapters.indexOf(activeChapter);
+  if (index < 0) {
+    chapterPager.innerHTML = "";
+    return;
+  }
   const previous = chapters[index - 1];
   const next = chapters[index + 1];
   const isComplete = getCompletedChapters().has(activeChapter.slug);
@@ -77,10 +85,10 @@ export function renderPager(activeChapter) {
   chapterPager.innerHTML = `
     ${index > 0 ? `
       <div class="chapter-completion">
-        <span>Finished reading this chapter?</span>
+        <span>Completed this chapter's learner artifact?</span>
         <button class="completion-button" type="button" data-complete-chapter="${activeChapter.slug}" aria-pressed="${isComplete}">
           <i data-lucide="${isComplete ? "circle-check-big" : "circle"}" aria-hidden="true"></i>
-          ${isComplete ? "Completed" : "Mark as complete"}
+          ${isComplete ? "Exercise completed" : "Mark exercise complete"}
         </button>
       </div>` : ""}
     <div class="pager-grid">
@@ -122,16 +130,89 @@ export function toggleTheme() {
 }
 
 export function closeDrawers() {
+  const focusTarget = drawerToggle;
   courseNavPanel.classList.remove("is-open");
   outlinePanel.classList.remove("is-open");
   document.body.classList.remove("drawer-open");
   chaptersToggle.setAttribute("aria-expanded", "false");
   outlineToggle.setAttribute("aria-expanded", "false");
+  const isMobile = window.matchMedia("(max-width: 52rem)").matches;
+  document.querySelector(".site-header").inert = false;
+  document.querySelector("#main-content").inert = false;
+  courseNavPanel.inert = isMobile;
+  outlinePanel.inert = isMobile;
+
+  if (activeDrawer) {
+    activeDrawer.removeAttribute("aria-modal");
+    activeDrawer.removeAttribute("role");
+    activeDrawer.removeAttribute("tabindex");
+  }
+  activeDrawer = null;
+  drawerToggle = null;
+
+  if (focusTarget && document.contains(focusTarget)) {
+    focusTarget.focus();
+  }
 }
 
 export function openDrawer(panel, toggle) {
   closeDrawers();
+  activeDrawer = panel;
+  drawerToggle = toggle;
   panel.classList.add("is-open");
+  panel.inert = false;
+  panel.setAttribute("role", "dialog");
+  panel.setAttribute("aria-modal", "true");
+  panel.setAttribute("tabindex", "-1");
   document.body.classList.add("drawer-open");
   toggle.setAttribute("aria-expanded", "true");
+
+  [document.querySelector(".site-header"), document.querySelector("#main-content"), courseNavPanel, outlinePanel]
+    .filter((element) => element && element !== panel)
+    .forEach((element) => {
+      element.inert = true;
+    });
+
+  const firstFocusable = panel.querySelector("a[href], button:not([disabled]), [tabindex]:not([tabindex='-1'])");
+  (firstFocusable || panel).focus();
+}
+
+export function handleDrawerKeydown(event) {
+  if (!activeDrawer) return;
+
+  if (event.key === "Escape") {
+    event.preventDefault();
+    closeDrawers();
+    return;
+  }
+
+  if (event.key !== "Tab") return;
+
+  const focusable = [...activeDrawer.querySelectorAll("a[href], button:not([disabled]), [tabindex]:not([tabindex='-1'])")]
+    .filter((element) => !element.hidden);
+  if (!focusable.length) {
+    event.preventDefault();
+    activeDrawer.focus();
+    return;
+  }
+
+  const first = focusable[0];
+  const last = focusable.at(-1);
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
+}
+
+export function renderPrerequisitesCheckpoint() {
+  const complete = getPrerequisitesComplete();
+  prerequisitesCheckpoint.setAttribute("aria-pressed", String(complete));
+  prerequisitesCheckpoint.innerHTML = `
+    <i data-lucide="${complete ? "circle-check-big" : "circle"}" aria-hidden="true"></i>
+    <span>${complete ? "Prerequisites verified" : "Prerequisites not yet verified"}</span>
+  `;
+  lucide.createIcons({ attrs: { "aria-hidden": "true" } });
 }

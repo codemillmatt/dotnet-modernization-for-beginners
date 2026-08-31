@@ -5,15 +5,18 @@ import {
   drawerBackdrop,
   outlinePanel,
   outlineToggle,
+  prerequisitesCheckpoint,
   themeToggle
 } from "./scripts/dom.js";
 import { getCurrentChapter, renderRoute } from "./scripts/reader.js";
-import { toggleChapterCompletion } from "./scripts/state.js";
+import { toggleChapterCompletion, togglePrerequisitesComplete } from "./scripts/state.js";
 import {
   closeDrawers,
+  handleDrawerKeydown,
   openDrawer,
   renderChapterNav,
   renderPager,
+  renderPrerequisitesCheckpoint,
   toggleTheme,
   updateReadingProgress
 } from "./scripts/ui.js";
@@ -35,6 +38,10 @@ outlineToggle.addEventListener("click", () => {
   else openDrawer(outlinePanel, outlineToggle);
 });
 drawerBackdrop.addEventListener("click", closeDrawers);
+prerequisitesCheckpoint.addEventListener("click", () => {
+  togglePrerequisitesComplete();
+  renderPrerequisitesCheckpoint();
+});
 chapterPager.addEventListener("click", (event) => {
   const button = event.target.closest("[data-complete-chapter]");
   if (!button) return;
@@ -45,12 +52,16 @@ chapterPager.addEventListener("click", (event) => {
   renderPager(chapter);
 });
 document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape") closeDrawers();
+  handleDrawerKeydown(event);
 });
 window.addEventListener("hashchange", renderRoute);
 window.addEventListener("scroll", updateReadingProgress, { passive: true });
-window.addEventListener("resize", updateReadingProgress);
+window.addEventListener("resize", () => {
+  closeDrawers();
+  updateReadingProgress();
+});
 
 lucide.createIcons();
+renderPrerequisitesCheckpoint();
 if (!window.location.hash) window.location.hash = "/overview";
 else renderRoute();

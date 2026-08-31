@@ -10,3 +10,4 @@ export const chaptersToggle = document.querySelector("#chapters-toggle");
 export const outlineToggle = document.querySelector("#outline-toggle");
 export const drawerBackdrop = document.querySelector("#drawer-backdrop");
 export const themeToggle = document.querySelector("#theme-toggle");
+export const prerequisitesCheckpoint = document.querySelector("#prerequisites-checkpoint");
