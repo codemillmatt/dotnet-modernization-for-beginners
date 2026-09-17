@@ -1,27 +1,56 @@
-# Course Webpage
+# Workshop website
 
-This folder contains the static GitHub Pages reader. Course content stays in the repository's existing README files and is not duplicated here.
+The reader uses the course READMEs as its source. Edit those files instead of generated HTML.
 
-## Local preview
+## Build and preview
 
-From the repository root, run:
+Use Node 24, npm, and Python 3. From the repository root:
 
 ```powershell
-python -m http.server 4173
+npm ci
+npm run build
+npm run preview
 ```
 
-Then open <http://localhost:4173/webpage/>.
+```bash
+npm ci
+npm run build
+npm run preview
+```
 
-## JavaScript structure
+Open `http://127.0.0.1:4173/`. Stop the preview with Ctrl+C.
+
+The build creates `_site`. It refuses to replace an existing directory without its build marker.
+
+The artifact includes local fonts, scripts, diagrams, and reference downloads. The reader does not need a CDN.
+
+## Source ownership
 
 | File | Responsibility |
-|------|----------------|
-| `app.js` | Application initialization and event wiring |
-| `scripts/config.js` | Chapter manifest and content location |
-| `scripts/dom.js` | Shared DOM element references |
-| `scripts/state.js` | Persisted chapter completion state |
-| `scripts/ui.js` | Navigation, outline, pager, drawers, and theme UI |
-| `scripts/reader.js` | Markdown loading, link rewriting, and generated diagram placement |
-| `tools/render-mermaid.mjs` | Build-time light/dark SVG generation and manifest creation |
+| --- | --- |
+| `scripts/chapters.js` | Chapter order, stable identifiers, and reference routes |
+| `scripts/reader.js` | Markdown, links, diagrams, and code copy |
+| `scripts/state.js` | Browser progress and migration of old reading marks |
+| `scripts/ui.js` | Navigation, outline, drawers, and theme |
+| `styles.css` | Color, typography, and responsive layout |
+| `assets/` | Original illustrations |
+| `tools/build.mjs` | Curated content and local dependency assets |
+| `tools/render-mermaid.mjs` | Light and dark diagram assets |
 
-The Pages workflow copies this folder into the deployment root, stages the course READMEs under `content/`, and converts Mermaid blocks into light and dark SVG assets. Mermaid remains the editable source, while the deployed reader has no Mermaid browser dependency.
+The default theme uses the selected retro-resort design. A previous saved choice or explicit theme link takes precedence.
+
+## Progress and privacy
+
+The reader stores progress in this browser. It does not send progress to a server.
+
+Completion means the learner marked a chapter after its checks. It does not mean the website tested the application.
+
+Azure is optional. Old reading marks remain separate from completion of the new workshop checks.
+
+## Checks and publication
+
+Run the commands in [the validation guide](../docs/validation.md).
+
+The Pages workflow builds this artifact on its existing triggers. Pull request checks do not publish the site.
+
+Keep chapter slugs and public anchors stable. Add an alias before changing a published section identifier.

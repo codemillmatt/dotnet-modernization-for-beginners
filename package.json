@@ -1,0 +1,29 @@
+{
+  "name": "dotnet-modernization-workshop",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "build": "node webpage/tools/build.mjs",
+    "preview": "node webpage/tools/serve.mjs",
+    "test:content": "node --test tests/content/*.test.mjs",
+    "test:site": "playwright test",
+    "test:language": "python3 tools/check-language.py",
+    "test:cloud": "node --test tests/cloud/*.test.mjs",
+    "test": "npm run test:content && npm run test:cloud && npm run test:language"
+  },
+  "dependencies": {
+    "mssql": "12.7.2"
+  },
+  "devDependencies": {
+    "@fontsource/outfit": "5.3.0",
+    "@mermaid-js/mermaid-cli": "11.17.0",
+    "@playwright/test": "1.63.0",
+    "dompurify": "3.4.15",
+    "github-slugger": "2.0.0",
+    "marked": "18.0.13"
+  }
+}

@@ -3,39 +3,34 @@ import { mkdtemp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { spawnSync } from "node:child_process";
+import { chapters } from "../scripts/chapters.js";
+import { fileURLToPath } from "node:url";
 
-const documents = [
-  "README.md",
-  "00-introduction/README.md",
-  "01-assessment/README.md",
-  "02-planning/README.md",
-  "03-upgrade-execution/README.md",
-  "04-cloud/README.md"
-];
+const documents = chapters.map(chapter => chapter.path);
 
 const themes = {
   light: {
     theme: "base",
     themeVariables: {
-      background: "#fdfcff",
-      primaryColor: "#f1eef8",
-      primaryTextColor: "#211c28",
-      primaryBorderColor: "#512bd4",
-      lineColor: "#62596e",
-      secondaryColor: "#e9e3f7",
-      tertiaryColor: "#ffffff"
+      background: "#fffbf2",
+      primaryColor: "#fff2d5",
+      primaryTextColor: "#102e2a",
+      primaryBorderColor: "#14675f",
+      lineColor: "#14675f",
+      secondaryColor: "#f0c24d",
+      tertiaryColor: "#fffbf2"
     }
   },
   dark: {
     theme: "base",
     themeVariables: {
-      background: "#110e17",
-      primaryColor: "#211a2b",
-      primaryTextColor: "#f5f2f8",
-      primaryBorderColor: "#8f78ff",
-      lineColor: "#b7adbf",
-      secondaryColor: "#2b1f3a",
-      tertiaryColor: "#18131f"
+      background: "#153331",
+      primaryColor: "#103d3d",
+      primaryTextColor: "#fff2d5",
+      primaryBorderColor: "#86e1cd",
+      lineColor: "#86e1cd",
+      secondaryColor: "#204642",
+      tertiaryColor: "#153331"
     }
   }
 };
@@ -67,8 +62,9 @@ function sourceForTheme(source, textColor) {
 }
 
 function renderDiagram(sourceFile, outputFile, configFile, backgroundColor, puppeteerConfigFile) {
-  const executable = process.platform === "win32" ? "mmdc.cmd" : "mmdc";
+  const executable = process.execPath;
   const argumentsList = [
+    fileURLToPath(new URL("../../node_modules/@mermaid-js/mermaid-cli/src/cli.js", import.meta.url)),
     "--input", sourceFile,
     "--output", outputFile,
     "--configFile", configFile,
@@ -82,7 +78,7 @@ function renderDiagram(sourceFile, outputFile, configFile, backgroundColor, pupp
 
   const result = spawnSync(executable, argumentsList, {
     encoding: "utf8",
-    shell: process.platform === "win32"
+    shell: false
   });
 
   if (result.status !== 0) {

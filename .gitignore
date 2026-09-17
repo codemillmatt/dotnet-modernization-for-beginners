@@ -133,6 +133,14 @@ secrets.json
 # GitHub Pages local deployment preview
 # ---------------------------------------------------------------
 _site/
+.site-build-*/
+node_modules/
+playwright-report/
+test-results/
+.playwright-mcp/
+.azure-lab/
+__pycache__/
+*.pyc
 
 # ---------------------------------------------------------------
 # ASP.NET local database files (SQL Server LocalDB / SQL CE)

@@ -1,225 +1,130 @@
-# Chapter 00: Introduction to Modernization
-In this chapter you'll get started with the GitHub Copilot modernization agent and run your first assessment on a small sample app. Along the way you'll see why teams bother upgrading off .NET Framework, and you'll meet the Assess → Plan → Act loop the agent uses.
+# Chapter 00: Get ready to modernize
 
-## 🎯 Learning Objectives
+First, run BookCatalog. Record its behavior before the agent changes it. You will compare that record with the upgraded app.
 
-By the end of this chapter, you'll:
-- Get started with the GitHub Copilot modernization agent in Visual Studio 2026
-- Run your first compatibility assessment on a legacy .NET Framework app
-- Understood the 3-phase model (Assess → Plan → Act) and how it structures every migration
-- Interpreted an assessment report: binary incompatible vs. source incompatible vs. behavioral changes
+BookCatalog has one web project, one controller, an EF6 database context, and Razor views. We supply that legacy code so you can practice an upgrade rather than build an old application from scratch.
 
----
+## Check before installing
 
-## ✅ Prerequisites
+Use Windows and Visual Studio 2026 for this path. BookCatalog needs the **ASP.NET and web development** workload.
 
-| Requirement | Version / Notes |
-|-------------|-----------------|
-| **Windows** | Windows 11 (22H2 or later) — Visual Studio requires Windows. On macOS or Linux, use the agent via VS Code or GitHub Copilot CLI instead. |
-| **Visual Studio** | 2026, with .NET desktop development workload |
-| **.NET 10 SDK** | Preview or latest release |
-| **GitHub Copilot subscription** | Active subscription required |
-| **Prior experience** | C#, Visual Studio basics |
+The agent needs **.NET desktop development** with the **GitHub Copilot** and **GitHub Copilot app modernization** optional components. Keep compatible installations. Do not uninstall other SDKs.
 
-> ⚠️ **Note:** This chapter includes getting started with the agent. If you've already used the GitHub Copilot modernization agent, skip to the [Your First Assessment](#-your-first-assessment) section.
+In PowerShell, start in the cloned repository root:
 
----
+```powershell
+git --version
+git config user.name
+git config user.email
+dotnet --list-sdks
+cd shared-legacy-app
+dotnet --version
+sqllocaldb info
+cd ..
+```
 
-## 🤔 Why Modernize?
+| Requirement | Why you need it | Acceptable result |
+| --- | --- | --- |
+| Git and author identity | Save and inspect your own changes | A Git version and nonempty name/email |
+| Stable .NET 10 SDK | Build the upgraded project | `dotnet --version` inside `shared-legacy-app` selects `10.0.x`, without a preview suffix |
+| .NET Framework 4.8 targeting pack and SDK | Compile the original project | Visual Studio loads and builds `BookCatalog.sln` without missing-framework errors |
+| ASP.NET workload and IIS Express | Build and host the legacy web app | The project loads as a web application and launches with F5 |
+| SQL Server LocalDB | Store the legacy sample data | `sqllocaldb info` lists `MSSQLLocalDB` |
+| Copilot component and signed-in access | Run the assessment and upgrade | The solution menu contains `Modernize`. The chat recognizes your account |
 
-Your .NET Framework 4.8 app works fine today. Why touch it? A few honest reasons:
+The checked-in `shared-legacy-app/global.json` allows stable .NET 10 feature bands through `latestFeature`. Run the check in that directory: SDK selection depends on the current directory, not just the project path.
 
-**.NET Framework isn't getting new features.** 4.8 and 4.8.1 are still supported and ship with Windows, but Microsoft's active investment has moved to modern .NET. 
+<details>
+<summary>Repair missing tools or access</summary>
 
-**LTS releases give you a predictable patch window.** Even-numbered modern .NET releases (8, 10, ...) get 3 years of free patches. Odd-numbered ones get 18 months. That's useful for planning. 
+Use the [Visual Studio Installer](https://learn.microsoft.com/visualstudio/install/modify-visual-studio) to add missing workloads and the .NET Framework 4.8 SDK/targeting pack, IIS Express, and LocalDB components. You can also use the [.NET Framework developer pack](https://learn.microsoft.com/dotnet/framework/install/guide-for-developers) and [LocalDB installation guidance](https://learn.microsoft.com/sql/database-engine/configure-windows/sql-server-express-localdb).
 
-**The runtime keeps getting faster.** Each annual release improves the JIT, GC, and ASP.NET Core pipeline. If you're curious how much, the "[Performance Improvements in .NET](https://devblogs.microsoft.com/dotnet/performance-improvements-in-net-10/)" posts are an exhausting read in the best way. 
+Install a stable [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) only if the SDK check fails. If you already have one, inspect `global.json` and the shell's `dotnet` path before installing again.
 
-**The package ecosystem moved.** Recent Azure SDKs, ML.NET, gRPC, and Aspire target modern .NET. The longer you stay on 4.x, the more new packages you can't pull in.
+Install [Git for Windows](https://git-scm.com/downloads/win) if needed. If author identity is missing, set it for this repository with `git config user.name "Your name"` and `git config user.email "your-address"`. Use an address you intend to appear in local commits.
 
-### Modernize vs. Rewrite vs. Retire
+Follow the [official Copilot upgrade installation instructions](https://learn.microsoft.com/dotnet/core/porting/github-copilot-upgrade/install?pivots=visualstudio). You can use paid or free Copilot access. Organizational policy and usage limits can affect availability.
 
-Not every app is worth modernizing. Before you start, decide which bucket yours falls in:
+</details>
 
-| Decision | When to Choose It | Example |
-|----------|-------------------|---------|
-| **Modernize** | The app still has business value, the code is in reasonable shape, and you want the security and ecosystem benefits. | An internal ASP.NET MVC app that processes orders. The logic is fine, but the dependencies are stale. |
-| **Rewrite** | The code is a mess, or the architecture doesn't fit modern patterns at all. | A 200k-line Web Forms monolith with no tests and inline SQL throughout. Modernizing it would cost more than starting over. |
-| **Retire** | Almost nobody uses it, or a SaaS product already does the job. | A custom HR portal used by five people. Microsoft 365 covers the same workflow. |
+## Run the original app
 
-This course assumes you've picked **Modernize**. If you're not sure, run the assessment in this chapter first. The report is a decent reality check on how much work you're actually looking at.
+Open `shared-legacy-app/BookCatalog.sln` in Visual Studio. Restore NuGet packages. Select **Build > Rebuild Solution**. Resolve restore or targeting-tool errors before an assessment.
 
----
+Select IIS Express. Press F5. The app should show the active book catalog. A fresh database contains six active books and one inactive book.
 
-## 🔧 What the Agent Does
+> **Use sample data only.** The legacy EF6 initializer can recreate its sample database if the model changes. Do not point this application at a database you care about. The later EF Core exercise uses a different database and leaves this one untouched.
 
-The GitHub Copilot modernization agent walks your project through three phases: **Assess**, **Plan**, and **Execute**.
+Follow the [baseline behavior checks](../docs/validation.md#behavior-contract) before any code changes. Create a disposable book. Record its details URL. Use that URL to find the book after you mark it inactive.
 
-| Phase | What It Does | Output |
-|-------|--------------|--------|
-| **Assess** | Scans the codebase for compatibility issues: deprecated APIs, breaking changes, NuGet packages that don't have a modern equivalent. | A report that buckets findings as blockers (won't compile), warnings (deprecated but still works), or informational (worth doing eventually). |
-| **Plan** | Turns the assessment into an ordered to-do list. Blockers first, then warnings, then the rest. | A migration plan with rough effort estimates. |
-| **Execute** | Actually makes the changes: edits project files, swaps deprecated APIs, proposes refactors. The AI generates suggestions; you review each one. | Modified files with diffs you accept or reject. |
+<div class="activity">
 
-You're still the one driving. The agent proposes, you decide.
+### Checkpoint: can you explain the starting state?
+
+In `shared-legacy-app/src/BookCatalog.Web/Controllers/BooksController.cs`, inspect `Index()`. Predict whether an inactive book appears. Predict the list order.
+
+Check your predictions in the app. Restore your disposable record's active status.
+
+You are ready when you can demonstrate the result, not merely identify a successful build.
+
+</div>
+
+## Save a baseline
+
+Stop debugging. From the repository root in PowerShell:
+
+```powershell
+git status --short
+git switch -c learn/bookcatalog-upgrade
+```
+
+If the branch name exists, use it only to resume that work. Otherwise, choose a new name. Do not reset an existing branch.
+
+The clone's current commit is your starting checkpoint. Inspect any changes before you proceed. Keep unrelated work separate.
+
+Later, commit only reviewed files. Keep database files and generated output out of Git.
+
+## What the agent does
 
 ```mermaid
-flowchart TD
-    START([Legacy .NET App])
-
-    START --> PHASE1
-
-    subgraph PHASE1 ["Phase 1 — Assess"]
-        ASSESS["Scan codebase<br/>APIs, packages, breaking changes"]
-        REPORT["Compatibility Report<br/>Binary incompatible / Source incompatible / Behavioral"]
-        ASSESS --> REPORT
-    end
-
-    PHASE1 --> PHASE2
-
-    subgraph PHASE2 ["Phase 2 — Plan"]
-        PLAN["Prioritize findings<br/>Blockers first, then warnings, then informational"]
-        MIGRATION["Migration Plan<br/>Ordered tasks with effort estimates"]
-        PLAN --> MIGRATION
-    end
-
-    PHASE2 --> PHASE3
-
-    subgraph PHASE3 ["Phase 3 — Act"]
-        ACT["AI proposes code changes<br/>Project files, API swaps, refactors"]
-        REVIEW{Developer Review}
-        ACT --> REVIEW
-    end
-
-    REVIEW -->|Reject diff| ACT
-    REVIEW -->|All accepted| DONE([Modernized App])
+flowchart LR
+    A["Assess: inspect source and risks"] --> P["Plan: choose and sequence changes"]
+    P --> E["Execute: edit, build, and test"]
+    E --> R["You: inspect evidence and decide"]
+    R -. "New finding" .-> P
 ```
 
----
+An assessment records what the agent found. Planning turns findings and your choices into tasks. Execution changes the application. Keeping these stages separate gives you a chance to correct a mistaken assumption before it becomes code.
 
-## 📦 Getting started
+Guided mode pauses at stage boundaries. It does not guarantee a pause or Git commit after every task.
 
-Open Visual Studio 2026 and make sure you have the .NET desktop development workload with these optional components enabled: GitHub Copilot, GitHub Copilot modernization agent.
+Ask the agent to remain in Guided mode. Tell it to wait for plan approval before code changes. Check its response and selected mode.
 
-Visual Studio includes the GitHub Copilot modernization agent through the GitHub Copilot modernization optional component, so you don't need to install it separately. Enable the GitHub Copilot and GitHub Copilot modernization optional components in the .NET desktop development workload through the Visual Studio Installer.
+Do not treat a bare "Continue" as a reliable review command.
 
-**Verify the installation**
-Open a solution in Visual Studio.
-Right-click a project in Solution Explorer and select **Modernize**, or open GitHub Copilot Chat and type **@Modernize**.
+The agent stores state under `.github/upgrades/{scenarioId}/`. Ask it to identify the actual folder. It contains your assessment, decisions, plan, task list, and per-task notes. These are your application's artifacts, not the repository's historical `plan.md`.
 
----
+<a id="-your-first-assessment"></a>
+## Optional: your first assessment
 
-## 🚀 Your First Assessment
+If you want a smaller warm-up, open `00-introduction/code/SimpleLegacyApp.sln` in **a separate clone**. This console app deliberately uses `HttpContext`, legacy configuration, and `BinaryFormatter`.
 
-Time to run an assessment on a small sample. It's a .NET Framework 4.8 console app with a couple of deliberately deprecated APIs, so the report has something to show you.
+Open the project's context menu. Select **Modernize**. Send this request:
 
-Open the sample:
-
-1. Navigate to `00-introduction/code/` in this repo.
-2. Open `SimpleLegacyApp.sln` in Visual Studio.
-
-**Expected output:**
-
-The solution loads with one project:
-
-```
-Solution 'SimpleLegacyApp' (1 of 1 project)
-  └── SimpleLegacyApp (net48)
+```text
+Assess this solution for an upgrade to .NET 10 in Guided mode.
+Do not plan or execute code changes yet. Identify the scenario folder
+and explain one compatibility finding by pointing to its source.
 ```
 
-Trigger the assessment:
+Read the reported finding. Inspect the named source. The compatibility category does not establish whether the business can defer the change.
 
-1. Right-click the project in Solution Explorer.
-2. Select **Modernize**.
-3. When the chat window opens, choose **Upgrade to a newer version of .NET**.
-4. Send message.
-5. After this initial message, the agent will take over and ask you which target framework you want. Write **".NET 10, Guided Mode and No Source Control"** and send.
+Use the [recorded report](../examples/assessments/README.md) for optional comparison. Do not expect identical counts. Do not copy its state into your clone.
 
- > ⚠️ **Guided vs. Flow Mode:** The agent has two modes. Flow Mode handles everything automatically. Guided Mode pauses after each phase so you can read the report before anything changes. Use Guided Mode here — the whole point of this chapter is to understand what the report is saying.
+Stop after assessment. Return to the BookCatalog clone and solution for Chapter 01. No console application output carries forward.
 
- > ⚠️ **Source control:** We're skipping it for this demo. On a real project, make sure you're on a clean Git branch before running Act — you'll want to be able to diff or roll back.
+## Before moving on
 
-**Expected output:**
+You have a working BookCatalog baseline, a learner branch, and a behavior record. You can distinguish the agent's assessment from its plan and code changes.
 
-The agent scans the code and produces a compatibility report. Expect 30–60 seconds.
-
-When complete, the report opens in a new tab:
-
-![Screenshot: Compatibility Report tab shows summary: 1 project, 8 issues, 7 source-incompatible APIs across 51 analyzed](images/assessment-report.png)
-
-### Reading the Report
-
-The report is a markdown file called **Projects and dependencies analysis**. It's long, so here's where to look first.
-
-The **High-level Metrics** table near the top gives you the big picture:
-
-| Metric | Count |
-| :--- | :---: |
-| Total Projects | 1 |
-| Total NuGet Packages | 0 |
-| Total Code Files | 2 |
-| Total Lines of Code | 81 |
-| Total Number of Issues | 8 |
-| Estimated LOC to modify | 7+ (~8.6% of the codebase) |
-
-For this sample, 7 lines out of 81. That's nothing. On a real app, the "Estimated LOC to modify" row is the first honest signal of how big the job is.
-
-Below that, the **API Compatibility** section breaks issues into three categories:
-
-| Category | What it means |
-| :--- | :--- |
-| 🔴 **Binary Incompatible** | The API is gone. Won't build. |
-| 🟡 **Source Incompatible** | The API changed enough that you need to edit and recompile. |
-| 🔵 **Behavioral change** | Compiles fine, behaves differently at runtime. Tests catch these. |
-
-All 7 of our issues are Source Incompatible. 44 of the 51 APIs analyzed are already fine and don't need touching.
-
-The **Technologies and Features** section groups those 7 issues by area, which is more useful than a raw API list:
-
-- **ASP.NET Framework (System.Web)** — 3 issues. `System.Web.*` doesn't exist in ASP.NET Core. Migrate to ASP.NET Core equivalents, or use `System.Web.Adapters` as a temporary bridge.
-- **Legacy Configuration System** — 2 issues. `ConfigurationManager` and `app.config` are replaced by `Microsoft.Extensions.Configuration`.
-- **Deprecated Remoting & Serialization** — 2 issues. `BinaryFormatter` is removed. `System.Text.Json` or protobuf are the go-to replacements.
-
-The **Most Frequent API Issues** table at the bottom lists the specific types: `System.Web.HttpContext` twice, `BinaryFormatter` twice, `ConfigurationManager` twice. Memorize these names — they'll come up again in Chapter 02 when the agent proposes actual code edits.
-
-None of this is fixed yet. The Assess phase only tells you what's there. Plan and Act are in Chapter 02.
-
----
-
-## ✅ You're Ready!
-
-First assessment done and report read. You know what a blocker is versus a warning, and you've understood the Assess → Plan → Act flow.
-
-Chapter 01 puts the same workflow against something bigger: BookCatalog, an ASP.NET MVC 5 app. You'll run a full assessment, generate an upgrade plan, and set up for the modernization in Chapter 02.
-
-**[Continue to Chapter 01: Assessment →](../01-assessment/README.md)**
-
-## 🛠️ Troubleshooting
-
-**Problem:** The assessment starts but fails with "Unable to analyze project."
-
-**Solution:** Check that your project is on a supported source framework. The modernization agent supports **.NET Framework (any version)**, **.NET Core 1.x–3.x**, and **.NET 5 or later** as source frameworks, with **.NET 8 or later** as the target. Verify the `<TargetFramework>` (or `<TargetFrameworkVersion>` for legacy `.csproj`) value in your project file.
-
-📘 **Learn more:** [Supported upgrade paths — GitHub Copilot modernization overview](https://learn.microsoft.com/dotnet/core/porting/github-copilot-app-modernization-overview#supported-upgrade-paths)
-
----
-
-**Problem:** GitHub Copilot shows "Not signed in" in the extension settings.
-
-**Solution:** Sign in to GitHub via **Tools** → **Options** → **GitHub** → **Account**. Your account must have an active Copilot subscription (individual, business, or enterprise).
-
-📘 **Learn more:** [Set up GitHub Copilot in Visual Studio](https://learn.microsoft.com/en-us/dotnet/core/porting/github-copilot-app-modernization/install?pivots=visualstudio)
-
----
-
-## 📚 Learn More
-
-A few useful follow-ups:
-
-- 📘 [GitHub Copilot modernization for .NET — overview](https://learn.microsoft.com/dotnet/core/porting/github-copilot-app-modernization/overview) — the agent and the Assess → Plan → Act flow.
-- 📘 [Port from .NET Framework to .NET](https://learn.microsoft.com/dotnet/core/porting/) — the canonical porting guide.
-- 📘 [.NET and .NET Framework support policy](https://dotnet.microsoft.com/platform/support/policy/dotnet-framework) — official end-of-support dates.
-- 📘 [`BinaryFormatter` security guide](https://learn.microsoft.com/dotnet/standard/serialization/binaryformatter-security-guide) — why it's deprecated and what to use instead.
-- 📘 [Strangler Fig pattern](https://learn.microsoft.com/azure/architecture/patterns/strangler-fig) — incremental modernization without a big-bang rewrite.
-
----
+**[Next: assess BookCatalog](../01-assessment/README.md)**

@@ -1,193 +1,142 @@
-# Chapter 02: Planning
+# Chapter 02: Choose the upgrade plan
 
-Chapter 01 gave you assessment artifacts. This chapter converts those findings into an execution-ready plan.
+You now have an assessment and a record of affected behaviors. Use them to choose the changes that belong together.
 
-The goal here is not code changes yet. The goal is decision quality: what to do first, what to defer, and how to gate execution so failures stay isolated.
+Start with the assessment commit from [Chapter 01](../01-assessment/README.md). BookCatalog must still run as the original .NET Framework application.
 
-## 🎯 Learning Objectives
+Your output is a reviewed plan. Do not authorize application edits yet.
 
-By the end of this chapter, you'll have:
-- Turned assessment findings into a prioritized migration strategy
-- Chosen key trade-offs (in-place vs side-by-side, inline fixes vs deferred fixes)
-- Generated plan artifacts (`upgrade-options.md`, `plan.md`, `tasks.md`)
-- Defined stop/go checkpoints before code execution
+## Understand the choices
 
----
+The agent can ask strategy questions during assessment or planning. Review their meaning rather than waiting for an exact dialog.
 
-## ✅ Prerequisites
+| Choice | Why it matters for BookCatalog | Choice for this exercise |
+| --- | --- | --- |
+| Upgrade strategy | One production project has no project dependency chain to sequence | Coordinate the changes in this application |
+| Project approach | A second web application and reverse proxy add deployment responsibilities | Use an in-place upgrade on your learner branch |
+| Entity Framework | EF Core changes data access as well as the web framework | Include EF Core and its behavior checks |
+| Configuration | ASP.NET Core needs connection and startup settings in its configuration system | Map the existing settings explicitly |
+| Database | An EF code change does not migrate existing records | Use a separate disposable database |
+| Review and Git | An agent pause does not create a code checkpoint | Request review boundaries and save actual commits |
 
-**From Chapter 01:**
-- Assessment report reviewed and understood
-- Blockers, warnings, and informational findings identified
-- Initial risk notes captured
+In larger systems, bottom-up means upgrading dependencies before their consumers. It is a project-order strategy.
 
----
+A side-by-side web migration keeps old and new applications running together. A reverse proxy can direct requests between them. That is a different decision.
 
-## 🗺️ Generating the Upgrade Plan
+BookCatalog is small enough for an in-place exercise. This does not make in-place migration the only valid approach for a single-project application.
 
-Once you've read the report in your Guided Mode session, the agent asks: **"To proceed: approve or continue To adjust: Edit assessment.md or tell me what to change To switch mode: Say continue in automatic mode to stop pausing at stage boundaries**
+## Choose the EF approach deliberately
 
-At the end of the assessment, Guided Mode pauses and prompts you with three options:
+Keeping EF6 can reduce the number of simultaneous changes. You must still check its package support and behavior on the target runtime.
 
-- **To proceed**: approve or say "continue"
-- **To adjust**: edit `assessment.md` directly or tell the agent what to change in chat
-- **To switch mode**: say "continue in automatic mode" to stop pausing at stage boundaries
+This exercise includes EF Core. We can inspect the small data layer and test its behavior. A larger data layer can justify a separate EF migration.
 
-Before continuing, this is your chance to amend the assessment if you spot a false positive or want to reprioritize something. For example, you could say: "In the assessment, please mark the `System.Web.Mvc` hits in `AdminController.cs` as informational instead of blockers, since those pages are low-priority for the upgrade."
+Dependency injection supplies a configured database context to the controller. The application controls its lifetime instead of the controller creating and disposing it manually.
 
-![Screenshot: Chat input with the message "Continue" to proceed to the Plan phase](images/plan-continue.png)
+EF Core's `EnsureCreated()` can create a schema in a new database. It cannot migrate an existing schema. Do not use it as a data-migration step.
 
-The agent then moves to the **Plan** phase. It takes the assessment findings and first surfaces a set of **upgrade strategy questions** — one decision at a time, each with a recommendation pre-selected and an explanation of why. The output is saved in `upgrade-options.md` in your project.
+Use these database boundaries:
 
-**Walk through each question, then at the end you'll send a single message to confirm your choices (or override any default).** We'll come back to that message at the end of this section.
+- Leave the legacy MDF and its connection unchanged.
+- Use `BookCatalogModernizedLab` for the modernized LocalDB sample.
+- Use sample records in each database.
+- Do not claim that records transfer between the databases.
+- Use a separate schema step for the optional Azure database.
 
-Let's walk through each decision BookCatalog triggers.
+<div class="activity">
 
-### Upgrade Strategy
+### Your decision: what evidence justifies EF Core now?
 
-The first question is how to spread the migration across time. Because BookCatalog is a single project, the agent has only one option:
+Inspect `Models/ApplicationDbContext.cs` and `Models/Book.cs` in the legacy project.
 
-| Value | Description |
-|-------|-------------|
-| **All-at-Once** (selected) | The single project is converted to SDK-style, retargeted to net10.0, and all code migrated in one coordinated pass. |
+Write one reason to include EF Core. Write one reason a different team might defer it. Name a behavior check for each reason.
 
-For multi-project solutions you'd also see **Strangler Fig** (migrate one project at a time from the bottom up). With a single project there's no dependency chain to work through, so all-at-once is the only sensible choice.
+</div>
 
-### Project Structure
+<details>
+<summary>Compare your reasoning</summary>
 
-Next, how to physically restructure the project during the migration:
+One context and one entity keep this exercise small. The active filter, editable fields, and creation-date behavior provide concrete checks.
 
-| Value | Description |
-|-------|-------------|
-| **In-place rewrite** (selected) | Replaces the Framework web project with an ASP.NET Core project in one pass. No YARP proxy, no parallel projects. |
-| Side-by-side | Creates a new ASP.NET Core project alongside the old one with a YARP proxy; assets migrate incrementally while the old app stays live. Better for large web surfaces. |
+A team with complex queries or an existing business database can choose a separate data-layer migration. Keeping EF6 does not remove the need for tests.
 
-BookCatalog is small (1 controller, ~633 LOC), so in-place is the cleaner fit. **Side-by-side** is worth knowing about for larger apps: it keeps the old site live while the new one is built alongside it, routing traffic gradually via a reverse proxy.
+</details>
 
-> 💡 **YARP** (Yet Another Reverse Proxy) is a Microsoft toolkit used in the side-by-side pattern to route incoming HTTP requests between the old ASP.NET Framework app and the new ASP.NET Core app. This lets you migrate and test incrementally while the old app stays live — at the cost of added infrastructure complexity.
+## Ask for the plan
 
-### APIs and Frameworks
+Send this request in the BookCatalog chat:
 
-89 `System.Web.Mvc` API changes, all with known ASP.NET Core equivalents. The agent recommends resolving them inline:
+```text
+Create the .NET 10 upgrade plan. Stay in Guided mode.
+Use an in-place ASP.NET Core MVC upgrade and include EF Core.
+Keep the legacy database untouched. Use BookCatalogModernizedLab
+as a separate disposable LocalDB database.
+Preserve the behavior checks from our assessment.
+Group package, API, and startup changes into coherent runnable states.
+Request my review before each execution group. Do not execute yet.
+Keep Git commits under my control.
+```
 
-| Value | Description |
-|-------|-------------|
-| **Fix Inline** (selected) | Resolve every API change in the same task, including complex ones. No deferred stubs to clean up later. |
-| Defer Complex Changes | Stub complex changes to keep the project building, resolve in follow-up subtasks. Better for large bottom-up upgrades. |
+Open the scenario files that the agent identifies:
 
-**Defer Complex Changes** is the escape hatch for large solutions where you want the project to compile at every step (useful in CI). For BookCatalog, all 89 issues are known patterns, fixing them inline gives you a clean codebase in one pass.
+| Artifact | What to check |
+| --- | --- |
+| `upgrade-options.md` | Your choices and the reasons for them |
+| `plan.md` | The scope and order of the changes |
+| `tasks.md` | The execution groups and their completion conditions |
+| `scenario-instructions.md` | Your constraints, including the database boundary |
 
-### Entity Framework
+Task names and counts can differ. Treat the plan as a proposal that you can edit.
 
-EF6 6.4.4 is detected with a single `DbContext`. The agent flags an important choice here:
+## Define runnable groups
 
-| Value | Description |
-|-------|-------------|
-| **Keep EF6** (selected) | Upgrade EF6 to 6.5.2 and run it on net10.0. Migrate to EF Core later as a separate effort. Lowest risk. |
-| Migrate to EF Core | Migrate Entity Framework simultaneously with the .NET upgrade. Two sources of breaking changes at once. |
+A project-file conversion is not necessarily a working web application. The project can compile while its views or hosting configuration still fail.
 
-As we are already doing an architectural migration (System.Web → ASP.NET Core), **we will migrate to Core**, as this is a simple app and we want to get all the benefits of EF Core right away. In a larger app with a complex data layer, it might be safer to *keep* EF6 for now, get the app running on .NET 10, then tackle EF Core as a separate project.
+Likewise, removing EF6 packages before replacing EF6 code can leave the application incomplete. Keep coupled changes inside the same review group.
 
-### Configuration
+| Group | Change | Evidence at the boundary |
+| --- | --- | --- |
+| Readiness | Check SDK selection, restore, branch, and baseline | The original app runs and the baseline record exists |
+| Application conversion | Change the project, MVC APIs, views, startup, configuration, and coupled EF code | The new app rebuilds and loads the separate lab database |
+| Behavior review | Compare results and correct regressions | The behavior contract passes |
+| Follow-up | Record intentional omissions and a recovery commit | The work can resume without recreating the plan |
 
-`web.config` holds standard connection strings and `appSettings` — nothing unusual:
+The agent can use smaller internal tasks. A temporary incomplete state is acceptable inside a group if you know when to run the application again.
 
-| Value | Description |
-|-------|-------------|
-| **Auto-migrate to .NET Core Configuration** (selected) | Converts web.config to appsettings.json and migrates code to IConfiguration. |
-| Manual Migration with Mapping Document | Generates a detailed settings mapping first. More control for complex configs. |
+Reject a completion condition that only says "build succeeded" when the group changes database or request behavior.
 
-**Manual Migration** is for apps where `web.config` has custom config sections, encrypted values, or environment-specific transforms that need human review before touching. BookCatalog's config is standard, so auto-migration handles it.
+## Approve the plan, not the execution
 
-With all strategy decisions reviewed, you're ready to generate the final plan. The agent synthesizes all of this into a prioritized sequence of atomic tasks.
+Inspect the pending diff before approval. Check that no application code changed during this planning step.
 
-Type: **"Continue. Change to use EF Core instead of keeping EF6"** and send. This overrides the default EF6 choice to include the EF Core migration in the same pass as the .NET upgrade — a reasonable call for a small app like BookCatalog.
+Ask for corrections where necessary. For example:
 
----
+```text
+The plan removes EF6 before the context migration.
+Keep those changes in the same runnable group.
+Add an HTTP check and a saved-record check at that boundary.
+Do not execute the revised plan yet.
+```
 
-## Plan Output
+From the repository root in PowerShell:
 
-When you send that message, it then updates `upgrade-options.md` to reflect your change and confirms it understood. Then the agent acknowledges the override and first asks permission to load the `SKILL.md` from its plan-generation module. Click **Confirm**.
+```powershell
+git status --short
+git diff
+git add .github/upgrades
+git diff --cached
+git commit -m "Record reviewed BookCatalog upgrade plan"
+```
 
-![Screenshot: "Access file 'SKILL.md'?" prompt pointing at the plan-generation skill folder with Confirm/Deny buttons](images/plan-skill-access.png)
+Commit only the reviewed artifacts. Keep unrelated files out of the staged changes.
 
-It generates the two plan artefacts — `plan.md` (+60 lines) and `tasks.md` (+15 lines) — in your project's `.github/upgrades/scenarios/dotnet-version-upgrade/` folder:
+You are ready when each execution group has a stated result and a way to check it.
 
-![Screenshot: "Now I'll generate the plan and tasks files." with plan.md (+60) and tasks.md (+15) file changes](images/plan-files-generated.png)
+**[Next: execute and check the upgrade](../03-upgrade-execution/README.md)**
 
-Finally, the agent then synthesizes the assessment findings and all strategy decisions into an **Upgrade Plan Summary** in the chat — a quick table you can review before the full plan files are written:
+## Reference
 
-![Screenshot: Upgrade Plan Summary — Strategy: All-At-Once (single project), Target: .NET 10.0, 5 tasks — table with task # / Task / What it does columns, plus key decisions footer](images/plan-summary.png)
-
----
-
-## 5-Task Breakdown
-
-The full content of `plan.md` is your Chapter 02 roadmap. It has 5 ordered tasks, each with a clear scope and a "Done when" condition so you know exactly when to move to the next:
-
-**Task 01 — Prerequisites**: Verify .NET 10 SDK is installed, check `global.json` for SDK pins, establish a baseline build. No code changes — just environment validation before anything else runs.
-
-**Task 02 — SDK-style conversion**: Rewrite `BookCatalog.Web.csproj` from classic Wap format to SDK-style and swap `packages.config` for `PackageReference`. The project stays on `net48` through this task so structural and API changes don't mix.
-
-**Task 03 — ASP.NET Core migration**: The main event. Retarget to `net10.0` and replace all 89 `System.Web.*` API hits:
-- `Global.asax.cs` + `RouteConfig` + `FilterConfig` → `Program.cs` startup pipeline
-- `BooksController` → `Microsoft.AspNetCore.Mvc.Controller`, `IActionResult`, `NotFound()`, `RedirectToAction`, `ValidateAntiForgeryToken`, `ModelState`
-- `HttpRequestBase.UserAgent` → ASP.NET Core equivalent
-- `web.config` → `appsettings.json` + `IConfiguration`
-- Razor views + `_Layout.cshtml` updated for ASP.NET Core conventions
-- `Newtonsoft.Json` bumped to 13.0.4; `Microsoft.AspNet.*` packages dropped
-
-**Task 04 — EF Core migration**: Migrate the data layer from EF6 to EF Core (`ApplicationDbContext` + `Book` entity). Replace the `EntityFramework` package with EF Core provider packages, convert the `DbContext` to the options-pattern constructor, register via DI in `Program.cs`, and handle EF6-specific patterns (database initializers → `EnsureCreated`, lazy-loading config).
-
-**Task 05 — Final validation**: Clean build (zero errors, zero warnings), app starts, any tests pass. Document deferred follow-ups (nullable reference types, EF Core migrations).
-
-> 💡 **Why 5 tasks instead of 1?** The plan deliberately isolates failure modes. If task 03 introduces a regression, you know it came from the ASP.NET Core migration — not the SDK conversion or the EF change. Each task is atomic and independently verifiable via its "Done when" condition.
-
-After reviewing the plan summary in the chat, open `plan.md` to see the full details. You can edit this file to adjust task scopes, add notes, or split/merge tasks as needed. The key is that the plan is a living document — generated by the agent but owned and maintained by you.
-
----
-
-## 🎓 Key Takeaways
-
-1. **Assessment quality determines plan quality.**
-   Planning is only as good as the assessment report. If the assessment missed an incompatibility, your plan will too. Spend time validating the assessment before moving forward.
-
-2. **Strategy decisions have trade-offs.**
-   All-at-Once is faster but riskier. Strangler Fig is slower but safer. There is no "perfect" strategy—only the right one for your constraints (timeline, team, risk tolerance).
-
-3. **Plan artifacts are living documents.**
-   Your `upgrade-options.md`, `plan.md`, and `tasks.md` will change as execution reveals new issues. Treat them as hypotheses, not law. Update them as you learn.
-
-4. **Task isolation reduces risk.**
-   Each task should be small enough to test, revert, and understand. If a task takes more than 1 day or touches more than one system, break it further.
-
-5. **Defer decisions explicitly.**
-   If you defer an item (e.g., "optimize LINQ queries later"), document it in `upgrade-options.md` with rationale. Implicit deferral means hidden tech debt.
-
-6. **Plan approval is your quality gate.**
-   Don't move to execution until all stakeholders agree:
-   - Strategy decisions are sound
-   - Risk notes are acknowledged
-   - Tasks are achievable in the allocated time
-   - Success criteria are clear
-
-7. **Feedback loops beat perfect upfront planning.**
-   Your plan will be wrong in some way. That's OK. Execute Phase 1, measure results, update the plan. Repeat. Migrating a large app to .NET 10 is not a waterfall—it's iterative.
-
----
-
-## ✅ You're Ready!
-
-You now have a planning artifact set ready for execution. Phase 01 gave you visibility into what's broken. Phase 02 gave you a strategy and a phased roadmap. Phase 03 is where you execute those tasks and build the new application.
-
-**[Continue to Chapter 03: Upgrade Execution →](../03-upgrade-execution/README.md)**
-
----
-
-## 📚 Learn More
-
-- [GitHub Copilot modernization for .NET](https://learn.microsoft.com/dotnet/core/porting/github-copilot-app-modernization-overview)
-- [Port from .NET Framework to .NET](https://learn.microsoft.com/dotnet/core/porting/)
-- [Migrate from System.Web to ASP.NET Core](https://learn.microsoft.com/aspnet/core/migration/fx-to-core/?view=aspnetcore-10.0)
-- [Entity Framework 6 to Entity Framework Core migration guide](https://learn.microsoft.com/ef/efcore-and-ef6/porting/)
-- [Configuration in .NET](https://learn.microsoft.com/dotnet/core/extensions/configuration)
+- [Upgrade strategies and flow modes](https://learn.microsoft.com/dotnet/core/porting/github-copilot-upgrade/concepts)
+- [EF6 to EF Core](https://learn.microsoft.com/ef/efcore-and-ef6/porting/)
+- [EF Core schema creation](https://learn.microsoft.com/ef/core/managing-schemas/ensure-created)
+- [Incremental ASP.NET migration](https://learn.microsoft.com/aspnet/core/migration/inc/overview)
