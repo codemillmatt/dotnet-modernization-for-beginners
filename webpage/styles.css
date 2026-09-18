@@ -108,7 +108,6 @@ button:hover, .resume-link:hover { box-shadow: 3px 3px 0 var(--shadow); }
 #main-content:focus { outline: none; }
 .chapter-label { display: inline-block; padding: .3rem .7rem; border: 1px solid var(--ink); border-radius: var(--control-radius, 4px); background: var(--soft); color: var(--ink); }
 .chapter-context { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem 1rem; }
-.era-label { color: var(--muted); font-size: .75rem; font-weight: 700; letter-spacing: .05em; }
 .article { margin: auto; max-width: 51rem; overflow-wrap: anywhere; }
 .article h1, .article h2, .article h3, .chapter-pager strong { font-family: var(--heading-font, Outfit), sans-serif; font-weight: 700; }
 .article h1 { font-size: clamp(2.1rem, 3.8vw, 3.8rem); line-height: 1.08; letter-spacing: -.045em; margin: 1.1rem 0 1.8rem; }
@@ -136,9 +135,14 @@ button:hover, .resume-link:hover { box-shadow: 3px 3px 0 var(--shadow); }
 .activity h3 { margin-top: .4rem; }
 details { border: 1px solid var(--line); border-radius: var(--panel-radius, 8px); padding: 1rem 1.1rem; margin: 1.5rem 0; }
 summary { cursor: pointer; font-weight: 700; color: var(--link); }
-.diagram-asset { margin: 2rem 0; }
-.diagram-asset img { display: block; width: 100%; min-height: 4rem; }
-html[data-theme="dark"] .diagram-light, html[data-theme="light"] .diagram-dark { display: none; }
+.course-illustration { margin: 2.5rem 0; max-width: 62rem; }
+.illustration-version { display: block; text-decoration: none; }
+.course-illustration img { display: block; width: 100%; min-height: 4rem; border: 1px solid var(--line); border-radius: var(--panel-radius, 10px); }
+.illustration-open { display: block; margin: .6rem 0; font-size: .8rem; text-decoration: underline; text-underline-offset: .2em; }
+.course-illustration figcaption { font-size: .9rem; color: var(--muted); }
+.course-illustration details { margin-top: .8rem; font-size: .85rem; }
+.course-illustration details p { margin-bottom: 0; }
+html[data-theme="dark"] .illustration-light, html[data-theme="light"] .illustration-dark { display: none; }
 .page-outline { padding-left: 1rem; border-left: 1px solid var(--line); }
 .page-outline ol { padding: 0; list-style: none; }
 .outline-link { display: block; padding: .3rem .4rem; font-size: .76rem; line-height: 1.5; color: var(--muted); text-decoration: none; border-left: 2px solid transparent; }

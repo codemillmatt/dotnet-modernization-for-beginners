@@ -12,22 +12,25 @@ export function escapeHtml(value) {
 }
 
 export function renderProgress(store, chapter) {
-  const { completed, previousReading, lastVisited } = store.value;
+  const { completed, previousCompleted, previousReading, lastVisited } = store.value;
   const core = chapters.filter(item => item.core);
   const count = core.filter(item => completed.includes(item.slug)).length;
   courseProgress.textContent = `${count} of ${core.length} core chapters complete`;
   document.querySelector("#completion-bar").style.width = `${100 * count / core.length}%`;
   const resume = document.querySelector("#resume-link");
   resume.href = `#/${lastVisited || "00-introduction"}`;
-  resume.textContent = lastVisited ? "Resume your last chapter" : "Start the workshop";
+  resume.textContent = lastVisited ? "Resume your last chapter" : "Start the course";
   const notice = document.querySelector("#storage-notice");
-  notice.textContent = store.warning || (previousReading.length
+  notice.textContent = store.warning || (previousCompleted.length
+    ? "Your earlier completion marks are saved as history. Complete the revised artifact and data checks before marking these chapters again."
+    : previousReading.length
     ? "Your previous reading marks are saved. Complete the new checks before you mark a chapter complete." : "");
   notice.hidden = !notice.textContent;
   chapterNav.innerHTML = `<ol class="chapter-list">${chapters.map(item => `
     <li><a class="chapter-link" href="#/${item.slug}" ${item.slug === chapter.slug ? 'aria-current="page"' : ""}>
       <span class="chapter-number ${completed.includes(item.slug) ? "is-complete" : ""}">${completed.includes(item.slug) ? "✓" : item.number}</span>
-      <span>${item.title}${item.slug === "04-cloud" ? '<small class="optional-label">Optional extension</small>' : ""}
+      <span>${item.title}${item.slug === "04-cloud" ? '<small>Assessment and plan</small>' : ""}
+      ${previousCompleted.some(mark => mark.slug === item.slug) && !completed.includes(item.slug) ? "<small>Earlier exercise completed</small>" : ""}
       ${previousReading.includes(item.slug) && !completed.includes(item.slug) ? "<small>Previously read</small>" : ""}
       ${completed.includes(item.slug) ? '<span class="sr-only">Completed</span>' : ""}</span>
     </a></li>`).join("")}</ol>`;
@@ -69,11 +72,13 @@ export function renderPager(chapter, store) {
   const complete = store.value.completed.includes(chapter.slug);
   chapterPager.innerHTML = `
     ${index > 0 ? `<div class="chapter-completion"><div><strong>Make this checkpoint yours.</strong>
-      <p>Complete the chapter's checks before you mark it.</p></div>
+      <p>${chapter.slug === "04-cloud"
+        ? "Complete the Azure assessment and migration plan. Deployment is optional."
+        : "Complete the chapter's artifact and data checks before you mark it."}</p></div>
       <button type="button" data-complete="${chapter.slug}" aria-pressed="${complete}">${complete ? "Marked complete" : "I completed the checks"}</button></div>` : ""}
     <div class="pager-grid">
-      ${previous ? `<a href="#/${previous.slug}"><small>Previous chapter</small><strong>${previous.title}</strong></a>` : '<a href="#/overview"><small>Workshop</small><strong>Return to the overview</strong></a>'}
-      ${next ? `<a href="#/${next.slug}"><small>${next.slug === "04-cloud" ? "Optional extension" : "Next chapter"}</small><strong>${next.title} <span aria-hidden="true">→</span></strong></a>` : ""}
+      ${previous ? `<a href="#/${previous.slug}"><small>Previous chapter</small><strong>${previous.title}</strong></a>` : '<a href="#/overview"><small>Course</small><strong>Return to the overview</strong></a>'}
+      ${next ? `<a href="#/${next.slug}"><small>Next chapter</small><strong>${next.title} <span aria-hidden="true">→</span></strong></a>` : ""}
     </div>`;
 }
 

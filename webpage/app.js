@@ -42,7 +42,7 @@ chapterPager.addEventListener("click", event => {
   chapterPager.querySelector("[data-complete]")?.focus();
 });
 document.querySelector("#reset-progress").addEventListener("click", () => {
-  if (!window.confirm("Reset this workshop's progress? This does not change your code or other browser data.")) return;
+  if (!window.confirm("Reset this course's progress? This keeps your theme and does not change your code or other browser data.")) return;
   store.reset();
   renderProgress(store, getCurrentChapter());
   renderPager(getCurrentChapter(), store);

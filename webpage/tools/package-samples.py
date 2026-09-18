@@ -7,8 +7,9 @@ import re
 root = Path(sys.argv[1]).resolve()
 destination = Path(sys.argv[2])
 with ZipFile(destination, "w", ZIP_DEFLATED) as archive:
-    for relative in ["shared-legacy-app", "examples", "tests/BookCatalog.Tests", ".config",
-                     "scripts", "docs", "webpage/README.md", "package.json", "package-lock.json",
+    for relative in ["shared-legacy-app", "examples", "tests/BookCatalog.Tests",
+                     "tests/BookCatalog.Data.Tests", "tools/BookCatalog.Data", ".config",
+                     "scripts", "docs", "04-cloud/deployment.md", "webpage/README.md", "package.json", "package-lock.json",
                      "README.md", "LICENSE"]:
         target = root / relative
         paths = sorted(target.rglob("*")) if target.is_dir() else [target]
@@ -24,18 +25,20 @@ with ZipFile(destination, "w", ZIP_DEFLATED) as archive:
                         resolved = (path.parent / relative_target).resolve()
                         if not resolved.is_relative_to(root):
                             return match.group(0)
-                        if resolved.parts[len(root.parts):][0] in (
+                        if (resolved.relative_to(root).as_posix() != "04-cloud/deployment.md"
+                                and resolved.parts[len(root.parts):]
+                                and resolved.parts[len(root.parts):][0] in (
                                 "00-introduction", "01-assessment", "02-planning",
-                                "03-upgrade-execution", "04-cloud"):
+                                "03-upgrade-execution", "04-cloud")):
                             target = ("https://github.com/codemillmatt/dotnet-modernization-for-beginners/blob/main/"
                                       + resolved.relative_to(root).as_posix()
                                       + (("#" + anchor) if anchor else ""))
                         return f"{label}({target})"
-                    text = re.sub(r"(!?\[[^\]]*\])\(([^)]+)\)", rewrite, path.read_text())
+                    text = re.sub(r"(!?\[[^\]]*\])\(([^)]+)\)", rewrite, path.read_text(encoding="utf-8"))
                     archive.writestr(path.relative_to(root).as_posix(), text)
                 else:
                     archive.write(path, path.relative_to(root))
     archive.writestr("DOWNLOAD-README.txt",
-                     "These files contain the workshop samples and their portable application tests.\n"
+                     "These files contain the course samples, selected-record helper, and application tests.\n"
                      "Run the sample through examples/modernized/README.md or shared-legacy-app/README.md.\n"
                      "For website tooling and the full lessons, use the repository clone.\n")

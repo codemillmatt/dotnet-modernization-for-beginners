@@ -27,6 +27,7 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: dotnet test tests/BookCatalog.Tests/BookCatalog.Tests.csproj --configuration Release
+      - run: dotnet test tests/BookCatalog.Data.Tests/BookCatalog.Data.Tests.csproj --configuration Release
       - run: az bicep build --file examples/azure/main.bicep --outfile "${{ runner.temp }}/bookcatalog-arm.json"
       - run: npm run build
       - run: npm run test:content
@@ -37,6 +38,15 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
+        with:
+          dotnet-version: 10.0.x
       - name: Check the isolated legacy application
         shell: powershell
         run: ./scripts/Test-LegacyApp.ps1
+      - name: Check isolated SQL Server record transfer
+        shell: powershell
+        run: ./scripts/Test-DataTransfer.ps1
+      - name: Check the modernized application on isolated LocalDB
+        shell: powershell
+        run: ./scripts/Test-ModernizedApp.ps1

@@ -1,285 +1,259 @@
-# Chapter 04: Prepare for Azure
+<a id="chapter-04-prepare-for-azure"></a>
+# Chapter 04: Assess and plan for Azure
 
-This optional extension takes your working local application to Azure. You will change configuration and identity, review infrastructure, and check persisted behavior.
+Your local upgrade works. Now decide what must change before the same application can run in Azure.
 
-You can finish the core workshop without this chapter. Start here only after [Chapter 03](../03-upgrade-execution/README.md) passes its behavior checks.
+This chapter is **required**. Its result is an Azure assessment and a revised migration plan, not a deployed application.
 
-> **Use a dedicated lab subscription or approved lab scope.** This exercise creates billable resources and a publicly accessible sample application.
->
-> Use sample data only. The sample does not authenticate its users. Anyone with its public URL can change its book records.
+Start with the verified app, selected-record snapshot, and learner record from [Chapter 03](../03-upgrade-execution/README.md).
 
-## Check tools, access, and costs first
+You need Visual Studio and Copilot access from Chapter 00. You do **not** need Node, Azure CLI, an Azure login, or an Azure subscription.
 
-Use PowerShell on the Windows machine that hosts your learner project. Start in the repository root.
+## What changes when the app moves?
 
-The application still uses .NET. The bootstrap helper also needs Node 24. Node is a supporting tool, not the application's runtime.
+The web framework is already modernized. Azure planning now concerns hosting, database access, configuration, identity, data, and operations.
 
-```powershell
-az version
-az bicep version
-node --version
-npm --version
-dotnet --version
-```
+The LocalDB database runs on your Windows machine. Moving web files to Azure does not move that database or its records.
 
-If a tool is missing, use the [Azure CLI installer](https://learn.microsoft.com/cli/azure/install-azure-cli), [Bicep instructions](https://learn.microsoft.com/azure/azure-resource-manager/bicep/install), or [Node installer](https://nodejs.org/en/download).
+| Component | Role in this example | What you must plan |
+| --- | --- | --- |
+| Azure App Service | Hosts the web application | Runtime support, application settings, deployment, and diagnostics |
+| Azure SQL | Stores the cloud `Books` table | Schema preparation, selected-record copy, and database permissions |
+| Azure Key Vault | Supplies the connection setting | Configuration loading and access permissions |
+| User-assigned managed identity | Lets the running app access supported Azure services | Identity binding and limited runtime permissions |
+| Developer/administrator identity | Prepares resources, schema, and selected data | Separately approved access, costs, and cleanup |
 
-Sign in to the intended Azure tenant. Select the approved subscription:
+A managed identity avoids storing an application password for supported service access. It does not authenticate BookCatalog's website users.
 
-```powershell
-az login
-$subscriptionId = "<your-subscription-id>"
-az account set --subscription $subscriptionId
-az account show --query "{subscription:id,tenant:tenantId,user:user.name}" -o json
-```
+Key Vault supplies configuration. It is not between the application and every SQL request.
 
-Check these permissions before proceeding:
+![Proposed Azure architecture: a public sample user reaches BookCatalog on App Service. Its runtime managed identity authorizes Key Vault and Azure SQL access. A separate approved administrator sets up the schema and copies selected records.](../docs/illustrations/azure-light.svg)
 
-| Operation | Required access |
-| --- | --- |
-| Create the dedicated group and resources | Resource creation permissions in the approved scope |
-| Assign Key Vault roles | Role-assignment permissions, such as Owner or an appropriate delegated role |
-| Apply the database schema | The Microsoft Entra user configured as SQL administrator |
-| Store the connection setting | Key Vault Secrets Officer on the lab vault |
-| Run the application | The template's managed identity and its limited vault/table permissions |
-
-Contributor alone cannot assign roles. This template expects a signed-in Microsoft Entra **user**, not a service principal or group administrator.
-
-The reference provisions a Linux App Service plan, web app, Azure SQL server/database, Key Vault, and a user-assigned identity.
-
-Its defaults use App Service B1 and SQL Standard S0. They are not a promise of free hosting or available regional capacity.
-
-Review all services in the [Azure pricing calculator](https://azure.microsoft.com/pricing/calculator/) for your region and subscription. Obtain approval before provisioning.
-
-Review [cleanup](#delete-the-dedicated-lab-group) now. Keep resources inside the dedicated group. Do not reuse a group with other workloads.
+The optional lab is publicly accessible and has no application-user authentication. Its plan must restrict it to disposable sample data.
 
 ## Ask the agent for cloud-readiness findings
 
-Open your modernized solution in the Copilot modernization chat. Send:
+Open your **upgraded learner solution** in Visual Studio, not the completed reference.
+
+1. Right-click the solution in Solution Explorer.
+2. Select **Modernize**.
+3. Select **Migrate to Azure** in Copilot Chat.
+4. Send that option to start the assessment.
+
+The equivalent chat entry is `@Modernize Migrate to Azure`. Use this Azure workflow, not another framework-upgrade assessment.
+
+Assessment normally starts automatically. Keep application remediation and resource creation unapproved.
+
+Attach your local verification notes and requirements. Send:
 
 ```text
-Assess this modernized BookCatalog app for Azure.
-Do not provision resources or deploy code.
-Explain the changes needed for App Service, Azure SQL, Key Vault,
-and a user-assigned managed identity.
-Keep the application on sample data and use a dedicated lab group.
-Identify the files and checks for each preparation step.
+Assess this upgraded BookCatalog application for Azure.
+Use my attached requirements and local verification results.
+Do not change application code, sign in to Azure, create resources, or deploy.
+Identify the assessment configuration and report locations.
+Explain target-specific findings with their source locations.
+Keep unresolved access and cost assumptions in the plan, not as actions.
 ```
 
-The LocalDB file cannot act as the Azure database. Its integrated connection does not expose a SQL password, but it requires different cloud authentication.
+Check each permission request. Decline or stop commands outside assessment and planning.
 
-A managed identity is an Azure identity for the application. It replaces stored credentials when the application accesses Key Vault and SQL.
+If the agent requests subscription access for deployment discovery, restate the planning-only scope. Use explicit assumptions instead of inventing an approved subscription.
 
-Key Vault stores the connection setting. It does not sit between the application and every SQL request.
+## Compare the report with the real application
 
-```mermaid
-flowchart LR
-    Browser["Public sample user"] --> App["App Service"]
-    Identity["Application identity"] --> Vault["Key Vault: read connection setting"]
-    Identity --> SQL["Azure SQL: read and write Books"]
-    App --> Identity
-    App --> SQL
-```
+Current Visual Studio documentation puts assessment configuration under `.appmod\.appcat`. A typical configuration file is `assessment-config.json`.
 
-## Prepare the application explicitly
+The first assessment creates configuration automatically. Ask the agent to identify its actual path rather than creating a guessed file beforehand.
 
-Set the project path from the repository root:
+The report may show **Application Information**, **Issue Summary**, and **Issues**. Check the solution, framework, and selected Azure target first.
 
-```powershell
-$project = (Resolve-Path "shared-legacy-app/src/BookCatalog.Web/BookCatalog.Web.csproj").Path
-```
+Azure report criticality differs from the framework-compatibility categories in Chapter 01:
 
-Check that this is your upgraded application, not the completed reference.
+| Azure criticality | How to use it |
+| --- | --- |
+| Mandatory | Investigate a change required for the assessed migration |
+| Potential | Review whether the issue applies to this application |
+| Optional | Consider the benefit and scope before choosing it |
 
-Ask the agent to add `Azure.Identity` and `Azure.Extensions.AspNetCore.Configuration.Secrets`. Review the package versions and diff.
+These labels do not replace source inspection or your business requirements.
 
-In `Program.cs`, add `using Azure.Identity;`. Add this configuration block after builder creation and before reading the connection string:
+Expand a real issue. Follow its file and line reference. Record the current behavior, proposed action, and evidence you would need after the change.
 
-```csharp
-var vaultName = builder.Configuration["KeyVaultName"];
-if (!string.IsNullOrWhiteSpace(vaultName))
+For example, inspect the effective LocalDB connection and automatic initialization in `Program.cs`. Explain why they need different treatment on Azure.
+
+If the report omits that issue, record it as your own finding. Do not invent a report entry or change counts to match this lesson.
+
+## Choose a target with a reason
+
+An assessment configured with `Any` can compare supported compute targets in the report. A target-specific assessment shows that target's findings.
+
+Inspect the generated configuration. If comparison will help your decision, ask the agent to assess `Any` or the alternative you want to compare.
+
+For the supplied deployment path, choose **App Service on Linux** with Azure SQL. The documented assessment target value is `AppService.Linux`.
+
+To focus a later assessment, edit the existing configuration's `appcat.target` value. Preserve its other settings.
+
+This fragment shows the relevant structure, not a command or a replacement for an unrelated configuration file:
+
+```json
 {
-    var clientId = builder.Configuration["AZURE_CLIENT_ID"]
-        ?? throw new InvalidOperationException("Set AZURE_CLIENT_ID.");
-    builder.Configuration.AddAzureKeyVault(
-        new Uri($"https://{vaultName}.vault.azure.net/"),
-        new ManagedIdentityCredential(
-            ManagedIdentityId.FromUserAssignedClientId(clientId)));
+  "appcat": {
+    "target": "AppService.Linux"
+  }
 }
 ```
 
-The vault name is absent during normal local use. In Azure, the template supplies both settings.
+Rerun the assessment after saving a configuration change. Confirm that the report names the target you selected.
 
-Find all automatic schema calls in startup. Put local initialization behind the `InitializeDatabase` setting and the separate local database-name check.
+| Option | Why consider it? | Additional responsibility |
+| --- | --- | --- |
+| App Service on Linux | Fits this .NET 10 web app without adding container packaging | Check supported runtime, settings, diagnostics, and SQL access |
+| App Service on Windows | Relevant when a workload retains Windows-specific dependencies | Identify the dependency that justifies that choice |
+| Azure Container Apps | Useful when container packaging is a deliberate requirement | Own the image, registry, container configuration, and operating model |
 
-Use [the reference `Program.cs`](../examples/modernized/src/BookCatalog.Web/Program.cs) to inspect that guard. Adapt the focused block rather than replacing your startup file.
+Do not select a target only because it reports fewer issues. Record why its responsibilities fit this application.
 
-Set `InitializeDatabase` to `true` in local configuration. The Azure template sets it to `false`.
-
-Keep the LocalDB connection for local use. Do not place SQL passwords or Azure credentials in source files.
-
-Rebuild and run locally. Repeat the saved-record check before provisioning anything.
-
-## Produce a schema from your application
-
-Use an EF Core design-time factory to generate SQL without connecting to a database.
-
-Inspect [the reference factory](../examples/modernized/src/BookCatalog.Web/Models/DesignDbContextFactory.cs). Add the equivalent file to your application's `Models` directory.
-
-Match its context type and namespace to your application. The factory supplies SQL Server options for script generation.
-
-Add `Microsoft.EntityFrameworkCore.Design` at the same version as your other EF Core packages. The reference uses the versions recorded in its project file.
-
-From the repository root:
-
-```powershell
-dotnet tool restore
-New-Item -ItemType Directory -Force .azure-lab
-dotnet ef dbcontext script --project $project --output .azure-lab/schema.sql
-if ($LASTEXITCODE -ne 0) { throw "Schema generation failed." }
-```
-
-Inspect `.azure-lab/schema.sql`. It must create the expected `Books` table. It must not target or delete the legacy database.
-
-If your model supplies seed data, inspect those inserts too. The helper does not copy your local records.
-
-## Review the infrastructure
-
-Open [the template](../examples/azure/main.bicep) and [helper guide](../examples/azure/README.md).
-
-Compare them with the agent's proposed infrastructure. This exercise uses the reviewed template so the helper receives a defined set of outputs.
-
-The SQL server uses Microsoft Entra authentication without a SQL administrator password. The runtime identity receives table permissions after schema creation.
-
-The public SQL firewall permits Azure-service traffic for this lab. This is broader than an application-specific network rule.
-
-Use private networking and an appropriate access design for production. Do not describe this disposable lab as production ready.
-
-Compile the template locally:
-
-```powershell
-az bicep build --file examples/azure/main.bicep --outfile .azure-lab/main.json
-if ($LASTEXITCODE -ne 0) { throw "Bicep compilation failed." }
-```
-
-This checks the template. It does not check your Azure quota, permissions, or live service behavior.
+The supplied optional lab uses App Service, Azure SQL, Key Vault, and a user-assigned managed identity. A different target needs a separately reviewed deployment procedure.
 
 <div class="activity">
 
-### Your review: what can each identity do?
+### Your decision: what finding changes the plan?
 
-Find the two Key Vault role assignments. Identify the application identity and your administrator identity.
+Choose one target-specific finding from your report. Trace it to source.
 
-Explain why the application needs secret reads but not secret writes. Then inspect the SQL helper's table permissions.
+Explain its effect on configuration, data access, or hosting. State one alternative and why you did not choose it.
 
 </div>
 
-## Provision the dedicated lab
+<details>
+<summary>Compare your reasoning</summary>
 
-> The following commands create Azure resources. Check the selected subscription and your cost approval before execution.
+A LocalDB connection cannot provide the cloud database. Replacing its server name alone does not create schema, copy records, or authorize the running app.
 
-Set the approved region. Create a new group name:
+The plan needs separate actions for those responsibilities. A successful web deployment proves none of them by itself.
 
-```powershell
-$location = "<approved-region>"
-$group = "rg-bookcatalog-$([guid]::NewGuid().ToString('N').Substring(0,8))"
-$user = az ad signed-in-user show -o json | ConvertFrom-Json
-if ($LASTEXITCODE -ne 0) { throw "The signed-in user check failed." }
-az group create --name $group --location $location --tags workshop=dotnet-modernization -o none
-if ($LASTEXITCODE -ne 0) { throw "Resource group creation failed." }
+</details>
+
+## Generate a migration plan without executing it
+
+The assessment can recommend migration tasks. Select the actual task that addresses your chosen finding.
+
+In Visual Studio, **Run Task** or the task's name in chat starts its migration workflow. Request a plan and a review boundary before remediation.
+
+Replace the placeholder with a task title from your own report:
+
+```text
+Prepare the plan for <actual-migration-task-title>.
+Do not start code remediation or Azure operations.
+Include the wider BookCatalog dependencies needed for App Service on Linux,
+Azure SQL, Key Vault, and a user-assigned managed identity.
+Use my baseline requirements and the selected-record snapshot.
+Identify the generated plan and progress files.
+Stop for review when the plan is ready.
 ```
 
-Check proposed changes before deployment:
+Current Visual Studio documentation describes `.appmod\.migration\plan.md` and `.appmod\.migration\progress.md`.
 
-```powershell
-az deployment group what-if --resource-group $group `
-  --template-file examples/azure/main.bicep `
-  --parameters administratorObjectId=$($user.id) administratorName=$($user.userPrincipalName)
-if ($LASTEXITCODE -ne 0) { throw "The what-if check failed." }
+These are not the framework-upgrade scenario files under `.github\upgrades\{scenarioId}`. Verify the files your installed agent actually creates.
+
+The plan defines intended work. Progress records execution state. Inspect the latter, but do not mark unrun tasks complete.
+
+## Edit and reconcile the cloud plan
+
+Open your generated migration plan. Add a **BookCatalog lab requirements** section, or revise the existing sections that own these decisions.
+
+Make the following requirements explicit:
+
+| Requirement | Planned action | Evidence or approval needed |
+| --- | --- | --- |
+| Preserve selected data | Apply schema, then copy the original `.bookcatalog-lab\books.json` to `BookCatalogLab` | Same selected IDs, values, nulls, `IsActive`, and stored `CreatedDate` |
+| Preserve local work | Keep the legacy database and `BookCatalogModernizedLab` unchanged | Reviewed connections and separate cloud target |
+| Use the chosen host | Prepare the learner app for App Service on Linux | Local checks and a reviewed runtime/deployment configuration |
+| Separate identities | Administrator prepares schema and data. Runtime identity handles application reads/writes | No schema-change permissions for the runtime app |
+| Load configuration safely | Read the connection setting from Key Vault only when configured | Local run without Azure access and cloud identity/configuration checks |
+| Bound access and cost | Use an approved dedicated group, region, budget, and sample data | Separate approval before login, provisioning, or deployment |
+| Verify and diagnose | Check actual HTTP behavior, stored values, restart persistence, and logs | Recorded results, not only HTTP 200 |
+| Recover and clean up | Define failed-deployment recovery and resource ownership | No source overwrite, no database deletion shortcut, and scoped cleanup confirmation |
+
+Use your actual two IDs in the data requirement. Creating seed records is not a substitute for copying those records.
+
+If the plan already covers every row, improve one acceptance condition with a concrete observation. Explain why your edit makes completion easier to judge.
+
+For recovery, distinguish restoring a previous application package from restoring database state. Redeploying code does not undo data changes.
+
+Ask the agent to reconcile your edits:
+
+```text
+Read the BookCatalog requirements I added to the migration plan.
+Reconcile the proposed actions, dependencies, and acceptance conditions.
+Show the plan change for each requirement and identify unresolved assumptions.
+Keep execution progress truthful. Do not mark unrun cloud tasks complete.
+Do not remediate, provision, or deploy.
 ```
 
-Unlike local compilation, what-if calls Azure. It still does not guarantee capacity or successful deployment.
+Compare the changed plan with your edits. Record one requirement-to-action-to-check link in your learner record.
 
-After reviewing its result, deploy:
-
-```powershell
-$result = az deployment group create --name bookcatalog --resource-group $group `
-  --template-file examples/azure/main.bicep `
-  --parameters administratorObjectId=$($user.id) administratorName=$($user.userPrincipalName) `
-  --query properties.outputs -o json
-if ($LASTEXITCODE -ne 0) { throw "Deployment failed. Inspect the Azure error before retrying." }
-$result | Out-File .azure-lab/outputs.json -Encoding utf8
-$outputs = $result | ConvertFrom-Json
-```
-
-Do not change regions or tiers without reviewing costs and resource placement again. A recorded quota failure is not an expected workshop step.
-
-## Apply the schema and application permissions
-
-Install the helper dependencies from the repository root:
+Inspect the pending diff from the repository root:
 
 ```powershell
-npm ci
+git status --short
+git diff
 ```
 
-Set `$clientIp` to your current public IPv4 address. Obtain it through your approved network tools.
+Expect assessment, configuration, and plan artifacts. Investigate any unexpected application changes.
 
-```powershell
-$clientIp = "<your-public-ipv4>"
-node examples/azure/lab.mjs bootstrap .azure-lab/outputs.json $clientIp .azure-lab/schema.sql
-if ($LASTEXITCODE -ne 0) { throw "Database preparation failed. Inspect the helper error." }
-```
+Save only reviewed, nonsecret artifacts in your checkpoint. Do not stage local snapshots or deployment outputs.
 
-The helper restricts its temporary firewall rule to that address. It removes the rule after success or failure.
+## Finish the required course
 
-It applies a new schema and records its fingerprint. A retry accepts the same schema but refuses an unrelated existing database.
+You are ready to mark Chapter 04 complete when you can show:
 
-The runtime identity receives `SELECT`, `INSERT`, `UPDATE`, and `DELETE` permissions on `Books`. It does not receive schema-change permissions.
+- A real Azure assessment for your upgraded app and chosen target.
+- A target-specific finding traced to source.
+- A hosting choice and a reasoned alternative.
+- Your edit to the generated migration plan and the agent's reconciliation.
+- Data, identity, cost, verification, recovery, and cleanup requirements.
+- No unapproved code remediation or Azure resource creation.
 
-The helper stores `ConnectionStrings--BookCatalogContext` in Key Vault. The configuration provider maps `--` to `:`.
+You have now used the same process for a framework upgrade and a cloud migration plan. The next application will need its own requirements and evidence.
 
-If an identity or vault role is not yet available, wait before retrying. Check the error rather than assuming a fixed wait guarantees access.
+Deployment is optional. Leave its learner-record section **Not run** if you stop here.
 
-## Publish your learner application
+**[Optional: deploy the reviewed plan](deployment.md)** · **[Course overview](../README.md)**
 
-The project path must still point to `shared-legacy-app`, not `examples/modernized`.
+## Earlier deployment links
 
-```powershell
-dotnet publish $project -c Release -o .azure-lab/publish
-if ($LASTEXITCODE -ne 0) { throw "Application publish failed." }
-Compress-Archive -Path .azure-lab/publish/* -DestinationPath .azure-lab/app.zip -Force
-az webapp deploy --resource-group $group --name $outputs.appName.value `
-  --src-path .azure-lab/app.zip --type zip
-if ($LASTEXITCODE -ne 0) { throw "The application deployment failed." }
-```
+The detailed deployment procedure has moved. Existing chapter links still lead to the corresponding optional steps below.
 
-Open the URL in `$outputs.appUrl.value`. Check the catalog and create a disposable record.
+<a id="check-tools-access-and-costs-first"></a>
+Use [deployment access and cost checks](deployment.md#check-tools-access-and-costs-first) only if you choose the optional lab.
 
-Restart the application:
+<a id="prepare-the-application-explicitly"></a>
+Continue with [reviewed application preparation](deployment.md#prepare-the-application-explicitly).
 
-```powershell
-az webapp restart --resource-group $group --name $outputs.appName.value
-```
+<a id="produce-a-schema-from-your-application"></a>
+See [schema generation](deployment.md#produce-a-schema-from-your-application).
 
-Open the saved record again. Check its values, edit it, and delete it through the form.
+<a id="review-the-infrastructure"></a>
+See [infrastructure review](deployment.md#review-the-infrastructure).
 
-HTTP 200 alone does not establish that database writes work. Keep the results of your behavior checks.
+<a id="your-review-what-can-each-identity-do"></a>
+Use the [identity review activity](deployment.md#your-review-what-can-each-identity-do).
 
-For a startup failure, inspect App Service logs. Check the identity binding, vault role, secret name, SQL user, and schema separately.
+<a id="provision-the-dedicated-lab"></a>
+See [dedicated-group provisioning](deployment.md#provision-the-dedicated-lab).
 
-## Delete the dedicated lab group
+<a id="apply-the-schema-and-application-permissions"></a>
+See [schema and runtime permissions](deployment.md#apply-the-schema-and-application-permissions).
 
-> This command deletes every resource in the group named by `.azure-lab/outputs.json`. Inspect that file before authorizing deletion.
+<a id="publish-your-learner-application"></a>
+See [deployment of your learner application](deployment.md#publish-your-learner-application).
 
-```powershell
-node examples/azure/lab.mjs cleanup .azure-lab/outputs.json --confirm-delete
-if ($LASTEXITCODE -ne 0) { throw "Cleanup is not complete." }
-```
+<a id="delete-the-dedicated-lab-group"></a>
+See [scoped cleanup](deployment.md#delete-the-dedicated-lab-group).
 
-The helper waits for deletion and checks the exact group. Key Vault can retain recoverable metadata. Do not purge it for this exercise.
+## Reference
 
-If deployment failed before it produced an outputs file, inspect `$group` and the Azure portal. Delete only that dedicated lab group.
-
-You completed the extension when the cloud behavior checks pass and the dedicated group no longer exists.
-
-**[Course overview](../README.md)**
+- [Visual Studio Azure assessment and migration workflow](https://learn.microsoft.com/dotnet/azure/migration/appmod/quickstart?pivots=visualstudio)
+- [Assessment configuration and report interpretation](https://learn.microsoft.com/dotnet/azure/migration/appmod/working-with-assessment)
+- [Optional Azure support files](../examples/azure/README.md)

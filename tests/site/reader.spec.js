@@ -1,5 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { chapters, references, sectionAliases } from "../../webpage/scripts/chapters.js";
+import { parseRoute } from "../../webpage/scripts/routes.js";
+import { zipEntries } from "../content/zip-entries.mjs";
 
 async function open(page, route = "#/overview") {
   await page.goto(route);
@@ -8,13 +10,21 @@ async function open(page, route = "#/overview") {
   await expect(page.getByRole("alert")).toHaveCount(0);
 }
 
-test("all chapters, references, diagrams, and original section links work", async ({ page }) => {
+test("all chapters, references, illustrations, and original section links work", async ({ page }) => {
   const errors = [];
+  const anchors = new Map();
+  const sectionLinks = [];
+  async function collectLinks(path) {
+    anchors.set(path, await page.locator("#article [id]").evaluateAll(elements => elements.map(element => element.id)));
+    sectionLinks.push(...await page.locator("#article a[href*='?']").evaluateAll(links =>
+      links.map(link => new URL(link.href).hash).filter(hash => hash.startsWith("#/") && hash.includes("section="))));
+  }
   page.on("pageerror", error => errors.push(error.message));
   for (const chapter of chapters) {
     await open(page, `#/${chapter.slug}`);
     await expect(page).toHaveTitle(new RegExp(chapter.title.replace("&", "&")));
     await expect(page.locator("code.language-mermaid")).toHaveCount(0);
+    await collectLinks(chapter.path);
     const broken = await page.locator("#article a[href*='?section=']").evaluateAll(links =>
       links.filter(link => {
         const url = new URL(link.href);
@@ -26,12 +36,21 @@ test("all chapters, references, diagrams, and original section links work", asyn
       await expect(page.locator(`[id="${alias}"]`)).toBeAttached();
       await expect(page.locator(`[id="${target}"]`)).toBeAttached();
     }
-    for (const image of await page.locator(".diagram-asset img").all()) {
+    await expect(page.locator(".course-illustration")).toHaveCount(1);
+    for (const image of await page.locator(".course-illustration img").all()) {
       const response = await page.request.get(await image.getAttribute("src"));
       expect(response.ok()).toBeTruthy();
     }
   }
-  for (const reference of references) await open(page, `#/reference?path=${encodeURIComponent(reference.path)}`);
+  for (const reference of references) {
+    await open(page, `#/reference?path=${encodeURIComponent(reference.path)}`);
+    await expect(page.locator("code.language-mermaid")).toHaveCount(0);
+    await collectLinks(reference.path);
+  }
+  for (const hash of sectionLinks) {
+    const { chapter, section } = parseRoute(hash);
+    expect(anchors.get(chapter.path), `${chapter.path}#${section}`).toContain(section);
+  }
   await open(page, "#/overview?section=-prerequisites");
   await expect(page.locator("#-prerequisites")).toBeAttached();
   await open(page, "#/00-introduction?section=-your-first-assessment");
@@ -49,11 +68,22 @@ test("keyboard skip stays in the selected lesson", async ({ page }) => {
 
 test("code copy preserves the displayed code and reports clipboard failure", async ({ page, context }) => {
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
-  await open(page, "#/04-cloud");
-  const expected = await page.locator("pre code").first().textContent();
-  await page.getByRole("button", { name: "Copy code", exact: true }).first().click();
-  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(expected);
-  await expect(page.getByRole("button", { name: "Copied", exact: true })).toBeVisible();
+  for (const route of ["#/04-cloud", "#/reference?path=04-cloud%2Fdeployment.md",
+    "#/reference?path=tools%2FBookCatalog.Data%2FREADME.md"]) {
+    await open(page, route);
+    const expected = await page.locator("pre code").first().textContent();
+    await page.evaluate(() => {
+      const write = navigator.clipboard.writeText.bind(navigator.clipboard);
+      Object.defineProperty(navigator.clipboard, "writeText", {
+        configurable: true, value: text => { window.copiedText = text; return write(text); }
+      });
+    });
+    await page.getByRole("button", { name: "Copy code", exact: true }).first().click();
+    await expect(page.getByRole("button", { name: "Copied", exact: true })).toBeVisible();
+    expect(await page.evaluate(() => window.copiedText)).toBe(expected);
+    // Windows converts clipboard line endings. All other characters must remain unchanged.
+    expect((await page.evaluate(() => navigator.clipboard.readText())).replace(/\r\n/g, "\n")).toBe(expected);
+  }
   await page.evaluate(() => Object.defineProperty(navigator.clipboard, "writeText", {
     configurable: true, value: () => Promise.reject(new Error("blocked"))
   }));
@@ -62,17 +92,19 @@ test("code copy preserves the displayed code and reports clipboard failure", asy
   await expect(page.locator("#copy-notice")).toContainText("manually");
 });
 
-test("core completion excludes Azure and survives a reload", async ({ page }) => {
+test("five core completions include the Azure plan, not optional deployment", async ({ page }) => {
   for (const chapter of chapters.filter(item => item.core)) {
     await open(page, `#/${chapter.slug}`);
     await page.getByRole("button", { name: "I completed the checks" }).click();
   }
   await page.reload();
-  await expect(page.locator("#course-progress")).toHaveText("4 of 4 core chapters complete");
-  await expect(page.locator("#resume-link")).toHaveAttribute("href", "#/03-upgrade-execution");
-  await open(page, "#/04-cloud");
-  await expect(page.getByRole("button", { name: "I completed the checks" })).toHaveAttribute("aria-pressed", "false");
-  await expect(page.locator("#course-progress")).toHaveText("4 of 4 core chapters complete");
+  await expect(page.locator("#course-progress")).toHaveText("5 of 5 core chapters complete");
+  await expect(page.locator("#resume-link")).toHaveAttribute("href", "#/04-cloud");
+  await expect(page.locator(".chapter-completion")).toContainText("Azure assessment and migration plan. Deployment is optional.");
+  await open(page, "#/reference?path=04-cloud%2Fdeployment.md");
+  await expect(page.locator("[data-complete]")).toHaveCount(0);
+  await expect(page.locator("#course-progress")).toHaveText("5 of 5 core chapters complete");
+  await expect(page.locator("#resume-link")).toHaveAttribute("href", "#/04-cloud");
 });
 
 test("migration and reset preserve unrelated storage", async ({ page }) => {
@@ -84,15 +116,15 @@ test("migration and reset preserve unrelated storage", async ({ page }) => {
     }
   });
   await open(page, "#/01-assessment");
-  await expect(page.locator("#course-progress")).toHaveText("0 of 4 core chapters complete");
+  await expect(page.locator("#course-progress")).toHaveText("0 of 5 core chapters complete");
   await expect(page.locator("#storage-notice")).toContainText("previous reading");
   await page.getByRole("button", { name: "I completed the checks" }).click();
   page.once("dialog", dialog => dialog.dismiss());
   await page.getByRole("button", { name: "Reset progress" }).click();
-  await expect(page.locator("#course-progress")).toContainText("1 of 4");
+  await expect(page.locator("#course-progress")).toContainText("1 of 5");
   page.once("dialog", dialog => dialog.accept());
   await page.getByRole("button", { name: "Reset progress" }).click();
-  await expect(page.locator("#course-progress")).toContainText("0 of 4");
+  await expect(page.locator("#course-progress")).toContainText("0 of 5");
   expect(await page.evaluate(() => localStorage.getItem("unrelated-app"))).toBe("keep");
   expect(await page.evaluate(() => localStorage.getItem("dotnet-modernization-course-progress"))).toBe('["01-assessment"]');
 });
@@ -104,7 +136,7 @@ test("blocked storage leaves a clear notice and usable completion", async ({ pag
   await open(page, "#/01-assessment");
   await page.getByRole("button", { name: "I completed the checks" }).click();
   await expect(page.locator("#storage-notice")).toContainText("this visit only");
-  await expect(page.locator("#course-progress")).toContainText("1 of 4");
+  await expect(page.locator("#course-progress")).toContainText("1 of 5");
 });
 
 test("failed lesson fetch shows a retry without a false completion", async ({ page }) => {
@@ -179,6 +211,70 @@ test("local assets, layout, contrast, and code remain usable", async ({ page }) 
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBeTruthy();
   const download = await page.request.get("downloads/samples.zip");
   expect(download.ok()).toBeTruthy();
-  expect((await download.body()).subarray(0, 2).toString()).toBe("PK");
+  const entries = zipEntries(await download.body());
+  expect(entries.has("tools/BookCatalog.Data/BookCatalog.Data.csproj")).toBeTruthy();
+  expect(entries.has("tests/BookCatalog.Data.Tests/BookCatalog.Data.Tests.csproj")).toBeTruthy();
+  expect(entries.has("docs/learner-record.md")).toBeTruthy();
+  expect(entries.has("04-cloud/deployment.md")).toBeTruthy();
+  expect([...entries.keys()].some(path => path.includes(".bookcatalog-lab"))).toBeFalsy();
   expect(remote).toEqual([]);
+});
+
+test("earlier completions remain history while theme and valid resume survive", async ({ page }) => {
+  await page.addInitScript(() => {
+    const key = "dotnet-modernization-workshop:v2:/workshop/";
+    if (localStorage.getItem(key)) return;
+    localStorage.setItem(key, JSON.stringify({
+      version: 2, completed: ["00-introduction", "01-assessment", "02-planning", "03-upgrade-execution", "04-cloud"],
+      previousReading: [], lastVisited: "02-planning", theme: "dark"
+    }));
+  });
+  await open(page);
+  await expect(page.locator("#course-progress")).toHaveText("0 of 5 core chapters complete");
+  await expect(page.locator("#storage-notice")).toContainText("history");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await expect(page.locator("#resume-link")).toHaveAttribute("href", "#/02-planning");
+  await page.locator("#resume-link").click();
+  await expect(page.locator("html")).toHaveAttribute("data-era", "1990s");
+  await expect(page.getByRole("button", { name: "I completed the checks" })).toHaveAttribute("aria-pressed", "false");
+  await page.getByRole("button", { name: "I completed the checks" }).click();
+  await page.reload();
+  await expect(page.locator("#course-progress")).toHaveText("1 of 5 core chapters complete");
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem("dotnet-modernization-workshop:v2:/workshop/"))))
+    .toMatchObject({ completionRevisions: { "02-planning": 2 }, previousCompleted: expect.any(Array) });
+  page.once("dialog", dialog => dialog.accept());
+  await page.getByRole("button", { name: "Reset progress" }).click();
+  await page.reload();
+  await expect(page.locator("#course-progress")).toHaveText("0 of 5 core chapters complete");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+});
+
+test("unchanged revision marks survive a later exercise revision", async ({ page }) => {
+  await page.addInitScript(() => {
+    localStorage.setItem("dotnet-modernization-workshop:v2:/workshop/", JSON.stringify({
+      version: 3, completed: ["00-introduction", "01-assessment"],
+      completionRevisions: { "00-introduction": 2, "01-assessment": 1 },
+      previousCompleted: [], previousReading: [], lastVisited: "00-introduction", theme: "dark"
+    }));
+  });
+  await open(page);
+  await expect(page.locator("#course-progress")).toHaveText("1 of 5 core chapters complete");
+  await expect(page.locator("#chapter-nav a[href='#/00-introduction'] .is-complete")).toBeVisible();
+  await expect(page.locator("#chapter-nav a[href='#/01-assessment']")).toContainText("Earlier exercise completed");
+});
+
+test("learner record replaces maintainer navigation without removing old checklist anchors", async ({ page }) => {
+  await open(page, "#/03-upgrade-execution");
+  await expect(page.locator(".reference-link").first()).toHaveText(/Learner record/);
+  await page.locator(".reference-link").first().click();
+  await expect(page).toHaveURL(/path=docs%2Flearner-record.md/);
+  await expect(page.locator("#article h1")).toBeVisible();
+  await expect(page.locator("#resume-link")).toHaveAttribute("href", "#/03-upgrade-execution");
+  await expect(page.locator("#chapter-nav")).not.toContainText("instructor");
+  await open(page, "#/reference?path=docs%2Fvalidation.md&section=behavior-contract");
+  await expect(page.locator("#behavior-contract")).toBeAttached();
+  await expect(page.locator("#article")).not.toContainText("This section moved.");
+  await open(page, "#/reference?path=webpage%2FREADME.md&section=workshop-website");
+  await expect(page.locator("#workshop-website")).toBeAttached();
+  await expect(page.locator("#article")).not.toContainText("This section moved.");
 });

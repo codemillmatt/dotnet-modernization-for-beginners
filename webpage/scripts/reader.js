@@ -3,10 +3,21 @@ import { normalizePath, parseRoute, routeForPath } from "./routes.js";
 import { article, chapterPager, outlineNav } from "./dom.js";
 import { buildOutline, closeDrawers, escapeHtml, renderPager, renderProgress } from "./ui.js";
 import { applyEra, getEra, referenceEra } from "./eras.js";
+import { illustrations, illustrationPath } from "./illustrations.js";
 
 let request;
 let current = parseRoute("#/overview").chapter;
 export const getCurrentChapter = () => current;
+
+function reportImageFailure(image) {
+  image.addEventListener("error", () => {
+    const notice = document.createElement("p");
+    notice.className = "notice";
+    notice.setAttribute("role", "status");
+    notice.textContent = `The image could not load. ${image.alt}`;
+    image.replaceWith(notice);
+  }, { once: true });
+}
 
 function rewriteLinks(chapter) {
   const folder = chapter.path.includes("/") ? chapter.path.slice(0, chapter.path.lastIndexOf("/") + 1) : "";
@@ -18,12 +29,7 @@ function rewriteLinks(chapter) {
     }
     image.src = contentUrl(normalizePath(folder + src));
     image.loading = "lazy";
-    image.addEventListener("error", () => {
-      const notice = document.createElement("p");
-      notice.className = "notice";
-      notice.textContent = `The image could not load. ${image.alt}`;
-      image.replaceWith(notice);
-    }, { once: true });
+    reportImageFailure(image);
   }
   for (const link of article.querySelectorAll("a[href]")) {
     const href = link.getAttribute("href");
@@ -40,7 +46,7 @@ function rewriteLinks(chapter) {
 function addCodeCopy() {
   for (const pre of article.querySelectorAll("pre")) {
     const code = pre.querySelector("code");
-    if (!code || code.classList.contains("language-mermaid")) continue;
+    if (!code) continue;
     const toolbar = document.createElement("div");
     toolbar.className = "code-toolbar";
     const language = [...code.classList].find(value => value.startsWith("language-"))?.slice(9) || "text";
@@ -107,33 +113,44 @@ function addChapterHeader(chapter) {
   panel.append(heading, image);
 }
 
-async function renderDiagrams(chapter, signal) {
-  const blocks = [...article.querySelectorAll("code.language-mermaid")];
-  if (!blocks.length) return;
-  const response = await fetch(siteUrl("diagrams/manifest.json"), { signal });
-  if (!response.ok) throw new Error("The diagram manifest could not load.");
-  const manifest = await response.json();
-  const assets = manifest.documents[chapter.path];
-  if (assets?.length !== blocks.length) throw new Error("The diagrams do not match the lesson. Rebuild the website.");
-  if (signal.aborted) return;
-  blocks.forEach((block, index) => {
+function renderIllustrations() {
+  for (const image of article.querySelectorAll("img[src]")) {
+    const illustration = illustrations.find(item => image.src === contentUrl(illustrationPath(item.id, "light")));
+    if (!illustration) continue;
     const figure = document.createElement("figure");
-    figure.className = "diagram-asset";
+    figure.className = "course-illustration";
+    figure.dataset.illustration = illustration.id;
     for (const theme of ["light", "dark"]) {
       const link = document.createElement("a");
-      link.className = `diagram-${theme}`;
-      link.href = siteUrl(assets[index][theme]);
+      link.className = `illustration-version illustration-${theme}`;
+      link.href = contentUrl(illustrationPath(illustration.id, theme));
       link.target = "_blank";
       link.rel = "noreferrer";
-      link.setAttribute("aria-label", `Open a larger ${assets[index].alt}`);
+      link.setAttribute("aria-label", `Open full-size image: ${illustration.title} (new tab)`);
       const img = document.createElement("img");
       img.src = link.href;
-      img.alt = assets[index].alt;
-      link.append(img);
+      img.alt = illustration.description;
+      img.loading = "lazy";
+      reportImageFailure(img);
+      const label = document.createElement("span");
+      label.className = "illustration-open";
+      label.textContent = "Open full-size image";
+      link.append(img, label);
       figure.append(link);
     }
-    block.parentElement.replaceWith(figure);
-  });
+    const caption = document.createElement("figcaption");
+    caption.textContent = illustration.caption;
+    const details = document.createElement("details");
+    const summary = document.createElement("summary");
+    summary.textContent = "Read the illustration";
+    const description = document.createElement("p");
+    description.textContent = illustration.description;
+    details.append(summary, description);
+    figure.append(caption, details);
+    const parent = image.parentElement;
+    if (parent.tagName === "P" && parent.childNodes.length === 1) parent.replaceWith(figure);
+    else image.replaceWith(figure);
+  }
 }
 
 export async function renderRoute(store) {
@@ -150,10 +167,9 @@ export async function renderRoute(store) {
     const { chapter, section } = parseRoute(location.hash);
     const era = chapter.era || referenceEra;
     applyEra(era, document.documentElement.dataset.theme);
-    document.querySelector("#era-label").textContent = getEra(era).label;
     document.querySelector("#chapter-label").textContent = chapter.slug === "overview"
-      ? "A .NET workshop with GitHub Copilot" : chapter.slug === "reference"
-      ? "Your workshop reference" : `${chapter.number} / ${chapter.core ? "Core workshop" : "Optional Azure extension"}`;
+      ? "A .NET course with GitHub Copilot" : chapter.slug === "reference"
+      ? "Your course reference" : `${chapter.number} / Core course`;
     document.body.classList.toggle("is-overview", chapter.slug === "overview");
     routeResolved = true;
     const response = await fetch(contentUrl(chapter.path), { signal });
@@ -163,12 +179,11 @@ export async function renderRoute(store) {
     current = chapter;
     article.innerHTML = DOMPurify.sanitize(marked.parse(markdown, { gfm: true }), { USE_PROFILES: { html: true } });
     rewriteLinks(chapter);
+    renderIllustrations();
     if (chapter.slug === "overview") addHero();
     else if (chapter.era) addChapterHeader(chapter);
     buildOutline(chapter);
     addCodeCopy();
-    await renderDiagrams(chapter, signal);
-    if (signal.aborted) return;
     document.body.classList.toggle("is-overview", chapter.slug === "overview");
     store.visit(chapter.slug);
     renderProgress(store, chapter);
@@ -190,8 +205,7 @@ export async function renderRoute(store) {
     if (signal.aborted) return;
     if (!routeResolved) {
       applyEra(referenceEra, document.documentElement.dataset.theme);
-      document.querySelector("#era-label").textContent = getEra(referenceEra).label;
-      document.querySelector("#chapter-label").textContent = "Workshop";
+      document.querySelector("#chapter-label").textContent = "Course";
       document.body.classList.remove("is-overview");
     }
     article.removeAttribute("aria-busy");

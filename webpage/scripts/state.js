@@ -2,7 +2,11 @@ import { chapters } from "./chapters.js";
 
 const lessonIds = chapters.filter(chapter => chapter.slug !== "overview").map(chapter => chapter.slug);
 const validIds = values => Array.isArray(values) ? [...new Set(values.filter(value => lessonIds.includes(value)))] : [];
-const fresh = () => ({ version: 2, completed: [], previousReading: [], lastVisited: "", theme: "light" });
+const revisionFor = slug => chapters.find(chapter => chapter.slug === slug)?.exerciseRevision;
+const fresh = () => ({
+  version: 3, completed: [], completionRevisions: {}, previousCompleted: [],
+  previousReading: [], lastVisited: "", theme: "light"
+});
 
 export function createProgressStore(storage, key) {
   let state = fresh();
@@ -15,16 +19,28 @@ export function createProgressStore(storage, key) {
     const raw = storage.getItem(key);
     if (raw) {
       const saved = JSON.parse(raw);
-      if (saved?.version !== 2) throw new Error("Unsupported progress format.");
-      if (!Array.isArray(saved.completed) || !Array.isArray(saved.previousReading)
-          || typeof saved.lastVisited !== "string" || !["light", "dark"].includes(saved.theme)) {
-        throw new Error("Invalid progress fields.");
-      }
-      state = {
-        version: 2, completed: validIds(saved.completed), previousReading: validIds(saved.previousReading),
-        lastVisited: lessonIds.includes(saved.lastVisited) ? saved.lastVisited : "",
-        theme: saved.theme === "dark" ? "dark" : "light"
+      state.theme = saved?.theme === "dark" ? "dark" : "light";
+      state.lastVisited = lessonIds.includes(saved?.lastVisited) ? saved.lastVisited : "";
+      if (![2, 3].includes(saved?.version) || !Array.isArray(saved.completed)
+          || !Array.isArray(saved.previousReading)) throw new Error("Invalid progress fields.");
+      state.previousReading = validIds(saved.previousReading);
+      const archive = (slug, revision) => {
+        if (!lessonIds.includes(slug) || !Number.isInteger(revision) || revision < 1) return;
+        if (!state.previousCompleted.some(item => item.slug === slug && item.revision === revision)) {
+          state.previousCompleted.push({ slug, revision });
+        }
       };
+      for (const item of Array.isArray(saved.previousCompleted) ? saved.previousCompleted : []) {
+        archive(item?.slug, item?.revision);
+      }
+      for (const slug of validIds(saved.completed)) {
+        const revision = saved.version === 2 ? 1 : saved.completionRevisions?.[slug];
+        if (revision === revisionFor(slug)) {
+          state.completed.push(slug);
+          state.completionRevisions[slug] = revision;
+        } else archive(slug, Number.isInteger(revision) && revision > 0 ? revision : 1);
+      }
+      save();
     } else {
       const legacy = storage.getItem("dotnet-modernization-course-progress");
       if (legacy) {
@@ -44,6 +60,8 @@ export function createProgressStore(storage, key) {
       if (!lessonIds.includes(slug)) throw new Error("Unknown chapter.");
       state.completed = state.completed.includes(slug)
         ? state.completed.filter(value => value !== slug) : [...state.completed, slug];
+      if (state.completed.includes(slug)) state.completionRevisions[slug] = revisionFor(slug);
+      else delete state.completionRevisions[slug];
       save();
     },
     visit(slug) {

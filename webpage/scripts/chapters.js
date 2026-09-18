@@ -1,10 +1,10 @@
 export const chapters = [
-  { slug: "overview", number: "Start", title: "Workshop overview", path: "README.md", core: false, era: "1960s" },
-  { slug: "00-introduction", number: "00", title: "Get ready", path: "00-introduction/README.md", core: true, era: "1970s" },
-  { slug: "01-assessment", number: "01", title: "Assess the app", path: "01-assessment/README.md", core: true, era: "1980s" },
-  { slug: "02-planning", number: "02", title: "Choose the plan", path: "02-planning/README.md", core: true, era: "1990s" },
-  { slug: "03-upgrade-execution", number: "03", title: "Upgrade & check", path: "03-upgrade-execution/README.md", core: true, era: "2000s-2010s" },
-  { slug: "04-cloud", number: "04", title: "Explore Azure", path: "04-cloud/README.md", core: false, era: "2020s" }
+  { slug: "overview", number: "Start", title: "Course overview", path: "README.md", core: false, era: "1960s" },
+  { slug: "00-introduction", number: "00", title: "Get ready", path: "00-introduction/README.md", core: true, era: "1970s", exerciseRevision: 2 },
+  { slug: "01-assessment", number: "01", title: "Assess the app", path: "01-assessment/README.md", core: true, era: "1980s", exerciseRevision: 2 },
+  { slug: "02-planning", number: "02", title: "Choose the plan", path: "02-planning/README.md", core: true, era: "1990s", exerciseRevision: 2 },
+  { slug: "03-upgrade-execution", number: "03", title: "Upgrade & check", path: "03-upgrade-execution/README.md", core: true, era: "2000s-2010s", exerciseRevision: 2 },
+  { slug: "04-cloud", number: "04", title: "Plan for Azure", path: "04-cloud/README.md", core: true, era: "2020s", exerciseRevision: 2 }
 ];
 
 export const references = [
@@ -13,7 +13,11 @@ export const references = [
   { path: "examples/azure/README.md", title: "Azure helper" },
   { path: "examples/assessments/README.md", title: "Recorded assessment" },
   { path: "00-introduction/code/README.md", title: "Optional console sample" },
-  { path: "docs/validation.md", title: "Behavior checks" },
+  { path: "docs/learner-record.md", title: "Learner record" },
+  { path: "04-cloud/deployment.md", title: "Optional Azure deployment" },
+  { path: "tools/BookCatalog.Data/README.md", title: "Selected-record helper" },
+  { path: "docs/instructor-guide.md", title: "Optional instructor guide" },
+  { path: "docs/validation.md", title: "Maintainer validation" },
   { path: "docs/writing.md", title: "Writing guide" },
   { path: "webpage/README.md", title: "Website guide" }
 ];
@@ -23,7 +27,8 @@ export const sectionAliases = {
   "00-introduction": {
     "chapter-00-introduction-to-modernization": "chapter-00-get-ready-to-modernize",
     "prerequisites": "check-before-installing",
-    "your-first-assessment": "optional-your-first-assessment"
+    "your-first-assessment": "optional-your-first-assessment",
+    "checkpoint-can-you-explain-the-starting-state": "checkpoint-what-would-a-build-miss"
   },
   "01-assessment": {
     "chapter-01-assessment": "chapter-01-assess-bookcatalog",

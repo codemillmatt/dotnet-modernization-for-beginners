@@ -5,7 +5,10 @@ import { dirname, join, resolve } from "node:path";
 import { chapters, references } from "../../webpage/scripts/chapters.js";
 import { normalizePath, parseRoute, routeForPath } from "../../webpage/scripts/routes.js";
 import { createProgressStore } from "../../webpage/scripts/state.js";
-import { eras, eraPalette, getEra, diagramTheme, referenceEra } from "../../webpage/scripts/eras.js";
+import { eras, eraPalette, getEra, referenceEra } from "../../webpage/scripts/eras.js";
+import { illustrations, illustrationPath } from "../../webpage/scripts/illustrations.js";
+import { zipEntries } from "./zip-entries.mjs";
+import { selectPublicContent } from "../../webpage/tools/public-content.mjs";
 
 const root = resolve(import.meta.dirname, "../..");
 const read = path => readFileSync(join(root, path), "utf8");
@@ -21,7 +24,6 @@ test("each chapter has the planned era and complete palettes", () => {
       const palette = eraPalette(id, mode);
       assert.deepEqual(Object.keys(palette).sort(), keys);
       assert.ok(Object.values(palette).every(value => typeof value === "string" && value.length));
-      assert.equal(diagramTheme(id, mode).themeVariables.primaryTextColor, palette.ink);
     }
   }
   assert.equal(referenceEra, "2020s");
@@ -41,15 +43,23 @@ test("all declared local links and images resolve", () => {
   assert.deepEqual(failures, []);
 });
 
-test("manifest preserves chapter identifiers and the optional Azure boundary", () => {
-  assert.equal(chapters.filter(chapter => chapter.core).length, 4);
-  assert.equal(chapters.find(chapter => chapter.slug === "04-cloud").core, false);
+test("manifest preserves identifiers, five core chapters, and optional deployment", () => {
+  assert.equal(chapters.filter(chapter => chapter.core).length, 5);
+  assert.equal(chapters.find(chapter => chapter.slug === "overview").core, false);
+  assert.equal(chapters.find(chapter => chapter.slug === "04-cloud").core, true);
+  assert.ok(chapters.filter(chapter => chapter.core).every(chapter => chapter.exerciseRevision > 1));
+  assert.ok(references.some(item => item.path === "04-cloud/deployment.md"));
+  assert.ok(references.some(item => item.path === "docs/learner-record.md"));
+  assert.ok(references.some(item => item.path === "docs/instructor-guide.md"));
+  assert.ok(references.some(item => item.path === "tools/BookCatalog.Data/README.md"));
   assert.equal(new Set(documents).size, documents.length);
   for (const item of [...chapters, ...references]) assert.ok(existsSync(join(root, item.path)));
 });
 
 test("routes constrain references and preserve sections", () => {
   assert.equal(routeForPath("01-assessment/../README.md", "-prerequisites"), "#/overview?section=-prerequisites");
+  assert.equal(routeForPath("04-cloud/deployment.md", "delete-the-dedicated-lab-group"),
+    "#/reference?path=04-cloud%2Fdeployment.md&section=delete-the-dedicated-lab-group");
   assert.equal(parseRoute("#/reference?path=docs%2Fvalidation.md").chapter.path, "docs/validation.md");
   assert.throws(() => parseRoute("#/reference?path=../../secret"), /not in the course/);
   assert.throws(() => normalizePath("../../secret"), /leaves the course/);
@@ -129,5 +139,58 @@ test("sample source downloads retain required project source", {
   const walk = path => readdirSync(path, { withFileTypes: true }).flatMap(entry =>
     entry.isDirectory() ? walk(join(path, entry.name)) : [join(path, entry.name)]);
   const files = walk(join(root, "_site/content"));
-  assert.ok(!files.some(path => /[/\\](bin|obj|packages|history)[/\\]/.test(path)));
+  assert.ok(!files.some(path => /[/\\](bin|obj|packages|history|\.bookcatalog-lab|\.azure-lab)[/\\]/i.test(path)));
+  const entries = zipEntries(readFileSync(join(root, "_site/downloads/samples.zip")));
+  for (const path of [
+    "tools/BookCatalog.Data/README.md", "tools/BookCatalog.Data/BookCatalog.Data.csproj",
+    "tests/BookCatalog.Data.Tests/BookCatalog.Data.Tests.csproj",
+    "tests/BookCatalog.Tests/BookCatalog.Tests.csproj", "scripts/Test-DataTransfer.ps1",
+    "scripts/Test-LegacyApp.ps1", "scripts/Test-ModernizedApp.ps1", "docs/learner-record.md", "docs/instructor-guide.md",
+    "04-cloud/deployment.md", ".config/dotnet-tools.json",
+    "shared-legacy-app/src/BookCatalog.Web/Properties/AssemblyInfo.cs",
+    "examples/modernized/src/BookCatalog.Web/Program.cs", "DOWNLOAD-README.txt"
+  ]) assert.ok(entries.get(path)?.length > 0, path);
+  assert.ok([...entries.keys()].some(path => /^tools\/BookCatalog.Data\/.*\.cs$/.test(path)));
+  assert.ok([...entries.keys()].some(path => /^tests\/BookCatalog.Data.Tests\/.*\.cs$/.test(path)));
+  assert.ok(![...entries.keys()].some(path =>
+    /(^|\/)(bin|obj|packages|history|\.bookcatalog-lab|\.azure-lab|snapshots|secrets\.json)(\/|$)|\.(mdf|ldf|pfx)$/i.test(path)));
+  assert.match(entries.get("README.md").toString("utf8"), /https:\/\/github.com\/.*\/blob\/main\/00-introduction\/README.md/);
+  for (const illustration of illustrations) {
+    for (const mode of ["light", "dark"]) {
+      const path = illustrationPath(illustration.id, mode);
+      assert.equal(read(`_site/content/${path}`), read(path));
+      assert.ok(entries.get(path)?.length > 0, path);
+    }
+  }
+});
+
+test("public previews include authored helper files without exposing untracked local data", () => {
+  const safe = [
+    "tools/BookCatalog.Data/Program.cs", "tools/BookCatalog.Data/BookCatalog.Data.csproj",
+    "tools/BookCatalog.Data/README.md", "tests/BookCatalog.Data.Tests/TransferTests.cs",
+    "scripts/Test-DataTransfer.ps1", "docs/learner-record.md", "docs/instructor-guide.md", "04-cloud/deployment.md",
+    "docs/illustrations/journey-light.svg", "docs/illustrations/azure-dark.svg"
+  ];
+  const privateFiles = [
+    "tools/BookCatalog.Data/.bookcatalog-lab/records.json", "tools/BookCatalog.Data/snapshot.json",
+    "tools/BookCatalog.Data/private-notes.md", "tools/BookCatalog.Data/bin/Generated.cs",
+    "tools/BookCatalog.Data/secrets.json", "shared-legacy-app/App_Data/books.mdf",
+    "docs/private-notes.md", "scripts/private-script.ps1", "examples/azure/.env",
+    "examples/azure/.azure-lab/state.json", "docs/illustrations/private.svg", "docs/illustrations/private-notes.md"
+  ];
+  assert.deepEqual(selectPublicContent([], [...safe, ...privateFiles]), [...safe].sort());
+  assert.deepEqual(selectPublicContent([
+    "examples/azure/secrets.json", "examples/azure/.bookcatalog-lab/records.json",
+    "examples/modernized/appsettings.Test.Local.json", "tools/BookCatalog.Data/obj/Generated.cs"
+  ], []), []);
+});
+
+test("validation covers data transfer without publishing feature branches", () => {
+  const validation = read(".github/workflows/course-validation.yml");
+  assert.match(validation, /dotnet test tests\/BookCatalog\.Data\.Tests\/BookCatalog\.Data\.Tests\.csproj/);
+  assert.match(validation, /windows-legacy:[\s\S]*runs-on: windows-latest[\s\S]*scripts\/Test-DataTransfer\.ps1/);
+  assert.match(validation, /scripts\/Test-DataTransfer\.ps1[\s\S]*scripts\/Test-ModernizedApp\.ps1/);
+  assert.doesNotMatch(validation, /actions\/deploy-pages|pages: write/);
+  const pages = read(".github/workflows/pages.yml");
+  assert.match(pages, /deploy:\s+if: github\.ref == 'refs\/heads\/main'\s+needs: validate/);
 });

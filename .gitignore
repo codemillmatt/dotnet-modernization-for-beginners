@@ -139,6 +139,7 @@ playwright-report/
 test-results/
 .playwright-mcp/
 .azure-lab/
+.bookcatalog-lab/
 __pycache__/
 *.pyc
 

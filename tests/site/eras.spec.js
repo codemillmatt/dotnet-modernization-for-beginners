@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { chapters } from "../../webpage/scripts/chapters.js";
 import { eraPalette } from "../../webpage/scripts/eras.js";
+import { illustrations, illustrationPath } from "../../webpage/scripts/illustrations.js";
 
 async function ready(page, chapter, mode = "light") {
   await page.goto(`?clawpilotTheme=${mode}#/${chapter.slug}`);
@@ -30,7 +31,7 @@ for (const chapter of chapters) {
           .reduce((sum, n, i) => sum + n * [.2126, .7152, .0722][i], 0);
         const bad = [];
         for (const element of document.querySelectorAll(
-          "p,a,button,summary,th,td,h1,h2,h3,small,.chapter-label,.era-label,.code-toolbar>span")) {
+          "p,a,button,summary,th,td,h1,h2,h3,small,figcaption,.chapter-label,.code-toolbar>span")) {
           if (!element.getClientRects().length) continue;
           const style = getComputedStyle(element);
           let ancestor = element;
@@ -135,18 +136,18 @@ test("failed content retains its chapter era", async ({ page }) => {
   await expect(page.locator("#chapter-label")).toContainText("02");
 });
 
-test("built diagram metadata follows chapter eras", async ({ request }) => {
-  const manifest = await (await request.get("diagrams/manifest.json")).json();
-  for (const chapter of chapters) {
-    for (const diagram of manifest.documents[chapter.path]) {
-      expect(diagram.era).toBe(chapter.era);
-      for (const mode of ["light", "dark"]) {
-        const response = await request.get(diagram[mode]);
-        expect(response.ok()).toBeTruthy();
-        expect(await response.text()).toContain(eraPalette(chapter.era, mode).ink);
-      }
+test("built illustrations follow chapter palettes without a diagram renderer", async ({ request }) => {
+  for (const illustration of illustrations) {
+    for (const mode of ["light", "dark"]) {
+      const response = await request.get(`content/${illustrationPath(illustration.id, mode)}`);
+      expect(response.ok()).toBeTruthy();
+      const svg = await response.text();
+      expect(svg).toContain(eraPalette(illustration.era, mode).ink);
+      expect(svg).toContain(`data-era="${illustration.era}"`);
+      expect(svg).toContain(`data-theme="${mode}"`);
     }
   }
+  expect((await request.get("diagrams/manifest.json")).status()).toBe(404);
 });
 
 test("era routing also works at the hosting root", async ({ page }) => {
@@ -156,5 +157,7 @@ test("era routing also works at the hosting root", async ({ page }) => {
     await expect(page.locator("#article")).not.toHaveAttribute("aria-busy", "true");
     await expect(page.getByRole("alert")).toHaveCount(0);
     await expect(page.locator("#article h1")).toBeVisible();
+    await expect(page.locator(".course-illustration")).toHaveCount(1);
+    await expect(page.locator(".illustration-light")).toHaveAttribute("href", /\/content\/docs\/illustrations\/.+-light\.svg$/);
   }
 });

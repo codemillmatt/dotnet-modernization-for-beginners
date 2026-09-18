@@ -1,25 +1,50 @@
 # Run the legacy BookCatalog sample
 
-BookCatalog is one ASP.NET MVC 5 application with .NET Framework 4.8, EF6, and SQL Server LocalDB. Chapters 01 and 02 assess and plan changes. Chapter 03 upgrades your copy. Chapter 04 optionally deploys the result.
+BookCatalog is an ASP.NET MVC 5 application using .NET Framework 4.8, EF6, and SQL Server LocalDB.
+
+Its users add, inspect, edit, and remove book records. The main list hides inactive books and sorts active books by title.
+
+You can run this sample without completing the course. To modernize it, start with [Chapter 00](../00-introduction/README.md).
 
 ## Windows quickstart
 
-Check the [course readiness instructions](../00-introduction/README.md#check-before-installing). You need Visual Studio's ASP.NET web build tools, .NET Framework 4.8 targeting tools, IIS Express, and `MSSQLLocalDB`.
+Check the [readiness instructions](../00-introduction/README.md#check-before-installing). You need Visual Studio web tools, .NET Framework 4.8 targeting tools, IIS Express, and `MSSQLLocalDB`.
 
-1. Open `BookCatalog.sln` in Visual Studio.
-2. Restore NuGet packages. `NuGet.Config` places them in this solution's `packages/` directory, matching the project's reference paths.
+> **Sample data only.** The EF6 `DropCreateDatabaseIfModelChanges` initializer can replace its database after model changes.
+>
+> Never change the connection string to a business database. Do not create an empty MDF as a startup workaround.
+
+1. Open `shared-legacy-app\BookCatalog.sln` from the repository root in Visual Studio.
+2. Restore NuGet packages.
 3. Select **Build > Rebuild Solution**.
-4. Select IIS Express. Press F5.
-5. Check that the active catalog loads. Use [the behavior contract](../docs/validation.md#behavior-contract) to check more than the landing page.
+4. Select IIS Express.
+5. Press F5.
+6. Check that the active catalog loads.
 
-> The sample uses an EF6 `DropCreateDatabaseIfModelChanges` initializer. It can replace its sample database after model changes. Never change the connection string to a real business database.
+`NuGet.Config` restores packages into this solution's `packages` directory. That location matches the classic project's reference paths.
 
-The legacy connection uses integrated authentication and an MDF under the application's data directory. It does not contain a SQL password. Keep it separate from the modernized lab database.
+Application startup creates `App_Data` before EF initialization. Do not precreate the directory or an empty MDF as a preparation step.
+
+A fresh database contains six active books and one inactive Matrix record. Existing sample data can change those counts.
+
+Check creation, editing, inactive filtering, and persistence with the [learner behavior checklist](../docs/learner-record.md#behavior-checks).
+
+The connection uses integrated authentication and an MDF under the application's data directory. It does not contain a SQL password.
+
+If startup fails, inspect the LocalDB instance and configuration before changing anything. Do not delete an existing database to force a fresh start.
 
 ## Working through the course
 
-Use your own branch. Follow [Chapter 00](../00-introduction/README.md). Change this copy only as part of your reviewed upgrade.
+Use your own branch. Chapter 00 establishes a baseline and two learner-created carry-forward records.
 
-For comparison, inspect the original Git commit or use another clone. Do not reset over your work.
+Chapters 01 and 02 assess requirements and revise a plan. Export the selected records in Chapter 02, while the original `Web.config` still exists.
 
-This project intentionally stays in classic WAP format. SDK-style conversion and API migration are part of the exercise, not setup repairs.
+Chapter 03 upgrades **your copy** in place. It uses a separate `BookCatalogModernizedLab` database and an explicit selected-record copy.
+
+Changing the framework or recreating seed data does not transfer those records. Keep the legacy database unchanged.
+
+Chapter 04 requires an Azure assessment and plan. [Deployment](../04-cloud/deployment.md) needs separate access and cost approval and remains optional.
+
+For comparison, inspect the original Git commit or another clone. Do not reset over your work.
+
+This project intentionally uses classic web application project format. SDK conversion and API migration belong to the exercise, not setup repairs.

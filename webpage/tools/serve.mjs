@@ -36,6 +36,6 @@ const server = createServer(async (request, response) => {
     else { console.error(error); response.writeHead(500).end("The server could not read the file."); }
   }
 });
-server.listen(port, "127.0.0.1", () => console.log(`Workshop preview: http://127.0.0.1:${port}${base}`));
+server.listen(port, "127.0.0.1", () => console.log(`Course preview: http://127.0.0.1:${port}${base}`));
 process.on("SIGTERM", () => server.close());
 process.on("SIGINT", () => server.close());

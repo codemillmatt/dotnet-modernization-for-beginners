@@ -19,6 +19,7 @@ jobs:
   validate:
     uses: ./.github/workflows/course-validation.yml
   deploy:
+    if: github.ref == 'refs/heads/main'
     needs: validate
     environment:
       name: github-pages
@@ -39,10 +40,10 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
 
-      - name: Restore workshop tools
+      - name: Restore course tools
         run: npm ci
 
-      - name: Build the workshop artifact
+      - name: Build the course artifact
         run: npm run build
 
       - name: Upload static site

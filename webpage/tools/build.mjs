@@ -1,53 +1,51 @@
-import { cp, lstat, mkdir, mkdtemp, readdir, readFile, rename, rm, writeFile } from "node:fs/promises";
-import { dirname, extname, join, resolve } from "node:path";
+import { cp, lstat, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 import { chapters, references } from "../scripts/chapters.js";
+import { selectPublicContent } from "./public-content.mjs";
+import { renderIllustrations } from "./render-illustrations.mjs";
+import { illustrations, illustrationPath } from "../scripts/illustrations.js";
+import { publishSite } from "./publish-site.mjs";
+import { runPython } from "../../tools/python.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const output = join(root, "_site");
 const stage = await mkdtemp(join(root, ".site-build-"));
-const excluded = new Set(["bin", "obj", "packages", "node_modules", ".git", ".vs", "TestResults"]);
-const extensions = new Set([".md", ".cs", ".cshtml", ".css", ".json", ".sln", ".csproj", ".config",
-  ".asax", ".png", ".svg", ".bicep", ".mjs", ".csv", ".ps1"]);
-async function copySource(source, destination) {
-  await mkdir(destination, { recursive: true });
-  for (const entry of await readdir(source, { withFileTypes: true })) {
-    if (excluded.has(entry.name) || entry.name.endsWith(".user")) continue;
-    if (entry.isSymbolicLink()) throw new Error(`The source contains a symbolic link: ${entry.name}`);
-    if (entry.isDirectory()) await copySource(join(source, entry.name), join(destination, entry.name));
-    else if (extensions.has(extname(entry.name).toLowerCase())) await cp(join(source, entry.name), join(destination, entry.name));
+async function copyPublicFile(path) {
+  let source = root;
+  for (const part of path.split("/")) {
+    source = join(source, part);
+    if ((await lstat(source)).isSymbolicLink()) throw new Error(`The source contains a symbolic link: ${path}`);
   }
+  const destination = join(stage, "content", path);
+  await mkdir(dirname(destination), { recursive: true });
+  await cp(source, destination);
 }
-function run(command, args) {
-  const result = spawnSync(command, args, { cwd: root, stdio: "inherit" });
-  if (result.error) throw result.error;
-  if (result.status !== 0) throw new Error(`${command} failed with exit ${result.status}.`);
+function gitFiles(args) {
+  const result = spawnSync("git", ["ls-files", "-z", ...args], { cwd: root, encoding: "utf8" });
+  if (result.error || result.status !== 0) throw new Error(result.error?.message || result.stderr);
+  return result.stdout.split("\0").filter(Boolean);
 }
 try {
+  await renderIllustrations({ check: true });
   for (const path of ["index.html", "styles.css", "app.js", ".nojekyll", "scripts", "assets"]) {
     await cp(join(root, "webpage", path), join(stage, path), { recursive: true });
   }
   await mkdir(join(stage, "content"), { recursive: true });
-  await cp(join(root, "README.md"), join(stage, "content/README.md"));
-  await cp(join(root, "LICENSE"), join(stage, "content/LICENSE"));
-  for (const chapter of chapters.slice(1)) {
-    const directory = dirname(chapter.path);
-    await copySource(join(root, directory), join(stage, "content", directory));
+  const publicFiles = selectPublicContent(gitFiles([]), gitFiles(["--others", "--exclude-standard"]));
+  for (const document of [...chapters, ...references]) {
+    if (!publicFiles.includes(document.path)) throw new Error(`Required public content is missing: ${document.path}`);
+    const markdown = await readFile(join(root, document.path), "utf8");
+    if (/^```mermaid\b/m.test(markdown)) throw new Error(`Replace the Mermaid block with an illustration: ${document.path}`);
   }
-  for (const directory of ["shared-legacy-app", "examples/modernized", "examples/azure", "examples/assessments"]) {
-    await copySource(join(root, directory), join(stage, "content", directory));
+  for (const illustration of illustrations) {
+    for (const mode of ["light", "dark"]) {
+      const path = illustrationPath(illustration.id, mode);
+      if (!publicFiles.includes(path)) throw new Error(`Required illustration is missing: ${path}`);
+    }
   }
-  for (const reference of references) {
-    await mkdir(dirname(join(stage, "content", reference.path)), { recursive: true });
-    await cp(join(root, reference.path), join(stage, "content", reference.path));
-  }
-  for (const path of ["README.md", "package.json", "package-lock.json", ".config/dotnet-tools.json"]) {
-    await mkdir(dirname(join(stage, "content", path)), { recursive: true });
-    await cp(join(root, path), join(stage, "content", path));
-  }
-  await copySource(join(root, "tests/BookCatalog.Tests"), join(stage, "content/tests/BookCatalog.Tests"));
-  await copySource(join(root, "scripts"), join(stage, "content/scripts"));
+  for (const path of publicFiles) await copyPublicFile(path);
   await mkdir(join(stage, "vendor/github-slugger"), { recursive: true });
   for (const [source, target] of [
     ["marked/lib/marked.umd.js", "vendor/marked.umd.js"],
@@ -60,10 +58,9 @@ try {
     ["@fontsource/outfit/files/outfit-latin-700-normal.woff2", "assets/outfit-latin-700-normal.woff2"],
     ["@fontsource/outfit/LICENSE", "assets/Outfit-LICENSE"]
   ]) await cp(join(root, "node_modules", source), join(stage, target));
-  run(process.execPath, [join(root, "webpage/tools/render-mermaid.mjs"), join(stage, "content"), join(stage, "diagrams")]);
   await mkdir(join(stage, "downloads"));
-  const python = process.platform === "win32" ? "python" : "python3";
-  run(python, [join(root, "webpage/tools/package-samples.py"), join(stage, "content"), join(stage, "downloads/samples.zip")]);
+  const packaged = runPython([join(root, "webpage/tools/package-samples.py"), join(stage, "content"), join(stage, "downloads/samples.zip")], { cwd: root });
+  if (packaged.status !== 0) throw new Error(`Sample packaging failed with exit ${packaged.status}.`);
   await writeFile(join(stage, ".workshop-build"), "dotnet-modernization-workshop\n");
   let existing;
   try { existing = await lstat(output); } catch (error) { if (error.code !== "ENOENT") throw error; }
@@ -73,8 +70,8 @@ try {
     }
     await rm(output, { recursive: true });
   }
-  await rename(stage, output);
-  console.log("The workshop artifact is ready in _site.");
+  await publishSite(stage, output);
+  console.log("The course artifact is ready in _site.");
 } finally {
   await rm(stage, { recursive: true, force: true });
 }

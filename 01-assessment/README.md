@@ -1,141 +1,194 @@
 # Chapter 01: Assess BookCatalog
 
-An assessment describes the application before you change it. You will use that description to choose work, not to estimate effort from a count.
+An assessment describes the application before you change it. Make that description useful by adding what matters to its users.
 
-Start with the working legacy app and learner branch from [Chapter 00](../00-introduction/README.md). Keep your [behavior record](../docs/validation.md#behavior-contract) available. Do not edit application code in this chapter.
+Start with the working app and learner branch from [Chapter 00](../00-introduction/README.md). Keep your [learner record](../docs/learner-record.md) open.
+
+Your output is a reviewed assessment with explicit requirements. Do not edit application code in this chapter.
 
 ## Ask for an assessment
 
-Open `shared-legacy-app/BookCatalog.sln` in Visual Studio. Stop debugging before the assessment.
+Open `shared-legacy-app\BookCatalog.sln` in Visual Studio. Stop debugging.
 
-Select **Modernize** from the solution's context menu. Select the .NET upgrade option if the agent asks which operation you want.
+Select **Modernize** from the solution's context menu. Choose the .NET upgrade operation if asked.
 
-Send this request:
+Attach your baseline notes through chat's context controls, or paste the relevant sections. Include:
+
+- The solution and baseline commit.
+- Your two actual record IDs, field values, and active states.
+- The observed behavior checks and any unresolved results.
+- The requirement to leave the legacy database unchanged.
+
+Do not assume the agent can see local notes that you have not attached. Use sample data only. Do not share connection credentials or database files.
+
+Send this request with that context:
 
 ```text
-Assess BookCatalog for an upgrade from .NET Framework 4.8 to .NET 10.
-Stay in Guided mode. Use my current learner branch.
-Do not change application code or execute an upgrade plan.
-Identify the scenario folder. Explain each major compatibility risk.
-Include our baseline behavior checks in your assessment.
+Assess BookCatalog from .NET Framework 4.8 to .NET 10 in Guided mode.
+Use the baseline context attached to this request.
+Do not change application code or execute an upgrade.
+Identify the scenario folder and the assessment file.
+Explain each major compatibility risk with source evidence.
+Separate observed facts, assumptions, and missing information.
 ```
 
-Inspect each requested permission before you approve it. Check the directory and command scope. Stop if the request targets another repository or database.
+Inspect requested permissions before approval. Check the directory and command scope. Stop a request that targets another repository or database.
 
-Open the assessment file through the agent. Its location follows `.github/upgrades/{scenarioId}/assessment.md`. Check the solution name and target framework.
+Ask the agent to open its assessment. Current documentation uses `.github\upgrades\{scenarioId}\assessment.md`. Verify the actual location, solution name, and target framework.
 
-![An example assessment identifies the classic BookCatalog web project and an architectural migration. Your wording and counts can differ.](images/assessment-complete.png)
+![One recorded assessment identifies a classic web project and an architectural migration. Your report can differ.](images/assessment-complete.png)
 
-The image records one run. Your report can contain different findings, sections, or package versions. Those differences do not by themselves indicate a failure.
+The screenshot records one run. Do not expect identical issue counts, package versions, or report sections.
 
 ## Read the report in a useful order
 
-| Section or equivalent | What to inspect | What it can tell you |
+| Section or equivalent | Inspect | What it establishes |
 | --- | --- | --- |
-| Project summary | Source framework, target, project type, dependencies | Which application the agent assessed |
-| Package findings | Current packages and proposed replacements | Which dependencies need an upgrade, replacement, or removal |
-| API findings | Named APIs and source locations | Where source or runtime behavior needs attention |
-| Technology groups | MVC, configuration, EF6, and startup | Which findings share an underlying change |
-| Test coverage and risks | Existing tests and untested behavior | Which conclusions still need evidence |
+| Project summary | Source, target, project type, and dependencies | Which application was assessed |
+| Package findings | Packages to upgrade, replace, or remove | Dependency work to investigate |
+| API findings | Named APIs and source locations | Source or runtime behavior needing attention |
+| Technology groups | MVC, configuration, EF6, and startup | Related changes that belong together |
+| Tests and risks | Existing coverage and missing checks | Which conclusions still need evidence |
 
-BookCatalog has one production project. Its classic web project format and `System.Web` dependencies mean this upgrade needs more than a target-framework edit.
+BookCatalog's classic web project and `System.Web` dependencies require more than a target-framework edit.
 
-Package rows need interpretation. ASP.NET Core provides web framework features through its framework reference. Removing an MVC 5 package still requires compatible controllers and views.
+ASP.NET Core supplies web features through its framework reference. Removing an MVC 5 package still requires compatible controllers and views.
 
 ## Separate compatibility from priority
 
-Compatibility categories describe a kind of change. They do not establish the business priority.
+Compatibility categories describe a kind of change. They do not establish business priority.
 
-| Compatibility category | Meaning | Evidence to seek |
+| Category | Meaning | Evidence to seek |
 | --- | --- | --- |
-| Binary incompatibility | An existing compiled component can stop working with the new dependency or runtime | Check replacements and rebuild affected components |
-| Source incompatibility | Existing source can need edits before it compiles against the new API | Inspect the reported source and compile the changed code |
-| Behavioral change | Code can compile but produce a different result | Test the affected behavior |
+| Binary incompatibility | A compiled component can stop working with the new runtime or dependency | Replacement support and rebuilt components |
+| Source incompatibility | Source can need edits before it compiles against the new API | Reported source and compilation results |
+| Behavioral change | Code can compile but produce a different result | Checks of affected behavior |
 
-A source incompatibility can block the build. A behavioral change can damage data. Neither category automatically means "optional."
+A source incompatibility can block a build. A behavioral change can damage data. Neither category automatically means optional.
 
-For each important finding, record three separate decisions:
+Record three separate decisions for an important finding:
 
-1. What technical change does the finding describe?
-2. How important is the affected behavior to the application's user?
+1. What technical change does it describe?
+2. Why does the behavior matter to the application's user?
 3. Will you fix, replace, remove, or explicitly defer that behavior?
 
-Low business priority does not make incompatible code compile. Deferral needs a workable design, such as keeping a feature in a separate compatible application.
+Deferral needs a workable design. Low usage does not make incompatible code compile.
 
-```mermaid
-flowchart TD
-    Finding["Reported finding"] --> Source["Check source and context"]
-    Source --> Impact["Identify affected behavior"]
-    Impact --> Decision["Choose an action"]
-    Decision --> Evidence["Define the build or behavior check"]
-```
+![An investigation trail from a finding to source inspection, affected behavior, a chosen action, and a defined check.](../docs/illustrations/investigation-light.svg)
 
 ## Trace a finding into the application
 
-Open `shared-legacy-app/src/BookCatalog.Web/Controllers/BooksController.cs`.
+Open `shared-legacy-app\src\BookCatalog.Web\Controllers\BooksController.cs`.
 
-`Details(int id)` calls `HttpNotFound()` when a book does not exist. The important behavior is an HTTP 404 response. A replacement must preserve that response.
+`Details(int id)` calls `HttpNotFound()` when a book does not exist. Preserve the HTTP 404 response, not the old method name.
 
-`Index()` reads the request's user-agent value. In a controller, ASP.NET Core provides the current request through `Request`. This does not require a separate context accessor.
+`Index()` reads the request's user-agent value. ASP.NET Core controllers expose the current request through `Request`. This case does not require a separate context accessor.
 
-Now inspect `Global.asax.cs`. Its startup method configures routes, filters, and database initialization. These responsibilities need locations in the new application's startup code.
+Inspect `Global.asax.cs` next. Routes, filters, and database initialization need corresponding responsibilities in the new startup code.
 
 <div class="activity">
 
 ### Your decision: can this finding wait?
 
-Choose a finding in `BooksController.cs`. Record its source location, affected behavior, proposed action, and a check.
+Choose a real finding in your report. Record its source, affected behavior, action, and check.
 
-Suppose the affected page has few users. Decide whether that fact changes the compatibility problem or only its business priority.
+Suppose the page has few users. Explain whether that changes compatibility or only business priority.
 
 </div>
 
 <details>
 <summary>Compare your reasoning</summary>
 
-The page still belongs to the same compiled application. Its user count does not change the API requirements.
+The page belongs to the same compiled application. User count does not change API requirements.
 
-For `HttpNotFound()`, a reasonable replacement is ASP.NET Core's `NotFound()`. Check a missing record's route for HTTP 404 after the change.
+For `HttpNotFound()`, ASP.NET Core's `NotFound()` is a reasonable replacement. Check that a missing record still returns HTTP 404.
 
-For the active list, check both filtering and title order. A successful build cannot establish either behavior.
+For the active list, check filtering and title order. A build establishes neither behavior.
 
 </details>
 
+## Tell the agent what must survive
+
+The agent can inspect code. It cannot infer which records you selected or why they must remain unchanged.
+
+Open **your generated assessment file**. Add an **Application requirements** section.
+
+Replace the ID placeholders below with your actual IDs before saving:
+
+```text
+R1: Preserve the selected records with IDs <active-id> and <inactive-id>.
+R2: Preserve each ID, Title, Author, ISBN, PublishedYear, IsActive,
+    and the full stored CreatedDate value, including null fields.
+R3: Keep inactive books out of the main list and sort active books by title.
+R4: Leave the legacy database unchanged.
+R5: Copy the selected records to the separate BookCatalogModernizedLab
+    database. New seed records do not count as that copy.
+R6: Preserve validation, missing-record responses, antiforgery protection,
+    persistence after restart, and CreatedDate during edits.
+```
+
+Refer to your baseline notes in this section. Record the two IDs in your learner record as well.
+
+Now attach or refer to the edited assessment in chat. Ask:
+
+```text
+Read the Application requirements section I added to this assessment.
+Compare it with the attached baseline observations.
+Identify the affected code and any information still missing.
+Explain how these requirements constrain the upgrade options.
+Keep my requirement IDs when you reconcile the assessment.
+Do not change application code or execute the upgrade.
+```
+
+Inspect the updated artifact, not only the chat acknowledgement. Correct lost requirements, invented observations, and mistaken assumptions.
+
+The separate database is deliberate. Copying selected records is a later explicit step, not a side effect of changing EF packages.
+
 ## What the numbers do not prove
 
-An API count can identify repeated patterns. It does not measure the time required to redesign startup or test data behavior.
+API counts can reveal repeated patterns. They do not measure redesign, environment repair, or testing effort.
 
-An estimated line count does not include every review, environment repair, or test. Do not turn it into a promised schedule.
+No reported behavioral issues means the assessment found none. It does not prove that behavior will remain identical.
 
-No reported behavioral issues means the assessment found none. It does not mean the application will behave identically after the upgrade.
+An assessment is an input to a decision. Your requirements explain which result is acceptable.
 
 ## Save the assessment for planning
 
-Ask the agent to correct inaccurate facts before planning. Keep technical categories separate from your priority notes.
-
-Check the pending diff. It should contain assessment and scenario information, not application edits.
-
-From the repository root in PowerShell:
+From the repository root, inspect:
 
 ```powershell
 git status --short
 git diff
-git add .github/upgrades
-git diff --cached
-git commit -m "Record BookCatalog assessment"
 ```
 
-Run the commit command only after you inspect the staged files. If the agent uses another directory, use that directory instead.
+Expect assessment and scenario changes, not application edits. If code changed, stop and inspect it before asking the agent to restore the agreed scope.
 
-You are ready when your report identifies BookCatalog and your finding/action record includes checks for the affected behaviors.
+Use the actual scenario directory when staging reviewed artifacts. For example:
+
+```powershell
+git add -- .github\upgrades\<actual-scenario-id>
+if ($LASTEXITCODE -ne 0) { throw "Staging failed." }
+git diff --cached
+```
+
+The path contains a placeholder. Replace it before running. Inspect the staged diff before making a checkpoint:
+
+```powershell
+git commit -m "Record BookCatalog assessment and requirements"
+if ($LASTEXITCODE -ne 0) { throw "Checkpoint was not saved." }
+```
+
+Do not include credentials, snapshots, database files, or unrelated work.
+
+You are ready when you can show a finding's source and your requirements in the assessment. Chapter 02 traces each requirement into a plan action and check.
 
 ## If the assessment differs or fails
 
-For restore errors, restore packages and rebuild the legacy solution first. For an incorrect project name, stop and reopen the correct solution.
+For restore errors, rebuild the legacy solution first. For an incorrect solution name, reopen the correct solution.
 
-For an unexpected finding, inspect its source location. Tell the agent what evidence contradicts the finding. Do not edit report categories merely to reduce a count.
+For a disputed finding, inspect the source and give the agent contrary evidence. Do not change categories merely to reduce a count.
 
-For an expired chat, reopen the solution. Ask the agent to identify the existing scenario before it starts another assessment.
+For an expired chat, ask the agent to identify the existing scenario before creating another assessment.
 
 **[Next: choose an upgrade plan](../02-planning/README.md)**
 

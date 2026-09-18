@@ -75,15 +75,3 @@ export function applyEra(id, mode, root = document.documentElement) {
   for (const [name, value] of Object.entries(palette)) root.style.setProperty(`--${name}`, value);
   root.ownerDocument.querySelector('meta[name="theme-color"]')?.setAttribute("content", palette.paper);
 }
-
-export function diagramTheme(id, mode) {
-  const p = eraPalette(id, mode);
-  return {
-    theme: "base",
-    themeVariables: {
-      background: p.surface, primaryColor: p.soft, primaryTextColor: p.ink,
-      primaryBorderColor: p.link, lineColor: p.link, secondaryColor: p.soft, tertiaryColor: p.surface,
-      fontFamily: "Arial, sans-serif"
-    }
-  };
-}

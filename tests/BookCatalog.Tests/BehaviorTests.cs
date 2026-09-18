@@ -130,4 +130,39 @@ public class BehaviorTests
         using var client = app.Start();
         Assert.Equal(HttpStatusCode.NotFound, (await client.GetAsync($"/Books/{action}/2147483647")).StatusCode);
     }
+
+    [Fact]
+    public async Task Imported_record_keeps_identity_nulls_and_full_creation_timestamp_when_edited()
+    {
+        using var app = new BookCatalogFactory();
+        using var client = app.Start();
+        var created = new DateTime(2003, 2, 3, 4, 5, 6).AddTicks(1234567);
+        using (var scope = app.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            db.Books.Add(new Book
+            {
+                Id = 8010, Title = "Imported inactive book", Author = "Sample Author",
+                ISBN = null, PublishedYear = null, IsActive = false, CreatedDate = created
+            });
+            await db.SaveChangesAsync();
+        }
+
+        Assert.DoesNotContain("Imported inactive book", await client.GetStringAsync("/"));
+        Assert.Contains("Imported inactive book", await client.GetStringAsync("/Books/Details/8010"));
+        using var edit = await Post(client, "/Books/Edit/8010", new()
+        {
+            ["Id"] = "8010", ["Title"] = "Edited imported book", ["Author"] = "Sample Author",
+            ["ISBN"] = "", ["PublishedYear"] = "", ["IsActive"] = "true", ["CreatedDate"] = "1900-01-01"
+        });
+        Assert.Equal(HttpStatusCode.Redirect, edit.StatusCode);
+        using var check = app.Services.CreateScope();
+        var saved = await check.ServiceProvider.GetRequiredService<ApplicationDbContext>().Books.FindAsync(8010);
+        Assert.NotNull(saved);
+        Assert.Equal(8010, saved.Id);
+        Assert.Equal(created, saved.CreatedDate);
+        Assert.Null(saved.ISBN);
+        Assert.Null(saved.PublishedYear);
+        Assert.Contains("Edited imported book", await client.GetStringAsync("/"));
+    }
 }

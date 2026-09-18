@@ -1,153 +1,258 @@
 # Chapter 03: Upgrade and check the application
 
-The plan now defines your changes and their review boundaries. Execute one coherent group, inspect its result, and decide whether to proceed.
+Execute a reviewed group, inspect its result, and decide whether to continue. Agent status is not proof that the application or records survived.
 
-Start with the reviewed plan commit from [Chapter 02](../02-planning/README.md). Keep the legacy behavior record available.
+Start with the revised plan and source snapshot from [Chapter 02](../02-planning/README.md). Keep your [learner record](../docs/learner-record.md) available.
 
-By the end, your app will target .NET 10 and use ASP.NET Core MVC with EF Core. Your checks will describe what you tested.
+Your output is a .NET 10 application using ASP.NET Core MVC and EF Core, with your selected records verified in a separate database.
 
 ## Authorize one execution group
 
-Review the plan, pending diff, and selected mode. Then send:
+Confirm that `.bookcatalog-lab\books.json` contains your two selected source records. Inspect the plan, pending diff, and selected mode.
+
+Send:
 
 ```text
 Execute the first approved runnable group.
-Keep our separate-database constraint and behavior checks.
-Do not create Git commits. Pause for my review after this group.
-If you cannot finish the group, explain the incomplete state.
-Do not start the next group until I approve it explicitly.
+Preserve our requirements and leave the legacy database unchanged.
+Keep tools\BookCatalog.Data outside the learner solution and upgrade scope.
+Do not create Git commits or change my source snapshot.
+Pause for review at the approved boundary.
+If the group cannot finish, explain the incomplete state.
+Do not start the next group until I approve it.
 ```
 
-Check the agent's response. Guided mode does not guarantee a pause after every internal task.
+Check the response. Guided mode does not guarantee a pause after each internal task.
 
-Inspect each requested command before approval. Check its working directory and target files. Do not authorize a reset or database deletion to make progress easier.
+Inspect requested commands and their directories. Do not authorize a reset, database deletion, or overwrite merely to get past an error.
 
 ## Check the SDK and project changes
 
-From `shared-legacy-app` in PowerShell:
+After the application conversion group, start in the repository root:
 
 ```powershell
+Set-Location shared-legacy-app
 dotnet --version
+if ($LASTEXITCODE -ne 0) { throw "SDK selection failed." }
+Set-Location ..
 ```
 
-The result must select a stable .NET 10 SDK. The existing `global.json` uses `latestFeature`, so a later stable .NET 10 feature band is acceptable.
+The result must select a stable .NET 10 SDK. The existing `global.json` allows later stable .NET 10 feature bands.
 
-Inspect `src/BookCatalog.Web/BookCatalog.Web.csproj` after the application conversion group.
+Inspect `shared-legacy-app\src\BookCatalog.Web\BookCatalog.Web.csproj`. Expect an SDK-style web project targeting `net10.0`.
 
-You should find an SDK-style web project targeting `net10.0`. MVC 5 package references and `System.Web` references should no longer drive the application.
-
-Do not require a particular package patch version from an old screenshot. Check compatible versions and the reasons for package changes.
+MVC 5 packages and `System.Web` references should no longer drive the app. Check compatible package versions rather than matching a screenshot's patch numbers.
 
 ## Inspect responsibilities, not only filenames
 
-| Legacy responsibility | New location or approach | What you check |
+| Legacy responsibility | New approach | Check |
 | --- | --- | --- |
-| `Global.asax.cs` startup | `Program.cs` | MVC services and request routes exist |
-| `RouteConfig` | Endpoint routing | The root route still reaches the book list |
-| `BooksController` MVC APIs | ASP.NET Core controller APIs | Missing records return 404 and writes retain validation |
-| `web.config` connection | Application configuration | The modernized connection uses the separate lab database |
-| Controller-owned context | Constructor injection | The context has the intended request lifetime |
-| EF6 initializer | Explicit schema/seed strategy | The legacy MDF stays untouched |
-| Razor views and static files | ASP.NET Core views and `wwwroot` | Forms, links, styles, and antiforgery tokens work |
+| `Global.asax.cs` startup | `Program.cs` | MVC services and routes exist |
+| `RouteConfig` | Endpoint routing | Root route reaches the book list |
+| MVC controller APIs | ASP.NET Core APIs | Missing records return 404 and writes retain validation |
+| `Web.config` connection | Application configuration | Effective connection uses `BookCatalogModernizedLab`, not the legacy MDF |
+| Controller-owned context | Constructor injection | Context has the intended request lifetime |
+| EF6 initializer | Explicit schema and seed strategy | Target has a separate schema and source remains unchanged |
+| Views and static files | Razor views and `wwwroot` | Forms, links, styles, and antiforgery tokens work |
 
-```mermaid
-flowchart LR
-    Browser["Browser request"] --> Controller["BooksController"]
-    Controller --> Context["Injected ApplicationDbContext"]
-    Context --> Database["Separate modernized lab database"]
-    Controller --> View["Razor view"]
-    View --> Browser
-```
+![A browser sends a request to BooksController. The injected ApplicationDbContext accesses BookCatalogModernizedLab. The controller selects a Razor view, which renders the response for the browser.](../docs/illustrations/architecture-light.svg)
 
-The context executes database operations. The controller selects a response. The view renders the result. A change in one responsibility can affect the others.
+The context executes database operations. The controller selects a response. The view renders it. Review each responsibility before running the changed application.
 
 <div class="activity">
 
 ### Your review: did the edit preserve the behavior?
 
-Inspect the generated `Edit` action. Find where it updates an existing record.
+Inspect the generated `Edit` action. Find how it loads and updates the existing record.
 
-Check that editable fields change without replacing `CreatedDate`. Inspect the corresponding create action for the original local-time behavior.
+Check that editable fields change without replacing `CreatedDate`. Compare the create action with the original local-time behavior.
 
-Explain why a replacement that assigns every property can pass a build but still fail this review.
+Explain why assigning every posted property can pass a build but fail this review.
 
 </div>
 
 <details>
 <summary>Compare your review</summary>
 
-The legacy edit action leaves `CreatedDate` unchanged. The create action sets it with `DateTime.Now`.
+The legacy edit action leaves `CreatedDate` unchanged. Its create action uses `DateTime.Now`.
 
-Copying a posted creation date into the existing record changes that behavior. A build checks types and references, not the intended meaning of the date.
+Accepting a posted creation date changes that behavior. A build checks types and references, not the intended meaning of the field.
 
 </details>
 
 ## Rebuild, run, and repeat the checks
 
-Finish the entire runnable group before this step. From `shared-legacy-app` in PowerShell:
+Finish the runnable group before building. From the repository root:
 
 ```powershell
-dotnet build src/BookCatalog.Web/BookCatalog.Web.csproj --no-incremental
-dotnet run --project src/BookCatalog.Web/BookCatalog.Web.csproj
+Set-Location shared-legacy-app
+dotnet build src\BookCatalog.Web\BookCatalog.Web.csproj --no-incremental
+if ($LASTEXITCODE -ne 0) { throw "Build failed. Resolve errors before running." }
+dotnet run --project src\BookCatalog.Web\BookCatalog.Web.csproj
 ```
 
-Open the loopback URL from the console. If you use Visual Studio, select the new project launch profile rather than the old IIS Express configuration.
+Open the loopback URL from the console. In Visual Studio, select the new project launch profile rather than the old IIS Express configuration.
 
-Check warnings instead of treating an unchanged incremental build as fresh evidence. Resolve errors before proceeding.
+Check warnings as well as errors. Confirm that the app uses the separate target database.
 
-Repeat [the behavior contract](../docs/validation.md#behavior-contract) with disposable records in the modernized database.
+A fresh target contains the seed base, not your learner-created records. Similar seed titles do not establish a data copy.
 
-Check the list, forms, invalid input, inactive records, missing records, edits, and deletion. Restart the app to check persistence.
+Stop the app with Ctrl+C before the import. Return the shell to the repository root with `Set-Location ..`.
 
-The legacy records do not transfer to this database. This exercise tests application behavior, not data migration.
+## Preview, copy, and verify the selected records
 
-![The recorded modernized app shows the active catalog. Use your own behavior checks rather than matching this screenshot.](images/19-bookcatalog-running.png)
+Open `shared-legacy-app\src\BookCatalog.Web\appsettings.json`. Check that `ConnectionStrings:BookCatalogContext` names the approved local target.
+
+Check environment-specific settings and environment variables too. The application and helper must use the same target, without an unnoticed configuration override.
+
+The helper reads the named configuration file. It does not reconstruct every ASP.NET Core configuration provider.
+
+From the repository root, preview:
+
+```powershell
+dotnet run --project tools\BookCatalog.Data -- import --input .bookcatalog-lab\books.json --target-config shared-legacy-app\src\BookCatalog.Web\appsettings.json
+if ($LASTEXITCODE -ne 0) { throw "Import preview failed. Do not apply." }
+```
+
+This command does **not** copy records. Review the destination and selected rows before proceeding.
+
+The `Destination:` line identifies the server and database. Compare both with your approved target.
+
+The helper prints `PREVIEW ONLY` and identifies missing, matching, or conflicting rows. A conflicting preview exits unsuccessfully.
+
+If an ID already has different values, stop. Do not renumber your records, overwrite the conflict, or delete unrelated data.
+
+Investigate whether you selected the wrong target or reused an occupied lab environment.
+
+When the preview matches the plan, apply and verify:
+
+```powershell
+dotnet run --project tools\BookCatalog.Data -- import --input .bookcatalog-lab\books.json --target-config shared-legacy-app\src\BookCatalog.Web\appsettings.json --apply
+if ($LASTEXITCODE -ne 0) { throw "Import failed. Inspect the error before continuing." }
+dotnet run --project tools\BookCatalog.Data -- verify --input .bookcatalog-lab\books.json --target-config shared-legacy-app\src\BookCatalog.Web\appsettings.json
+if ($LASTEXITCODE -ne 0) { throw "Stored values do not match. The data check has not passed." }
+```
+
+The selected set is transactional: a conflict must not leave a partial copy. Reapplying matching records must not create duplicates.
+
+If a connection fails during apply, run verify before retrying. A lost response can leave the client unable to confirm a completed commit.
+
+Record the actual preview, apply, and verification results. Do not edit the snapshot to hide a mismatch.
+
+Use these final messages to distinguish the operations. `N` and `M` below are count placeholders, not text you enter:
+
+```text
+PREVIEW ONLY: N would be inserted; M already match. No rows changed.
+Applied and verified: N inserted; M already matched. No records overwritten.
+Verified N records: IDs and all stored values match exactly.
+```
+
+Verify compares IDs and stored fields, including nulls, `IsActive`, and full `CreatedDate` values. A date-only details page cannot establish timestamp precision.
+
+Exit code `0` means the requested helper operation passed. A failed or incomplete operation must not become a passing learner-record entry.
+
+### Check the legacy source remains unchanged
+
+Use SQL Server Object Explorer to inspect the **original** database on `(localdb)\MSSQLLocalDB`. Do not point the upgraded app at it.
+
+Replace both placeholders in this read-only query:
+
+```sql
+SELECT Id, Title, Author, ISBN, PublishedYear, IsActive,
+       CONVERT(nvarchar(27), CreatedDate, 126) AS StoredCreatedDate
+FROM dbo.Books
+WHERE Id IN (<active-id>, <inactive-id>)
+ORDER BY Id;
+```
+
+Compare the results with your source snapshot. Check values, SQL nulls, and timestamp precision. Record the source check separately from target verification.
+
+Do not modify, detach, or delete the legacy database.
+
+## Check your actual upgraded application
+
+Run the upgraded project again from `shared-legacy-app`. Open both saved details paths on the **new** local address.
+
+The active carry-forward record belongs in the list. The inactive record must stay absent while its details route remains available.
+
+Repeat the [behavior checks](../docs/learner-record.md#behavior-checks) with a **new throwaway record** in the target database.
+
+Use that record for edits, validation, inactive/restore experiments, and deletion. Keep both carry-forward records unchanged.
+
+Use [Chapter 00's check guidance](../00-introduction/README.md#check-behavior-with-a-separate-record) against the upgraded app's URL and target database.
+
+Restart the app and check persistence. Use stored values to check creation dates during edits, not only the date shown by the view.
+
+![One recorded modernized app shows the active catalog. Your own behavior and stored-value checks establish the result.](images/19-bookcatalog-running.png)
+
+The [reference tests](../docs/validation.md#what-the-reference-tests-prove) run against the completed example. They do not automatically test your agent-generated application.
+
+Ask the agent to add or adapt checks for your actual app when a result remains unverified. Keep **Not run** distinct from **Pass**.
 
 ## Save a real checkpoint
 
-Stop the application after the checks. From the repository root in PowerShell:
+Stop the app. From the repository root:
 
 ```powershell
 git status --short
 git diff --stat
 git diff
-git add shared-legacy-app .github/upgrades
-git diff --cached
-git commit -m "Upgrade BookCatalog and record behavior checks"
 ```
 
-Inspect the staged changes before the commit. Do not stage database files, credentials, unrelated edits, or build output.
+Stage only reviewed application and scenario files. If those directories contain no unrelated changes:
 
-Request the next planned group explicitly if work remains. Keep the same pause, review, and commit rules.
+```powershell
+git add -- shared-legacy-app .github\upgrades
+if ($LASTEXITCODE -ne 0) { throw "Staging failed." }
+git diff --cached
+```
+
+Inspect the staged diff before committing:
+
+```powershell
+git commit -m "Upgrade BookCatalog and verify selected records"
+if ($LASTEXITCODE -ne 0) { throw "Checkpoint was not saved." }
+```
+
+Do not stage snapshots, database files, credentials, or build output. Record unresolved checks honestly.
+
+Request the next approved group explicitly if work remains. Keep the same review rules.
 
 ## Recover without discarding your work
 
-If a task fails, inspect its log under `.github/upgrades/{scenarioId}/tasks/{taskId}/progress-details.md`.
+Find the existing scenario's task status and progress details. Current upgrade documentation uses paths such as `tasks\{taskId}\progress-details.md` under the scenario folder.
 
-Ask the agent to state the current incomplete condition. Give it the actual error and the last successful check.
+Use the actual path reported by your agent. Do not create a file merely because an example names it.
 
-If you close the IDE, reopen the same solution and branch. Ask the agent to identify the existing scenario and pending task before it edits.
+Give the agent the actual error, last successful check, and current incomplete state. Ask it to reconcile the next action with the plan.
 
-If you need a reference, open [the completed example](../examples/modernized/README.md) in a separate directory. Do not copy it over your learner project.
+Rehearse a resume after saving your checkpoint:
 
-If SQL startup fails, check the selected database and LocalDB instance. `EnsureCreated()` does not repair an incompatible existing schema.
+1. Close and reopen Visual Studio.
+2. Open the same solution and learner branch.
+3. Ask the agent to identify the existing scenario and pending group.
+4. Compare its answer with your learner record before authorizing changes.
 
-Do not delete the legacy MDF as a repair step.
+Do not manufacture completion by editing progress checkmarks.
+
+For SQL startup errors, inspect the selected target and LocalDB instance. `EnsureCreated()` cannot repair an incompatible existing schema.
+
+For comparison, open [the completed reference](../examples/modernized/README.md) in an isolated environment. Do not copy it over your learner output.
 
 ## Make an independent change
 
-Add an optional author filter to the book list. Keep active-only results and title order.
+Add an optional author filter to the list. Keep active-only results and title order.
 
-First, write the change and its checks in your own words. Then use the agent to inspect and edit the relevant controller and view.
+First, write the requirement and checks in your own words. Then use the agent to inspect and edit the relevant controller and view.
 
-Check a matching author, a nonmatching author, and an empty filter. Check that an inactive matching book remains absent.
+Check a matching author, a nonmatching author, and an empty filter. Confirm that an inactive matching book remains absent.
 
 <details>
 <summary>Worked approach after your attempt</summary>
 
-In `BooksController.Index`, start with the active-book query. Add the author condition before materializing the results.
+Start `BooksController.Index` with the active query. Add the author condition before materializing results.
 
-This fragment describes the query inside the action. Adapt the context variable to your implementation:
+This fragment belongs inside the action. Adapt the context variable to your implementation:
 
 ```csharp
 var query = db.Books.Where(book => book.IsActive);
@@ -158,18 +263,19 @@ if (!string.IsNullOrWhiteSpace(author))
 var books = await query.OrderBy(book => book.Title).ToListAsync();
 ```
 
-Add a nullable `author` parameter to the action. Add a GET form in `Views/Books/Index.cshtml` with an input named `author`.
+Add a nullable `author` parameter and a GET form in `Views\Books\Index.cshtml`. Name the input `author`.
 
-Keep the original condition when the filter is empty. Define case-matching expectations for your database rather than assuming all providers behave identically.
+Define case-matching expectations for your database. Do not assume all providers compare text identically.
 
-Check the complete action and view before you commit the change.
+Check the complete action and view before saving the change.
 
 </details>
 
-## Finish the core workshop
+<a id="finish-the-core-workshop"></a>
+## Finish the local upgrade
 
-Save your independent change after its checks pass. Record any remaining limitations instead of claiming a production-ready application.
+Save the independent change after its checks pass. Run selected-record verification again to confirm that the filter did not change your stable data.
 
-You can now assess, plan, inspect generated changes, and check selected behaviors. Apply that process to another application with its own risks and tests.
+You have completed the local journey, not the whole course. Next, apply the same assessment and planning discipline to Azure.
 
-**[Optional: prepare for Azure](../04-cloud/README.md)** · **[Course overview](../README.md)**
+**[Next: assess and plan for Azure](../04-cloud/README.md)** · **[Course overview](../README.md)**

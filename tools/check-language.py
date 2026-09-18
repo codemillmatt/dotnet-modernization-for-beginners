@@ -15,7 +15,8 @@ paths += sorted(root.glob("[0-9][0-9]-*/README.md"))
 paths += [root / name for name in [
     "00-introduction/code/README.md", "shared-legacy-app/README.md", "webpage/README.md",
     "examples/modernized/README.md", "examples/azure/README.md", "examples/assessments/README.md",
-    "docs/validation.md", "docs/writing.md"
+    "docs/validation.md", "docs/writing.md", "docs/learner-record.md",
+    "docs/instructor-guide.md", "04-cloud/deployment.md", "tools/BookCatalog.Data/README.md"
 ]]
 failures = []
 for path in paths:

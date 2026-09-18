@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Upgrade a legacy .NET application with GitHub Copilot. Assess the app, choose a plan, and check the result.">
+  <meta name="description" content="Upgrade BookCatalog with GitHub Copilot. Preserve selected records, check the result, and plan an Azure migration without deploying.">
   <meta name="theme-color" content="#FFF2D5">
   <title>.NET Modernization for Beginners</title>
   <link rel="icon" href="assets/sun.svg" type="image/svg+xml">
@@ -16,9 +16,9 @@
 <body>
   <a class="skip-link" href="#main-content">Skip to lesson</a>
   <header class="site-header">
-    <a class="brand" href="#/overview" aria-label=".NET Modernization workshop home">
+    <a class="brand" href="#/overview" aria-label=".NET Modernization course home">
       <span class="brand-mark" aria-hidden="true">.NET</span>
-      <span class="brand-copy"><strong>Modernization</strong><span>A hands-on workshop</span></span>
+      <span class="brand-copy"><strong>Modernization</strong><span>A self-paced course</span></span>
     </a>
     <div class="header-actions">
       <button class="mobile-only" id="chapters-toggle" type="button" aria-controls="course-nav" aria-expanded="false">Chapters</button>
@@ -29,7 +29,7 @@
   </header>
   <div class="sun-strip" aria-hidden="true"></div>
   <div class="course-shell">
-    <aside class="course-nav" id="course-nav" aria-label="Workshop chapters">
+    <aside class="course-nav" id="course-nav" aria-label="Course chapters">
       <p class="eyebrow">Your learning path</p>
       <p class="nav-description">One app. A new foundation.</p>
       <nav id="chapter-nav" aria-label="Chapters"></nav>
@@ -38,17 +38,16 @@
         <p id="course-progress"></p>
         <div class="progress-track" aria-hidden="true"><span id="completion-bar"></span></div>
         <p class="progress-note">You mark chapters after you complete their checks.</p>
-        <a id="resume-link" class="resume-link" href="#/00-introduction">Start the workshop</a>
+        <a id="resume-link" class="resume-link" href="#/00-introduction">Start the course</a>
         <button class="text-button" id="reset-progress" type="button">Reset progress</button>
       </div>
-      <a class="reference-link" href="#/reference?path=docs%2Fvalidation.md">Behavior check sheet <span aria-hidden="true">↗</span></a>
+      <a class="reference-link" href="#/reference?path=docs%2Flearner-record.md">Learner record <span aria-hidden="true">↗</span></a>
       <a class="reference-link" href="downloads/samples.zip">Download reference samples <span aria-hidden="true">↓</span></a>
     </aside>
     <main id="main-content" tabindex="-1">
       <div id="storage-notice" class="notice" role="status" hidden></div>
       <div class="chapter-context">
         <div id="chapter-label" class="chapter-label"></div>
-        <span id="era-label" class="era-label" aria-label="Visual era">1960s</span>
       </div>
       <article id="article" class="article" aria-busy="true">
         <p role="status">The lesson is loading.</p>
