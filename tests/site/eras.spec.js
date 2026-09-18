@@ -1,0 +1,160 @@
+import { test, expect } from "@playwright/test";
+import { chapters } from "../../webpage/scripts/chapters.js";
+import { eraPalette } from "../../webpage/scripts/eras.js";
+
+async function ready(page, chapter, mode = "light") {
+  await page.goto(`?clawpilotTheme=${mode}#/${chapter.slug}`);
+  await expect(page.locator("#article")).not.toHaveAttribute("aria-busy", "true");
+  await expect(page.locator("html")).toHaveAttribute("data-era", chapter.era);
+  await expect(page.getByRole("alert")).toHaveCount(0);
+}
+
+for (const chapter of chapters) {
+  for (const mode of ["light", "dark"]) {
+    test(`${chapter.era} ${mode}: direct route, accents, contrast, and narrow layout`, async ({ page }) => {
+      await page.setViewportSize({ width: 1440, height: 1000 });
+      await ready(page, chapter, mode);
+      await expect(page.locator("html")).toHaveAttribute("data-theme", mode);
+      expect(await page.locator("html").evaluate(element => element.style.getPropertyValue("--paper")))
+        .toBe(eraPalette(chapter.era, mode).paper);
+      const art = page.locator(chapter.slug === "overview" ? ".hero-art" : ".era-art");
+      await expect(art).toBeVisible();
+      await expect.poll(() => art.evaluate(image => image.complete && image.naturalWidth > 0)).toBeTruthy();
+      const box = await art.boundingBox();
+      expect(box.height).toBeGreaterThanOrEqual(150);
+      expect(box.width).toBeGreaterThanOrEqual(140);
+      const badContrast = await page.evaluate(() => {
+        const components = value => (value.match(/[\d.]+/g) || []).map(Number);
+        const luminance = values => values.slice(0, 3).map(n => n / 255)
+          .map(n => n <= .04045 ? n / 12.92 : ((n + .055) / 1.055) ** 2.4)
+          .reduce((sum, n, i) => sum + n * [.2126, .7152, .0722][i], 0);
+        const bad = [];
+        for (const element of document.querySelectorAll(
+          "p,a,button,summary,th,td,h1,h2,h3,small,.chapter-label,.era-label,.code-toolbar>span")) {
+          if (!element.getClientRects().length) continue;
+          const style = getComputedStyle(element);
+          let ancestor = element;
+          let background;
+          while (ancestor) {
+            background = components(getComputedStyle(ancestor).backgroundColor);
+            if (background.length === 3 || background[3] === 1) break;
+            ancestor = ancestor.parentElement;
+          }
+          if (!ancestor) continue;
+          const a = luminance(components(style.color));
+          const b = luminance(background);
+          const ratio = (Math.max(a, b) + .05) / (Math.min(a, b) + .05);
+          const large = parseFloat(style.fontSize) >= 24 ||
+            (Number(style.fontWeight) >= 700 && parseFloat(style.fontSize) >= 18.66);
+          if (ratio < (large ? 3 : 4.5)) bad.push({ text: element.textContent.slice(0, 50), ratio });
+        }
+        return bad;
+      });
+      expect(badContrast).toEqual([]);
+      if (chapter.slug !== "overview") {
+        const button = page.getByRole("button", { name: "I completed the checks" });
+        await button.focus();
+        expect(await button.evaluate(element => getComputedStyle(element).outlineStyle)).not.toBe("none");
+        await button.hover();
+        await button.click();
+        await expect(page.getByRole("button", { name: "Marked complete" })).toHaveAttribute("aria-pressed", "true");
+      }
+      for (const width of [390, 320]) {
+        await page.setViewportSize({ width, height: 1000 });
+        await expect(art).toBeVisible();
+        expect((await art.boundingBox()).height).toBeGreaterThanOrEqual(140);
+        expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBeTruthy();
+      }
+      await page.emulateMedia({ reducedMotion: "reduce" });
+      await page.evaluate(() => { document.documentElement.style.fontSize = "200%"; });
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBeTruthy();
+      const overflowingCode = await page.locator("pre").evaluateAll(elements =>
+        elements.filter(element => getComputedStyle(element).overflowX !== "auto").length);
+      expect(overflowingCode).toBe(0);
+    });
+  }
+}
+
+test("era follows history and Resume without changing color mode", async ({ page }) => {
+  await ready(page, chapters[1], "dark");
+  await page.locator("#chapter-nav a[href='#/01-assessment']").click();
+  await expect(page.locator("html")).toHaveAttribute("data-era", "1980s");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await page.goBack();
+  await expect(page.locator("html")).toHaveAttribute("data-era", "1970s");
+  await page.goForward();
+  await expect(page.locator("html")).toHaveAttribute("data-era", "1980s");
+  await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("data-era", "1980s");
+  await page.locator(".brand").click();
+  await expect(page.locator("html")).toHaveAttribute("data-era", "1960s");
+  await page.locator("#resume-link").click();
+  await expect(page.locator("html")).toHaveAttribute("data-era", "1980s");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await page.getByRole("button", { name: "Use light theme" }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-era", "1980s");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+});
+
+test("references and unknown routes use the quiet modern era", async ({ page }) => {
+  await ready(page, chapters[2]);
+  await page.locator(".reference-link").first().click();
+  await expect(page.locator("html")).toHaveAttribute("data-era", "2020s");
+  await expect(page.locator(".era-intro")).toHaveCount(0);
+  await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("data-era", "2020s");
+  await page.goto("#/unknown");
+  await expect(page.getByRole("alert")).toBeVisible();
+  await expect(page.locator("html")).toHaveAttribute("data-era", "2020s");
+});
+
+test("a delayed response cannot restore an old chapter era", async ({ page }) => {
+  let release;
+  await page.route("**/content/00-introduction/README.md", route => new Promise(resolve => {
+    release = async () => {
+      await route.fulfill({ status: 200, body: "# Outdated response" });
+      resolve();
+    };
+  }));
+  await page.goto("#/00-introduction");
+  await expect(page.locator("html")).toHaveAttribute("data-era", "1970s");
+  await expect.poll(() => Boolean(release)).toBeTruthy();
+  await page.evaluate(() => { location.hash = "#/04-cloud"; });
+  await expect(page.locator("html")).toHaveAttribute("data-era", "2020s");
+  await expect(page.locator("#article h1")).toContainText("Chapter 04");
+  await release();
+  await expect(page.locator("html")).toHaveAttribute("data-era", "2020s");
+  await expect(page.locator("#article h1")).toContainText("Chapter 04");
+});
+
+test("failed content retains its chapter era", async ({ page }) => {
+  await page.route("**/content/02-planning/README.md", route => route.fulfill({ status: 503, body: "Unavailable" }));
+  await page.goto("#/02-planning");
+  await expect(page.getByRole("alert")).toContainText("503");
+  await expect(page.locator("html")).toHaveAttribute("data-era", "1990s");
+  await expect(page.locator("#chapter-label")).toContainText("02");
+});
+
+test("built diagram metadata follows chapter eras", async ({ request }) => {
+  const manifest = await (await request.get("diagrams/manifest.json")).json();
+  for (const chapter of chapters) {
+    for (const diagram of manifest.documents[chapter.path]) {
+      expect(diagram.era).toBe(chapter.era);
+      for (const mode of ["light", "dark"]) {
+        const response = await request.get(diagram[mode]);
+        expect(response.ok()).toBeTruthy();
+        expect(await response.text()).toContain(eraPalette(chapter.era, mode).ink);
+      }
+    }
+  }
+});
+
+test("era routing also works at the hosting root", async ({ page }) => {
+  for (const chapter of chapters) {
+    await page.goto(`http://127.0.0.1:4193/#/${chapter.slug}`);
+    await expect(page.locator("html")).toHaveAttribute("data-era", chapter.era);
+    await expect(page.locator("#article")).not.toHaveAttribute("aria-busy", "true");
+    await expect(page.getByRole("alert")).toHaveCount(0);
+    await expect(page.locator("#article h1")).toBeVisible();
+  }
+});

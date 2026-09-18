@@ -2,6 +2,7 @@ import { contentUrl, siteUrl } from "./config.js";
 import { normalizePath, parseRoute, routeForPath } from "./routes.js";
 import { article, chapterPager, outlineNav } from "./dom.js";
 import { buildOutline, closeDrawers, escapeHtml, renderPager, renderProgress } from "./ui.js";
+import { applyEra, getEra, referenceEra } from "./eras.js";
 
 let request;
 let current = parseRoute("#/overview").chapter;
@@ -71,6 +72,7 @@ function addHero() {
     if (node.nodeType === Node.ELEMENT_NODE && node.tagName === "H2") break;
     copy.append(node);
   }
+
   const art = document.createElement("img");
   art.src = siteUrl("assets/retro-workshop.svg");
   art.alt = "";
@@ -89,6 +91,20 @@ function addHero() {
     secondary.append(...links.slice(1));
     actions.replaceChildren(primary, secondary);
   }
+}
+
+function addChapterHeader(chapter) {
+  const heading = article.querySelector("h1");
+  if (!heading) throw new Error("The chapter has no title. Check its source.");
+  const panel = document.createElement("div");
+  panel.className = "era-intro";
+  const image = document.createElement("img");
+  image.src = siteUrl(`assets/${getEra(chapter.era).art}`);
+  image.alt = "";
+  image.className = "era-art";
+  image.setAttribute("aria-hidden", "true");
+  heading.before(panel);
+  panel.append(heading, image);
 }
 
 async function renderDiagrams(chapter, signal) {
@@ -129,8 +145,17 @@ export async function renderRoute(store) {
   article.innerHTML = '<p role="status">The lesson is loading.</p>';
   chapterPager.innerHTML = "";
   outlineNav.innerHTML = "";
+  let routeResolved = false;
   try {
     const { chapter, section } = parseRoute(location.hash);
+    const era = chapter.era || referenceEra;
+    applyEra(era, document.documentElement.dataset.theme);
+    document.querySelector("#era-label").textContent = getEra(era).label;
+    document.querySelector("#chapter-label").textContent = chapter.slug === "overview"
+      ? "A .NET workshop with GitHub Copilot" : chapter.slug === "reference"
+      ? "Your workshop reference" : `${chapter.number} / ${chapter.core ? "Core workshop" : "Optional Azure extension"}`;
+    document.body.classList.toggle("is-overview", chapter.slug === "overview");
+    routeResolved = true;
     const response = await fetch(contentUrl(chapter.path), { signal });
     if (!response.ok) throw new Error(`The lesson could not load (HTTP ${response.status}).`);
     const markdown = await response.text();
@@ -139,14 +164,12 @@ export async function renderRoute(store) {
     article.innerHTML = DOMPurify.sanitize(marked.parse(markdown, { gfm: true }), { USE_PROFILES: { html: true } });
     rewriteLinks(chapter);
     if (chapter.slug === "overview") addHero();
+    else if (chapter.era) addChapterHeader(chapter);
     buildOutline(chapter);
     addCodeCopy();
     await renderDiagrams(chapter, signal);
     if (signal.aborted) return;
     document.body.classList.toggle("is-overview", chapter.slug === "overview");
-    document.querySelector("#chapter-label").textContent = chapter.slug === "overview"
-      ? "A .NET workshop with GitHub Copilot" : chapter.slug === "reference"
-      ? "Your workshop reference" : `${chapter.number} / ${chapter.core ? "Core workshop" : "Optional Azure extension"}`;
     store.visit(chapter.slug);
     renderProgress(store, chapter);
     renderPager(chapter, store);
@@ -165,6 +188,12 @@ export async function renderRoute(store) {
     else window.scrollTo({ top: 0, behavior: "instant" });
   } catch (error) {
     if (signal.aborted) return;
+    if (!routeResolved) {
+      applyEra(referenceEra, document.documentElement.dataset.theme);
+      document.querySelector("#era-label").textContent = getEra(referenceEra).label;
+      document.querySelector("#chapter-label").textContent = "Workshop";
+      document.body.classList.remove("is-overview");
+    }
     article.removeAttribute("aria-busy");
     article.innerHTML = `<div class="notice" role="alert"><h1>The lesson could not load</h1>
       <p>${escapeHtml(error.message)}</p><button id="retry-lesson" type="button">Try again</button>

@@ -5,10 +5,29 @@ import { dirname, join, resolve } from "node:path";
 import { chapters, references } from "../../webpage/scripts/chapters.js";
 import { normalizePath, parseRoute, routeForPath } from "../../webpage/scripts/routes.js";
 import { createProgressStore } from "../../webpage/scripts/state.js";
+import { eras, eraPalette, getEra, diagramTheme, referenceEra } from "../../webpage/scripts/eras.js";
 
 const root = resolve(import.meta.dirname, "../..");
 const read = path => readFileSync(join(root, path), "utf8");
 const documents = [...chapters, ...references].map(item => item.path);
+
+test("each chapter has the planned era and complete palettes", () => {
+  assert.deepEqual(chapters.map(chapter => chapter.era),
+    ["1960s", "1970s", "1980s", "1990s", "2000s-2010s", "2020s"]);
+  const keys = Object.keys(eraPalette("1960s", "light")).sort();
+  for (const [id, era] of Object.entries(eras)) {
+    assert.ok(existsSync(join(root, "webpage/assets", era.art)));
+    for (const mode of ["light", "dark"]) {
+      const palette = eraPalette(id, mode);
+      assert.deepEqual(Object.keys(palette).sort(), keys);
+      assert.ok(Object.values(palette).every(value => typeof value === "string" && value.length));
+      assert.equal(diagramTheme(id, mode).themeVariables.primaryTextColor, palette.ink);
+    }
+  }
+  assert.equal(referenceEra, "2020s");
+  assert.throws(() => getEra("unknown"), /Unknown visual era/);
+  assert.throws(() => eraPalette("1960s", "unknown"), /Unknown color mode/);
+});
 
 test("all declared local links and images resolve", () => {
   const failures = [];

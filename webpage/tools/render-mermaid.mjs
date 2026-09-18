@@ -5,36 +5,11 @@ import { join, resolve } from "node:path";
 import { spawnSync } from "node:child_process";
 import { chapters } from "../scripts/chapters.js";
 import { fileURLToPath } from "node:url";
+import { diagramTheme } from "../scripts/eras.js";
 
 const documents = chapters.map(chapter => chapter.path);
 
-const themes = {
-  light: {
-    theme: "base",
-    themeVariables: {
-      background: "#fffbf2",
-      primaryColor: "#fff2d5",
-      primaryTextColor: "#102e2a",
-      primaryBorderColor: "#14675f",
-      lineColor: "#14675f",
-      secondaryColor: "#f0c24d",
-      tertiaryColor: "#fffbf2"
-    }
-  },
-  dark: {
-    theme: "base",
-    themeVariables: {
-      background: "#153331",
-      primaryColor: "#103d3d",
-      primaryTextColor: "#fff2d5",
-      primaryBorderColor: "#86e1cd",
-      lineColor: "#86e1cd",
-      secondaryColor: "#204642",
-      tertiaryColor: "#153331"
-    }
-  }
-};
-const rendererFingerprint = JSON.stringify({ version: 2, themes });
+const rendererVersion = 3;
 
 const [contentArgument, outputArgument] = process.argv.slice(2);
 if (!contentArgument || !outputArgument) {
@@ -88,14 +63,6 @@ function renderDiagram(sourceFile, outputFile, configFile, backgroundColor, pupp
 
 try {
   await mkdir(outputDirectory, { recursive: true });
-  const configFiles = {};
-
-  for (const [theme, config] of Object.entries(themes)) {
-    const configFile = join(temporaryDirectory, `${theme}.json`);
-    await writeFile(configFile, JSON.stringify(config));
-    configFiles[theme] = configFile;
-  }
-
   let puppeteerConfigFile;
   if (process.env.CI === "true") {
     puppeteerConfigFile = join(temporaryDirectory, "puppeteer.json");
@@ -105,6 +72,15 @@ try {
   }
 
   for (const documentPath of documents) {
+    const era = chapters.find(chapter => chapter.path === documentPath).era;
+    const themes = { light: diagramTheme(era, "light"), dark: diagramTheme(era, "dark") };
+    const rendererFingerprint = JSON.stringify({ version: rendererVersion, era, themes });
+    const configFiles = {};
+    for (const [theme, config] of Object.entries(themes)) {
+      const configFile = join(temporaryDirectory, `${era}-${theme}.json`);
+      await writeFile(configFile, JSON.stringify(config));
+      configFiles[theme] = configFile;
+    }
     const markdown = await readFile(join(contentDirectory, documentPath), "utf8");
     const diagrams = [...markdown.matchAll(/```mermaid[^\r\n]*\r?\n([\s\S]*?)```/g)];
     manifest.documents[documentPath] = [];
@@ -138,6 +114,7 @@ try {
         light: `diagrams/${hash}-light.svg`,
         dark: `diagrams/${hash}-dark.svg`,
         alt: diagramTitle(markdown, match.index),
+        era,
         index
       });
     }

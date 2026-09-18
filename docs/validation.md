@@ -97,3 +97,17 @@ On September 17, 2026, local checks passed on macOS:
 The browser checks used a repository subpath. The visual review covered the landing page, a lesson, and a narrow dark-theme view.
 
 Windows application execution and live Azure operations did not run. This record does not claim those results.
+
+## Era interface checks
+
+The era tests cover every chapter in light and dark modes. They check the actual styles, artwork size, text contrast, and narrow layouts.
+
+They also check history navigation, Resume, failed requests, delayed responses, and diagram palettes.
+
+The six-era visual comparison belongs in the session review artifacts. It does not establish learner engagement or historical authenticity.
+
+The era changes do not alter application behavior or Azure resources.
+
+The era branch passed 28 browser checks and 11 content/state checks. Structural language checks also passed.
+
+The review compared all six eras on desktop and mobile, in both color modes. The original application and cloud source stayed unchanged.

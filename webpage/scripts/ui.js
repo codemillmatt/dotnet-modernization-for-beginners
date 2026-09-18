@@ -1,6 +1,7 @@
 import GithubSlugger from "../vendor/github-slugger/index.js";
 import { chapters, sectionAliases } from "./chapters.js";
 import { routeForPath } from "./routes.js";
+import { applyEra } from "./eras.js";
 import { article, chapterNav, chapterPager, outlineNav, courseProgress, courseNavPanel, outlinePanel,
   chaptersToggle, outlineToggle, drawerBackdrop, themeToggle } from "./dom.js";
 
@@ -119,6 +120,7 @@ export function handleDrawerKey(event) {
 }
 export function setTheme(theme, store) {
   document.documentElement.dataset.theme = theme;
+  applyEra(document.documentElement.dataset.era || "1960s", theme);
   themeToggle.textContent = theme === "light" ? "Dark theme" : "Light theme";
   themeToggle.setAttribute("aria-label", `Use ${theme === "light" ? "dark" : "light"} theme`);
   store.theme(theme);

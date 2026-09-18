@@ -1,10 +1,10 @@
 export const chapters = [
-  { slug: "overview", number: "Start", title: "Workshop overview", path: "README.md", core: false },
-  { slug: "00-introduction", number: "00", title: "Get ready", path: "00-introduction/README.md", core: true },
-  { slug: "01-assessment", number: "01", title: "Assess the app", path: "01-assessment/README.md", core: true },
-  { slug: "02-planning", number: "02", title: "Choose the plan", path: "02-planning/README.md", core: true },
-  { slug: "03-upgrade-execution", number: "03", title: "Upgrade & check", path: "03-upgrade-execution/README.md", core: true },
-  { slug: "04-cloud", number: "04", title: "Explore Azure", path: "04-cloud/README.md", core: false }
+  { slug: "overview", number: "Start", title: "Workshop overview", path: "README.md", core: false, era: "1960s" },
+  { slug: "00-introduction", number: "00", title: "Get ready", path: "00-introduction/README.md", core: true, era: "1970s" },
+  { slug: "01-assessment", number: "01", title: "Assess the app", path: "01-assessment/README.md", core: true, era: "1980s" },
+  { slug: "02-planning", number: "02", title: "Choose the plan", path: "02-planning/README.md", core: true, era: "1990s" },
+  { slug: "03-upgrade-execution", number: "03", title: "Upgrade & check", path: "03-upgrade-execution/README.md", core: true, era: "2000s-2010s" },
+  { slug: "04-cloud", number: "04", title: "Explore Azure", path: "04-cloud/README.md", core: false, era: "2020s" }
 ];
 
 export const references = [

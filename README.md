@@ -1,22 +1,26 @@
 # .NET Modernization for Beginners
 
-Give a working legacy app a new foundation.
+Take a working legacy app and give it modern foundation.
 
-Use GitHub Copilot to upgrade **BookCatalog**, an ASP.NET MVC 5 application, from .NET Framework 4.8 to .NET 10. A catalog maintainer uses it to add and edit books, inspect details, and keep inactive books out of the main list. Your job is to keep those behaviors working while changing the implementation.
+In this workshop you'll use the GitHub Copilot .NET modernization agent to upgrade a sample **Book Catalog** application, an ASP.NET MVC 5 application, from .NET Framework 4.8 to .NET 10. 
 
-This workshop is for developers who know C#, ASP.NET, Visual Studio, NuGet, and basic Git. You do not need previous experience with the upgrade agent.
+The Book Catalog app models, well, a book catalog. You use it to add and edit books to the catalog, inspect details, and keep inactive books out of the main list. Your job is to keep those behaviors working while upgrading the code to .NET 10.
+
+This workshop is for developers who know C#, ASP.NET, Visual Studio, NuGet, and basic Git. You do not need previous experience with the GitHub Copilot .NET upgrade agent.
 
 **[Start the workshop: check your setup](00-introduction/README.md)** · [Run the legacy sample only](shared-legacy-app/README.md) · [Inspect the completed reference](examples/modernized/README.md)
 
 <a id="-what-youll-learn"></a>
 ## What you'll learn
 
-You will run an assessment, turn its findings into decisions, and review a plan before allowing code changes. Then you will inspect generated diffs and check whether the modernized app still behaves as expected.
+You're going to learn how to use the GitHub Copilot .NET moderization agent to upgrade a legacy app to modern .NET.
 
-By the end of the core path, you should be able to:
+Along the way, you will run an assessment of the code, turn its findings into decisions, and review a plan before allowing code changes. Then you will inspect generated diffs and check whether the upgraded app still behaves as expected.
 
-- Explain why a compatibility finding and its business priority are different.
-- Change an upgrade plan with a reason and a way to test the result.
+By the time you're finished with this workshop, you should be able to:
+
+- Explain the different types of findings in an assessment report.
+- Create and change an upgrade plan with a reason and a way to test the result.
 - Compare application behavior before and after an upgrade.
 - Resume work from a saved checkpoint and make a small independent change.
 
@@ -25,7 +29,7 @@ The optional Azure extension covers cloud readiness, managed identity, deploymen
 <a id="-prerequisites"></a>
 ## Prerequisites
 
-The learner path uses **Windows and Visual Studio 2026**. The legacy web project needs ASP.NET web build tools, .NET Framework 4.8 targeting tools, IIS Express, and SQL Server LocalDB. The modernized app needs a stable .NET 10 SDK. You also need Git and a GitHub account with Copilot access.
+We're using **Windows and Visual Studio 2026**. The legacy web project needs ASP.NET web build tools, .NET Framework 4.8 targeting tools, IIS Express, and SQL Server LocalDB. The modernized app needs the .NET 10 SDK. You also need Git and a GitHub account with Copilot access.
 
 [Chapter 00](00-introduction/README.md#check-before-installing) provides checks, acceptable results, and installation guidance only for missing requirements. Other Copilot environments exist, but they do not make this legacy Windows project a macOS/Linux lab.
 
@@ -33,7 +37,7 @@ The learner path uses **Windows and Visual Studio 2026**. The legacy web project
 
 **GitHub Copilot upgrade** handles the .NET version upgrade. In Visual Studio, you still start it through **Modernize** or `@Modernize`. **GitHub Copilot modernization** provides the Azure migration capabilities used in the optional extension.
 
-The agent can assess, plan, and edit. You decide the strategy, authorize the work, and verify the result. A green build is evidence about compilation, not proof that application behavior survived.
+The agent can assess, plan, and edit. You still are in charge of the strategy, authorizing the work, and verifying the result. A green build is evidence about compilation, not proof that application behavior survived.
 
 <a id="-course-structure"></a>
 ## Course structure

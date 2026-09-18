@@ -37,7 +37,30 @@ The artifact includes local fonts, scripts, diagrams, and reference downloads. T
 | `tools/build.mjs` | Curated content and local dependency assets |
 | `tools/render-mermaid.mjs` | Light and dark diagram assets |
 
-The default theme uses the selected retro-resort design. A previous saved choice or explicit theme link takes precedence.
+The Start page uses the retro-resort design. The chapter controls the visual era. Your saved light/dark choice remains separate.
+
+## Visual eras
+
+The full interface changes with each chapter. Light/dark mode remains a separate choice.
+
+| Page | Era | Main accents |
+| --- | --- | --- |
+| Start | 1960s | Resort-poster illustration and geometric sunbursts |
+| Get ready | 1970s | Broad curved stripes and warm layered panels |
+| Assess the app | 1980s | Large angular shapes and bright geometric frames |
+| Choose the plan | 1990s | Beveled controls and desktop-style panels |
+| Upgrade and check | 2000s / 2010s | Glossy details and layered web-app surfaces |
+| Explore Azure | 2020s | Sculptural shapes and quieter controls |
+
+`scripts/chapters.js` selects the era. `scripts/eras.js` supplies its palettes and typography.
+
+The reader sets `data-era` before it loads chapter content. `data-theme` retains the selected color mode.
+
+References use a quiet 2020s treatment. They look the same on direct access and after chapter navigation.
+
+The diagram tool uses the same palettes. Its asset hashes include the era and color definitions.
+
+Keep code legible in every era. Do not add simulated CRT effects, flashing elements, or patterns behind paragraphs.
 
 ## Progress and privacy
 
