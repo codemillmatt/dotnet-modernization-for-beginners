@@ -12,7 +12,7 @@ namespace SimpleLegacyApp
 
             var appName = ConfigurationManager.AppSettings["AppName"] ?? "SimpleLegacyApp";
 
-            var context = HttpContext.Current; // BLOCKER: not available in .NET 10
+            var context = HttpContext.Current; // Review this legacy dependency in the assessment.
             Console.WriteLine($"App: {appName}, HttpContext present: {context != null}");
 
             var sample = new SampleData { Id = 1, Name = "Neo" };

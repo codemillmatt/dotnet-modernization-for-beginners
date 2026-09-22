@@ -1,115 +1,95 @@
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)&ensp;
-[![Docs](https://img.shields.io/badge/Docs-GitHub_Copilot-blue)](https://docs.github.com/copilot)&ensp;
-[![Discord](https://img.shields.io/badge/Discord-AI_Community-blue?logo=discord)](https://aka.ms/foundry/discord)
-
-🎯 [What You'll Learn](#-what-youll-learn) &ensp; ✅ [Prerequisites](#-prerequisites) &ensp; 📚 [Course Structure](#-course-structure)
-
 # .NET Modernization for Beginners
 
-> **✨ Take a legacy ASP.NET app from .NET Framework 4.8 to .NET 10 — using AI.**
+Use GitHub Copilot in Visual Studio to upgrade a legacy .NET app, then plan its move to Azure.
 
-You've inherited a legacy .NET app. It works, but it's stuck on .NET Framework 4.8. Security patches are getting scarce, modern libraries won't install, and your team can't use the latest language features. Modernizing feels overwhelming: breaking changes, deprecated APIs, package incompatibilities. This course shows you how to do it systematically using the GitHub Copilot modernization agent — an AI-powered tool that assesses your code, plans the migration, and helps you execute it step by step.
+Our sample, BookCatalog, lets a catalog editor add, inspect, edit, and remove books. Its main list hides inactive books and sorts active books by title.
 
-This course is artifact-first. Instead of only showing mechanics, it teaches you how to read assessment reports and upgrade plans as decision tools: what to fix first, where risk is concentrated, and how to stage execution with confidence.
+In this self-paced course, you'll use the GitHub Copilot modernization for .NET tooling to upgrade the application from .NET Framework 4.8 to .NET 10. You'll then assess and plan its move to Azure. Actual Azure deployment is optional.
 
-This course is designed for:
-- **.NET developers on legacy stacks** — If you're maintaining apps on .NET Framework 4.x, .NET Core 3.1, or .NET 5–7, you'll learn a repeatable upgrade process that works for real-world codebases.
-- **Teams planning a migration** — You'll understand the assessment-first approach: how to identify blockers, estimate effort, and prioritize fixes before touching code.
-- **Developers new to the GitHub Copilot modernization agent** — You've used GitHub Copilot for code completion, but this agent is purpose-built for .NET migrations. You'll learn how it differs and when to use it.
+You'll direct the modernization agent through **assess, decide, plan, change, and verify**. You'll finish with a working application on .NET 10 and generated artifacts that capture the plans and decisions behind it.
 
-## 🎯 What You'll Learn
+This course assumes C#, basic ASP.NET MVC, Visual Studio, NuGet, and basic Git knowledge. You don't need previous modernization experience.
 
-You'll walk through the full modernization lifecycle: assess a legacy ASP.NET MVC 5 application (the BookCatalog app in this repo), interpret its compatibility report, resolve breaking changes, target .NET 10, and deploy the modernized app to Azure. By the end, you'll have a repeatable workflow you can apply to your own legacy codebases.
+[**Start: meet BookCatalog and the tools**](00-introduction/README.md) · [Go straight to Setup](prerequisites/README.md) · [Run the completed reference](examples/modernized/README.md)
 
-You will also learn a practical interpretation model for modernization artifacts:
-- How to translate findings into priorities and sequencing
-- How to separate assessment outputs from planning outputs
-- How to use execution checkpoints to reduce migration risk
+<a id="-what-youll-learn"></a>
+## What you'll learn
 
-## ✅ Prerequisites
+By the end of the course, you should be able to:
 
-| Requirement | Version / Notes |
-|-------------|-----------------|
-| **Windows** | Windows 11 (22H2 or later) |
-| **Visual Studio** | 2026 |
-| **GitHub Copilot subscription** | Active subscription required |
-| **.NET Framework 4.8 SDK** | Required to run the legacy sample app |
-| **.NET 10 SDK** | Preview or latest release |
-| **Git** | Any recent version |
-| **Prior experience** | C#, ASP.NET, Git, NuGet fundamentals |
+- Start the modernization workflow in Visual Studio and read its assessment.
+- Review the assessment and add an application requirement if needed.
+- Review upgrade choices and change a practical instruction in the plan.
+- Run the upgrade and review the generated project, startup, and controller changes.
+- Launch your upgraded app and try its book forms.
+- Assess Azure readiness and edit a migration plan without creating resources.
 
-> ⚠️ **Note:** This course covers the Visual Studio workflow, which requires Windows. The agent also runs in VS Code, GitHub Copilot app, and GitHub Copilot CLI for cross-platform use — but those paths are not covered here.
+**You don't need an Azure subscription to complete the required course.** Data transfer, detailed checks, and deployment are separate optional exercises.
 
-## 🔧 GitHub Copilot Modernization
+<a id="-prerequisites"></a>
+## Prerequisites
 
-The GitHub Copilot modernization agent is available in Visual Studio, VS Code, GitHub Copilot app, and GitHub Copilot CLI. It automates .NET migration analysis and code updates. Here's where it fits in the Copilot ecosystem:
+Use **Windows, Visual Studio 2026, and PowerShell**. The legacy app needs ASP.NET web build tools, .NET Framework 4.8 targeting tools, IIS Express, and SQL Server LocalDB.
 
-| Tool | Purpose | When to Use It |
-|------|---------|----------------|
-| **GitHub Copilot (code completion)** | Autocomplete code as you type | Daily coding in any language |
-| **GitHub Copilot Chat** | Answer questions, generate snippets | When you need explanations or quick code samples |
-| **GitHub Copilot modernization agent** | Assess, plan, and modernize .NET apps | When upgrading legacy .NET codebases to modern frameworks |
+You also need a stable .NET SDK 10 or later, the .NET 10 runtime, Git, and a GitHub account with Copilot access.
 
-This course focuses on the third tool: the agent that specializes in .NET migrations. It runs in Visual Studio, VS Code, GitHub Copilot app, and GitHub Copilot CLI — this course covers the Visual Studio workflow.
+[Setup](prerequisites/README.md#check-before-installing) explains how to check existing tools before installing anything. Azure CLI, Node, and Python aren't prerequisites for the required lessons.
 
-## 📚 Course Structure
+## Which Copilot tool are we using?
 
-```mermaid
-flowchart LR
-    C00["Chapter 00\n🧭 Introduction\n──────────────\nUnderstand Assess→Plan→Act"]
-    C01["Chapter 01\n🔍 Assessment\n──────────────\nInterpret findings\nEstimate impact"]
-    C02["Chapter 02\n🗺️ Planning\n──────────────\nDefine strategy\nGenerate upgrade plan"]
-    C03["Chapter 03\n⚡ Upgrade Execution\n──────────────\nMigrate to .NET 10 + EF Core"]
-    C04["Chapter 04\n☁️ Going to the Cloud\n──────────────\nDeploy to Azure App Service"]
+**GitHub Copilot upgrade** handles the framework upgrade. In Visual Studio, start through **Modernize** or `@Modernize`.
 
-    C00 --> C01 --> C02 --> C03 --> C04
+**GitHub Copilot modernization** handles Azure migration. Chapter 04 uses Visual Studio's **Modernize > Migrate to Azure** workflow.
 
-    classDef chapter fill:#1f6feb15,stroke:#1f6feb,color:#e6edf3,text-align:left
-    class C00,C01,C02,C03,C04 chapter
-```
+The modernization agent generates the reports and changes through Copilot Chat.
+You choose the options, adjust its instructions, and try the result.
 
-| Chapter | Title | What You'll Do |
-|:-------:|-------|----------------|
-| **00** | 🧭 [Introduction](./00-introduction/README.md) | Get started with the agent, understand the 3-phase model (Assess → Plan → Execute), and run your first assessment on a standalone sample. |
-| **01** | 🔍 [Assessment](./01-assessment/README.md) | Open the BookCatalog legacy app, run the compatibility assessment, and interpret blockers vs. warnings using report artifacts. |
-| **02** | 🗺️ [Planning](./02-planning/README.md) | Turn assessment findings into strategy decisions, ordered tasks, and execution gates using plan artifacts. |
-| **03** | ⚡ [Upgrade Execution](./03-upgrade-execution/README.md) | Execute the agent's Act workflow to migrate BookCatalog to .NET 10, review AI-generated code suggestions, resolve compilation errors, and verify the upgrade. |
-| **04** | ☁️ [Going to the Cloud](./04-cloud/README.md) | Use the agent's cloud-migration flow to deploy the modernized BookCatalog app to Azure, verify the deployment, and clean up resources. |
+<a id="-course-structure"></a>
+## Course structure
 
-## 📖 How This Course Works
+![A travel-poster route through introduction, setup, assessment, planning, upgrade, and Azure planning. Deployment is a separate optional route.](docs/illustrations/journey-light.svg)
 
-**Chapters are sequential.** Chapter 01 assesses the app, Chapter 02 turns findings into a plan, Chapter 03 executes the upgrade, and Chapter 04 deploys the modernized output to Azure. Don't skip ahead.
+| Chapter | What you do | Result |
+| --- | --- | --- |
+| [00: Introduction](00-introduction/README.md) | Meet BookCatalog and the tools | Know what you're building |
+| [Setup: Get ready](prerequisites/README.md) | Check your tools and try the app | Working learner copy and Copilot access |
+| [01: Assessment](01-assessment/README.md) | Read the report and add a requirement if needed | An assessment you've reviewed |
+| [02: Planning](02-planning/README.md) | Review options and edit a plan instruction | A plan ready for execution |
+| [03: Upgrade execution](03-upgrade-execution/README.md) | Run the upgrade and use the changed app | Your working .NET 10 application |
+| [04: Azure planning](04-cloud/README.md) | Review the Azure report and edit a migration plan | A cloud plan, without deployed resources |
 
-Clone this repo and follow the steps in each chapter's README:
+These are the six required completion steps. The [optional deployment lab](04-cloud/deployment.md) follows Chapter 04.
 
-```bash
-git clone https://github.com/microsoft/dotnet-modernization-for-beginners.git
-cd dotnet-modernization-for-beginners
-```
+## Work on your own copy
 
-Each chapter includes step-by-step instructions, code samples, expected outputs, and troubleshooting tips. The `shared-legacy-app/` folder contains the BookCatalog app used in Chapters 01-04.
+[Setup](prerequisites/README.md#make-your-learner-copy) covers cloning and opening your learner workspace. BookCatalog is the continuing project.
 
-## 🚀 Keep Going
+Use the supplied demo data. EF Core rebuilds the upgraded database schema and seeds the catalog.
+Existing books don't need to survive the upgrade. You don't need backups, snapshots, or a data-transfer step for this course.
 
-Once you've worked through the chapters, use these two resources to keep building on the same modernization workflow:
+Tool output varies by version and application. Compare the report's meaning and your app's behavior, not screenshot counts.
 
-- **Documentation:** [GitHub Copilot app modernization docs](https://aka.ms/ghcp-appmod/dotnet-docs) for deeper guidance on the assess, plan, and execute flows.
-- **Workshop:** [Hands-on modernization workshop](https://aka.ms/ghcp-appmod/dotnet-mod-workshop) to practice the experience in a guided lab format.
+## Samples and help
 
-## 🙋 Getting Help
-
-- **Issues:** Found a bug or unclear instruction? [Open an issue](https://github.com/microsoft/dotnet-modernization-for-beginners/issues).
-- **Docs:** [GitHub Copilot documentation](https://docs.github.com/copilot) | [.NET 10 what's new](https://learn.microsoft.com/dotnet/core/whats-new/dotnet-10/overview) | [GitHub Copilot modernization docs](https://aka.ms/ghcp-appmod/dotnet-docs)
-- **Community:** Join the [Azure AI Discord](https://aka.ms/foundry/discord) to connect with other developers.
+- [Legacy sample quickstart](shared-legacy-app/README.md)
+- [Completed reference and intentional differences](examples/modernized/README.md)
+- [Optional learner record](docs/learner-record.md)
+- [Optional data-transfer lab](docs/data-transfer.md)
+- [Optional advanced checks](docs/advanced-checks.md)
+- [Optional author-filter challenge](docs/author-filter.md)
+- [BookCatalog recording and examples](examples/assessments/bookcatalog/README.md)
+- [Historical console assessment](examples/assessments/README.md)
+- [Optional instructor companion](docs/instructor-guide.md)
+- [GitHub Copilot upgrade documentation](https://learn.microsoft.com/dotnet/core/porting/github-copilot-upgrade/overview)
+- [GitHub Copilot modernization for Azure](https://learn.microsoft.com/dotnet/azure/migration/appmod/overview)
+- [Report a course issue](https://github.com/microsoft/dotnet-modernization-for-beginners/issues)
 
 ## Contributing
 
-Contributions are welcome through [pull requests](https://github.com/microsoft/dotnet-modernization-for-beginners/pulls) and [issues](https://github.com/microsoft/dotnet-modernization-for-beginners/issues).
+Edit chapter READMEs, not generated website content. See [writing guidance](docs/writing.md), [maintainer validation](docs/validation.md), and [website preview instructions](webpage/README.md).
+
+Historical notes under `docs/history/` are not learner instructions. A local preview does not publish the course.
 
 ## License
 
-MIT. See [LICENSE](LICENSE) for details.
-
----
-
-**[Start Here: Chapter 00 →](./00-introduction/README.md)**
+MIT. See [LICENSE](LICENSE). Third-party font and tool licenses remain with their respective assets.

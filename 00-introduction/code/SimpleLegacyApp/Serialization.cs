@@ -7,8 +7,7 @@ namespace SimpleLegacyApp
     /// Legacy serialization helpers that use BinaryFormatter.
     /// BinaryFormatter is deprecated and removed in modern .NET due to
     /// well-known deserialization-of-untrusted-data security risks.
-    /// The modernization extension flags usage as a warning and suggests
-    /// migrating to System.Text.Json (or another secure serializer).
+    /// Review the assessment's proposed replacement and its behavior.
     /// </summary>
     public static class Serialization
     {
@@ -38,7 +37,6 @@ namespace SimpleLegacyApp
                 // arbitrary code if the payload comes from an untrusted source.
                 // Replacement: System.Text.Json.JsonSerializer.Deserialize<T>(data)
                 //
-                // The modernization extension flags this exact line as a warning.
                 var formatter = new BinaryFormatter();
                 return (T)formatter.Deserialize(stream);
             }

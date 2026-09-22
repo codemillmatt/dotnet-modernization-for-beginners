@@ -1,137 +1,137 @@
-import { chapters } from "./config.js";
-import {
-  article,
-  chapterNav,
-  chapterPager,
-  chaptersToggle,
-  courseNavPanel,
-  courseProgress,
-  outlineNav,
-  outlinePanel,
-  outlineToggle,
-  progressBar
-} from "./dom.js";
-import { getCompletedChapters } from "./state.js";
+import GithubSlugger from "../vendor/github-slugger/index.js";
+import { chapters, sectionAliases } from "./chapters.js";
+import { routeForPath } from "./routes.js";
+import { applyEra } from "./eras.js";
+import { article, chapterNav, chapterPager, outlineNav, courseProgress, courseNavPanel, outlinePanel,
+  chaptersToggle, outlineToggle, drawerBackdrop, themeToggle } from "./dom.js";
 
-function slugify(value) {
-  return value
-    .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, "")
-    .trim()
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-");
-}
-
-function escapeHtml(value) {
+export function escapeHtml(value) {
   const element = document.createElement("span");
   element.textContent = value;
   return element.innerHTML;
 }
 
-export function renderChapterNav(activeChapter) {
-  const completed = getCompletedChapters();
-  const completedCount = chapters.slice(1).filter((chapter) => completed.has(chapter.slug)).length;
-  courseProgress.textContent = `${completedCount} of ${chapters.length - 1} chapters complete`;
-
-  chapterNav.innerHTML = `
-    <ol class="chapter-list">
-      ${chapters.map((chapter) => `
-        <li>
-          <a class="chapter-link" href="#/${chapter.slug}" ${chapter === activeChapter ? 'aria-current="page"' : ""}>
-            <span class="chapter-number ${completed.has(chapter.slug) ? "is-complete" : ""}" aria-hidden="true">${completed.has(chapter.slug) ? "&#10003;" : chapter.number}</span>
-            <span>${chapter.title}</span>
-            ${completed.has(chapter.slug) ? '<span class="sr-only">Completed</span>' : ""}
-          </a>
-        </li>
-      `).join("")}
-    </ol>
-  `;
+export function renderProgress(store, chapter) {
+  const { completed, previousCompleted, previousReading, lastVisited } = store.value;
+  const core = chapters.filter(item => item.core);
+  const count = core.filter(item => completed.includes(item.slug)).length;
+  courseProgress.textContent = `${count} of ${core.length} required steps complete`;
+  document.querySelector("#completion-bar").style.width = `${100 * count / core.length}%`;
+  const resume = document.querySelector("#resume-link");
+  resume.href = `#/${lastVisited || "00-introduction"}`;
+  resume.textContent = lastVisited ? "Resume your last chapter" : "Start the course";
+  const notice = document.querySelector("#storage-notice");
+  notice.textContent = store.warning || (previousCompleted.length
+    ? "Your earlier completion marks are saved as history. Follow each chapter's current steps before marking it complete."
+    : previousReading.length
+    ? "Your previous reading marks are saved. Follow each chapter's steps before marking it complete." : "");
+  notice.hidden = !notice.textContent;
+  chapterNav.innerHTML = `<ol class="chapter-list">${chapters.map(item => `
+    <li><a class="chapter-link" href="#/${item.slug}" ${item.slug === chapter.slug ? 'aria-current="page"' : ""}>
+      <span class="chapter-number ${completed.includes(item.slug) ? "is-complete" : ""}">${completed.includes(item.slug) ? "✓" : item.number}</span>
+      <span>${item.title}${item.slug === "04-cloud" ? '<small>Assessment and plan</small>' : ""}
+      ${previousCompleted.some(mark => mark.slug === item.slug) && !completed.includes(item.slug) ? "<small>Earlier exercise completed</small>" : ""}
+      ${previousReading.includes(item.slug) && !completed.includes(item.slug) ? "<small>Previously read</small>" : ""}
+      ${completed.includes(item.slug) ? '<span class="sr-only">Completed</span>' : ""}</span>
+    </a></li>`).join("")}</ol>`;
 }
 
 export function buildOutline(chapter) {
-  const headings = [...article.querySelectorAll("h2, h3")];
-  const usedIds = new Map();
-
-  article.querySelectorAll("h1, h2, h3, h4").forEach((heading) => {
-    const baseId = slugify(heading.textContent) || "section";
-    const count = usedIds.get(baseId) || 0;
-    usedIds.set(baseId, count + 1);
-    heading.id = count ? `${baseId}-${count + 1}` : baseId;
-  });
-
-  outlineNav.innerHTML = headings.length
-    ? `<ol class="outline-list">${headings.map((heading) => `
-        <li>
-          <a class="outline-link depth-${heading.tagName.slice(1)}" data-section="${heading.id}" href="#/${chapter.slug}?section=${encodeURIComponent(heading.id)}">${escapeHtml(heading.textContent)}</a>
-        </li>
-      `).join("")}</ol>`
-    : "";
+  const slugger = new GithubSlugger();
+  for (const heading of article.querySelectorAll("h1,h2,h3,h4")) {
+    let id = slugger.slug(heading.textContent);
+    while (document.getElementById(id)) id = slugger.slug(heading.textContent);
+    heading.id = id;
+    const legacy = heading.textContent.toLowerCase().replace(/[^a-z0-9\s-]/g, "").trim().replace(/\s+/g, "-").replace(/-+/g, "-");
+    if (legacy && legacy !== id && !document.getElementById(legacy)) {
+      const alias = document.createElement("span");
+      alias.id = legacy;
+      alias.className = "anchor-alias";
+      heading.before(alias);
+    }
+    for (const [oldId, targetId] of Object.entries(sectionAliases[chapter.slug] || {})) {
+      const target = document.getElementById(targetId);
+      if (!target) continue;
+      for (const aliasId of [oldId, `-${oldId}`]) {
+        if (document.getElementById(aliasId)) continue;
+        const alias = document.createElement("span");
+        alias.id = aliasId;
+        alias.className = "anchor-alias";
+        target.before(alias);
+      }
+    }
+  }
+  outlineNav.innerHTML = `<ol>${[...article.querySelectorAll("h2,h3")].map(heading => `
+    <li><a class="outline-link depth-${heading.tagName.slice(1)}" href="${routeForPath(chapter.path, heading.id)}">${escapeHtml(heading.textContent)}</a></li>`).join("")}</ol>`;
 }
 
-export function renderPager(activeChapter) {
-  const index = chapters.indexOf(activeChapter);
+export function renderPager(chapter, store) {
+  const index = chapters.findIndex(item => item.slug === chapter.slug);
   const previous = chapters[index - 1];
   const next = chapters[index + 1];
-  const isComplete = getCompletedChapters().has(activeChapter.slug);
-
+  const complete = store.value.completed.includes(chapter.slug);
   chapterPager.innerHTML = `
-    ${index > 0 ? `
-      <div class="chapter-completion">
-        <span>Finished reading this chapter?</span>
-        <button class="completion-button" type="button" data-complete-chapter="${activeChapter.slug}" aria-pressed="${isComplete}">
-          <i data-lucide="${isComplete ? "circle-check-big" : "circle"}" aria-hidden="true"></i>
-          ${isComplete ? "Completed" : "Mark as complete"}
-        </button>
-      </div>` : ""}
+    ${chapter.core ? `<div class="chapter-completion"><div><strong>Ready for the next step?</strong>
+      <p>${chapter.slug === "04-cloud"
+        ? "Complete the Azure assessment and migration plan. Deployment is optional."
+        : chapter.slug === "prerequisites"
+        ? "Check your tools, run BookCatalog, and try adding and editing a sample book."
+        : chapter.slug === "00-introduction"
+        ? "Meet BookCatalog and the Copilot workflow, then continue to Setup."
+        : "Finish this chapter's tool steps, then mark it complete."}</p></div>
+      <button type="button" data-complete="${chapter.slug}" aria-pressed="${complete}">${complete ? "Marked complete" : "Mark step complete"}</button></div>` : ""}
     <div class="pager-grid">
-      ${previous ? `
-        <a class="pager-link" href="#/${previous.slug}">
-          <span class="pager-label">Previous</span>
-          <strong>${previous.title}</strong>
-        </a>` : "<span></span>"}
-      ${next ? `
-        <a class="pager-link" href="#/${next.slug}">
-          <span class="pager-label">Next</span>
-          <strong>${next.title}</strong>
-        </a>` : ""}
-    </div>
-  `;
-
-  lucide.createIcons({ attrs: { "aria-hidden": "true" } });
+      ${previous ? `<a href="#/${previous.slug}"><small>Previous chapter</small><strong>${previous.title}</strong></a>` : '<a href="#/overview"><small>Course</small><strong>Return to the overview</strong></a>'}
+      ${next ? `<a href="#/${next.slug}"><small>Next chapter</small><strong>${next.title} <span aria-hidden="true">→</span></strong></a>` : ""}
+    </div>`;
 }
 
-export function updateReadingProgress() {
-  const articleTop = article.offsetTop;
-  const scrollable = Math.max(article.offsetHeight - window.innerHeight, 1);
-  const progress = Math.min(Math.max((window.scrollY - articleTop) / scrollable, 0), 1);
-  progressBar.style.width = `${progress * 100}%`;
-
-  const headings = [...article.querySelectorAll("h2, h3")];
-  const activeHeading = headings.filter((heading) => heading.getBoundingClientRect().top <= 140).at(-1);
-  outlineNav.querySelectorAll(".outline-link").forEach((link) => {
-    if (link.dataset.section === activeHeading?.id) link.setAttribute("aria-current", "location");
-    else link.removeAttribute("aria-current");
-  });
-}
-
-export function toggleTheme() {
-  const current = document.documentElement.dataset.theme;
-  const url = new URL(window.location.href);
-  url.searchParams.set("clawpilotTheme", current === "dark" ? "light" : "dark");
-  window.location.replace(url);
-}
-
-export function closeDrawers() {
+let drawer;
+let opener;
+export function closeDrawers(restoreFocus = false) {
   courseNavPanel.classList.remove("is-open");
   outlinePanel.classList.remove("is-open");
-  document.body.classList.remove("drawer-open");
   chaptersToggle.setAttribute("aria-expanded", "false");
   outlineToggle.setAttribute("aria-expanded", "false");
+  document.body.classList.remove("drawer-open");
+  drawerBackdrop.hidden = true;
+  drawer = null;
+  syncDrawers();
+  if (restoreFocus) opener?.focus();
 }
-
-export function openDrawer(panel, toggle) {
+export function syncDrawers() {
+  const mobile = matchMedia("(max-width: 850px)").matches;
+  courseNavPanel.inert = mobile && !courseNavPanel.classList.contains("is-open");
+  outlinePanel.inert = matchMedia("(max-width: 1250px)").matches && !outlinePanel.classList.contains("is-open");
+}
+export function toggleDrawer(panel, button) {
+  const isOpen = panel.classList.contains("is-open");
   closeDrawers();
+  if (isOpen) { button.focus(); return; }
+  opener = button;
+  drawer = panel;
   panel.classList.add("is-open");
+  panel.inert = false;
+  button.setAttribute("aria-expanded", "true");
   document.body.classList.add("drawer-open");
-  toggle.setAttribute("aria-expanded", "true");
+  drawerBackdrop.hidden = false;
+  panel.querySelector("a,button,summary")?.focus();
+}
+export function handleDrawerKey(event) {
+  if (!drawer) return;
+  if (event.key === "Escape") { event.preventDefault(); closeDrawers(true); }
+  if (event.key !== "Tab") return;
+  const focusable = [...drawer.querySelectorAll("a,button,summary")]
+    .filter(element => !element.disabled && element.checkVisibility());
+  const first = focusable[0];
+  const last = focusable.at(-1);
+  if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+  if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+}
+export function setTheme(theme, store) {
+  document.documentElement.dataset.theme = theme;
+  applyEra(document.documentElement.dataset.era || "1960s", theme);
+  themeToggle.textContent = theme === "light" ? "Dark theme" : "Light theme";
+  themeToggle.setAttribute("aria-label", `Use ${theme === "light" ? "dark" : "light"} theme`);
+  store.theme(theme);
 }

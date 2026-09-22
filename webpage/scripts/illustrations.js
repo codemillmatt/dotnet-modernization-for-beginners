@@ -1,0 +1,50 @@
+export const illustrations = [
+  {
+    id: "journey", document: "README.md", era: "1960s",
+    title: "One app, a new foundation",
+    caption: "Follow the required route through Azure planning. Deployment is a separate, optional trip.",
+    description: "Meet BookCatalog, get your tools ready in Setup, read the assessment report, shape the plan, run and review the upgrade, and prepare an Azure plan. These are the six required steps. Deployment and cleanup are optional and need separate cost approval."
+  },
+  {
+    id: "workflow", document: "00-introduction/README.md", era: "1970s",
+    title: "Assess, plan, upgrade, review",
+    caption: "Read the report, shape the plan, then review and run the app.",
+    description: "Read the modernization agent's assessment report. Add a requirement only if needed. Request an upgrade plan, review its choices, and check its tasks. Let the agent make the approved changes. Review the changes and run the application. If a requirement was missed, return to the plan."
+  },
+  {
+    id: "soundcheck", document: "prerequisites/README.md", era: "soundcheck",
+    title: "Soundcheck: get ready",
+    caption: "Check your tools, open BookCatalog, and try the app before the assessment.",
+    description: "Three soundcheck tickets show the setup sequence: check your installed tools and Copilot access, open the BookCatalog solution in your learner copy, then run the app and try adding and editing a sample book. If your tools are ready, go straight to running BookCatalog."
+  },
+  {
+    id: "investigation", document: "01-assessment/README.md", era: "1980s",
+    title: "Make the report useful",
+    caption: "Read the agent's report. Add a requirement only if needed.",
+    description: "Open the assessment report, confirm BookCatalog and .NET 10, and read the findings. Add an application requirement if something is missing, or keep the report unchanged. Save the report for planning and for discussions with your team."
+  },
+  {
+    id: "plan", document: "02-planning/README.md", era: "1990s",
+    title: "Shape the upgrade plan",
+    caption: "Request the plan, review the choices, then check its tasks before execution.",
+    description: "Ask the modernization agent to create a .NET 10 plan. Choose an in-place ASP.NET Core MVC upgrade with EF Core and demo database creation. Read the saved plan and check that its final task includes launching, adding a book, editing it, and restarting. Run the app in Chapter 03, not while planning."
+  },
+  {
+    id: "architecture", document: "03-upgrade-execution/README.md", era: "2000s-2010s",
+    title: "Inside the upgraded application",
+    caption: "Follow the request to the database and the rendered response back to the browser.",
+    description: "The browser sends a request to BooksController. The controller uses the injected ApplicationDbContext, which executes operations against BookCatalogModernizedLab. The controller selects a Razor view. The view renders the response for the browser."
+  },
+  {
+    id: "azure", document: "04-cloud/README.md", era: "2020s",
+    title: "A proposed home in Azure",
+    caption: "Separate runtime access from administrator setup. This picture is a plan, not a deployed environment.",
+    description: "A public sample user reaches BookCatalog on App Service. The app reads its connection setting from Key Vault and accesses Books in Azure SQL. Its runtime managed identity authorizes both operations. An approved administrator creates the schema from the EF Core model and adds demo seed data. The sample has no application-user authentication."
+  }
+];
+
+export function illustrationPath(id, mode) {
+  if (!illustrations.some(item => item.id === id)) throw new Error(`Unknown illustration: ${id}`);
+  if (!["light", "dark"].includes(mode)) throw new Error(`Unknown color mode: ${mode}`);
+  return `docs/illustrations/${id}-${mode}.svg`;
+}

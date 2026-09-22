@@ -1,24 +1,28 @@
-# SimpleLegacyApp — Chapter 00 demo
+# Optional introductory assessment sample
 
-A tiny .NET Framework 4.8 console app used by [Chapter 00](../README.md) to run your **first** GitHub Copilot modernization agent assessment.
+`SimpleLegacyApp` is a small SDK-style .NET Framework 4.8 console project.
+It isn't the BookCatalog web project used in the required course.
 
-## What's inside (and why)
+| File | What to inspect |
+| --- | --- |
+| `SimpleLegacyApp/Program.cs` | `HttpContext.Current` and legacy configuration |
+| `SimpleLegacyApp/Serialization.cs` | `BinaryFormatter` serialization and deserialization |
+| `SimpleLegacyApp/App.config` | XML application settings |
 
-| File | Modernization signal |
-|------|----------------------|
-| `SimpleLegacyApp.csproj` | Targets `net48` — the source framework the agent will assess. |
-| `Program.cs` | Uses `System.Web.HttpContext.Current` → **blocker** in .NET 10. |
-| `Serialization.cs` | Uses `BinaryFormatter` → **warning** (deprecated, removed in modern .NET). |
-| `App.config` | Legacy `ConfigurationManager` settings → informational (move to `appsettings.json`). |
+These APIs give the agent examples to assess.
+Read the explanation for each finding. The API name alone doesn't tell you its priority.
 
-These three signals map 1:1 to the **blocker / warning / informational** categories you'll learn to read in the assessment report.
+Open `00-introduction\code\SimpleLegacyApp.sln` from the repository root in Visual Studio on Windows.
+In Copilot Chat, send:
 
-## Open in Visual Studio 2026
+```text
+@Modernize Assess SimpleLegacyApp for .NET 10.
+Create a scenario for this console solution, separate from any BookCatalog scenario.
+Do not change application code or create Git commits.
+Stop after the assessment and show its path.
+```
 
-1. Open `SimpleLegacyApp.sln`.
-2. Right-click the project → **GitHub Copilot → Assess for Modernization**.
-3. Pick **.NET 10** as the target.
+Compare the report with the [historical console assessment](../../examples/assessments/README.md).
+Return to `shared-legacy-app\BookCatalog.sln` before continuing the required course.
 
-Then jump back to the [chapter walkthrough](../README.md#-your-first-assessment).
-
-> ⚠️ **Windows required to build.** This project targets .NET Framework 4.8, which only builds on Windows. The modernization agent itself is available on macOS and Linux via VS Code or GitHub Copilot CLI, but you'd need a different source project.
+The deliberately legacy serialization code is for local sample data only. Do not deserialize an untrusted payload.
