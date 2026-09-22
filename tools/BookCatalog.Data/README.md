@@ -8,6 +8,14 @@ Inspect the selected IDs and destination before you apply a copy.
 The helper does not create a database, apply a schema, or fix a conflict.
 This exercise is not a production backup, migration, or cutover procedure.
 
+This is a standalone, opt-in helper. The core course and Azure deployment rebuild demo data through EF Core instead.
+
+For the complete exercise, follow the [data-transfer reference](../../docs/data-transfer.md).
+
+The exercise creates its own untouched legacy source clone under `.bookcatalog-lab\legacy-source`.
+
+It doesn't depend on your learner copy retaining its legacy configuration or records. Don't add export as an upgrade prerequisite.
+
 ## What each command does
 
 | Command | Result | Database changes |
@@ -36,21 +44,29 @@ A lost commit response can leave the client unable to confirm a completed commit
 
 For the local exercise:
 
-- Use Windows, PowerShell, the .NET 10 SDK, and SQL Server LocalDB.
-- Start the legacy application first. Its source database must already be attached.
-- Start the upgraded app with its separate lab database and expected schema.
-- Confirm its connection uses Windows integrated security and `BookCatalogModernizedLab`.
+- Use Windows, PowerShell, a stable .NET SDK 10 or later, and SQL Server LocalDB.
+- Start the standalone source from `.bookcatalog-lab\legacy-source\shared-legacy-app\BookCatalog.sln`. Its database must already be attached.
+- Before import, run the completed reference to create its EF Core schema and seeds.
+- Confirm the destination uses Windows integrated security and `BookCatalogModernizedLab`.
 - Run commands from the repository root.
-- Use the actual IDs from your learner record. Do not infer IDs from book titles.
+- Use the actual IDs selected in the optional lab. Do not infer IDs from book titles.
 - Close the apps before the copy so that their initializers and users do not change the data.
 
 NuGet dependencies restore through `dotnet run` or `dotnet test`.
 A separate NuGet CLI, Node.js, and Python are not required by this helper.
 Local operations do not run Azure CLI or acquire Azure credentials.
 
+The helper still targets .NET 10. A later SDK doesn't replace its required .NET 10 runtime.
+
+Run `dotnet --list-runtimes` and look for `Microsoft.NETCore.App 10.0.x`. If it's missing, add the .NET 10 runtime through the [setup instructions](../../prerequisites/README.md#check-before-installing).
+
 The helper reads the named configuration file only.
 It does not merge `appsettings.Development.json`, environment variables, or user secrets.
 Ensure that the file identifies the same database your application actually uses.
+
+Keep the exercise's source project on .NET Framework 4.8. Initialize the destination before import.
+
+The helper's destination and schema restrictions apply to explicit imports, not to the required modernization workflow.
 
 Only the `dbo.Books` table is supported, with these columns:
 
@@ -83,15 +99,16 @@ LocalDB's instance owner normally has these permissions.
 Apply needs destination `SELECT`, `INSERT`, and permission to enable `IDENTITY_INSERT` (`ALTER` on the table).
 Do not grant the deployed application's runtime identity extra migration permissions.
 
-## Export before the upgrade
+<a id="export-before-the-upgrade"></a>
+## Export from the standalone source
 
-Create the ignored snapshot directory once:
+Use PowerShell from the repository root. Stop debugging after saving your selected records.
 
-```powershell
-New-Item -ItemType Directory -Path .bookcatalog-lab -Force
-```
+First complete [standalone source preparation](../../docs/data-transfer.md#prepare-a-standalone-legacy-source) and create its two sample records.
 
-Replace both placeholders below with the actual IDs from your learner record.
+That procedure creates `.bookcatalog-lab` and the source clone. Use its `Web.config`, not the core learner project's configuration.
+
+Replace both placeholders below with your actual selected IDs.
 Use your active record ID and your inactive record ID.
 Do not run the export with the placeholder text.
 
@@ -99,9 +116,10 @@ Do not run the export with the placeholder text.
 $ids = "<active-id>,<inactive-id>"
 
 dotnet run --project tools\BookCatalog.Data -- export `
-  --source-config shared-legacy-app\src\BookCatalog.Web\Web.config `
+  --source-config .bookcatalog-lab\legacy-source\shared-legacy-app\src\BookCatalog.Web\Web.config `
   --ids $ids `
   --output .bookcatalog-lab\books.json
+if ($LASTEXITCODE -ne 0) { throw "Source export failed. Inspect the error before retrying the export." }
 ```
 
 `|DataDirectory|` in `AttachDbFilename` resolves to `App_Data` beside that `Web.config`.
@@ -122,15 +140,23 @@ They contain no connection string, password, token, or account credential.
 
 ## Preview, apply, and verify locally
 
-The upgraded app must use the existing `BookCatalogModernizedLab` database.
-Do not point this operation at the legacy database.
+The standalone exercise uses the completed reference and `BookCatalogModernizedLab` as its destination.
+
+Run it once with `dotnet run --project examples\modernized\src\BookCatalog.Web` from the original repository root. Stop it with Ctrl+C before import.
+
+Set the configuration file for the following commands:
+
+```powershell
+$targetConfig = "examples\modernized\src\BookCatalog.Web\appsettings.json"
+```
 
 Preview:
 
 ```powershell
 dotnet run --project tools\BookCatalog.Data -- import `
   --input .bookcatalog-lab\books.json `
-  --target-config shared-legacy-app\src\BookCatalog.Web\appsettings.json
+  --target-config $targetConfig
+if ($LASTEXITCODE -ne 0) { throw "Import preview failed. Do not apply." }
 ```
 
 Read the printed server and database.
@@ -143,8 +169,9 @@ Apply only after you approve that destination:
 ```powershell
 dotnet run --project tools\BookCatalog.Data -- import `
   --input .bookcatalog-lab\books.json `
-  --target-config shared-legacy-app\src\BookCatalog.Web\appsettings.json `
+  --target-config $targetConfig `
   --apply
+if ($LASTEXITCODE -ne 0) { throw "Import failed. Inspect the error before continuing." }
 ```
 
 Compare the stored values:
@@ -152,11 +179,13 @@ Compare the stored values:
 ```powershell
 dotnet run --project tools\BookCatalog.Data -- verify `
   --input .bookcatalog-lab\books.json `
-  --target-config shared-legacy-app\src\BookCatalog.Web\appsettings.json
+  --target-config $targetConfig
+if ($LASTEXITCODE -ne 0) { throw "Stored values do not match." }
 ```
 
-For the completed reference, use `examples\modernized\src\BookCatalog.Web\appsettings.json` instead.
-Do not use the reference as a substitute for the learner's upgraded application.
+To use your own upgraded app, set `$targetConfig` to `shared-legacy-app\src\BookCatalog.Web\appsettings.json` before preview.
+
+Use that app for initialization and browser checks too. Reference results don't validate a different learner implementation.
 
 The snapshot preserves `Id`, `Title`, `Author`, `ISBN`, `PublishedYear`, `IsActive`, and `CreatedDate`.
 Strings compare ordinally, including case and trailing spaces.
@@ -179,9 +208,13 @@ Do not run these commands until the optional deployment is approved.
 They contact Azure, including for preview and verification.
 Local helper tests do not establish that live Azure permissions or networking work.
 
+Use the exported snapshot of the records you intend to copy.
+The deployment lab uses [new-record checks](../../04-cloud/deployment.md#publish-your-learner-application), not this import procedure.
+
 Before this step:
 
-1. Follow the [reviewed Azure lab procedure](../../examples/azure/README.md).
+1. Use an approved deployed lab before its resource-group cleanup.
+   The [deployment procedure](../../04-cloud/deployment.md) prepares its resources, schema, and seeds.
 2. Obtain unmodified deployment outputs from `examples\azure\main.bicep`.
    Keep the outputs object at `.azure-lab\outputs.json`.
    Each output must retain its `type` and `value` fields.
@@ -196,6 +229,8 @@ Before this step:
 7. Arrange approved, temporary SQL firewall access for your public IP and outbound TCP port 1433.
    The bootstrap helper removes its own temporary firewall rule when it finishes.
    This data helper does not create rules. Remove your approved rule after verification.
+
+The [standalone Azure-copy procedure](../../docs/data-transfer.md#optional-azure-copy) keeps firewall cleanup in `finally`, including after an import failure.
 
 The helper checks the CLI subscription and AzureCloud environment.
 It checks the signed-in user's object ID against the live SQL administrator.
@@ -213,6 +248,7 @@ Preview:
 dotnet run --project tools\BookCatalog.Data -- import `
   --input .bookcatalog-lab\books.json `
   --azure-outputs .azure-lab\outputs.json
+if ($LASTEXITCODE -ne 0) { throw "Cloud import preview failed. Do not apply." }
 ```
 
 Apply after reviewing the identified server, database, and records:
@@ -222,6 +258,7 @@ dotnet run --project tools\BookCatalog.Data -- import `
   --input .bookcatalog-lab\books.json `
   --azure-outputs .azure-lab\outputs.json `
   --apply
+if ($LASTEXITCODE -ne 0) { throw "Cloud import failed. Inspect the error before continuing." }
 ```
 
 Verify:
@@ -230,22 +267,24 @@ Verify:
 dotnet run --project tools\BookCatalog.Data -- verify `
   --input .bookcatalog-lab\books.json `
   --azure-outputs .azure-lab\outputs.json
+if ($LASTEXITCODE -ne 0) { throw "Cloud stored-value verification failed." }
 ```
 
 Use either `--target-config` or `--azure-outputs`, never both.
 The helper does not provision resources, apply schema, change permissions, create secrets, or delete the lab.
-Keep the lab's resource and firewall cleanup steps in your learner record.
+Complete the lab's resource and firewall cleanup steps even if data checks fail.
+The [learner record](../../docs/learner-record.md) is an optional place to save those results.
 
 ## If a check fails
 
-- **A conflicting ID:** keep both the snapshot and source database unchanged.
-  Inspect the destination and the fields named in the report.
+- **A conflicting ID:** inspect the destination and the fields named in the report.
+  Keep the snapshot unchanged so verification still compares against the exported values.
   There is no force, overwrite, renumber, or delete option.
 - **Unexpected schema:** compare the application's model and reviewed schema.
   Do not use this helper to repair the database.
-- **Missing source database:** start the legacy app through its documented path.
+- **Missing source database:** start `.bookcatalog-lab\legacy-source\shared-legacy-app\BookCatalog.sln` with IIS Express in Visual Studio.
   Do not create an empty MDF as a workaround.
-- **Missing target database:** initialize the separate local lab through the upgraded app, or apply the approved Azure schema.
+- **Missing target database:** start the completed reference for the local exercise, or apply the approved Azure schema.
 - **Azure failure:** check the approved user, subscription, permissions, output file, and firewall.
   Error output deliberately excludes raw authentication and SQL messages that could expose sensitive data.
 - **Interrupted apply:** run `verify`, then preview again.

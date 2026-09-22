@@ -1,200 +1,150 @@
 # Chapter 01: Assess BookCatalog
 
-An assessment describes the application before you change it. Make that description useful by adding what matters to its users.
+An assessment identifies what must change before an app can use your selected .NET version.
+The modernization agent generates the report through GitHub Copilot in Visual Studio.
 
-Start with the working app and learner branch from [Chapter 00](../00-introduction/README.md). Keep your [learner record](../docs/learner-record.md) open.
+We'll use `shared-legacy-app\BookCatalog.sln` inside your learner copy.
+It's the same solution you ran in Setup. Open it in Visual Studio and stop debugging.
 
-Your output is a reviewed assessment with explicit requirements. Do not edit application code in this chapter.
+## Why assess the app?
+
+The report gives you a starting point for the upgrade. It identifies incompatible APIs, project changes, and package issues.
+You can share the report with your team or management when discussing the work.
+The modernization agent also uses it to prepare the upgrade plan.
 
 ## Ask for an assessment
 
-Open `shared-legacy-app\BookCatalog.sln` in Visual Studio. Stop debugging.
+Open **GitHub Copilot Chat**. Sending `@Modernize` opens the **Upgrade Agent Dashboard**.
+In the recorded run, chat offered **@Modernize Run an assessment for BookCatalog**.
 
-Select **Modernize** from the solution's context menu. Choose the .NET upgrade operation if asked.
-
-Attach your baseline notes through chat's context controls, or paste the relevant sections. Include:
-
-- The solution and baseline commit.
-- Your two actual record IDs, field values, and active states.
-- The observed behavior checks and any unresolved results.
-- The requirement to leave the legacy database unchanged.
-
-Do not assume the agent can see local notes that you have not attached. Use sample data only. Do not share connection credentials or database files.
-
-Send this request with that context:
+Instead of selecting that short suggestion, send the full request below.
+The extra context tells the agent which project to assess and when to stop.
 
 ```text
-Assess BookCatalog from .NET Framework 4.8 to .NET 10 in Guided mode.
-Use the baseline context attached to this request.
-Do not change application code or execute an upgrade.
-Identify the scenario folder and the assessment file.
-Explain each major compatibility risk with source evidence.
-Separate observed facts, assumptions, and missing information.
+@Modernize Assess BookCatalog from .NET Framework 4.8 to .NET 10 in Guided mode.
+Assess only shared-legacy-app\BookCatalog.sln and its BookCatalog.Web project.
+Exclude the data helper, completed reference, test projects, and course website.
+Write the assessment and identify its scenario folder.
+Do not change application code, execute the upgrade, or create Git commits.
+Stop when the assessment is ready for review.
 ```
 
-Inspect requested permissions before approval. Check the directory and command scope. Stop a request that targets another repository or database.
+**Guided mode** lets you review the assessment and plan before approving implementation.
+The agent may ask permission to inspect Git information or run the assessment.
+Approve those requests for this learner copy. Don't approve a commit or application upgrade during this step.
 
-Ask the agent to open its assessment. Current documentation uses `.github\upgrades\{scenarioId}\assessment.md`. Verify the actual location, solution name, and target framework.
+Visual Studio opened the report automatically in the recorded run. The dashboard also changed to show the assessment.
+If your report doesn't open, select the assessment in the dashboard.
+Ask the agent for the report's path if you can't find it.
 
-![One recorded assessment identifies a classic web project and an architectural migration. Your report can differ.](images/assessment-complete.png)
+The usual location is `.github\upgrades\<scenarioId>\assessment.md`.
+The agent chooses `<scenarioId>`.
+Use the directory it reports, not a directory you create yourself.
+See the [recorded BookCatalog example](../examples/assessments/bookcatalog/README.md) for actual output.
 
-The screenshot records one run. Do not expect identical issue counts, package versions, or report sections.
+![The recorded Upgrade Agent Dashboard shows BookCatalog's completed assessment and the next planning stage.](../examples/assessments/bookcatalog/images/ch1-2-dashboard-assessment.png)
+
+[Open the full-size dashboard screenshot](../examples/assessments/bookcatalog/images/ch1-2-dashboard-assessment.png).
 
 ## Read the report in a useful order
 
-| Section or equivalent | Inspect | What it establishes |
-| --- | --- | --- |
-| Project summary | Source, target, project type, and dependencies | Which application was assessed |
-| Package findings | Packages to upgrade, replace, or remove | Dependency work to investigate |
-| API findings | Named APIs and source locations | Source or runtime behavior needing attention |
-| Technology groups | MVC, configuration, EF6, and startup | Related changes that belong together |
-| Tests and risks | Existing coverage and missing checks | Which conclusions still need evidence |
+<a id="separate-compatibility-from-priority"></a>
+<a id="trace-a-finding-into-the-application"></a>
+<a id="your-decision-can-this-finding-wait"></a>
 
-BookCatalog's classic web project and `System.Web` dependencies require more than a target-framework edit.
+The supplied BookCatalog assessment has these sections:
 
-ASP.NET Core supplies web features through its framework reference. Removing an MVC 5 package still requires compatible controllers and views.
+| Report section | What to check |
+| --- | --- |
+| **Executive Summary** | One BookCatalog web project, moving from `net48` to `net10.0` |
+| **Projects Compatibility** | The `BookCatalog.Web.csproj` row describes a classic project that needs conversion |
+| **Top API Migration Challenges** | The `System.Web` findings identify MVC 5 APIs that need ASP.NET Core replacements |
+| **Project Details** | The file, API, and binding-redirect entries show where the agent found the work |
 
-## Separate compatibility from priority
+The recorded report lists **89 incompatible API findings** and **three binding redirect issues**.
+Those counts describe that run, not a required result for yours.
+A binding redirect tells .NET Framework which assembly version to load.
+ASP.NET Core handles dependencies differently.
 
-Compatibility categories describe a kind of change. They do not establish business priority.
+The report also lists zero packages in its aggregate table, but seven package issues in the project row.
+Don't read the zero as proof that there are no package changes.
+Open `shared-legacy-app\src\BookCatalog.Web\packages.config` to see the legacy package list.
+Ask the agent to explain any mismatch before you approve its package choices.
+In the supplied follow-up, the agent counted six actual packages.
 
-| Category | Meaning | Evidence to seek |
-| --- | --- | --- |
-| Binary incompatibility | A compiled component can stop working with the new runtime or dependency | Replacement support and rebuilt components |
-| Source incompatibility | Source can need edits before it compiles against the new API | Reported source and compilation results |
-| Behavioral change | Code can compile but produce a different result | Checks of affected behavior |
+The [recorded assessment excerpts](../examples/assessments/bookcatalog/assessment-excerpts.md) include the original counts and package findings.
+The supplied detailed report screenshot also has stale **.NET 8** labels.
+Check the target in your saved assessment rather than copying a screenshot label.
 
-A source incompatibility can block a build. A behavioral change can damage data. Neither category automatically means optional.
+<a id="what-the-numbers-do-not-prove"></a>
+Issue counts aren't an estimate of upgrade time.
+Read the affected code and proposed change, not only the severity icon.
 
-Record three separate decisions for an important finding:
+## Add a preference Copilot can use
 
-1. What technical change does it describe?
-2. Why does the behavior matter to the application's user?
-3. Will you fix, replace, remove, or explicitly defer that behavior?
+<a id="tell-the-agent-what-must-survive"></a>
+An assessment doesn't need an edit just to complete this lesson.
+Keep it unchanged if it describes the right app and target.
+If you want to add a requirement, either edit the report or ask the agent to add it.
 
-Deferral needs a workable design. Low usage does not make incompatible code compile.
-
-![An investigation trail from a finding to source inspection, affected behavior, a chosen action, and a defined check.](../docs/illustrations/investigation-light.svg)
-
-## Trace a finding into the application
-
-Open `shared-legacy-app\src\BookCatalog.Web\Controllers\BooksController.cs`.
-
-`Details(int id)` calls `HttpNotFound()` when a book does not exist. Preserve the HTTP 404 response, not the old method name.
-
-`Index()` reads the request's user-agent value. ASP.NET Core controllers expose the current request through `Request`. This case does not require a separate context accessor.
-
-Inspect `Global.asax.cs` next. Routes, filters, and database initialization need corresponding responsibilities in the new startup code.
-
-<div class="activity">
-
-### Your decision: can this finding wait?
-
-Choose a real finding in your report. Record its source, affected behavior, action, and check.
-
-Suppose the page has few users. Explain whether that changes compatibility or only business priority.
-
-</div>
-
-<details>
-<summary>Compare your reasoning</summary>
-
-The page belongs to the same compiled application. User count does not change API requirements.
-
-For `HttpNotFound()`, ASP.NET Core's `NotFound()` is a reasonable replacement. Check that a missing record still returns HTTP 404.
-
-For the active list, check filtering and title order. A build establishes neither behavior.
-
-</details>
-
-## Tell the agent what must survive
-
-The agent can inspect code. It cannot infer which records you selected or why they must remain unchanged.
-
-Open **your generated assessment file**. Add an **Application requirements** section.
-
-Replace the ID placeholders below with your actual IDs before saving:
+For example, open the generated `assessment.md` and add:
 
 ```text
-R1: Preserve the selected records with IDs <active-id> and <inactive-id>.
-R2: Preserve each ID, Title, Author, ISBN, PublishedYear, IsActive,
-    and the full stored CreatedDate value, including null fields.
-R3: Keep inactive books out of the main list and sort active books by title.
-R4: Leave the legacy database unchanged.
-R5: Copy the selected records to the separate BookCatalogModernizedLab
-    database. New seed records do not count as that copy.
-R6: Preserve validation, missing-record responses, antiforgery protection,
-    persistence after restart, and CreatedDate during edits.
+## Application requirements
+
+Keep the current book-list page and forms.
+Upgrade the framework without redesigning the interface.
 ```
 
-Refer to your baseline notes in this section. Record the two IDs in your learner record as well.
-
-Now attach or refer to the edited assessment in chat. Ask:
+Save the file. Then send this in the same chat:
 
 ```text
-Read the Application requirements section I added to this assessment.
-Compare it with the attached baseline observations.
-Identify the affected code and any information still missing.
-Explain how these requirements constrain the upgrade options.
-Keep my requirement IDs when you reconcile the assessment.
-Do not change application code or execute the upgrade.
+@Modernize Read the Application requirements section in this scenario's assessment.md.
+Keep that requirement in the assessment and use it when you create the plan.
+Do not change application code or execute the upgrade yet.
 ```
 
-Inspect the updated artifact, not only the chat acknowledgement. Correct lost requirements, invented observations, and mistaken assumptions.
+To have the agent make the edit instead, send this request rather than editing the file yourself:
 
-The separate database is deliberate. Copying selected records is a later explicit step, not a side effect of changing EF packages.
+```text
+@Modernize Add an Application requirements section to this scenario's assessment.md.
+Add: Keep the current book-list page and forms. Do not redesign the interface.
+Use that requirement when you create the plan.
+Do not change application code or execute the upgrade yet.
+```
 
-## What the numbers do not prove
+Check the saved `assessment.md` after either method.
+If you made no changes, move directly to the next section.
 
-API counts can reveal repeated patterns. They do not measure redesign, environment repair, or testing effort.
-
-No reported behavioral issues means the assessment found none. It does not prove that behavior will remain identical.
-
-An assessment is an input to a decision. Your requirements explain which result is acceptable.
+![Read the assessment, check its findings, and add an application requirement only if needed.](../docs/illustrations/investigation-light.svg)
 
 ## Save the assessment for planning
 
-From the repository root, inspect:
+Keep the generated report and scenario files in your learner copy.
+They record the starting findings for the plan and for later discussions with your team or management.
+If you changed the report, keep the explanation of your change with it.
 
-```powershell
-git status --short
-git diff
-```
-
-Expect assessment and scenario changes, not application edits. If code changed, stop and inspect it before asking the agent to restore the agreed scope.
-
-Use the actual scenario directory when staging reviewed artifacts. For example:
-
-```powershell
-git add -- .github\upgrades\<actual-scenario-id>
-if ($LASTEXITCODE -ne 0) { throw "Staging failed." }
-git diff --cached
-```
-
-The path contains a placeholder. Replace it before running. Inspect the staged diff before making a checkpoint:
-
-```powershell
-git commit -m "Record BookCatalog assessment and requirements"
-if ($LASTEXITCODE -ne 0) { throw "Checkpoint was not saved." }
-```
-
-Do not include credentials, snapshots, database files, or unrelated work.
-
-You are ready when you can show a finding's source and your requirements in the assessment. Chapter 02 traces each requirement into a plan action and check.
+In Visual Studio, open **View > Git Changes**.
+Expect assessment and scenario files, not converted application files.
+The next chapter starts from this assessment in the same modernization chat.
 
 ## If the assessment differs or fails
 
-For restore errors, rebuild the legacy solution first. For an incorrect solution name, reopen the correct solution.
+For a restore error, restore packages and rebuild `BookCatalog.sln`, then ask the agent to retry the assessment.
+For the wrong application or target, correct those details in chat and regenerate the report before planning.
 
-For a disputed finding, inspect the source and give the agent contrary evidence. Do not change categories merely to reduce a count.
+If chat loses the scenario, send:
 
-For an expired chat, ask the agent to identify the existing scenario before creating another assessment.
+```text
+@Modernize Find the existing BookCatalog .NET 10 assessment in this learner copy.
+Show its scenario folder and assessment.md path.
+Continue with that scenario. Do not create a second assessment.
+```
 
-**[Next: choose an upgrade plan](../02-planning/README.md)**
+**[Next: shape the upgrade plan](../02-planning/README.md)**
 
 ## Reference
 
-- [Upgrade concepts and state](https://learn.microsoft.com/dotnet/core/porting/github-copilot-upgrade/concepts)
-- [Types of breaking changes](https://learn.microsoft.com/dotnet/core/compatibility/categories)
-- [ASP.NET Framework migration](https://learn.microsoft.com/aspnet/core/migration/fx-to-core/)
+- [Visual Studio upgrade walkthrough](https://learn.microsoft.com/dotnet/core/porting/github-copilot-upgrade/how-to-upgrade-with-github-copilot?pivots=visualstudio)
+- [Upgrade concepts and flow modes](https://learn.microsoft.com/dotnet/core/porting/github-copilot-upgrade/concepts)
 - [Historical console assessment](../examples/assessments/README.md)

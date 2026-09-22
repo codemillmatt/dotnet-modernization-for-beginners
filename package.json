@@ -9,6 +9,7 @@
   "scripts": {
     "build": "node webpage/tools/build.mjs",
     "illustrations": "node webpage/tools/render-illustrations.mjs",
+    "prepreview": "npm run build",
     "preview": "node webpage/tools/serve.mjs",
     "test:content": "node --test tests/content/*.test.mjs",
     "test:site": "playwright test",

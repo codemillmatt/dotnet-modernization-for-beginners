@@ -1,235 +1,156 @@
 <a id="chapter-04-prepare-for-azure"></a>
 # Chapter 04: Assess and plan for Azure
 
-Your local upgrade works. Now decide what must change before the same application can run in Azure.
+Your upgraded app runs locally. Now use Visual Studio's Azure modernization workflow to find what must change before it can run in Azure.
 
-This chapter is **required**. Its result is an Azure assessment and a revised migration plan, not a deployed application.
+Open `shared-legacy-app\BookCatalog.sln`, containing the app you upgraded in Chapter 03.
+The result of this chapter is an Azure assessment and an edited migration plan.
+**Don't create Azure resources or deploy the app in this chapter.**
 
-Start with the verified app, selected-record snapshot, and learner record from [Chapter 03](../03-upgrade-execution/README.md).
-
-You need Visual Studio and Copilot access from Chapter 00. You do **not** need Node, Azure CLI, an Azure login, or an Azure subscription.
+Use the Visual Studio installation and Copilot account from Setup.
+You don't need Azure CLI, Node, or an Azure subscription for this planning path.
 
 ## What changes when the app moves?
 
-The web framework is already modernized. Azure planning now concerns hosting, database access, configuration, identity, data, and operations.
+LocalDB runs on your Windows machine. Uploading the web application wouldn't move that database with it.
 
-The LocalDB database runs on your Windows machine. Moving web files to Azure does not move that database or its records.
+Use these components as the proposed target. The optional deployment files use the same design:
 
-| Component | Role in this example | What you must plan |
-| --- | --- | --- |
-| Azure App Service | Hosts the web application | Runtime support, application settings, deployment, and diagnostics |
-| Azure SQL | Stores the cloud `Books` table | Schema preparation, selected-record copy, and database permissions |
-| Azure Key Vault | Supplies the connection setting | Configuration loading and access permissions |
-| User-assigned managed identity | Lets the running app access supported Azure services | Identity binding and limited runtime permissions |
-| Developer/administrator identity | Prepares resources, schema, and selected data | Separately approved access, costs, and cleanup |
+| Component | Responsibility |
+| --- | --- |
+| Azure App Service on Linux | Host the .NET 10 web app |
+| Azure SQL | Store the cloud book catalog |
+| Azure Key Vault | Supply the configured connection setting |
+| Managed identity | Give the running app access to supported Azure services without an application password |
 
-A managed identity avoids storing an application password for supported service access. It does not authenticate BookCatalog's website users.
+A managed identity doesn't sign users into BookCatalog. The optional sample is publicly accessible and has no application-user authentication.
+Use disposable sample data only.
 
-Key Vault supplies configuration. It is not between the application and every SQL request.
-
-![Proposed Azure architecture: a public sample user reaches BookCatalog on App Service. Its runtime managed identity authorizes Key Vault and Azure SQL access. A separate approved administrator sets up the schema and copies selected records.](../docs/illustrations/azure-light.svg)
-
-The optional lab is publicly accessible and has no application-user authentication. Its plan must restrict it to disposable sample data.
+![BookCatalog runs on App Service, uses its managed identity for Key Vault and Azure SQL, and has separately approved administrator setup.](../docs/illustrations/azure-light.svg)
 
 ## Ask the agent for cloud-readiness findings
 
-Open your **upgraded learner solution** in Visual Studio, not the completed reference.
+Stop debugging. Open a new Copilot Chat for the Azure workflow.
 
-1. Right-click the solution in Solution Explorer.
-2. Select **Modernize**.
-3. Select **Migrate to Azure** in Copilot Chat.
-4. Send that option to start the assessment.
-
-The equivalent chat entry is `@Modernize Migrate to Azure`. Use this Azure workflow, not another framework-upgrade assessment.
-
-Assessment normally starts automatically. Keep application remediation and resource creation unapproved.
-
-Attach your local verification notes and requirements. Send:
+Right-click the solution and select **Modernize > Migrate to Azure**.
+You can also start from Copilot Chat with this request:
 
 ```text
-Assess this upgraded BookCatalog application for Azure.
-Use my attached requirements and local verification results.
+@Modernize Migrate to Azure.
+Assess this upgraded BookCatalog application only.
 Do not change application code, sign in to Azure, create resources, or deploy.
-Identify the assessment configuration and report locations.
-Explain target-specific findings with their source locations.
-Keep unresolved access and cost assumptions in the plan, not as actions.
+Identify the assessment report and configuration locations.
+Stop after assessment.
 ```
 
-Check each permission request. Decline or stop commands outside assessment and planning.
+This is the Azure workflow, not another .NET framework upgrade.
+If the menu starts the assessment automatically, wait for its report.
+Otherwise, use the request above to start the assessment.
 
-If the agent requests subscription access for deployment discovery, restate the planning-only scope. Use explicit assumptions instead of inventing an approved subscription.
+Approve requests to inspect the local application for assessment.
+If the tool requires Azure sign-in or resource creation, stop and record the exact message.
+Those actions aren't part of this chapter.
 
 ## Compare the report with the real application
 
-Current Visual Studio documentation puts assessment configuration under `.appmod\.appcat`. A typical configuration file is `assessment-config.json`.
+Open the report from the assessment results.
+If you can't find it, ask the agent to show the report's path and open it.
+Look for **Application Information**, **Issue Summary**, and **Issues**, or equivalent headings.
+First check that the report names your upgraded BookCatalog project.
 
-The first assessment creates configuration automatically. Ask the agent to identify its actual path rather than creating a guessed file beforehand.
+Expand one issue about configuration, hosting, or database access.
+Read its explanation and recommended migration task.
+Identify the application setting or code that the task would change.
 
-The report may show **Application Information**, **Issue Summary**, and **Issues**. Check the solution, framework, and selected Azure target first.
+For example, a local database connection needs a cloud database and a different access configuration.
+If your report doesn't identify a LocalDB issue, ask the agent how the current connection will work on App Service.
+Keep its answer separate from the report's actual findings.
 
-Azure report criticality differs from the framework-compatibility categories in Chapter 01:
-
-| Azure criticality | How to use it |
-| --- | --- |
-| Mandatory | Investigate a change required for the assessed migration |
-| Potential | Review whether the issue applies to this application |
-| Optional | Consider the benefit and scope before choosing it |
-
-These labels do not replace source inspection or your business requirements.
-
-Expand a real issue. Follow its file and line reference. Record the current behavior, proposed action, and evidence you would need after the change.
-
-For example, inspect the effective LocalDB connection and automatic initialization in `Program.cs`. Explain why they need different treatment on Azure.
-
-If the report omits that issue, record it as your own finding. Do not invent a report entry or change counts to match this lesson.
+Report criticality labels such as **Mandatory**, **Potential**, and **Optional** help you review findings.
+They aren't instructions to execute every suggested task.
 
 ## Choose a target with a reason
 
-An assessment configured with `Any` can compare supported compute targets in the report. A target-specific assessment shows that target's findings.
+Use **App Service on Linux** for this course's optional deployment path.
+It fits the .NET 10 web application without adding container packaging.
 
-Inspect the generated configuration. If comparison will help your decision, ask the agent to assess `Any` or the alternative you want to compare.
+Visual Studio documentation places assessment configuration under `.appmod\.appcat`, often in `assessment-config.json`.
+Ask the modernization agent to open the configuration file and show the selected target.
 
-For the supplied deployment path, choose **App Service on Linux** with Azure SQL. The documented assessment target value is `AppService.Linux`.
-
-To focus a later assessment, edit the existing configuration's `appcat.target` value. Preserve its other settings.
-
-This fragment shows the relevant structure, not a command or a replacement for an unrelated configuration file:
-
-```json
-{
-  "appcat": {
-    "target": "AppService.Linux"
-  }
-}
-```
-
-Rerun the assessment after saving a configuration change. Confirm that the report names the target you selected.
-
-| Option | Why consider it? | Additional responsibility |
-| --- | --- | --- |
-| App Service on Linux | Fits this .NET 10 web app without adding container packaging | Check supported runtime, settings, diagnostics, and SQL access |
-| App Service on Windows | Relevant when a workload retains Windows-specific dependencies | Identify the dependency that justifies that choice |
-| Azure Container Apps | Useful when container packaging is a deliberate requirement | Own the image, registry, container configuration, and operating model |
-
-Do not select a target only because it reports fewer issues. Record why its responsibilities fit this application.
-
-The supplied optional lab uses App Service, Azure SQL, Key Vault, and a user-assigned managed identity. A different target needs a separately reviewed deployment procedure.
-
-<div class="activity">
-
-### Your decision: what finding changes the plan?
-
-Choose one target-specific finding from your report. Trace it to source.
-
-Explain its effect on configuration, data access, or hosting. State one alternative and why you did not choose it.
-
-</div>
-
-<details>
-<summary>Compare your reasoning</summary>
-
-A LocalDB connection cannot provide the cloud database. Replacing its server name alone does not create schema, copy records, or authorize the running app.
-
-The plan needs separate actions for those responsibilities. A successful web deployment proves none of them by itself.
-
-</details>
+If the target isn't `AppService.Linux`, ask the agent to select that target and rerun the assessment.
+Check that the new report names App Service on Linux.
 
 ## Generate a migration plan without executing it
 
-The assessment can recommend migration tasks. Select the actual task that addresses your chosen finding.
+Choose one recommended migration task from your report and copy its title.
+Use chat to request a plan. Don't select **Run Task** if that action would immediately change the application.
 
-In Visual Studio, **Run Task** or the task's name in chat starts its migration workflow. Request a plan and a review boundary before remediation.
-
-Replace the placeholder with a task title from your own report:
+Keep the planning-only boundary explicit. Replace the placeholder below with the task's actual title:
 
 ```text
-Prepare the plan for <actual-migration-task-title>.
-Do not start code remediation or Azure operations.
-Include the wider BookCatalog dependencies needed for App Service on Linux,
-Azure SQL, Key Vault, and a user-assigned managed identity.
-Use my baseline requirements and the selected-record snapshot.
+@Modernize Prepare the plan for <actual-migration-task-title>.
+Plan for BookCatalog on App Service on Linux with Azure SQL.
+Include the configuration and identity dependencies the task needs.
 Identify the generated plan and progress files.
-Stop for review when the plan is ready.
+Do not remediate application code, sign in, provision, or deploy.
+Stop when the plan is ready for review.
 ```
 
-Current Visual Studio documentation describes `.appmod\.migration\plan.md` and `.appmod\.migration\progress.md`.
+Ask the agent to open the files it created.
+Visual Studio documentation describes `.appmod\.migration\plan.md` and `progress.md`.
+Use the paths from your run. These aren't the framework-upgrade files under `.github\upgrades`.
 
-These are not the framework-upgrade scenario files under `.github\upgrades\{scenarioId}`. Verify the files your installed agent actually creates.
-
-The plan defines intended work. Progress records execution state. Inspect the latter, but do not mark unrun tasks complete.
+If the tool starts execution instead of offering a planning boundary, stop it and inspect the pending changes.
+Don't approve remediation to make the instructions appear to work.
 
 ## Edit and reconcile the cloud plan
 
-Open your generated migration plan. Add a **BookCatalog lab requirements** section, or revise the existing sections that own these decisions.
-
-Make the following requirements explicit:
-
-| Requirement | Planned action | Evidence or approval needed |
-| --- | --- | --- |
-| Preserve selected data | Apply schema, then copy the original `.bookcatalog-lab\books.json` to `BookCatalogLab` | Same selected IDs, values, nulls, `IsActive`, and stored `CreatedDate` |
-| Preserve local work | Keep the legacy database and `BookCatalogModernizedLab` unchanged | Reviewed connections and separate cloud target |
-| Use the chosen host | Prepare the learner app for App Service on Linux | Local checks and a reviewed runtime/deployment configuration |
-| Separate identities | Administrator prepares schema and data. Runtime identity handles application reads/writes | No schema-change permissions for the runtime app |
-| Load configuration safely | Read the connection setting from Key Vault only when configured | Local run without Azure access and cloud identity/configuration checks |
-| Bound access and cost | Use an approved dedicated group, region, budget, and sample data | Separate approval before login, provisioning, or deployment |
-| Verify and diagnose | Check actual HTTP behavior, stored values, restart persistence, and logs | Recorded results, not only HTTP 200 |
-| Recover and clean up | Define failed-deployment recovery and resource ownership | No source overwrite, no database deletion shortcut, and scoped cleanup confirmation |
-
-Use your actual two IDs in the data requirement. Creating seed records is not a substitute for copying those records.
-
-If the plan already covers every row, improve one acceptance condition with a concrete observation. Explain why your edit makes completion easier to judge.
-
-For recovery, distinguish restoring a previous application package from restoring database state. Redeploying code does not undo data changes.
-
-Ask the agent to reconcile your edits:
+Open the Azure migration `plan.md`, not the .NET upgrade plan from Chapter 02.
+Find the configuration or validation section and add:
 
 ```text
-Read the BookCatalog requirements I added to the migration plan.
-Reconcile the proposed actions, dependencies, and acceptance conditions.
-Show the plan change for each requirement and identify unresolved assumptions.
-Keep execution progress truthful. Do not mark unrun cloud tasks complete.
-Do not remediate, provision, or deploy.
+Keep local BookCatalog development working without Azure access.
+Keep LocalDB for local runs. Use Azure SQL for the proposed cloud deployment.
+Before any future deployment, require separate approval for the
+subscription, dedicated resource group, region, budget, and cleanup owner.
+Create the cloud schema from the EF Core model and use demo seed data.
+After deployment, check the app by adding and editing a new sample book.
 ```
 
-Compare the changed plan with your edits. Record one requirement-to-action-to-check link in your learner record.
+Save the file and ask:
 
-Inspect the pending diff from the repository root:
-
-```powershell
-git status --short
-git diff
+```text
+@Modernize Read the requirements I added to the Azure migration plan.
+Update its configuration, deployment, and validation steps to include them.
+Show the changed steps.
+Leave unrun work pending. Do not remediate, provision, or deploy.
 ```
 
-Expect assessment, configuration, and plan artifacts. Investigate any unexpected application changes.
-
-Save only reviewed, nonsecret artifacts in your checkpoint. Do not stage local snapshots or deployment outputs.
+Read the changed sections.
+Check that the plan keeps local runs on LocalDB and uses the EF Core model to create the proposed cloud schema.
+Deployment must still require separate approval.
 
 ## Finish the required course
 
-You are ready to mark Chapter 04 complete when you can show:
+Finish this chapter when you have the Azure assessment and a migration plan that includes your saved requirements.
 
-- A real Azure assessment for your upgraded app and chosen target.
-- A target-specific finding traced to source.
-- A hosting choice and a reasoned alternative.
-- Your edit to the generated migration plan and the agent's reconciliation.
-- Data, identity, cost, verification, recovery, and cleanup requirements.
-- No unapproved code remediation or Azure resource creation.
-
-You have now used the same process for a framework upgrade and a cloud migration plan. The next application will need its own requirements and evidence.
-
-Deployment is optional. Leave its learner-record section **Not run** if you stop here.
+You've used the modernization agent to assess, plan, and upgrade an application, then prepare its cloud plan.
+Keep the reports and plans so you can review the decisions with your team.
 
 **[Optional: deploy the reviewed plan](deployment.md)** · **[Course overview](../README.md)**
 
-## Earlier deployment links
+<details>
+<summary>Earlier activities and deployment links</summary>
 
-The detailed deployment procedure has moved. Existing chapter links still lead to the corresponding optional steps below.
+<a id="your-decision-what-finding-changes-the-plan"></a>
+Use [the report review](#compare-the-report-with-the-real-application) to choose a relevant task. A source-tracing table and alternative-target essay aren't required.
 
+<a id="earlier-deployment-links"></a>
 <a id="check-tools-access-and-costs-first"></a>
-Use [deployment access and cost checks](deployment.md#check-tools-access-and-costs-first) only if you choose the optional lab.
+See [deployment access and cost checks](deployment.md#check-tools-access-and-costs-first).
 
 <a id="prepare-the-application-explicitly"></a>
-Continue with [reviewed application preparation](deployment.md#prepare-the-application-explicitly).
+See [application preparation](deployment.md#prepare-the-application-explicitly).
 
 <a id="produce-a-schema-from-your-application"></a>
 See [schema generation](deployment.md#produce-a-schema-from-your-application).
@@ -238,7 +159,7 @@ See [schema generation](deployment.md#produce-a-schema-from-your-application).
 See [infrastructure review](deployment.md#review-the-infrastructure).
 
 <a id="your-review-what-can-each-identity-do"></a>
-Use the [identity review activity](deployment.md#your-review-what-can-each-identity-do).
+See [identity review](deployment.md#your-review-what-can-each-identity-do).
 
 <a id="provision-the-dedicated-lab"></a>
 See [dedicated-group provisioning](deployment.md#provision-the-dedicated-lab).
@@ -251,6 +172,8 @@ See [deployment of your learner application](deployment.md#publish-your-learner-
 
 <a id="delete-the-dedicated-lab-group"></a>
 See [scoped cleanup](deployment.md#delete-the-dedicated-lab-group).
+
+</details>
 
 ## Reference
 

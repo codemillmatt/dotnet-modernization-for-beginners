@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1100" height="820" viewBox="0 0 1100 820" role="img" aria-labelledby="illustration-workflow-light-title illustration-workflow-light-desc" data-illustration="workflow" data-era="1970s" data-theme="light">
   <title id="illustration-workflow-light-title">Move forward. Look back.</title>
-  <desc id="illustration-workflow-light-desc">The workflow runs in order: Assess, inspect source and risks; Plan, choose changes and checks; Execute, change the application; Review, you compare evidence. If requirements are missed, the dashed correction route returns from Review to Plan.</desc>
+  <desc id="illustration-workflow-light-desc">The workflow runs in order: Assess, read the report and add a requirement if needed; Plan, request and review the plan; Upgrade, make the approved changes; Review, inspect changes and run the app. If requirements are missed, the dashed correction route returns from Review to Plan.</desc>
   <defs>
     <marker id="illustration-workflow-light-arrow" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="18" markerHeight="18" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M1 1L11 6 1 11Z" fill="#883718"/></marker>
     <marker id="illustration-workflow-light-return" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="16" markerHeight="16" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M1 1L11 6 1 11" fill="none" stroke="#65503a" stroke-width="2"/></marker>
@@ -27,7 +27,7 @@
       </g>
       <circle cx="121" cy="217" r="23" fill="#883718" stroke="#fff7e7" stroke-width="4"/><text x="121" y="225" fill="#fff7e7" font-size="24" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="121" dy="0">1</tspan></text>
       <text x="211" y="407" fill="#442710" font-size="34" font-weight="700" text-anchor="middle" font-family="Georgia, serif" letter-spacing="0"><tspan x="211" dy="0">Assess</tspan></text>
-      <text x="211" y="440" fill="#65503a" font-size="21" font-weight="400" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="211" dy="0">Inspect source &amp; risks</tspan></text>
+      <text x="211" y="440" fill="#65503a" font-size="21" font-weight="400" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="211" dy="0">Read report</tspan><tspan x="211" dy="26.88">&amp; check findings</tspan></text>
       <g transform="translate(788 279)">
         <circle r="95" fill="#fff7e7"/>
         <path d="M-67-54L-22-68 22-51 65-63V57L22 70-22 52-67 66Z" fill="#f1e1bf" stroke="#883718" stroke-width="4"/>
@@ -37,7 +37,7 @@
       </g>
       <circle cx="698" cy="217" r="23" fill="#883718" stroke="#fff7e7" stroke-width="4"/><text x="698" y="225" fill="#fff7e7" font-size="24" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="698" dy="0">2</tspan></text>
       <text x="788" y="407" fill="#442710" font-size="34" font-weight="700" text-anchor="middle" font-family="Georgia, serif" letter-spacing="0"><tspan x="788" dy="0">Plan</tspan></text>
-      <text x="788" y="437" fill="#65503a" font-size="21" font-weight="400" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="788" dy="0">Choose changes</tspan><tspan x="788" dy="26.88">&amp; checks</tspan></text>
+      <text x="788" y="437" fill="#65503a" font-size="21" font-weight="400" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="788" dy="0">Request plan</tspan><tspan x="788" dy="26.88">&amp; review choices</tspan></text>
       <g transform="translate(788 574)">
         <circle r="95" fill="#fff7e7"/>
         <rect x="-66" y="-52" width="130" height="105" rx="9" fill="#f1e1bf" stroke="#883718" stroke-width="4"/>
@@ -48,8 +48,8 @@
         <path d="M47 9L57-1Q62-6 67-1L75 7Q80 12 75 17L65 27" fill="#c87132" stroke="#883718" stroke-width="3"/>
       </g>
       <circle cx="698" cy="510" r="23" fill="#883718" stroke="#fff7e7" stroke-width="4"/><text x="698" y="518" fill="#fff7e7" font-size="24" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="698" dy="0">3</tspan></text>
-      <text x="788" y="711" fill="#442710" font-size="34" font-weight="700" text-anchor="middle" font-family="Georgia, serif" letter-spacing="0"><tspan x="788" dy="0">Execute</tspan></text>
-      <text x="788" y="745" fill="#65503a" font-size="21" font-weight="400" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="788" dy="0">Change the application</tspan></text>
+      <text x="788" y="711" fill="#442710" font-size="34" font-weight="700" text-anchor="middle" font-family="Georgia, serif" letter-spacing="0"><tspan x="788" dy="0">Upgrade</tspan></text>
+      <text x="788" y="745" fill="#65503a" font-size="21" font-weight="400" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="788" dy="0">Make approved changes</tspan></text>
       <g transform="translate(211 574)">
         <circle r="95" fill="#fff7e7"/>
         <path d="M-70-44H1V59H-70Z" fill="#f1e1bf" stroke="#883718" stroke-width="3" transform="rotate(-8)"/>
@@ -61,7 +61,7 @@
       </g>
       <circle cx="121" cy="510" r="23" fill="#883718" stroke="#fff7e7" stroke-width="4"/><text x="121" y="518" fill="#fff7e7" font-size="24" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="121" dy="0">4</tspan></text>
       <text x="211" y="711" fill="#442710" font-size="34" font-weight="700" text-anchor="middle" font-family="Georgia, serif" letter-spacing="0"><tspan x="211" dy="0">Review</tspan></text>
-      <text x="211" y="745" fill="#65503a" font-size="21" font-weight="400" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="211" dy="0">You compare evidence</tspan></text>
+      <text x="211" y="745" fill="#65503a" font-size="21" font-weight="400" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="211" dy="0">Review changes &amp; run</tspan></text>
       <path d="M307 547C420 550 463 406 562 369S630 326 689 307" fill="none" stroke="#65503a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="1" stroke-dasharray="7 9" marker-end="url(#illustration-workflow-light-return)"/>
       <text x="550" y="504" fill="#442710" font-size="21" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="550" dy="0">Requirements missed?</tspan></text>
       <text x="550" y="535" fill="#65503a" font-size="21" font-weight="400" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="550" dy="0">Return to Plan</tspan></text>

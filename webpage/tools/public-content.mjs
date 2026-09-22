@@ -6,17 +6,28 @@ const exact = new Set([
   ...chapters.map(item => item.path), ...references.map(item => item.path),
   ...illustrations.flatMap(item => ["light", "dark"].map(mode => illustrationPath(item.id, mode))),
   "LICENSE", "package.json", "package-lock.json", ".config/dotnet-tools.json",
-  "scripts/Test-DataTransfer.ps1", "scripts/Test-ModernizedApp.ps1"
+  "scripts/Test-DataTransfer.ps1", "scripts/Test-ModernizedApp.ps1",
+  "examples/assessments/simple-legacy-app/scenario.json",
+  "examples/assessments/simple-legacy-app/assessment.md",
+  "examples/assessments/simple-legacy-app/assessment.json",
+  "examples/assessments/simple-legacy-app/assessment.csv",
+  "examples/assessments/bookcatalog/images/legacy-preview.png",
+  "examples/assessments/bookcatalog/images/ch1-1-upgrade-agent-dashboard.png",
+  "examples/assessments/bookcatalog/images/ch1-2-dashboard-assessment.png",
+  "examples/assessments/bookcatalog/images/ch1-3-assessment-view.png",
+  "examples/assessments/bookcatalog/images/ch2-1-dashboard-plan.png",
+  "examples/assessments/bookcatalog/images/ch3-1-dashboard-task1-done.png",
+  "examples/assessments/bookcatalog/images/ch3-2-most-tasks-complete.png"
 ]);
 const roots = [
   ...chapters.slice(1).map(item => item.slug), "shared-legacy-app", "examples/modernized",
-  "examples/azure", "examples/assessments", "tests/BookCatalog.Tests",
+  "examples/azure", "tests/BookCatalog.Tests",
   "tests/BookCatalog.Data.Tests", "tools/BookCatalog.Data", "scripts"
 ];
 const extensions = new Set([".md", ".cs", ".cshtml", ".css", ".json", ".sln", ".csproj", ".config",
   ".asax", ".png", ".svg", ".bicep", ".mjs", ".csv", ".ps1"]);
 const excluded = new Set(["bin", "obj", "packages", "node_modules", ".git", ".vs", "testresults",
-  "history", ".bookcatalog-lab", ".azure-lab", "app_data", "snapshots"]);
+  "history", ".bookcatalog-lab", ".azure-lab", "app_data", "snapshots", ".appmod", ".github", "scenarios"]);
 
 export function selectPublicContent(tracked, untracked) {
   const safe = path => !path.split("/").some(part => excluded.has(part.toLowerCase()))

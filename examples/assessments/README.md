@@ -2,7 +2,7 @@
 
 `simple-legacy-app` preserves a recorded assessment of the optional console sample. Its fields, paths, counts, and suggested changes describe that recording.
 
-They are not a current product schema or an expected BookCatalog result.
+They aren't a current product schema or an expected BookCatalog result.
 
 These files previously lived at `.github\upgrades\scenarios\dotnet-version-upgrade`. They are reference material, not an active upgrade.
 
@@ -16,6 +16,7 @@ Current upgrade documentation uses `.github\upgrades\{scenarioId}\assessment.md`
 
 Compare how a finding identifies source and impact. Do not compare issue counts as a measure of success.
 
-BookCatalog learners must add their own [application requirements](../../01-assessment/README.md#tell-the-agent-what-must-survive) and connect them to a reviewed plan.
+For BookCatalog, [review the assessment](../../01-assessment/README.md#read-the-report-in-a-useful-order) and add requirements only if needed.
+Then review the agent's proposed upgrade plan.
 
 Visual Studio's Azure workflow uses different artifacts, including `.appmod\.appcat` and `.appmod\.migration`. This console recording is not an Azure planning template.

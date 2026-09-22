@@ -15,16 +15,16 @@ export function renderProgress(store, chapter) {
   const { completed, previousCompleted, previousReading, lastVisited } = store.value;
   const core = chapters.filter(item => item.core);
   const count = core.filter(item => completed.includes(item.slug)).length;
-  courseProgress.textContent = `${count} of ${core.length} core chapters complete`;
+  courseProgress.textContent = `${count} of ${core.length} required steps complete`;
   document.querySelector("#completion-bar").style.width = `${100 * count / core.length}%`;
   const resume = document.querySelector("#resume-link");
   resume.href = `#/${lastVisited || "00-introduction"}`;
   resume.textContent = lastVisited ? "Resume your last chapter" : "Start the course";
   const notice = document.querySelector("#storage-notice");
   notice.textContent = store.warning || (previousCompleted.length
-    ? "Your earlier completion marks are saved as history. Complete the revised artifact and data checks before marking these chapters again."
+    ? "Your earlier completion marks are saved as history. Follow each chapter's current steps before marking it complete."
     : previousReading.length
-    ? "Your previous reading marks are saved. Complete the new checks before you mark a chapter complete." : "");
+    ? "Your previous reading marks are saved. Follow each chapter's steps before marking it complete." : "");
   notice.hidden = !notice.textContent;
   chapterNav.innerHTML = `<ol class="chapter-list">${chapters.map(item => `
     <li><a class="chapter-link" href="#/${item.slug}" ${item.slug === chapter.slug ? 'aria-current="page"' : ""}>
@@ -71,11 +71,15 @@ export function renderPager(chapter, store) {
   const next = chapters[index + 1];
   const complete = store.value.completed.includes(chapter.slug);
   chapterPager.innerHTML = `
-    ${index > 0 ? `<div class="chapter-completion"><div><strong>Make this checkpoint yours.</strong>
+    ${chapter.core ? `<div class="chapter-completion"><div><strong>Ready for the next step?</strong>
       <p>${chapter.slug === "04-cloud"
         ? "Complete the Azure assessment and migration plan. Deployment is optional."
-        : "Complete the chapter's artifact and data checks before you mark it."}</p></div>
-      <button type="button" data-complete="${chapter.slug}" aria-pressed="${complete}">${complete ? "Marked complete" : "I completed the checks"}</button></div>` : ""}
+        : chapter.slug === "prerequisites"
+        ? "Check your tools, run BookCatalog, and try adding and editing a sample book."
+        : chapter.slug === "00-introduction"
+        ? "Meet BookCatalog and the Copilot workflow, then continue to Setup."
+        : "Finish this chapter's tool steps, then mark it complete."}</p></div>
+      <button type="button" data-complete="${chapter.slug}" aria-pressed="${complete}">${complete ? "Marked complete" : "Mark step complete"}</button></div>` : ""}
     <div class="pager-grid">
       ${previous ? `<a href="#/${previous.slug}"><small>Previous chapter</small><strong>${previous.title}</strong></a>` : '<a href="#/overview"><small>Course</small><strong>Return to the overview</strong></a>'}
       ${next ? `<a href="#/${next.slug}"><small>Next chapter</small><strong>${next.title} <span aria-hidden="true">→</span></strong></a>` : ""}
@@ -111,13 +115,14 @@ export function toggleDrawer(panel, button) {
   button.setAttribute("aria-expanded", "true");
   document.body.classList.add("drawer-open");
   drawerBackdrop.hidden = false;
-  panel.querySelector("a,button")?.focus();
+  panel.querySelector("a,button,summary")?.focus();
 }
 export function handleDrawerKey(event) {
   if (!drawer) return;
   if (event.key === "Escape") { event.preventDefault(); closeDrawers(true); }
   if (event.key !== "Tab") return;
-  const focusable = [...drawer.querySelectorAll("a,button")].filter(element => !element.disabled);
+  const focusable = [...drawer.querySelectorAll("a,button,summary")]
+    .filter(element => !element.disabled && element.checkVisibility());
   const first = focusable[0];
   const last = focusable.at(-1);
   if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }

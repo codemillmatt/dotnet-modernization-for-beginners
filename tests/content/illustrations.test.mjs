@@ -5,7 +5,7 @@ import { dirname, resolve } from "node:path";
 import { chapters, references } from "../../webpage/scripts/chapters.js";
 import { illustrations, illustrationPath } from "../../webpage/scripts/illustrations.js";
 import { eras } from "../../webpage/scripts/eras.js";
-import { renderIllustration } from "../../webpage/tools/illustration-art.mjs";
+import { renderIllustration, renderSoundcheckHeader } from "../../webpage/tools/illustration-art.mjs";
 import { renderIllustrations } from "../../webpage/tools/render-illustrations.mjs";
 
 const root = resolve(import.meta.dirname, "../..");
@@ -29,6 +29,37 @@ test("each chapter embeds its own original illustration as a normal README image
   for (const document of [...chapters, ...references]) {
     const markdown = await readFile(resolve(root, document.path), "utf8");
     assert.doesNotMatch(markdown, /^```mermaid\b/m, document.path);
+  }
+});
+
+test("the tool-first artwork includes setup and keeps technical relationships accurate", () => {
+  const text = id => renderIllustration(id, "light").replace(/<[^>]+>/g, " ");
+  assert.match(text("journey"), /six required steps/);
+  assert.match(text("journey"), /Setup/);
+  for (const id of ["journey", "workflow", "investigation", "plan"]) {
+    assert.doesNotMatch(text(id), /baseline|inspect source|preserve stored values|compare selected records/i);
+  }
+  assert.match(text("investigation"), /Edit if needed/);
+  assert.match(text("investigation"), /requirement is optional/);
+  assert.match(text("plan"), /01  Request plan/);
+  assert.match(text("plan"), /02  Review choices/);
+  assert.match(text("plan"), /03  Check plan/);
+  assert.doesNotMatch(text("plan"), /Instruction: Build and run|02  Instruction/);
+  assert.match(text("plan"), /Review before execution/);
+  assert.match(text("architecture"), /controller selects a Razor view/);
+  assert.match(text("architecture"), /view does not query the database directly/);
+  assert.match(text("azure"), /creates the schema from the EF Core model and adds demo seed data/);
+});
+
+test("soundcheck headers are generated for both modes without external or animated artwork", async () => {
+  for (const [mode, file] of [["light", eras.soundcheck.art], ["dark", eras.soundcheck.artDark]]) {
+    const svg = renderSoundcheckHeader(mode);
+    assert.equal((await readFile(resolve(root, "webpage/assets", file), "utf8")).trim(),
+      svg.trim().replace(/[ \t]+$/gm, ""));
+    assert.match(svg, /SOUND/);
+    assert.match(svg, /CHECK/);
+    assert.ok(svg.includes(eras.soundcheck[mode].paper));
+    assert.doesNotMatch(svg, /<image|<script|<animate|(?:href|src)=["']https?:|1960s|1970s/);
   }
 });
 

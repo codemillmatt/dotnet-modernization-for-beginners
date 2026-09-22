@@ -17,6 +17,14 @@ export const eras = {
     dark: { paper: "#2e2117", surface: "#34271b", ink: "#fff0d0", muted: "#decaad", accent: "#ffc37c", accentText: "#34271b",
       soft: "#463221", line: "#a08663", selected: "#d4d486", selectedText: "#34271b", a: "#c87132", b: "#8e9b48", c: "#e6b947" }
   },
+  soundcheck: {
+    label: "Soundcheck", art: "era-soundcheck-light.svg", artDark: "era-soundcheck-dark.svg",
+    heading: 'Georgia, "Times New Roman", serif', interface: '"Trebuchet MS", Verdana, sans-serif', radius: "16px", control: "8px",
+    light: { paper: "#fff1d5", surface: "#fffaf0", ink: "#44213e", muted: "#685261", accent: "#7b285d", accentText: "#fffaf0",
+      soft: "#f6e4ca", line: "#a27e90", selected: "#f6b574", selectedText: "#44213e", a: "#087e80", b: "#de692e", c: "#f5ba67" },
+    dark: { paper: "#261a2b", surface: "#312137", ink: "#fff1d5", muted: "#e1c7d4", accent: "#ffc189", accentText: "#312137",
+      soft: "#452b45", line: "#b58b9e", selected: "#ffc189", selectedText: "#312137", a: "#56c6bd", b: "#ef925a", c: "#e9b8d4" }
+  },
   "1980s": {
     label: "1980s", art: "era-1980s.svg",
     heading: 'Outfit, "Arial Black", sans-serif', interface: '"Trebuchet MS", Arial, sans-serif', radius: "0px", control: "0px",

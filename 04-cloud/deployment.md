@@ -1,14 +1,16 @@
 # Optional: deploy BookCatalog to Azure
 
-This lab executes the reviewed plan from [Chapter 04](README.md). It is not required for course completion.
+This lab executes the reviewed plan from [Chapter 04](README.md). It isn't required for course completion.
 
-Use your upgraded learner application and the original `.bookcatalog-lab\books.json`. Do not deploy the completed reference instead.
+Use your upgraded learner application. Don't deploy the completed reference instead.
+
+You'll generate the schema and seeds from EF Core, then check a new disposable record through the cloud app.
 
 > **Approval required.** This lab creates billable resources and a public application with no user authentication.
 >
 > Anyone with its URL can change book records. Use sample data only and an approved, dedicated lab scope.
 
-The sequence is application preparation, local checks, resource approval, provisioning, schema preparation, selected-record copy, deployment, verification, and cleanup.
+The sequence is application preparation, local checks, resource approval, provisioning, schema and seed preparation, deployment, app checks, and cleanup.
 
 This revision has not had a live Azure walkthrough. Local and mocked checks do not prove deployment or cleanup.
 
@@ -32,7 +34,9 @@ dotnet --list-sdks
 
 Use the [Azure CLI installer](https://learn.microsoft.com/cli/azure/install-azure-cli), [Bicep instructions](https://learn.microsoft.com/azure/azure-resource-manager/bicep/install), or [Node installer](https://nodejs.org/en/download) only for missing requirements.
 
-Confirm a stable .NET 10 SDK as in Chapter 00. Do not replace compatible runtimes merely to match a screenshot.
+Confirm a stable .NET SDK 10 or later with the [setup checks](../prerequisites/README.md#check-before-installing). Don't replace compatible runtimes merely to match a screenshot.
+
+The app still targets .NET 10. Keep the .NET 10 runtime components installed for local checks, even with a later SDK.
 
 Review all services in the [Azure pricing calculator](https://azure.microsoft.com/pricing/calculator/). Obtain approval for the subscription, region, budget, and cleanup owner.
 
@@ -56,7 +60,7 @@ if ($LASTEXITCODE -ne 0) { throw "Account verification failed." }
 | --- | --- |
 | Create dedicated resources | Resource creation rights in the approved scope |
 | Assign Key Vault roles | Owner or appropriate delegated role-assignment rights |
-| Apply schema and copy selected records | The Microsoft Entra user configured as SQL administrator |
+| Apply schema and seeds | The Microsoft Entra user configured as SQL administrator |
 | Store the connection setting | Key Vault Secrets Officer on the lab vault |
 | Run the application | User-assigned identity with restricted vault/table permissions |
 
@@ -72,15 +76,18 @@ Start from your saved local checkpoint. Identify the learner project:
 $project = (Resolve-Path "shared-legacy-app\src\BookCatalog.Web\BookCatalog.Web.csproj" -ErrorAction Stop).Path
 ```
 
-Ask the agent to execute only the approved application-preparation group:
+In Visual Studio, open `shared-legacy-app\BookCatalog.sln`. In Copilot Chat, ask the modernization agent to execute only the approved application-preparation group:
 
 ```text
-Prepare my learner application for the reviewed Azure plan.
+@Modernize Prepare my learner application for the reviewed Azure plan.
 Add Key Vault configuration using the user-assigned managed identity.
 Keep local operation independent of Azure when KeyVaultName is absent.
 Guard local schema initialization and disable it for Azure.
 Add design-time schema generation without a live database connection.
-Preserve my behavior, selected records, and source snapshot.
+Include the reviewed seed base in the generated schema SQL.
+Use BookCatalogModernizedLab for local demo data.
+EF Core may rebuild and seed the demo database when needed, not on every startup.
+Keep saved edits across an ordinary app restart.
 Do not provision, deploy, or commit. Stop for diff review and local checks.
 ```
 
@@ -113,7 +120,7 @@ Inspect [the reference startup guard](../examples/modernized/src/BookCatalog.Web
 
 The restricted runtime identity must not create schema. The approved administrator performs that step separately.
 
-Rebuild and run locally as in Chapter 03. Repeat behavior checks and selected-record verification before provisioning.
+Rebuild and run locally as in Chapter 03. Add a book, edit it, restart the app, and confirm the saved edit remains.
 
 Save reviewed application changes yourself. Ask the agent to reconcile plan progress with those actual checks.
 
@@ -137,11 +144,17 @@ if ($LASTEXITCODE -ne 0) { throw "Schema generation failed." }
 
 Inspect `.azure-lab\schema.sql` with the agent before applying it. It must create the expected `Books` shape and retain the seed base.
 
-Check nullable fields, identity IDs, and `CreatedDate` as `datetime2(7)`. Compare all columns with the [helper's supported schema](../tools/BookCatalog.Data/README.md#prerequisites-and-limits).
+Compare the generated `Books` columns with your EF Core `Book` model. Check required fields, string lengths, and the primary key.
 
-Do not allow destructive operations against the local or legacy databases.
+Check that the SQL includes the reviewed seed inserts. A runtime-only seed method isn't included by `dotnet ef dbcontext script`.
 
-Seed inserts do not copy your selected records. The snapshot import remains a separate step.
+If inserts are missing, ask the agent to include fixed model seed data, then regenerate and review the SQL before proceeding.
+
+Review existing runtime seeding too. Local restarts mustn't duplicate seed records or replace existing stored values.
+
+Don't enable cloud startup initialization to compensate. The runtime identity won't have schema-change permissions.
+
+The cloud lab starts with demo seed data. It doesn't need records from the legacy app.
 
 ## Review the infrastructure
 
@@ -149,10 +162,10 @@ Open [the supplied Bicep template](../examples/azure/main.bicep) and [helper gui
 
 Bicep describes the Azure resources and their configuration. The supplied template bounds this lab and defines the outputs its helpers accept.
 
-Ask the agent:
+In Copilot Chat, ask the modernization agent:
 
 ```text
-Compare our cloud plan and proposed changes with examples\azure\main.bicep.
+@Modernize Compare our cloud plan and proposed changes with examples\azure\main.bicep.
 Identify any mismatch in resources, identities, database names, or outputs.
 Explain the cost and public-access boundaries.
 Do not replace the reviewed template or deploy anything yet.
@@ -181,7 +194,7 @@ Find the two Key Vault role assignments. Identify the runtime identity and your 
 
 Explain why the runtime needs secret reads but not secret writes. Inspect the SQL helper's table permissions.
 
-Explain why selected-record import uses your approved administrator identity instead.
+Explain why schema preparation uses your approved administrator identity instead.
 
 </div>
 
@@ -232,7 +245,7 @@ Do not change region or tier without reviewing cost and resource placement again
 
 ## Apply the schema and application permissions
 
-The supplied Node helper prepares an empty database and grants runtime permissions. It does not copy your selected local records.
+The supplied Node helper prepares an empty database using your reviewed schema and seed SQL. It grants runtime permissions but doesn't copy local records.
 
 Check helper dependencies with `npm ls --depth=0`. If required dependencies are missing, run `npm ci` from the repository root.
 
@@ -258,52 +271,7 @@ If roles or identity changes are not yet available, inspect the error before ret
 
 If firewall cleanup fails, remove only that run's named temporary rule. Do not remove another learner's rule.
 
-## Copy the same selected records
-
-Use the **original** `.bookcatalog-lab\books.json`, not a new export of seed records.
-
-The [.NET data helper](../tools/BookCatalog.Data/README.md) uses reviewed deployment outputs with `--azure-outputs`, instead of local `--target-config`.
-
-Cloud copy and verification use the approved Azure CLI SQL administrator, not the runtime managed identity. No credentials belong in the snapshot.
-
-This helper supports the AzureCloud environment. Keep the deployment outputs unchanged, including each output's `type` and `value`.
-
-Azure CLI must read your signed-in user object and the group's, server's, and SQL administrator's metadata. Check policy restrictions before attempting the copy.
-
-Bootstrap has closed its temporary firewall rule. Open a separate rule for your current client address only while copying and checking records.
-
-The client also needs outbound TCP port 1433. If network policy blocks it, seek approved access instead of broadening the server rule.
-
-Keep cleanup in `finally` so a failed copy also closes the rule:
-
-```powershell
-$copyRule = "workshop-copy-$([guid]::NewGuid().ToString('N'))"
-try {
-    az sql server firewall-rule create --subscription $outputs.subscriptionId.value --resource-group $group --server $outputs.sqlServerName.value `
-      --name $copyRule --start-ip-address $clientIp --end-ip-address $clientIp -o none
-    if ($LASTEXITCODE -ne 0) { throw "Client firewall rule creation failed." }
-    dotnet run --project tools\BookCatalog.Data -- import --input .bookcatalog-lab\books.json --azure-outputs .azure-lab\outputs.json
-    if ($LASTEXITCODE -ne 0) { throw "Cloud import preview failed." }
-    $approval = Read-Host "Review target and rows. Type APPLY to copy these selected records"
-    if ($approval -cne "APPLY") { throw "Copy not approved. No records were imported." }
-    dotnet run --project tools\BookCatalog.Data -- import --input .bookcatalog-lab\books.json --azure-outputs .azure-lab\outputs.json --apply
-    if ($LASTEXITCODE -ne 0) { throw "Cloud import failed." }
-    dotnet run --project tools\BookCatalog.Data -- verify --input .bookcatalog-lab\books.json --azure-outputs .azure-lab\outputs.json
-    if ($LASTEXITCODE -ne 0) { throw "Cloud stored-value verification failed." }
-}
-finally {
-    az sql server firewall-rule delete --subscription $outputs.subscriptionId.value --resource-group $group --server $outputs.sqlServerName.value --name $copyRule -o none
-    if ($LASTEXITCODE -ne 0) { throw "Client rule cleanup failed. Inspect and remove only this rule: $copyRule" }
-}
-```
-
-Review the preview **before** typing `APPLY`. Record each operation's actual result.
-
-A conflicting ID must stop the copy. Do not change IDs, overwrite rows, or alter the snapshot to force a match.
-
-If apply loses its connection, verify before retrying. Do not treat an uncertain commit response as proof that nothing changed.
-
-Keep the two carry-forward records unchanged in Azure too. Use another throwaway record for web edits and deletion.
+Successful bootstrap reports that schema, runtime identity, and Key Vault configuration are ready. Continue with publishing.
 
 ## Publish your learner application
 
@@ -320,11 +288,13 @@ az webapp deploy --subscription $outputs.subscriptionId.value --resource-group $
 if ($LASTEXITCODE -ne 0) { throw "Application deployment failed." }
 ```
 
-Open `$outputs.appUrl.value`. Use each selected ID on this new host to open its details route.
+Open `$outputs.appUrl.value`. Confirm that the seeded catalog loads.
 
-Check active filtering and title order. Repeat the [behavior checks](../docs/learner-record.md#behavior-checks) using a new throwaway record.
+Create a **new disposable cloud book** with valid sample values and **Active** selected. Save its actual ID and details path.
 
-Use the cloud URL for request checks. For database inspection, use approved client access to Azure SQL, not the local database.
+Edit that record and confirm the saved values. Check active filtering and title order.
+
+Use the cloud URL for these requests.
 
 Restart the application before deleting that record:
 
@@ -333,11 +303,15 @@ az webapp restart --subscription $outputs.subscriptionId.value --resource-group 
 if ($LASTEXITCODE -ne 0) { throw "Application restart failed." }
 ```
 
-Check its saved values after restart. Finish its inactive/restore and validation checks.
+Check the disposable book's saved values after restart.
 
-Keep the throwaway record until the stored creation-time check below. Do not delete it yet.
+Clear **Active**, save, and confirm it leaves the list while its details route still works. Restore **Active** and check title order.
 
-HTTP 200 alone does not establish database writes or persistence. A date-only details page does not establish timestamp preservation.
+If you want deeper validation, use the [optional advanced checks](../docs/advanced-checks.md) against the cloud app.
+
+Keep the disposable record until any optional timestamp check below is finished. Otherwise, skip to [finish the app checks](#finish-the-app-checks).
+
+HTTP 200 alone doesn't establish database writes or persistence. Confirm the edited values through the app after restart.
 
 For a startup failure, inspect App Service logs. Check identity binding, vault role, secret name, SQL user, and schema separately.
 
@@ -345,11 +319,13 @@ Do not grant broad runtime permissions to hide an administrator setup error.
 
 ### Verify stored values after restart
 
-Reopen only the narrow client rule for stored-value checks. Do not rerun import to hide lost data.
+**Optional advanced check.** This checks the disposable book's stored creation time. It doesn't require a snapshot.
+
+Reopen only the narrow client rule for this check. The client needs approved outbound TCP port 1433.
 
 The pause in this block keeps client access open for SQL Server Object Explorer. Connect to `$outputs.sqlServerFqdn.value` with the approved administrator.
 
-Select `BookCatalogLab`. Use the [read-only creation-time query](../00-introduction/README.md#check-behavior-with-a-separate-record) with your cloud throwaway ID.
+Select `BookCatalogLab`. Use the [read-only creation-time query](../docs/advanced-checks.md#check-stored-creation-time) with your cloud disposable ID.
 
 Record its stored `CreatedDate`, edit that record through the website, and query again. After comparing the values, return to PowerShell and press Enter.
 
@@ -360,8 +336,6 @@ try {
       --name $verifyRule --start-ip-address $clientIp --end-ip-address $clientIp -o none
     if ($LASTEXITCODE -ne 0) { throw "Verification firewall rule creation failed." }
     Read-Host "Check throwaway CreatedDate before and after a web edit. Press Enter when done" | Out-Null
-    dotnet run --project tools\BookCatalog.Data -- verify --input .bookcatalog-lab\books.json --azure-outputs .azure-lab\outputs.json
-    if ($LASTEXITCODE -ne 0) { throw "Post-restart stored values do not match." }
 }
 finally {
     az sql server firewall-rule delete --subscription $outputs.subscriptionId.value --resource-group $group --server $outputs.sqlServerName.value --name $verifyRule -o none
@@ -369,9 +343,13 @@ finally {
 }
 ```
 
-Record the result. Ask the agent to reconcile the cloud plan's progress with your observed evidence and unresolved failures.
+A date-only details page doesn't establish timestamp preservation. Compare the actual stored values and keep an unrun check distinct from a pass.
 
-Delete the throwaway record through the website and confirm its details route returns 404. Keep the carry-forward records unchanged.
+### Finish the app checks
+
+Delete the disposable book through the website. Confirm its details route returns HTTP 404.
+
+Ask the agent to reconcile the cloud plan's progress with your observations and unresolved failures. Optional checks you skipped aren't passing results.
 
 If deployment must be rolled back, follow the reviewed recovery boundary. Restoring application code does not restore database state.
 
@@ -392,8 +370,14 @@ Key Vault can retain recoverable metadata. Do not purge it for this exercise.
 
 If deployment failed before producing outputs, use your recorded `$group` and the Azure portal. Delete only that dedicated group after inspecting its contents and ownership.
 
-Do not delete the legacy database, local target, or source snapshot as cloud cleanup.
+Cloud cleanup removes the dedicated Azure group. It doesn't operate on local files or databases.
 
 Record cleanup as passed only after confirming resource-group removal. Record failed or unrun application checks separately.
+
+<a id="copy-the-same-selected-records"></a>
+<a id="verify-original-records-after-restart"></a>
+## Standalone data-transfer reference
+
+For a separate import exercise, use [data transfer](../docs/data-transfer.md#optional-azure-copy). Import and snapshot verification aren't part of this deployment procedure.
 
 **[Return to Azure planning](README.md)** · **[Course overview](../README.md)**

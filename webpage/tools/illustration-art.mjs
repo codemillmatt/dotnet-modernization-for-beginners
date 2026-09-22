@@ -3,6 +3,7 @@ import { getEra } from "../scripts/eras.js";
 const illustrations = {
   journey: { era: "1960s", height: 840, draw: journey },
   workflow: { era: "1970s", height: 820, draw: workflow },
+  soundcheck: { era: "soundcheck", height: 850, draw: soundcheck },
   investigation: { era: "1980s", height: 830, draw: investigation },
   plan: { era: "1990s", height: 820, draw: plan },
   architecture: { era: "2000s-2010s", height: 860, draw: architecture },
@@ -70,7 +71,7 @@ function journey(p, { text, path, number, heading }, prefix) {
   }).join("");
   return {
     title: "A route to modernization",
-    description: "A travel-poster road follows the required route in order: 00 Baseline, 01 Assess, 02 Plan, 03 Upgrade and check, and 04 Azure plan. A separate dotted side route from Azure plan leads to optional Deploy and clean up. Deployment is not part of the required route and requires cost approval.",
+    description: "A travel-poster road follows six required steps in order: 00 Meet the app, Setup, 01 Assess, 02 Plan, 03 Upgrade and run, and 04 Azure plan. A dotted side route leads from Azure planning to optional deployment and cleanup, which require separate cost approval.",
     defs: `<clipPath id="${prefix}-landscape"><rect x="35" y="171" width="1030" height="492" rx="8"/></clipPath>`,
     art: `<rect x="24" y="24" width="1052" height="792" rx="8" fill="none" stroke="${p.line}" stroke-width="2"/>
       ${heading("A route to modernization", "Keep the working application in view.", { font: "Georgia, Times New Roman, serif", size: 51 })}
@@ -85,14 +86,12 @@ function journey(p, { text, path, number, heading }, prefix) {
         ${path("M191 574l10-14-17 3M355 353l18 1-12 12M578 428l13 15-18-3M803 371l17-9-6 17", { stroke: p.accentText, width: 4 })}
       </g>
       ${text(64, 201, "THE REQUIRED ROUTE", { size: 18, weight: 700, spacing: 2, fill: p.muted })}
-      <g transform="translate(86 547)">
-        <path d="M-10 31L45-8 100 31Z" fill="${p.b}"/>
-        <path d="M4 31h82v55H4Z" fill="${p.surface}" stroke="${p.accent}" stroke-width="4"/>
-        <path d="M38 86V47h22v39" fill="${p.c}" stroke="${p.accent}" stroke-width="3"/>
-        <path d="M16 42h12v17H16Zm54 0h10v17H70Z" fill="${p.a}"/>
-      </g>
+      <circle cx="193" cy="570" r="29" fill="${p.surface}" stroke="${p.accent}" stroke-width="4"/>
+      <path d="M181 558q12-13 24 0v19h-6v-18q-6-7-12 0v18h-6Z" fill="${p.b}"/>
+      ${path("M226 570h24", { stroke: p.accent, width: 3 })}
+      ${text(268, 580, "Setup", { size: 29, weight: 700, font: "Georgia, serif" })}
       ${number(140, 645, "00", p.c, "#102e2a", 27)}
-      ${text(140, 711, "Baseline", { size: 29, weight: 700, anchor: "middle", font: "Georgia, serif" })}
+      ${text(140, 711, "Meet the app", { size: 29, weight: 700, anchor: "middle", font: "Georgia, serif" })}
       ${text(140, 744, "Start here", { size: 20, anchor: "middle", fill: p.muted })}
       <g transform="translate(130 355)">
         <circle r="43" fill="${p.surface}" stroke="${p.accent}" stroke-width="4"/>
@@ -116,8 +115,8 @@ function journey(p, { text, path, number, heading }, prefix) {
         <circle cx="25" cy="87" r="4" fill="${p.surface}"/>
       </g>
       ${number(700, 490, "03", p.c, "#102e2a", 27)}
-      ${text(670, 586, "Upgrade & check", { size: 29, weight: 700, anchor: "middle", font: "Georgia, serif" })}
-      ${text(670, 621, "Keep the evidence", { size: 20, anchor: "middle", fill: p.muted })}
+      ${text(670, 586, "Upgrade & run", { size: 29, weight: 700, anchor: "middle", font: "Georgia, serif" })}
+      ${text(670, 621, "Review the changes", { size: 20, anchor: "middle", fill: p.muted })}
       ${text(924, 281, "Azure plan", { size: 29, weight: 700, anchor: "middle", font: "Georgia, serif" })}
       ${number(935, 320, "04", p.c, "#102e2a", 27)}
       ${path("M961 335C1038 385 1020 482 971 528S931 585 934 625", { stroke: p.accent, width: 5, dash: "1 12", arrow: true })}
@@ -140,7 +139,7 @@ function workflow(p, { text, path, number, lines, heading }) {
   const route = "M210 292C376 186 615 196 790 287S1042 532 804 582 449 703 220 580";
   return {
     title: "Move forward. Look back.",
-    description: "The workflow runs in order: Assess, inspect source and risks; Plan, choose changes and checks; Execute, change the application; Review, you compare evidence. If requirements are missed, the dashed correction route returns from Review to Plan.",
+    description: "The workflow runs in order: Assess, read the report and add a requirement if needed; Plan, request and review the plan; Upgrade, make the approved changes; Review, inspect changes and run the app. If requirements are missed, the dashed correction route returns from Review to Plan.",
     art: `${heading("Move forward. Look back.", "A deliberate workflow, with room to correct course.", { font: "Georgia, Times New Roman, serif", size: 51 })}
       ${path(route, { stroke: p.a, width: 106 })}
       ${path(route, { stroke: p.c, width: 75 })}
@@ -160,7 +159,7 @@ function workflow(p, { text, path, number, lines, heading }) {
       </g>
       ${number(121, 217, "1")}
       ${text(211, 407, "Assess", { size: 34, anchor: "middle", weight: 700, font: "Georgia, serif" })}
-      ${text(211, 440, "Inspect source & risks", { size: 21, anchor: "middle", fill: p.muted })}
+      ${text(211, 440, ["Read report", "& check findings"], { size: 21, anchor: "middle", fill: p.muted })}
       <g transform="translate(788 279)">
         <circle r="95" fill="${p.surface}"/>
         <path d="M-67-54L-22-68 22-51 65-63V57L22 70-22 52-67 66Z" fill="${p.soft}" stroke="${p.accent}" stroke-width="4"/>
@@ -170,7 +169,7 @@ function workflow(p, { text, path, number, lines, heading }) {
       </g>
       ${number(698, 217, "2")}
       ${text(788, 407, "Plan", { size: 34, anchor: "middle", weight: 700, font: "Georgia, serif" })}
-      ${text(788, 437, ["Choose changes", "& checks"], { size: 21, anchor: "middle", fill: p.muted })}
+      ${text(788, 437, ["Request plan", "& review choices"], { size: 21, anchor: "middle", fill: p.muted })}
       <g transform="translate(788 574)">
         <circle r="95" fill="${p.surface}"/>
         <rect x="-66" y="-52" width="130" height="105" rx="9" fill="${p.soft}" stroke="${p.accent}" stroke-width="4"/>
@@ -181,8 +180,8 @@ function workflow(p, { text, path, number, lines, heading }) {
         <path d="M47 9L57-1Q62-6 67-1L75 7Q80 12 75 17L65 27" fill="${p.a}" stroke="${p.accent}" stroke-width="3"/>
       </g>
       ${number(698, 510, "3")}
-      ${text(788, 711, "Execute", { size: 34, anchor: "middle", weight: 700, font: "Georgia, serif" })}
-      ${text(788, 745, "Change the application", { size: 21, anchor: "middle", fill: p.muted })}
+      ${text(788, 711, "Upgrade", { size: 34, anchor: "middle", weight: 700, font: "Georgia, serif" })}
+      ${text(788, 745, "Make approved changes", { size: 21, anchor: "middle", fill: p.muted })}
       <g transform="translate(211 574)">
         <circle r="95" fill="${p.surface}"/>
         <path d="M-70-44H1V59H-70Z" fill="${p.soft}" stroke="${p.accent}" stroke-width="3" transform="rotate(-8)"/>
@@ -194,7 +193,7 @@ function workflow(p, { text, path, number, lines, heading }) {
       </g>
       ${number(121, 510, "4")}
       ${text(211, 711, "Review", { size: 34, anchor: "middle", weight: 700, font: "Georgia, serif" })}
-      ${text(211, 745, "You compare evidence", { size: 21, anchor: "middle", fill: p.muted })}
+      ${text(211, 745, "Review changes & run", { size: 21, anchor: "middle", fill: p.muted })}
       ${path("M307 547C420 550 463 406 562 369S630 326 689 307", { stroke: p.muted, width: 3, dash: "7 9", arrow: "return" })}
       ${text(550, 504, "Requirements missed?", { size: 21, weight: 700, anchor: "middle" })}
       ${text(550, 535, "Return to Plan", { size: 21, anchor: "middle", fill: p.muted })}
@@ -202,11 +201,74 @@ function workflow(p, { text, path, number, lines, heading }) {
   };
 }
 
+function starburst(x, y, radius, fill) {
+  const points = Array.from({ length: 32 }, (_, index) => {
+    const angle = index * Math.PI / 16 - Math.PI / 2;
+    const r = index % 2 ? radius * .64 : radius;
+    return `${(x + Math.cos(angle) * r).toFixed(2)},${(y + Math.sin(angle) * r).toFixed(2)}`;
+  }).join(" ");
+  return `<polygon points="${points}" fill="${fill}"/>`;
+}
+
+export function renderSoundcheckHeader(mode) {
+  if (!["light", "dark"].includes(mode)) throw new Error(`Unknown illustration theme: ${mode}`);
+  const p = getEra("soundcheck")[mode];
+  const { text, path } = primitives(p, `soundcheck-header-${mode}`);
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="520" height="480" viewBox="0 0 520 480" data-era="soundcheck" data-theme="${mode}">
+    <title>Soundcheck concert poster</title>
+    <rect x="12" y="12" width="496" height="456" rx="130" fill="${p.paper}"/>
+    ${path("M-20 295C119 482 139 63 307 80S462 378 553 188", { stroke: p.a, width: 28 })}
+    ${path("M-20 326C119 513 139 94 307 111S462 409 553 219", { stroke: p.b, width: 19 })}
+    ${path("M-20 350C119 537 139 118 307 135S462 433 553 243", { stroke: p.c, width: 12 })}
+    ${starburst(424, 89, 63, p.b)}
+    ${starburst(75, 390, 48, p.a)}
+    <g transform="rotate(-6 260 248)">
+      <path d="M54 212Q260 78 466 202L451 318Q268 387 69 325Z" fill="${p.accent}"/>
+      ${text(260, 236, "SOUND", { size: 87, weight: 700, anchor: "middle", fill: p.accentText, font: "Georgia, Times New Roman, serif", spacing: -6 })}
+      ${text(260, 311, "CHECK", { size: 87, weight: 700, anchor: "middle", fill: p.accentText, font: "Georgia, Times New Roman, serif", spacing: -6 })}
+    </g>
+    <path d="M159 367h239v17a14 14 0 0 0 0 28v17H159v-17a14 14 0 0 0 0-28Z" fill="${p.surface}" stroke="${p.accent}" stroke-width="2"/>
+    ${text(278, 406, "READY TO RUN", { size: 24, weight: 700, anchor: "middle", spacing: 2 })}
+  </svg>`;
+}
+
+function soundcheck(p, { text, path }) {
+  const ticket = (x, number, title, lines) => `
+    <path d="M${x} 346h300v76a20 20 0 0 0 0 40v163H${x}V462a20 20 0 0 0 0-40Z" fill="${p.surface}" stroke="${p.accent}" stroke-width="3"/>
+    ${path(`M${x + 21} 445h258`, { stroke: p.line, width: 2, dash: "5 8" })}
+    ${text(x + 150, 402, number, { size: 24, weight: 700, anchor: "middle", spacing: 3, fill: p.accent })}
+    ${text(x + 150, 499, title, { size: 31, weight: 700, anchor: "middle", font: "Georgia, Times New Roman, serif" })}
+    ${text(x + 150, 550, lines, { size: 23, anchor: "middle", fill: p.muted })}`;
+  return {
+    title: "Soundcheck: get ready",
+    description: "A concert poster with three numbered tickets: 1 Check tools and Copilot access; 2 Open the BookCatalog solution in a learner copy; 3 Run the app, add a sample book, and edit it. Already set up? Go straight to running BookCatalog. Flowing ribbons connect the tickets, but the body instructions remain plain and readable.",
+    art: `<rect x="24" y="24" width="1052" height="802" rx="38" fill="none" stroke="${p.accent}" stroke-width="3"/>
+      <g transform="translate(0 48)">
+      ${path("M-30 312C118 163 218 417 409 310S706 89 868 258 1027 321 1140 259", { stroke: p.a, width: 27 })}
+      ${path("M-30 345C118 196 218 450 409 343S706 122 868 291 1027 354 1140 292", { stroke: p.b, width: 21 })}
+      ${path("M-30 371C118 222 218 476 409 369S706 148 868 317 1027 380 1140 318", { stroke: p.c, width: 14 })}
+      </g>
+      ${text(69, 71, "BEFORE THE FIRST REPORT", { size: 23, weight: 700, spacing: 3, fill: p.muted })}
+      <g transform="rotate(-4 455 174)">
+        ${text(61, 214, "Soundcheck", { size: 105, weight: 700, font: "Georgia, Times New Roman, serif", spacing: -5, fill: p.accent })}
+      </g>
+      ${starburst(948, 153, 82, p.b)}
+      ${starburst(948, 153, 42, p.c)}
+      ${ticket(60, "01", "Check tools", ["Installed tools", "+ Copilot access"])}
+      ${ticket(400, "02", "Open the app", ["BookCatalog solution", "in your learner copy"])}
+      ${ticket(740, "03", "Try the app", ["Run, add a book,", "then edit it"])}
+      ${text(550, 706, "Already set up?", { size: 32, weight: 700, anchor: "middle", font: "Georgia, Times New Roman, serif" })}
+      ${text(550, 751, "Go straight to running BookCatalog.", { size: 26, anchor: "middle" })}
+      ${path("M289 788Q550 818 811 788", { stroke: p.a, width: 10 })}
+      ${starburst(116, 745, 45, p.c)}${starburst(984, 745, 45, p.a)}`
+  };
+}
+
 function investigation(p, { text, path, number, lines, heading }) {
   return {
-    title: "Follow the evidence",
-    description: "An investigation desk follows an evidence trail in five numbered steps: 1 Finding, 2 Inspect source, 3 Affected behavior, 4 Choose action, and 5 Define check. Findings are investigated before an action and a verification check are chosen.",
-    art: `${heading("Follow the evidence", "Turn each finding into a decision you can verify.", { font: "Trebuchet MS, Verdana, sans-serif", size: 53 })}
+    title: "Make the report useful",
+    description: "An assessment desk shows five report-review steps: 1 Open report, 2 Confirm app and target, 3 Read findings, 4 Edit if needed, and 5 Save report. Keep the assessment unchanged if it describes the correct application and target. An added requirement is optional.",
+    art: `${heading("Make the report useful", "Check the findings. Add a requirement only if needed.", { font: "Trebuchet MS, Verdana, sans-serif", size: 53 })}
       <path d="M32 190L1034 165 1061 766 69 790Z" fill="${p.surface}" stroke="${p.line}" stroke-width="2"/>
       <path d="M38 713L155 795H44ZM995 167L1061 257V167Z" fill="${p.a}"/>
       <path d="M974 717l19-17 19 17 19-17 19 17" fill="none" stroke="${p.b}" stroke-width="8"/>
@@ -223,7 +285,7 @@ function investigation(p, { text, path, number, lines, heading }) {
         <path d="M-27-93H26v24H-27Z" fill="${p.a}" opacity=".9"/>
       </g>
       ${number(94, 239, "1")}
-      ${text(176, 425, "Finding", { size: 28, anchor: "middle", weight: 700 })}
+      ${text(176, 425, "Open report", { size: 28, anchor: "middle", weight: 700 })}
       <g transform="translate(536 290) rotate(5)">
         <path d="M-92-65H69V48H-92Z" fill="${p.soft}" stroke="${p.ink}" stroke-width="4"/>
         <path d="M-106 48H82L97 68H-121Z" fill="${p.a}" stroke="${p.ink}" stroke-width="3"/>
@@ -234,7 +296,7 @@ function investigation(p, { text, path, number, lines, heading }) {
         <path d="M43 22h34M60 5v34" stroke="${p.accent}" stroke-width="4"/>
       </g>
       ${number(436, 212, "2")}
-      ${text(535, 425, "Inspect source", { size: 28, anchor: "middle", weight: 700 })}
+      ${text(535, 425, "Confirm app & target", { size: 26, anchor: "middle", weight: 700 })}
       <g transform="translate(897 300) rotate(-4)">
         <rect x="-90" y="-67" width="177" height="128" fill="${p.soft}" stroke="${p.ink}" stroke-width="4"/>
         <path d="M-90-38H87" stroke="${p.ink}" stroke-width="3"/>
@@ -245,7 +307,7 @@ function investigation(p, { text, path, number, lines, heading }) {
         <path d="M67 25l12-8M54 12V-2M79 39l15 2" stroke="${p.b}" stroke-width="4" stroke-linecap="round"/>
       </g>
       ${number(810, 232, "3")}
-      ${text(892, 425, "Affected behavior", { size: 27, anchor: "middle", weight: 700 })}
+      ${text(892, 425, "Read findings", { size: 27, anchor: "middle", weight: 700 })}
       <g transform="translate(757 608) rotate(7)">
         <path d="M-77-77H46L65-56V75H-77Z" fill="${p.paper}" stroke="${p.ink}" stroke-width="3"/>
         <circle cx="-48" cy="-35" r="10" fill="none" stroke="${p.accent}" stroke-width="3"/>
@@ -256,7 +318,7 @@ function investigation(p, { text, path, number, lines, heading }) {
         <path d="M-56 53H38" stroke="${p.a}" stroke-width="10"/>
       </g>
       ${number(656, 537, "4")}
-      ${text(757, 746, "Choose action", { size: 29, anchor: "middle", weight: 700 })}
+      ${text(757, 746, "Edit if needed", { size: 29, anchor: "middle", weight: 700 })}
       <g transform="translate(316 617) rotate(-5)">
         <rect x="-70" y="-86" width="139" height="167" rx="6" fill="${p.soft}" stroke="${p.ink}" stroke-width="3"/>
         <path d="M-29-93h57v24h-57Z" fill="${p.b}" stroke="${p.ink}" stroke-width="3"/>
@@ -265,7 +327,7 @@ function investigation(p, { text, path, number, lines, heading }) {
         <path d="M78-29L94-13 78 3 94 19" fill="none" stroke="${p.a}" stroke-width="7"/>
       </g>
       ${number(221, 543, "5")}
-      ${text(316, 746, "Define check", { size: 29, anchor: "middle", weight: 700 })}
+      ${text(316, 746, "Save report", { size: 29, anchor: "middle", weight: 700 })}
       <path d="M126 521l-27 13 26 14-25 14" fill="none" stroke="${p.b}" stroke-width="7"/>
       <path d="M465 746l15-27 15 27Z" fill="${p.c}"/>
       <circle cx="556" cy="567" r="19" fill="none" stroke="${p.a}" stroke-width="7"/>`
@@ -282,38 +344,38 @@ function plan(p, { text, path, heading }) {
     ${text(x + 23, y + 38, caption, { size: 23, weight: 700, font: "Verdana, Tahoma, sans-serif", fill: p.accentText })}
     ${contents}`;
   return {
-    title: "Make each change testable",
-    description: "A desktop planning scene links Requirement: Preserve stored values, to Decision: Choose the data approach, to Check: Compare selected records. The stage guidance is Run one group at a time. These are planned actions, not completed checks or evidence of success.",
-    art: `${heading("Make each change testable", "A requirement, a decision, and a check you can run.", { font: "Verdana, Tahoma, sans-serif", size: 43 })}
+    title: "Shape the upgrade plan",
+    description: "A desktop planning scene links 1 Request plan: Ask the agent, to 2 Review choices: In-place and EF Core, to 3 Check plan: Read tasks and checks. The stage guidance is Review before execution. Building and running the app happens in Chapter 03, not during planning.",
+    art: `${heading("Shape the upgrade plan", "Review the options. Make the next action clear.", { font: "Verdana, Tahoma, sans-serif", size: 43 })}
       <rect x="35" y="177" width="1030" height="606" fill="${p.a}" opacity=".13"/>
       <path d="M35 783V177H1065" fill="none" stroke="${p.line}" stroke-width="3"/>
       <path d="M1065 177V783H35" fill="none" stroke="${p.surface}" stroke-width="3"/>
-      ${window(64, 219, 436, 213, "01  Requirement", `
+      ${window(64, 219, 436, 213, "01  Request plan", `
         <path d="M96 291h57l23 23v88H96Z" fill="${p.surface}" stroke="${p.accent}" stroke-width="3"/>
         <path d="M153 291v23h23" fill="${p.c}" stroke="${p.accent}" stroke-width="3"/>
         <path d="M112 339h47M112 356h37M112 373h45" stroke="${p.line}" stroke-width="4"/>
-        ${text(202, 333, ["Preserve", "stored values"], { size: 29, font: "Verdana, Tahoma, sans-serif" })}
+        ${text(202, 333, ["Ask the", "agent"], { size: 29, font: "Verdana, Tahoma, sans-serif" })}
       `)}
       ${path("M512 326H609", { width: 6, arrow: true })}
-      ${window(625, 219, 409, 213, "02  Decision", `
+      ${window(625, 219, 409, 213, "02  Review choices", `
         <path d="M652 315v-24h40l14 14h45v83H652Z" fill="${p.b}" stroke="${p.accent}" stroke-width="3"/>
         <path d="M652 323h111l-13 65h-98Z" fill="${p.c}" stroke="${p.accent}" stroke-width="3"/>
-        ${text(780, 319, ["Choose the", "data", "approach"], { size: 27, font: "Verdana, Tahoma, sans-serif" })}
+        ${text(780, 315, ["In-place", "and", "EF Core"], { size: 25, font: "Verdana, Tahoma, sans-serif" })}
       `)}
       ${path("M835 445V468H734V492", { width: 6, arrow: true })}
-      ${window(281, 504, 572, 184, "03  Check", `
+      ${window(281, 504, 572, 184, "03  Check plan", `
         <path d="M311 573h58v80h-58Z" fill="${p.surface}" stroke="${p.accent}" stroke-width="3"/>
         <path d="M399 573h58v80h-58Z" fill="${p.surface}" stroke="${p.accent}" stroke-width="3"/>
         <path d="M323 593h33M323 610h33M323 627h24M410 593h33M410 610h33M410 627h24" stroke="${p.line}" stroke-width="4"/>
         <path d="M378 604h12M378 618h12" stroke="${p.accent}" stroke-width="4"/>
-        ${text(486, 603, ["Compare", "selected records"], { size: 28, font: "Verdana, Tahoma, sans-serif" })}
+        ${text(486, 603, ["Read tasks", "and checks"], { size: 28, font: "Verdana, Tahoma, sans-serif" })}
       `)}
       <path d="M79 590h139M79 604h95M903 569h99M903 583h66" stroke="${p.line}" stroke-width="2" opacity=".5"/>
       <rect x="48" y="714" width="1004" height="56" fill="${p.soft}" stroke="${p.line}" stroke-width="2"/>
       <path d="M51 767v-50h998" fill="none" stroke="${p.surface}" stroke-width="3"/>
       ${text(75, 749, "STAGE", { size: 19, weight: 700, fill: p.muted, font: "Verdana, sans-serif", spacing: 1 })}
       <path d="M173 725v34" stroke="${p.line}" stroke-width="2"/>
-      ${text(199, 751, "Run one group at a time", { size: 27, font: "Verdana, Tahoma, sans-serif" })}
+      ${text(199, 751, "Review before execution", { size: 27, font: "Verdana, Tahoma, sans-serif" })}
       <g fill="${p.accent}" opacity=".65"><rect x="974" y="733" width="8" height="18"/><rect x="989" y="727" width="8" height="24"/><rect x="1004" y="721" width="8" height="30"/></g>`
   };
 }
@@ -396,7 +458,7 @@ function azure(p, { text, path, heading, key }, prefix) {
   </g>`;
   return {
     title: "A proposed home in Azure",
-    description: "Proposed target, not an existing deployment. Disposable sample data only. A public sample user sends HTTPS requests to App Service running BookCatalog. The application accesses Key Vault for its connection setting and Azure SQL for Books. Its runtime managed identity authorizes access to both Key Vault and SQL. Separately, an approved administrator performs one-time schema setup and a selected-record copy into Azure SQL. Solid arrows are runtime requests or access; the dashed arrow is one-time administrator setup, not runtime identity.",
+    description: "Proposed target, not an existing deployment. Demo data only. A public sample user sends HTTPS requests to App Service running BookCatalog. The application accesses Key Vault for its connection setting and Azure SQL for Books. Its runtime managed identity authorizes access to both Key Vault and SQL. Separately, an approved administrator creates the schema from the EF Core model and adds demo seed data. Solid arrows are runtime requests or access; the dashed arrow is administrator setup, not runtime identity.",
     defs: `<linearGradient id="${prefix}-sculpture" x1="0" y1="0" x2="1" y2="1"><stop stop-color="${p.surface}"/><stop offset="1" stop-color="${p.soft}"/></linearGradient>`,
     art: `${heading("A proposed home in Azure", "Disposable sample data only", { size: 49 })}
       ${text(63, 185, "PROPOSED TARGET", { size: 18, spacing: 2, weight: 700, fill: p.muted })}
@@ -458,7 +520,7 @@ function azure(p, { text, path, heading, key }, prefix) {
       ${text(76, 745, ["Approved", "administrator"], { size: 24 })}
       ${text(467, 696, "ONE-TIME SETUP", { size: 18, weight: 700, spacing: 1, fill: p.muted })}
       ${path("M391 759H1061V628H1024", { stroke: p.muted, width: 3, dash: "8 9", arrow: "return" })}
-      ${text(692, 795, "Schema + selected-record copy", { size: 22, anchor: "middle", fill: p.muted })}
+      ${text(692, 795, "Schema and demo seed data", { size: 22, anchor: "middle", fill: p.muted })}
       ${path("M65 857h53", { width: 4, arrow: true })}
       ${text(134, 864, "Runtime requests / access", { size: 21 })}
       ${path("M628 857h53", { stroke: p.muted, width: 3, dash: "8 8", arrow: "return" })}

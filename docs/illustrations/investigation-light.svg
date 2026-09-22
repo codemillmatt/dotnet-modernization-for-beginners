@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1100" height="830" viewBox="0 0 1100 830" role="img" aria-labelledby="illustration-investigation-light-title illustration-investigation-light-desc" data-illustration="investigation" data-era="1980s" data-theme="light">
-  <title id="illustration-investigation-light-title">Follow the evidence</title>
-  <desc id="illustration-investigation-light-desc">An investigation desk follows an evidence trail in five numbered steps: 1 Finding, 2 Inspect source, 3 Affected behavior, 4 Choose action, and 5 Define check. Findings are investigated before an action and a verification check are chosen.</desc>
+  <title id="illustration-investigation-light-title">Make the report useful</title>
+  <desc id="illustration-investigation-light-desc">An assessment desk shows five report-review steps: 1 Open report, 2 Confirm app and target, 3 Read findings, 4 Edit if needed, and 5 Save report. Keep the assessment unchanged if it describes the correct application and target. An added requirement is optional.</desc>
   <defs>
     <marker id="illustration-investigation-light-arrow" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="18" markerHeight="18" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M1 1L11 6 1 11Z" fill="#742393"/></marker>
     <marker id="illustration-investigation-light-return" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="16" markerHeight="16" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M1 1L11 6 1 11" fill="none" stroke="#5f4b75" stroke-width="2"/></marker>
@@ -8,7 +8,7 @@
 
   </defs>
   <rect width="1100" height="830" fill="#e6e0fa"/>
-  <text x="60" y="89" fill="#271443" font-size="53" font-weight="700" text-anchor="start" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="60" dy="0">Follow the evidence</tspan></text><text x="63" y="132" fill="#5f4b75" font-size="23" font-weight="400" text-anchor="start" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="63" dy="0">Turn each finding into a decision you can verify.</tspan></text>
+  <text x="60" y="89" fill="#271443" font-size="53" font-weight="700" text-anchor="start" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="60" dy="0">Make the report useful</tspan></text><text x="63" y="132" fill="#5f4b75" font-size="23" font-weight="400" text-anchor="start" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="63" dy="0">Check the findings. Add a requirement only if needed.</tspan></text>
       <path d="M32 190L1034 165 1061 766 69 790Z" fill="#fffcff" stroke="#786391" stroke-width="2"/>
       <path d="M38 713L155 795H44ZM995 167L1061 257V167Z" fill="#37d5dd"/>
       <path d="M974 717l19-17 19 17 19-17 19 17" fill="none" stroke="#ee4d9a" stroke-width="8"/>
@@ -25,7 +25,7 @@
         <path d="M-27-93H26v24H-27Z" fill="#37d5dd" opacity=".9"/>
       </g>
       <circle cx="94" cy="239" r="23" fill="#742393" stroke="#fffcff" stroke-width="4"/><text x="94" y="247" fill="#ffffff" font-size="24" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="94" dy="0">1</tspan></text>
-      <text x="176" y="425" fill="#271443" font-size="28" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="176" dy="0">Finding</tspan></text>
+      <text x="176" y="425" fill="#271443" font-size="28" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="176" dy="0">Open report</tspan></text>
       <g transform="translate(536 290) rotate(5)">
         <path d="M-92-65H69V48H-92Z" fill="#f1e8fa" stroke="#271443" stroke-width="4"/>
         <path d="M-106 48H82L97 68H-121Z" fill="#37d5dd" stroke="#271443" stroke-width="3"/>
@@ -36,7 +36,7 @@
         <path d="M43 22h34M60 5v34" stroke="#742393" stroke-width="4"/>
       </g>
       <circle cx="436" cy="212" r="23" fill="#742393" stroke="#fffcff" stroke-width="4"/><text x="436" y="220" fill="#ffffff" font-size="24" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="436" dy="0">2</tspan></text>
-      <text x="535" y="425" fill="#271443" font-size="28" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="535" dy="0">Inspect source</tspan></text>
+      <text x="535" y="425" fill="#271443" font-size="26" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="535" dy="0">Confirm app &amp; target</tspan></text>
       <g transform="translate(897 300) rotate(-4)">
         <rect x="-90" y="-67" width="177" height="128" fill="#f1e8fa" stroke="#271443" stroke-width="4"/>
         <path d="M-90-38H87" stroke="#271443" stroke-width="3"/>
@@ -47,7 +47,7 @@
         <path d="M67 25l12-8M54 12V-2M79 39l15 2" stroke="#ee4d9a" stroke-width="4" stroke-linecap="round"/>
       </g>
       <circle cx="810" cy="232" r="23" fill="#742393" stroke="#fffcff" stroke-width="4"/><text x="810" y="240" fill="#ffffff" font-size="24" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="810" dy="0">3</tspan></text>
-      <text x="892" y="425" fill="#271443" font-size="27" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="892" dy="0">Affected behavior</tspan></text>
+      <text x="892" y="425" fill="#271443" font-size="27" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="892" dy="0">Read findings</tspan></text>
       <g transform="translate(757 608) rotate(7)">
         <path d="M-77-77H46L65-56V75H-77Z" fill="#e6e0fa" stroke="#271443" stroke-width="3"/>
         <circle cx="-48" cy="-35" r="10" fill="none" stroke="#742393" stroke-width="3"/>
@@ -58,7 +58,7 @@
         <path d="M-56 53H38" stroke="#37d5dd" stroke-width="10"/>
       </g>
       <circle cx="656" cy="537" r="23" fill="#742393" stroke="#fffcff" stroke-width="4"/><text x="656" y="545" fill="#ffffff" font-size="24" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="656" dy="0">4</tspan></text>
-      <text x="757" y="746" fill="#271443" font-size="29" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="757" dy="0">Choose action</tspan></text>
+      <text x="757" y="746" fill="#271443" font-size="29" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="757" dy="0">Edit if needed</tspan></text>
       <g transform="translate(316 617) rotate(-5)">
         <rect x="-70" y="-86" width="139" height="167" rx="6" fill="#f1e8fa" stroke="#271443" stroke-width="3"/>
         <path d="M-29-93h57v24h-57Z" fill="#ee4d9a" stroke="#271443" stroke-width="3"/>
@@ -67,7 +67,7 @@
         <path d="M78-29L94-13 78 3 94 19" fill="none" stroke="#37d5dd" stroke-width="7"/>
       </g>
       <circle cx="221" cy="543" r="23" fill="#742393" stroke="#fffcff" stroke-width="4"/><text x="221" y="551" fill="#ffffff" font-size="24" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="221" dy="0">5</tspan></text>
-      <text x="316" y="746" fill="#271443" font-size="29" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="316" dy="0">Define check</tspan></text>
+      <text x="316" y="746" fill="#271443" font-size="29" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="316" dy="0">Save report</tspan></text>
       <path d="M126 521l-27 13 26 14-25 14" fill="none" stroke="#ee4d9a" stroke-width="7"/>
       <path d="M465 746l15-27 15 27Z" fill="#ffcc46"/>
       <circle cx="556" cy="567" r="19" fill="none" stroke="#37d5dd" stroke-width="7"/>

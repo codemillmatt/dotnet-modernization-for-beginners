@@ -18,7 +18,7 @@ for (const chapter of chapters) {
       await expect(page.locator("html")).toHaveAttribute("data-theme", mode);
       expect(await page.locator("html").evaluate(element => element.style.getPropertyValue("--paper")))
         .toBe(eraPalette(chapter.era, mode).paper);
-      const art = page.locator(chapter.slug === "overview" ? ".hero-art" : ".era-art");
+      const art = page.locator(chapter.slug === "overview" ? ".hero-art" : ".era-art:visible");
       await expect(art).toBeVisible();
       await expect.poll(() => art.evaluate(image => image.complete && image.naturalWidth > 0)).toBeTruthy();
       const box = await art.boundingBox();
@@ -53,7 +53,7 @@ for (const chapter of chapters) {
       });
       expect(badContrast).toEqual([]);
       if (chapter.slug !== "overview") {
-        const button = page.getByRole("button", { name: "I completed the checks" });
+        const button = page.getByRole("button", { name: "Mark step complete" });
         await button.focus();
         expect(await button.evaluate(element => getComputedStyle(element).outlineStyle)).not.toBe("none");
         await button.hover();
@@ -97,8 +97,26 @@ test("era follows history and Resume without changing color mode", async ({ page
   await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
 });
 
+test("soundcheck has themed poster headers, readable instructions, and no decade badge", async ({ page }) => {
+  const chapter = chapters.find(item => item.slug === "prerequisites");
+  await ready(page, chapter);
+  await expect(page.locator(".era-art:visible")).toHaveAttribute("src", /era-soundcheck-light\.svg$/);
+  await expect(page.locator("#era-label")).toHaveCount(0);
+  expect(await page.locator("#article p").first().evaluate(element => getComputedStyle(element).fontFamily))
+    .toContain("Trebuchet");
+  expect(await page.locator(".era-intro h1").evaluate(element => getComputedStyle(element).fontStyle)).toBe("italic");
+  await page.getByRole("button", { name: "Use dark theme" }).click();
+  await expect(page.locator(".era-art:visible")).toHaveAttribute("src", /era-soundcheck-dark\.svg$/);
+  await expect(page.locator(".illustration-dark img")).toHaveAttribute("src", /soundcheck-dark\.svg$/);
+  await page.locator(".brand").click();
+  await page.locator("#resume-link").click();
+  await expect(page.locator("html")).toHaveAttribute("data-era", "soundcheck");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+});
+
 test("references and unknown routes use the quiet modern era", async ({ page }) => {
   await ready(page, chapters[2]);
+  await page.locator(".optional-references summary").click();
   await page.locator(".reference-link").first().click();
   await expect(page.locator("html")).toHaveAttribute("data-era", "2020s");
   await expect(page.locator(".era-intro")).toHaveCount(0);

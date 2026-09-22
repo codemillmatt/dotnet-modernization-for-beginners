@@ -1,6 +1,7 @@
 # Optional introductory assessment sample
 
-`SimpleLegacyApp` is a small SDK-style .NET Framework 4.8 console project. It is separate from the classic BookCatalog web project used in the main workshop.
+`SimpleLegacyApp` is a small SDK-style .NET Framework 4.8 console project.
+It isn't the BookCatalog web project used in the required course.
 
 | File | What to inspect |
 | --- | --- |
@@ -8,8 +9,20 @@
 | `SimpleLegacyApp/Serialization.cs` | `BinaryFormatter` serialization and deserialization |
 | `SimpleLegacyApp/App.config` | XML application settings |
 
-These uses help you practice reading a compatibility report. Do not assign blocker/warning/informational priority solely from the API name or expect a fixed report category.
+These APIs give the agent examples to assess.
+Read the explanation for each finding. The API name alone doesn't tell you its priority.
 
-Use a separate clone for this warm-up so its scenario state cannot be mistaken for the BookCatalog assessment. Open `SimpleLegacyApp.sln` in Visual Studio on Windows, select **Modernize**, and follow [the optional assessment exercise](../README.md#optional-your-first-assessment). Stop after the report.
+Open `00-introduction\code\SimpleLegacyApp.sln` from the repository root in Visual Studio on Windows.
+In Copilot Chat, send:
+
+```text
+@Modernize Assess SimpleLegacyApp for .NET 10.
+Create a scenario for this console solution, separate from any BookCatalog scenario.
+Do not change application code or create Git commits.
+Stop after the assessment and show its path.
+```
+
+Compare the report with the [historical console assessment](../../examples/assessments/README.md).
+Return to `shared-legacy-app\BookCatalog.sln` before continuing the required course.
 
 The deliberately legacy serialization code is for local sample data only. Do not deserialize an untrusted payload.

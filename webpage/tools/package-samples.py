@@ -28,9 +28,9 @@ with ZipFile(destination, "w", ZIP_DEFLATED) as archive:
                         if (resolved.relative_to(root).as_posix() != "04-cloud/deployment.md"
                                 and resolved.parts[len(root.parts):]
                                 and resolved.parts[len(root.parts):][0] in (
-                                "00-introduction", "01-assessment", "02-planning",
+                                "00-introduction", "prerequisites", "01-assessment", "02-planning",
                                 "03-upgrade-execution", "04-cloud")):
-                            target = ("https://github.com/codemillmatt/dotnet-modernization-for-beginners/blob/main/"
+                            target = ("https://github.com/microsoft/dotnet-modernization-for-beginners/blob/main/"
                                       + resolved.relative_to(root).as_posix()
                                       + (("#" + anchor) if anchor else ""))
                         return f"{label}({target})"

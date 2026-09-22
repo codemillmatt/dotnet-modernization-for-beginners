@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Upgrade BookCatalog with GitHub Copilot. Preserve selected records, check the result, and plan an Azure migration without deploying.">
+  <meta name="description" content="Use GitHub Copilot in Visual Studio to assess BookCatalog, shape its upgrade plan, run the .NET 10 app, and plan an Azure migration.">
   <meta name="theme-color" content="#FFF2D5">
   <title>.NET Modernization for Beginners</title>
   <link rel="icon" href="assets/sun.svg" type="image/svg+xml">
@@ -23,7 +23,7 @@
     <div class="header-actions">
       <button class="mobile-only" id="chapters-toggle" type="button" aria-controls="course-nav" aria-expanded="false">Chapters</button>
       <button class="outline-toggle" id="outline-toggle" type="button" aria-controls="page-outline" aria-expanded="false">On this page</button>
-      <a class="source-link" href="https://github.com/codemillmatt/dotnet-modernization-for-beginners">Source</a>
+      <a class="source-link" href="https://github.com/microsoft/dotnet-modernization-for-beginners">Source</a>
       <button id="theme-toggle" type="button" aria-label="Use dark theme">Dark theme</button>
     </div>
   </header>
@@ -37,11 +37,17 @@
         <p class="eyebrow">Your progress</p>
         <p id="course-progress"></p>
         <div class="progress-track" aria-hidden="true"><span id="completion-bar"></span></div>
-        <p class="progress-note">You mark chapters after you complete their checks.</p>
+        <p class="progress-note">You mark each step when you're ready to continue.</p>
         <a id="resume-link" class="resume-link" href="#/00-introduction">Start the course</a>
         <button class="text-button" id="reset-progress" type="button">Reset progress</button>
       </div>
-      <a class="reference-link" href="#/reference?path=docs%2Flearner-record.md">Learner record <span aria-hidden="true">↗</span></a>
+      <details class="optional-references">
+        <summary>Optional practice</summary>
+        <a class="reference-link" href="#/reference?path=docs%2Fdata-transfer.md">Copy selected records</a>
+        <a class="reference-link" href="#/reference?path=docs%2Fadvanced-checks.md">Application checks</a>
+        <a class="reference-link" href="#/reference?path=docs%2Fauthor-filter.md">Author-filter challenge</a>
+        <a class="reference-link" href="#/reference?path=docs%2Flearner-record.md">Learner record</a>
+      </details>
       <a class="reference-link" href="downloads/samples.zip">Download reference samples <span aria-hidden="true">↓</span></a>
     </aside>
     <main id="main-content" tabindex="-1">

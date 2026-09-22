@@ -8,7 +8,7 @@ You can run this sample without completing the course. To modernize it, start wi
 
 ## Windows quickstart
 
-Check the [readiness instructions](../00-introduction/README.md#check-before-installing). You need Visual Studio web tools, .NET Framework 4.8 targeting tools, IIS Express, and `MSSQLLocalDB`.
+Check the [readiness instructions](../prerequisites/README.md#check-before-installing). You need Visual Studio web tools, .NET Framework 4.8 targeting tools, IIS Express, and `MSSQLLocalDB`.
 
 > **Sample data only.** The EF6 `DropCreateDatabaseIfModelChanges` initializer can replace its database after model changes.
 >
@@ -27,23 +27,35 @@ Application startup creates `App_Data` before EF initialization. Do not precreat
 
 A fresh database contains six active books and one inactive Matrix record. Existing sample data can change those counts.
 
-Check creation, editing, inactive filtering, and persistence with the [learner behavior checklist](../docs/learner-record.md#behavior-checks).
+Try adding an active sample book and editing it. Select **Active** explicitly when creating it.
+
+The [setup app tour](../prerequisites/README.md#run-bookcatalog) covers ordinary use. The [detailed behavior checklist](../docs/learner-record.md#behavior-checks) is optional.
 
 The connection uses integrated authentication and an MDF under the application's data directory. It does not contain a SQL password.
 
-If startup fails, inspect the LocalDB instance and configuration before changing anything. Do not delete an existing database to force a fresh start.
+If startup fails, inspect the first error and check that `MSSQLLocalDB` is available. Don't create an empty MDF to fix an attachment error.
 
 ## Working through the course
 
-Use your own branch. Chapter 00 establishes a baseline and two learner-created carry-forward records.
+Start with [the introduction](../00-introduction/README.md), then [Setup](../prerequisites/README.md). Setup prepares a learner copy and finishes with an app tour.
 
-Chapters 01 and 02 assess requirements and revise a plan. Export the selected records in Chapter 02, while the original `Web.config` still exists.
+Chapters 01 and 02 use the modernization agent through Copilot Chat in Visual Studio to assess the app and generate its upgrade plan.
 
-Chapter 03 upgrades **your copy** in place. It uses a separate `BookCatalogModernizedLab` database and an explicit selected-record copy.
+For modernization, use a stable .NET SDK 10 or later. The upgraded app still targets .NET 10, even with a later SDK.
 
-Changing the framework or recreating seed data does not transfer those records. Keep the legacy database unchanged.
+Keep the .NET 10 runtime component installed through Visual Studio Installer's **Modify > Individual components** page.
 
-Chapter 04 requires an Azure assessment and plan. [Deployment](../04-cloud/deployment.md) needs separate access and cost approval and remains optional.
+Chapter 03 upgrades **your copy** in place to ASP.NET Core MVC on .NET 10 with EF Core.
+
+The plan replaces the old web host. It doesn't keep a side-by-side host, shared schema, YARP, or System.Web adapters.
+
+The data is disposable. Let EF Core rebuild the schema and seed `BookCatalogModernizedLab`, recreating the demo database when needed.
+
+Don't reset it on every startup. Add a book, edit it, and restart the upgraded app to confirm that the saved edit remains.
+
+Existing records don't need to survive modernization. [Data transfer](../docs/data-transfer.md) is a standalone reference, not a course prerequisite.
+
+Chapter 04 finishes with an Azure assessment and plan. [Deployment](../04-cloud/deployment.md) needs separate access and cost approval and remains optional.
 
 For comparison, inspect the original Git commit or another clone. Do not reset over your work.
 

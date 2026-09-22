@@ -1,6 +1,6 @@
 import { chapters } from "./chapters.js";
 
-const lessonIds = chapters.filter(chapter => chapter.slug !== "overview").map(chapter => chapter.slug);
+const lessonIds = chapters.filter(chapter => chapter.core).map(chapter => chapter.slug);
 const validIds = values => Array.isArray(values) ? [...new Set(values.filter(value => lessonIds.includes(value)))] : [];
 const revisionFor = slug => chapters.find(chapter => chapter.slug === slug)?.exerciseRevision;
 const fresh = () => ({

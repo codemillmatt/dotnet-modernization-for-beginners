@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1100" height="840" viewBox="0 0 1100 840" role="img" aria-labelledby="illustration-journey-light-title illustration-journey-light-desc" data-illustration="journey" data-era="1960s" data-theme="light">
   <title id="illustration-journey-light-title">A route to modernization</title>
-  <desc id="illustration-journey-light-desc">A travel-poster road follows the required route in order: 00 Baseline, 01 Assess, 02 Plan, 03 Upgrade and check, and 04 Azure plan. A separate dotted side route from Azure plan leads to optional Deploy and clean up. Deployment is not part of the required route and requires cost approval.</desc>
+  <desc id="illustration-journey-light-desc">A travel-poster road follows six required steps in order: 00 Meet the app, Setup, 01 Assess, 02 Plan, 03 Upgrade and run, and 04 Azure plan. A dotted side route leads from Azure planning to optional deployment and cleanup, which require separate cost approval.</desc>
   <defs>
     <marker id="illustration-journey-light-arrow" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="18" markerHeight="18" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M1 1L11 6 1 11Z" fill="#14675f"/></marker>
     <marker id="illustration-journey-light-return" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="16" markerHeight="16" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M1 1L11 6 1 11" fill="none" stroke="#405952" stroke-width="2"/></marker>
@@ -21,14 +21,12 @@
         <path d="M191 574l10-14-17 3M355 353l18 1-12 12M578 428l13 15-18-3M803 371l17-9-6 17" fill="none" stroke="#fff2d5" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
       </g>
       <text x="64" y="201" fill="#405952" font-size="18" font-weight="700" text-anchor="start" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="2"><tspan x="64" dy="0">THE REQUIRED ROUTE</tspan></text>
-      <g transform="translate(86 547)">
-        <path d="M-10 31L45-8 100 31Z" fill="#ef6b3b"/>
-        <path d="M4 31h82v55H4Z" fill="#fffbf2" stroke="#14675f" stroke-width="4"/>
-        <path d="M38 86V47h22v39" fill="#f0c24d" stroke="#14675f" stroke-width="3"/>
-        <path d="M16 42h12v17H16Zm54 0h10v17H70Z" fill="#40b7a5"/>
-      </g>
+      <circle cx="193" cy="570" r="29" fill="#fffbf2" stroke="#14675f" stroke-width="4"/>
+      <path d="M181 558q12-13 24 0v19h-6v-18q-6-7-12 0v18h-6Z" fill="#ef6b3b"/>
+      <path d="M226 570h24" fill="none" stroke="#14675f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+      <text x="268" y="580" fill="#102e2a" font-size="29" font-weight="700" text-anchor="start" font-family="Georgia, serif" letter-spacing="0"><tspan x="268" dy="0">Setup</tspan></text>
       <circle cx="140" cy="645" r="27" fill="#f0c24d" stroke="#fffbf2" stroke-width="4"/><text x="140" y="653" fill="#102e2a" font-size="24" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="140" dy="0">00</tspan></text>
-      <text x="140" y="711" fill="#102e2a" font-size="29" font-weight="700" text-anchor="middle" font-family="Georgia, serif" letter-spacing="0"><tspan x="140" dy="0">Baseline</tspan></text>
+      <text x="140" y="711" fill="#102e2a" font-size="29" font-weight="700" text-anchor="middle" font-family="Georgia, serif" letter-spacing="0"><tspan x="140" dy="0">Meet the app</tspan></text>
       <text x="140" y="744" fill="#405952" font-size="20" font-weight="400" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="140" dy="0">Start here</tspan></text>
       <g transform="translate(130 355)">
         <circle r="43" fill="#fffbf2" stroke="#14675f" stroke-width="4"/>
@@ -52,8 +50,8 @@
         <circle cx="25" cy="87" r="4" fill="#fffbf2"/>
       </g>
       <circle cx="700" cy="490" r="27" fill="#f0c24d" stroke="#fffbf2" stroke-width="4"/><text x="700" y="498" fill="#102e2a" font-size="24" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="700" dy="0">03</tspan></text>
-      <text x="670" y="586" fill="#102e2a" font-size="29" font-weight="700" text-anchor="middle" font-family="Georgia, serif" letter-spacing="0"><tspan x="670" dy="0">Upgrade &amp; check</tspan></text>
-      <text x="670" y="621" fill="#405952" font-size="20" font-weight="400" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="670" dy="0">Keep the evidence</tspan></text>
+      <text x="670" y="586" fill="#102e2a" font-size="29" font-weight="700" text-anchor="middle" font-family="Georgia, serif" letter-spacing="0"><tspan x="670" dy="0">Upgrade &amp; run</tspan></text>
+      <text x="670" y="621" fill="#405952" font-size="20" font-weight="400" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="670" dy="0">Review the changes</tspan></text>
       <text x="924" y="281" fill="#102e2a" font-size="29" font-weight="700" text-anchor="middle" font-family="Georgia, serif" letter-spacing="0"><tspan x="924" dy="0">Azure plan</tspan></text>
       <circle cx="935" cy="320" r="27" fill="#f0c24d" stroke="#fffbf2" stroke-width="4"/><text x="935" y="328" fill="#102e2a" font-size="24" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="935" dy="0">04</tspan></text>
       <path d="M961 335C1038 385 1020 482 971 528S931 585 934 625" fill="none" stroke="#14675f" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity="1" stroke-dasharray="1 12" marker-end="url(#illustration-journey-light-arrow)"/>

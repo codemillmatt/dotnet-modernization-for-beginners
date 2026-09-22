@@ -13,9 +13,14 @@ spec.loader.exec_module(linter)
 paths = [root / "README.md", root / "plan.md", root / "progress.md"]
 paths += sorted(root.glob("[0-9][0-9]-*/README.md"))
 paths += [root / name for name in [
-    "00-introduction/code/README.md", "shared-legacy-app/README.md", "webpage/README.md",
+    "00-introduction/code/README.md", "prerequisites/README.md", "shared-legacy-app/README.md", "webpage/README.md",
     "examples/modernized/README.md", "examples/azure/README.md", "examples/assessments/README.md",
+    "examples/assessments/bookcatalog/README.md",
+    "examples/assessments/bookcatalog/assessment-excerpts.md",
+    "examples/assessments/bookcatalog/planning-excerpts.md",
+    "examples/assessments/bookcatalog/execution-excerpts.md",
     "docs/validation.md", "docs/writing.md", "docs/learner-record.md",
+    "docs/data-transfer.md", "docs/advanced-checks.md", "docs/author-filter.md",
     "docs/instructor-guide.md", "04-cloud/deployment.md", "tools/BookCatalog.Data/README.md"
 ]]
 failures = []

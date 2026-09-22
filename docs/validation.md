@@ -1,16 +1,21 @@
 # Validation and evidence
 
-This page is for maintainers. Learners should use the compact [learner record](learner-record.md).
+This page is for maintainers. The [learner record](learner-record.md) is an optional detailed workbook, not a core-course prerequisite.
 
 Keep planned checks separate from actual results. Record the command, environment, date, and limitations before claiming a result.
 
 ## Behavior contract
 
-The [learner checklist](learner-record.md#behavior-checks) owns the reusable behavior cases. Keep those checks against the original and actual upgraded applications.
+The [optional behavior checklist](learner-record.md#behavior-checks) owns the reusable detailed cases. Maintainers should check the original and actual upgraded applications.
 
 Preserve active filtering, title order, validation, antiforgery protection, missing-record responses, persistence, and creation-date behavior.
 
-Use two stable learner-created records for data comparison. One is active, and one is inactive.
+The revised core path uses one in-place ASP.NET Core MVC application on .NET 10 with EF Core.
+EF Core creates and seeds a separate demo database. Core completion doesn't require preservation of the original records or a shared schema.
+Keep the original database outside that work.
+Check that later launches retain a newly saved edit rather than recreate the demo data each time.
+
+For the optional data-transfer lab, use two stable learner-created records for comparison. One is active, and one is inactive.
 
 Use a separate throwaway record for edits, validation experiments, inactive/restore actions, and deletion.
 
@@ -19,6 +24,9 @@ Preserve the selected IDs, all field values, SQL nulls, `IsActive`, and full sto
 `Book` and the legacy create action use local `DateTime.Now`. Do not silently change time semantics during the upgrade.
 
 Fresh seed counts apply only before learner additions. Reseeding is not selected-record migration.
+
+Core completion requires the learner's upgraded app to run and save an edit that remains after restart.
+It doesn't require the optional record-copy lab, server-validation exercises, workbook, or author-filter challenge.
 
 ## What the reference tests prove
 
@@ -154,9 +162,227 @@ The helper stays outside the learner's solution and upgrade scope.
 | Windows learner walkthrough | Behavior in the exercised environment | Not every Visual Studio version or machine |
 | Representative learner pilot | Observed decisions and understanding | Not established by an automated build |
 
+## Supplied upgrade evidence: September 21, 2026
+
+This is a review of user-supplied artifacts, not a new application or site validation run.
+The [BookCatalog evidence page](../examples/assessments/bookcatalog/README.md) preserves the earlier September 18 observations and adds the later supplied record.
+
+The review covered all 151 files in `mod-course-notes`, including `final-mod-agent-files`, plus the working-notes attachment.
+It covered both assessment snapshots, plans, preferences, all task narratives, scripts, logs, response files, and six screenshots.
+Identical report snapshots and repeated response bodies were compared by content.
+Large build logs were inspected for outcomes and diagnostics.
+No supplied scripts were executed, and no ongoing Visual Studio upgrade was changed.
+
+### Assessment and planning facts
+
+The assessment covers one non-SDK-style `net48` web project with no project dependencies.
+The saved target is `net10.0`.
+It records 636 lines of code, 89 incompatible API findings, seven package findings, and three binding findings.
+The 89 API findings comprise 83 binary and six source incompatibilities grouped under `System.Web`.
+
+The Markdown aggregate package count is zero, but the readiness record reconciles six installed packages and seven package findings.
+The two EntityFramework findings account for the extra package finding.
+The readiness record also reports assembly-identity checks that contradict the proposed Newtonsoft.Json redirect change.
+Package `13.0.3` contains assembly `13.0.0.0`, which matches the existing redirect.
+The baseline build didn't reproduce the reported `MSB3836` conflict.
+
+The initial plan selected All-at-Once ordering with a side-by-side Core project, System.Web Adapters, EF6, inline fixes, and disabled nullable reference types.
+It required binding review and authorized planning only.
+The generated plan and tasks are separate artifacts from the assessment.
+The supplied scripts place the framework scenario under `.github\upgrades\scenarios\dotnet-version-upgrade`, relative to the solution root.
+The post-plan instructions capture has a misspelled filename. The generated file remains `scenario-instructions.md`.
+
+### Execution facts and limits
+
+The user reports an upgrade still running after more than five hours, with database safety causing difficulty.
+That duration is a user observation, not an independently measured course timing.
+The records don't establish how much of the reported delay came from database admission.
+
+The recorded two-host approach required shared-schema ownership, a restorable data copy, and a restricted runtime identity.
+The task records describe disabling legacy startup creation and seeding.
+They then report a LocalDB runtime identity with `sysadmin` privileges and an unsuitable existing SQL Express configuration.
+The user later authorized code-first work, Automatic execution, and a fresh isolated Docker fixture instead of original-data preservation.
+
+| Supplied evidence | Supported result | What it doesn't establish |
+| --- | --- | --- |
+| Readiness baseline build log | Zero warnings and errors with SDK `10.0.401` and full Visual Studio MSBuild | A generated-app launch |
+| Task 03.04 build and retry logs | Initial executable-lock failure, followed by a zero-warning, zero-error rebuild | Final upgrade acceptance |
+| Proxy and native-asset HTTP logs | Health and CSS responses passed. Book routes remained guarded with HTTP 503 | CRUD, form interaction, or restart persistence |
+| Task 02.01 admission log and superseding narrative | Reported backup, restore, schema, and restricted-permission checks on a three-record synthetic fixture | Original-data parity or a complete app walkthrough |
+| `runtime-acceptance.md` | Explicitly deferred runtime checks | Passed runtime acceptance |
+| Final task scripts | Intended parity, persistence, and rebuild checks | Execution or success without their result logs |
+| `tasks.md` and `scenario.json` | Ten of eleven tasks complete, with final task 04 in progress | Completed migration or final adapter cleanup |
+| Dashboard screenshots | Assessment, planning, and intermediate execution states | A manually observed generated-app Visual Studio launch |
+
+Some older task narratives still say database admission is blocked.
+The superseding task 02.01 entry and its admission log record the later fresh-fixture result.
+Final validation remains open in the copied task state.
+The folder name `final-mod-agent-files` doesn't override that state.
+
+The metadata's last update is `2026-09-22T00:16:07Z`.
+The snapshot contains no completed final parity, restart-persistence, or final-build result log.
+It contains no Azure assessment, plan, deployment, or cleanup evidence.
+All test projects were explicitly excluded from the supplied upgrade run.
+Loopback HTTP probes used a certificate-trust bypass and don't establish TLS trust.
+
+### Decision for the revised demo
+
+The shared-database safeguards match a production coexistence problem.
+The approved demo doesn't require that problem: it uses one upgraded host and fresh sample data.
+The course now requests an in-place ASP.NET Core MVC upgrade to .NET 10, EF Core schema creation, and demo seeding.
+It doesn't require adapters, YARP fallback, old/new schema coexistence, or preservation of original records.
+That's a change in teaching scope, not a claim that the new path has been demonstrated successfully.
+
+The assessment can stay unchanged.
+Learners can record a preference when they need one, then review whether the generated plan matches the demo scope.
+The final learner check still requires an actual Visual Studio launch and a saved edit that remains after restart.
+
+### Public curation and current validation status
+
+Three excerpt pages preserve selected original text with separate explanations.
+Six screenshots retain their original filenames under the BookCatalog evidence image directory.
+Their documented crops remove browser accounts and workspace paths without changing report text or task state.
+The original detailed assessment screenshot includes .NET 8 labels that conflict with the saved `net10.0` target.
+Those labels remain unchanged and are called out in the evidence page.
+
+Raw response headers can contain encoded source paths. Raw build logs contain private filesystem paths.
+Neither those files nor raw scripts, configuration, credentials, or database files were copied into public content.
+The [provenance table](../examples/assessments/bookcatalog/README.md#provenance-and-excerpt-boundaries) records source names and exact image treatment.
+
+The current revision's source and site checks are recorded below.
+They don't replace the missing generated-application runtime checks.
+No commits, pushes, publication, deployment, database changes, or interventions in the user's upgrade were performed for this review.
+
+### Integrated checks for the September 21 revision
+
+The complete required course and its optional guides now use the demo-rebuild scope.
+The assessment edit is optional. Planning starts with the agent request, followed by explicit option review.
+The standalone transfer exercise uses its own legacy copy instead of depending on records from the required upgrade.
+Azure deployment remains optional and separately approved.
+
+| Check | Actual result |
+| --- | --- |
+| `npm run illustrations` | Regenerated the light and dark illustrations, including the corrected planning sequence |
+| `npm run build` | Passed with the three new excerpt pages and six curated screenshots |
+| `npm test` | 34 content tests and 11 mocked cloud tests passed. Language checks passed across 28 files |
+| `npm run test:site` | 62 Chromium browser tests passed |
+| `git diff --check` | Passed |
+| PowerShell syntax parsing | All 43 fenced PowerShell blocks in the revised core and optional guides parsed without executing them |
+| SDK selection | `dotnet --version` returned `10.0.401` in both sample directories |
+| Reference build | From `examples\modernized`, `dotnet build src\BookCatalog.Web\BookCatalog.Web.csproj --no-restore --nologo --verbosity quiet` passed with zero warnings and errors |
+
+Both sample SDK policies accept later stable SDKs through `latestMajor` and reject preview SDKs.
+The installed .NET 10 SDK was tested. No later major SDK was installed for this review.
+The application target remains `net10.0`.
+
+Browser checks cover old anchors, all required and reference routes, six-step progress, and preserved revision-2 completion.
+They also cover the exact public-file list, ZIP contents, root/subpath hosting, code copying, and image loading.
+Raw scenario files, private logs, databases, and arbitrary screenshots remain excluded from the site and download.
+
+Direct visual review covered the corrected planning illustration at desktop width and the Setup page in the narrow dark theme.
+The assessment screenshot loaded at narrow width with a full-size link.
+The browser suite also checked light/dark themes, 320/390-pixel layouts, contrast, and illustration labels.
+Review screenshots are retained in the private session artifacts, not published as course content.
+
+The local preview responded at `http://127.0.0.1:4173/`.
+The learner-copy commands weren't executed against the user's checkout, and the ongoing Visual Studio upgrade wasn't changed.
+The source changes don't establish that a fresh in-place upgrade finishes successfully or takes less time.
+That walkthrough and the Azure planning run remain unverified.
+
+## Course slimming: September 18, 2026, Windows
+
+The approved implementation adds a separate Setup chapter and narrows the required path to the Visual Studio tools.
+Core completion has six steps: introduction, setup, assessment, planning, upgrade execution, and Azure planning.
+The workbook, data lab, advanced checks, independent feature challenge, and deployment remain optional.
+
+### Isolated Visual Studio observations
+
+The recording started from tracked source commit `8a03066708b478c700fcfdf60119a1de46cae56b`, not the user's working files.
+The user's root README edits were read and integrated. Their emphasis on Copilot tooling and generated artifacts remains.
+
+The recording used Visual Studio Professional 2026 Insiders `18.11.12210.170`.
+Installed SDKs were `9.0.318` and `10.0.401`. LocalDB reported `17.0.4025.3`.
+Installed VSIX manifests reported GitHub Copilot `18.11.979.32481` and the modernization upgrade extension `1.1.458.59476`.
+
+Its source copy, named LocalDB instance, MDF paths, and development port were separate from the course checkout and original database.
+Only the recording copy's connection and port settings were changed for isolation.
+
+| Action | Actual result |
+| --- | --- |
+| Open isolated solution | User opened it after Computer Use's open-solution action failed |
+| Visual Studio F5 | Computer Use started a build, and Visual Studio showed BookCatalog running |
+| Browser app check | Isolated URL displayed six active seed books and the legacy framework footer |
+| Add a book | Explicitly approved form submission saved an active sample book, visible as the seventh listed book |
+| `@modernize` | Explicitly approved chat submission returned an actual response and a .NET version assessment choice |
+| Framework assessment and preference edit | Not captured |
+| Upgrade options, edited plan, and execution | Not captured |
+| Generated-app launch and resume | Not captured |
+| Azure assessment and edited migration plan | Not captured |
+
+Computer Use intermittently exposed an incomplete accessibility tree.
+Some actions returned `no_viable_candidate` or UIA focus failures. Other clicks reported dispatch without an observed UI change.
+The recorded success doesn't establish a completed unattended walkthrough.
+
+The [curated recording](../examples/assessments/bookcatalog/README.md) contains the real app preview, verbatim Modernize greeting, provenance, and capture limits.
+Raw source and database files remain in the private session workspace. No raw scenario directory is publicly allowlisted.
+
+At that point, the remaining tool procedures were checked against current Microsoft Learn documentation.
+They weren't presented as observed assessment, upgrade, or Azure results.
+The later supplied assessment and planning evidence is recorded separately above. The full live walkthrough remains incomplete.
+
+No Azure resources, commits, pushes, or publication were performed.
+The recording copy and its dedicated LocalDB instance are retained. Cleanup requires separate approval.
+
+### Source and site checks
+
+The existing language checker passed across 25 documentation files with zero structural failures.
+A separate STE-inspired review reported 13 findings and exited `1`, including eight synonym findings classified as hard.
+Those included a preserved installation URL, exact UI wording, compatibility anchors, and terms with distinct uses here.
+They were reviewed in context rather than changing protected technical text to satisfy a heuristic. This isn't a controlled-language compliance claim.
+A heading comparison against the source commit retained all 81 prior root and core-chapter heading or explicit anchor targets.
+Browser checks passed for moved anchors, including opening collapsed compatibility notices and following their Setup links.
+
+PowerShell parsing passed for the three new core/setup command blocks after substituting the documented clone-URL placeholder.
+That check parsed the examples without executing their commands.
+The optional-document workstream also parsed 35 PowerShell blocks and resolved 97 local links and anchors.
+Those checks didn't execute either deployment branch or perform database transfers.
+
+The portable helper regression command passed all 68 selected tests:
+
+```powershell
+dotnet test tests\BookCatalog.Data.Tests\BookCatalog.Data.Tests.csproj --no-restore --nologo --verbosity quiet --filter 'FullyQualifiedName!~LocalDbIntegrationTests'
+```
+
+The filter explicitly excluded LocalDB integration. This run didn't copy records or establish behavior against the generated application.
+
+The five original chapter sources contained 8,490 whitespace-delimited words.
+The revised chapters plus the new Setup source contain 4,784, a 43.7% reduction.
+This count includes Markdown, code, tables, optional notices, and link targets. It isn't a measured learner time saving.
+
+Final integrated checks against the rewritten sources passed:
+
+| Command | Actual result |
+| --- | --- |
+| `npm run illustrations` | Generated all 14 chapter illustration variants |
+| `npm run build` | Passed |
+| `npm test` | 31 content tests, 11 mocked cloud tests, and language checks across 25 files passed |
+| `npm run test:site` | 59 Chromium browser tests passed |
+| `git diff --check` | Passed |
+
+These checks cover six-step progress, retained revision-2 completions, initially incomplete Setup, and excluded optional-page completion.
+They also cover old routes and anchors, root/subpath hosting, exact public allowlists, packaged download links, and code copying.
+
+Visual inspection covered Setup at 1440-pixel desktop and 390-pixel narrow widths, in light and dark themes.
+The artwork, body, code, and navigation showed no clipping or horizontal overflow. Narrow artwork has full-size and text alternatives.
+The screenshot set is retained under the ignored `artifacts\site-slimming` directory, not published as course content.
+
+The final local preview returned HTTP 200 at its loopback address. It wasn't published.
+Git HEAD remained `8a03066708b478c700fcfdf60119a1de46cae56b` on `workshop/decade-progression`.
+No representative learner pilot or clean-machine installation has been performed.
+
 ## Current rewrite: actual execution record
 
-This section records checks for the Windows curriculum rewrite. Historical results below do not establish the current branch's status.
+This section retains the earlier Windows curriculum rewrite results. They don't establish the current course-slimming changes' status.
 
 Documentation checks on September 17, 2026, Windows:
 
@@ -292,7 +518,9 @@ Opening the solution was blocked because foreground actions were disallowed. Com
 
 No solution load, UI build, or agent prompt ran during that attempt.
 
-No actual Modernize assessment or agent-driven learner walkthrough is recorded as passed. Workflow and artifact guidance comes from official documentation and source review.
+No actual Modernize assessment or agent-driven learner walkthrough was recorded as passed during that September 17 attempt.
+Its workflow and artifact guidance came from official documentation and source review.
+The September 21 supplied record above establishes later assessment and planning artifacts, not a completed walkthrough.
 
 ## Planned release checks
 
@@ -300,9 +528,9 @@ These are acceptance checks, not completed results:
 
 | Area | Evidence still required before claiming completion |
 | --- | --- |
-| Visual Studio entry | F5 and signed-in Copilot checks. Command-line clean startup and restart checks have passed |
-| Learner data transfer | Repeat the passing isolated helper checks against the actual learner-generated application and its selected records |
-| Complete learner journey | Assessment edit, reconciled plan, actual generated app checks, and successful resume |
+| Visual Studio entry | Isolated legacy F5 launch and a signed-in Modernize response were observed on September 18. Generated-app F5 launch remains unrecorded |
+| Optional learner data transfer | Repeat the passing isolated helper checks against the actual learner-generated application and its selected records |
+| Complete learner journey | Review the supplied assessment and plan against the revised in-place demo. Capture generated-app launch, saved-edit persistence, and successful resume. Assessment edits are optional |
 | Required Azure learning | Visual Studio assessment and edited plan without provisioning prerequisites |
 | Optional Azure deployment | Excluded from this run. A future approved run needs data, behavior, and dedicated-group cleanup evidence |
 | Teaching quality | Representative learner attempts and explanations |

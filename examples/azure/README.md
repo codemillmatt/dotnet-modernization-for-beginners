@@ -8,9 +8,12 @@ Do not deploy without separate access, scope, and cost approval. The lab exposes
 | --- | --- |
 | `main.bicep` | Define App Service, Azure SQL, Key Vault, a user-assigned identity, and deployment outputs |
 | `lab.mjs` | Prepare schema, grant runtime table permissions, store the connection setting, and remove the dedicated group |
-| `tools\BookCatalog.Data` | Separately preview, copy, and compare selected BookCatalog records |
 
-The Node helper does not transfer records. Creating schema and seeds is separate from copying the learner's selected records.
+The Node helper doesn't transfer records. It applies the supplied schema SQL, including any reviewed seed inserts.
+
+Prepare EF Core schema and seeds, deploy the learner app, then add and edit a new cloud book. Confirm the edit survives restart.
+
+Data transfer is a [standalone reference](../../docs/data-transfer.md), not a step in this deployment flow.
 
 ## Helper inputs
 
@@ -43,25 +46,19 @@ If cleanup fails, inspect the server's rules. Remove only the `workshop-` rule f
 
 ## Copy selected records
 
-Use the .NET helper's `--azure-outputs .azure-lab\outputs.json` option instead of local `--target-config`.
+For a separate import exercise, follow the [standalone Azure-copy instructions](../../docs/data-transfer.md#optional-azure-copy).
 
-The original `.bookcatalog-lab\books.json` remains the comparison source. Keep its IDs, field values, SQL nulls, active state, and stored timestamps unchanged.
-
-An import without `--apply` previews only. Apply and verify are separate actions.
-
-Bootstrap removes its temporary client rule. Follow the [bounded client-access procedure](../../04-cloud/deployment.md#copy-the-same-selected-records) for cloud record operations.
+The .NET data helper uses a selected-record export and reviewed deployment outputs. Preview, apply, and verify are separate operations.
 
 The approved CLI administrator performs the copy, not the app's managed identity. Never increase runtime permissions to make a migration operation work.
-
-See the [data helper guide](../../tools/BookCatalog.Data/README.md) for destination validation, conflict handling, and snapshot boundaries.
 
 ## Retry behavior
 
 Inspect identity and role errors before retrying. Propagation delays can occur, but a fixed wait does not guarantee readiness.
 
-Retry bootstrap with the same reviewed schema. A different fingerprint requires investigation, not database deletion.
+Retry bootstrap with the same reviewed schema. The helper refuses a different fingerprint rather than migrating an existing schema.
 
-For selected-record import, an exact repeat must not duplicate matching rows. Conflicting values must stop the copy rather than overwrite them.
+If the schema has changed, review the error and update the deployment plan before creating or removing resources.
 
 ## Cleanup
 
@@ -76,7 +73,7 @@ The helper checks the subscription and workshop tag. It waits for deletion and c
 
 Key Vault can retain recoverable metadata after group deletion. The helper does not purge it.
 
-Keep the local databases and source snapshot. Cloud cleanup does not own them.
+Cloud cleanup removes the dedicated Azure group. It doesn't operate on local files or databases.
 
 ## Limits
 

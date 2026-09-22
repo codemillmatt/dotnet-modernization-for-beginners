@@ -104,13 +104,17 @@ function addChapterHeader(chapter) {
   if (!heading) throw new Error("The chapter has no title. Check its source.");
   const panel = document.createElement("div");
   panel.className = "era-intro";
-  const image = document.createElement("img");
-  image.src = siteUrl(`assets/${getEra(chapter.era).art}`);
-  image.alt = "";
-  image.className = "era-art";
-  image.setAttribute("aria-hidden", "true");
+  const era = getEra(chapter.era);
   heading.before(panel);
-  panel.append(heading, image);
+  panel.append(heading);
+  for (const [mode, file] of era.artDark ? [["light", era.art], ["dark", era.artDark]] : [["", era.art]]) {
+    const image = document.createElement("img");
+    image.src = siteUrl(`assets/${file}`);
+    image.alt = "";
+    image.className = `era-art${mode ? ` era-art-${mode}` : ""}`;
+    image.setAttribute("aria-hidden", "true");
+    panel.append(image);
+  }
 }
 
 function renderIllustrations() {
@@ -199,8 +203,12 @@ export async function renderRoute(store) {
       notice.textContent = "This section moved. Use the page outline to find it.";
       article.prepend(notice);
     }
-    if (target) target.scrollIntoView({ behavior: "instant", block: "start" });
-    else window.scrollTo({ top: 0, behavior: "instant" });
+    if (target) {
+      for (let ancestor = target.parentElement; ancestor; ancestor = ancestor.parentElement) {
+        if (ancestor.tagName === "DETAILS") ancestor.open = true;
+      }
+      target.scrollIntoView({ behavior: "instant", block: "start" });
+    } else window.scrollTo({ top: 0, behavior: "instant" });
   } catch (error) {
     if (signal.aborted) return;
     if (!routeResolved) {

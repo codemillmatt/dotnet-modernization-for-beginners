@@ -1,40 +1,39 @@
 # .NET Modernization for Beginners
 
-Modernize a legacy .NET app without losing the behavior or records its users need.
+Use GitHub Copilot in Visual Studio to upgrade a legacy .NET app, then plan its move to Azure.
 
 Our sample, BookCatalog, lets a catalog editor add, inspect, edit, and remove books. Its main list hides inactive books and sorts active books by title.
 
-In this self-paced course, you will upgrade the application from .NET Framework 4.8 to .NET 10. You will then assess and plan its move to Azure. Deployment is optional.
+In this self-paced course, you'll use the GitHub Copilot modernization for .NET tooling to upgrade the application from .NET Framework 4.8 to .NET 10. You'll then assess and plan its move to Azure. Actual Azure deployment is optional.
 
-You will direct the agent through **assess, decide, plan, change, and verify**. The result is your working application, two preserved records, and decisions you can explain.
+You'll direct the modernization agent through **assess, decide, plan, change, and verify**. You'll finish with a working application on .NET 10 and generated artifacts that capture the plans and decisions behind it.
 
-This course assumes C#, basic ASP.NET MVC, Visual Studio, NuGet, and basic Git knowledge. You do not need previous modernization experience.
+This course assumes C#, basic ASP.NET MVC, Visual Studio, NuGet, and basic Git knowledge. You don't need previous modernization experience.
 
-[**Start: check your setup**](00-introduction/README.md) · [Run the legacy sample only](shared-legacy-app/README.md) · [Run the completed reference](examples/modernized/README.md)
+[**Start: meet BookCatalog and the tools**](00-introduction/README.md) · [Go straight to Setup](prerequisites/README.md) · [Run the completed reference](examples/modernized/README.md)
 
 <a id="-what-youll-learn"></a>
 ## What you'll learn
 
-By the end of the required course, you should be able to:
+By the end of the course, you should be able to:
 
-- Establish a behavior baseline before authorizing changes.
-- Trace an assessment finding to source and separate compatibility from business priority.
-- Edit requirements and show their effect on the agent's plan.
-- Compare upgrade options and repair a weak validation step.
-- Review generated changes and check the same selected records in a separate database.
-- Resume interrupted work and make a small independent change.
-- Assess Azure readiness and revise a migration plan without creating resources.
+- Start the modernization workflow in Visual Studio and read its assessment.
+- Review the assessment and add an application requirement if needed.
+- Review upgrade choices and change a practical instruction in the plan.
+- Run the upgrade and review the generated project, startup, and controller changes.
+- Launch your upgraded app and try its book forms.
+- Assess Azure readiness and edit a migration plan without creating resources.
 
-The optional deployment adds cloud behavior, data-preservation, and cleanup checks. **You do not need an Azure subscription to complete the required course.**
+**You don't need an Azure subscription to complete the required course.** Data transfer, detailed checks, and deployment are separate optional exercises.
 
 <a id="-prerequisites"></a>
 ## Prerequisites
 
 Use **Windows, Visual Studio 2026, and PowerShell**. The legacy app needs ASP.NET web build tools, .NET Framework 4.8 targeting tools, IIS Express, and SQL Server LocalDB.
 
-You also need a stable .NET 10 SDK, Git, and a GitHub account with Copilot access.
+You also need a stable .NET SDK 10 or later, the .NET 10 runtime, Git, and a GitHub account with Copilot access.
 
-[Chapter 00](00-introduction/README.md#check-before-installing) explains how to check existing tools before installing anything. Azure CLI and Node are not prerequisites for the required lessons.
+[Setup](prerequisites/README.md#check-before-installing) explains how to check existing tools before installing anything. Azure CLI, Node, and Python aren't prerequisites for the required lessons.
 
 ## Which Copilot tool are we using?
 
@@ -42,49 +41,44 @@ You also need a stable .NET 10 SDK, Git, and a GitHub account with Copilot acces
 
 **GitHub Copilot modernization** handles Azure migration. Chapter 04 uses Visual Studio's **Modernize > Migrate to Azure** workflow.
 
-The agent can assess, plan, and edit. You choose the strategy, authorize changes, and verify results. A successful build does not prove that behavior or data survived.
+The modernization agent generates the reports and changes through Copilot Chat.
+You choose the options, adjust its instructions, and try the result.
 
 <a id="-course-structure"></a>
 ## Course structure
 
-![A travel-poster route from baseline through assessment, planning, upgrade checks, and Azure planning. An optional deployment and cleanup route requires cost approval.](docs/illustrations/journey-light.svg)
+![A travel-poster route through introduction, setup, assessment, planning, upgrade, and Azure planning. Deployment is a separate optional route.](docs/illustrations/journey-light.svg)
 
-| Chapter | What you do | Evidence before moving on |
+| Chapter | What you do | Result |
 | --- | --- | --- |
-| [00: Introduction](00-introduction/README.md) | Run BookCatalog and select two records to preserve | Working baseline, actual record IDs, and learner branch |
-| [01: Assessment](01-assessment/README.md) | Trace a finding and edit application requirements | Reviewed assessment linked to your baseline |
-| [02: Planning](02-planning/README.md) | Compare EF options, revise the plan, and export selected records | Requirement-to-check links and a source snapshot |
-| [03: Upgrade execution](03-upgrade-execution/README.md) | Review changes, copy records, and check behavior | Working .NET 10 app, matching stored values, and an independent change |
-| [04: Azure planning](04-cloud/README.md) | Assess a target and revise its migration plan | Reviewed Azure assessment and plan, without deployment |
+| [00: Introduction](00-introduction/README.md) | Meet BookCatalog and the tools | Know what you're building |
+| [Setup: Get ready](prerequisites/README.md) | Check your tools and try the app | Working learner copy and Copilot access |
+| [01: Assessment](01-assessment/README.md) | Read the report and add a requirement if needed | An assessment you've reviewed |
+| [02: Planning](02-planning/README.md) | Review options and edit a plan instruction | A plan ready for execution |
+| [03: Upgrade execution](03-upgrade-execution/README.md) | Run the upgrade and use the changed app | Your working .NET 10 application |
+| [04: Azure planning](04-cloud/README.md) | Review the Azure report and edit a migration plan | A cloud plan, without deployed resources |
 
-Keep one [learner record](docs/learner-record.md) through all five chapters. The [optional deployment lab](04-cloud/deployment.md) follows Chapter 04.
+These are the six required completion steps. The [optional deployment lab](04-cloud/deployment.md) follows Chapter 04.
 
 ## Work on your own copy
 
-Use the **Code** menu in the repository that hosts your course. Copy its clone URL.
+[Setup](prerequisites/README.md#make-your-learner-copy) covers cloning and opening your learner workspace. BookCatalog is the continuing project.
 
-Replace `<course-repository-url>` with that URL. Run this in your projects directory:
+Use the supplied demo data. EF Core rebuilds the upgraded database schema and seeds the catalog.
+Existing books don't need to survive the upgrade. You don't need backups, snapshots, or a data-transfer step for this course.
 
-```powershell
-git clone <course-repository-url> dotnet-modernization-for-beginners
-if ($LASTEXITCODE -ne 0) { throw "Clone failed." }
-Set-Location dotnet-modernization-for-beginners
-```
-
-Follow Chapters 00 through 04 in order. The console example is an optional warm-up. BookCatalog is the continuing project.
-
-Your output can differ from recorded screenshots. Counts, package versions, task boundaries, and chat wording change. Compare the meaning of the artifacts and the application's behavior.
-
-Use sample data only. A supplied .NET helper copies two selected records into a separate modernized database. Reseeding a database does not copy those records.
-
-The legacy database stays unchanged. This small copy exercise is not a production backup, schema migration, or cutover procedure.
+Tool output varies by version and application. Compare the report's meaning and your app's behavior, not screenshot counts.
 
 ## Samples and help
 
 - [Legacy sample quickstart](shared-legacy-app/README.md)
 - [Completed reference and intentional differences](examples/modernized/README.md)
-- [Learner record](docs/learner-record.md)
-- [Recorded assessment example](examples/assessments/README.md)
+- [Optional learner record](docs/learner-record.md)
+- [Optional data-transfer lab](docs/data-transfer.md)
+- [Optional advanced checks](docs/advanced-checks.md)
+- [Optional author-filter challenge](docs/author-filter.md)
+- [BookCatalog recording and examples](examples/assessments/bookcatalog/README.md)
+- [Historical console assessment](examples/assessments/README.md)
 - [Optional instructor companion](docs/instructor-guide.md)
 - [GitHub Copilot upgrade documentation](https://learn.microsoft.com/dotnet/core/porting/github-copilot-upgrade/overview)
 - [GitHub Copilot modernization for Azure](https://learn.microsoft.com/dotnet/azure/migration/appmod/overview)
