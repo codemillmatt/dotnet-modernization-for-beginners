@@ -73,7 +73,7 @@ export function renderPager(chapter, store) {
   chapterPager.innerHTML = `
     ${chapter.core ? `<div class="chapter-completion"><div><strong>Ready for the next step?</strong>
       <p>${chapter.slug === "04-cloud"
-        ? "Complete the Azure assessment and migration plan. Deployment is optional."
+        ? "Complete the Azure assessment and migration plan."
         : chapter.slug === "prerequisites"
         ? "Check your tools, run BookCatalog, and try adding and editing a sample book."
         : chapter.slug === "00-introduction"

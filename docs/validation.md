@@ -279,6 +279,70 @@ Browser checks cover old anchors, all required and reference routes, six-step pr
 They also cover the exact public-file list, ZIP contents, root/subpath hosting, code copying, and image loading.
 Raw scenario files, private logs, databases, and arbitrary screenshots remain excluded from the site and download.
 
+## Completed reference Docker checks
+
+The [completed reference](../examples/modernized/README.md) has an optional Windows PowerShell quickstart for Docker SQL Server.
+The app still runs with `dotnet`. Its default LocalDB configuration and the core lessons stay unchanged.
+
+From the repository root, run the helper checks without starting Docker or touching a database:
+
+```powershell
+powershell.exe -NoProfile -File examples\modernized\Test-Quickstart.ps1
+if ($LASTEXITCODE -ne 0) { throw "Quickstart checks failed." }
+dotnet test tests\BookCatalog.Tests\BookCatalog.Tests.csproj
+if ($LASTEXITCODE -ne 0) { throw "Reference application tests failed." }
+```
+
+The helper checks simulate Docker and .NET commands.
+They cover prerequisites, license acceptance, generated-password reuse, failure handling, local endpoints, and restoration of the caller's configuration.
+The application tests still use SQLite. Neither check proves that Docker SQL Server starts or retains records.
+
+For live validation, first inspect Docker containers, volumes, and listening ports without changing them.
+Use an isolated sample copy, a unique `-ProjectName`, and unused `-SqlPort` and `-AppPort` values.
+Run `Start-BookCatalog.ps1 -AcceptSqlServerLicense` with those values after reviewing the SQL Server license.
+Confirm that Compose reports a healthy SQL container and that the app shows six active seed books.
+Create a book, edit it, restart the app, then stop and restart the SQL container.
+Confirm that the saved title remains.
+
+Use `docker compose --project-name <your-test-project> stop` from the isolated sample directory to stop its SQL container.
+Remove only that test project's resources after validation.
+Never use the existing migration container, a learner database, or a broad Docker cleanup command.
+Keep generated `.env` files, resolved Compose output containing passwords, and database volumes out of source and public downloads.
+
+This path uses a loopback-only SQL Server Developer instance and its generated `sa` password for disposable sample data.
+It isn't a production identity, secret-storage, or certificate-trust example.
+ARM hosts and Windows containers aren't supported by this SQL Server image.
+
+The reference retains its optional Key Vault configuration.
+Without `KeyVaultName`, startup doesn't contact Azure. The local helper explicitly clears that setting.
+With it, startup requires `AZURE_CLIENT_ID` and a matching user-assigned managed identity.
+For Azure, disable `InitializeDatabase`. An approved administrator must prepare the schema and seeds before the app uses its restricted runtime identity.
+These Docker checks don't validate Azure access or deployment.
+
+### Docker quickstart evidence: September 23, 2026
+
+The live run used x64 Windows, .NET SDK `10.0.401`, .NET runtimes `10.0.12`, Docker Engine `29.8.0`, and Compose `5.5.1`.
+SQL Server used the locally available `mcr.microsoft.com/mssql/server:2022-latest` image.
+The isolated Compose project used SQL port `15333` and app port `5199`.
+
+| Check | Actual result |
+| --- | --- |
+| `Test-Quickstart.ps1` | Passed under Windows PowerShell 5.1 and PowerShell 7.6.6 |
+| PowerShell syntax | Both scripts and all six new or revised command blocks parsed |
+| Compose configuration | Parsed successfully, with Linux x64 and loopback-only SQL binding |
+| Live startup | SQL became healthy. The app returned HTTP 200 with six active seed books |
+| Live HTTP behavior | Create, edit, required-title validation, missing-record 404, and antiforgery 400 checks passed |
+| SQL storage | The edited book was stored. Forged `CreatedDate=1900-01-01` didn't replace its creation timestamp |
+| Persistence | The saved edit survived app restart, SQL stop/resume, and container removal/recreation with the retained volume |
+| Missing secret file | The helper refused existing Docker resources without generating a replacement password |
+| Reference application tests | All 12 HTTP/SQLite tests passed |
+| Documentation | Local links, six historical section aliases, and repository language checks passed |
+
+The run used only its own sample copy, app processes, Compose project, and volume.
+Its resources were removed after validation. The existing migration SQL container stayed running and unchanged.
+No learner databases, LocalDB instances, Visual Studio workloads, or Azure resources were modified.
+These checks aren't a visual browser walkthrough or evidence of learner understanding.
+
 Direct visual review covered the corrected planning illustration at desktop width and the Setup page in the narrow dark theme.
 The assessment screenshot loaded at narrow width with a full-size link.
 The browser suite also checked light/dark themes, 320/390-pixel layouts, contrast, and illustration labels.

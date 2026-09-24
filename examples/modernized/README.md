@@ -1,96 +1,151 @@
 # Completed BookCatalog reference
 
-This standalone reference uses .NET 10, ASP.NET Core MVC, and EF Core. It has one production web project.
+You'll run a completed .NET 10 application that lets you browse books, add one, and keep your changes.
+It uses ASP.NET Core MVC and Entity Framework Core (EF Core).
+Running it gives you a working example to compare with your own upgrade.
 
-It supports comparison and recovery. It is not a recording of the agent's output or a replacement for your learner application.
+This is a separate example for comparison, not a recording of the modernization agent's output.
+Your upgraded app can have different files and still do the same work.
 
-## Run on Windows
+## What runs where
 
-Use a stable .NET SDK 10 or later and SQL Server LocalDB. The [setup checks](../../prerequisites/README.md#check-before-installing) explain these requirements.
+We'll run SQL Server in Docker and the app with `dotnet` on your computer.
+The container gives this reference its own SQL Server, separate from your learner app's LocalDB instance.
 
-The application still targets .NET 10. A later SDK doesn't replace the .NET 10 runtimes needed to run it.
+Docker is optional. The core course still uses Windows and LocalDB to rebuild the demo schema and seed books.
+You don't need Azure here.
 
-In Visual Studio Installer, select **Modify > Individual components**. Keep the .NET 10 runtime component selected.
+## Check your tools
 
-For a command-line check, run `dotnet --list-runtimes`. Expect `Microsoft.NETCore.App 10.0.x` and `Microsoft.AspNetCore.App 10.0.x`, with your installed patch numbers.
+Use **PowerShell on x64 Windows**, with Docker running **Linux containers**.
+SQL Server's Linux image doesn't support ARM hosts or emulation.
 
-If either runtime is missing, repair the .NET 10 components through the [setup instructions](../../prerequisites/README.md#check-before-installing) before running the app.
+Open PowerShell in `examples\modernized` inside your repository or extracted sample download.
+Run these checks before installing anything:
 
-Use sample data only. The default target is `BookCatalogModernizedLab`, which the learner app also uses.
+```powershell
+dotnet --version
+dotnet --list-runtimes
+docker info --format '{{.OSType}} {{.Architecture}}'
+docker compose version
+```
 
-Stop the learner app before trying the reference. Both connect to that named database, even from different clones.
+- Expect a stable SDK version of `10.0.x` or later.
+- Expect both `Microsoft.NETCore.App 10.0.x` and `Microsoft.AspNetCore.App 10.0.x`. A later SDK might not include these runtimes.
+- Expect `linux x86_64` or `linux amd64`, with Compose **2.20 or later**.
 
-From `examples\modernized`:
+Missing a tool? Install the [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) or [Docker Desktop for Windows](https://docs.docker.com/desktop/setup/install/windows-install/).
+Start Docker Desktop before continuing. Allow at least 2 GB of memory for SQL Server, plus memory for Docker and the app.
+
+## Start the completed app
+
+Use sample data only. SQL Server Developer edition is for development and testing, not production.
+Read the [SQL Server container license terms](https://go.microsoft.com/fwlink/?linkid=857698) before accepting them.
+
+The helper generates a password in the Git-ignored `.env` file.
+Keep it private and with your sample. It's plain text, and local Docker administrators can inspect container settings too.
+
+From `examples\modernized`, run:
+
+```powershell
+.\Start-BookCatalog.ps1 -AcceptSqlServerLicense
+```
+
+The helper starts SQL Server on `127.0.0.1:14333` and waits until it can answer a query.
+Then it runs the app at **http://127.0.0.1:5099**.
+The first run may take a few minutes to download SQL Server and restore .NET packages.
+
+EF Core creates the schema and seed books on the first launch, not every restart.
+Expect six active books. One inactive seed book stays off the list.
+
+The helper temporarily replaces the LocalDB connection and disables the optional Key Vault setting.
+It doesn't change the project's defaults.
+
+## Try a saved change
+
+<a id="compare-the-behavior"></a>
+
+1. Select **Add New Book**.
+2. Enter a sample title and author.
+3. Select **Active** and save.
+4. Open the book's **Edit** link.
+5. Change the title and save.
+6. Press Ctrl+C in PowerShell to stop the app.
+7. Run the same helper command again.
+8. Check that your changed title remains.
+
+That's the useful comparison: the forms work, and a saved edit survives a restart.
+
+## Stop and resume
+
+After Ctrl+C stops the app, SQL Server keeps running.
+From `examples\modernized`, stop this reference's SQL container with:
+
+```powershell
+docker compose stop
+```
+
+Run `.\Start-BookCatalog.ps1 -AcceptSqlServerLicense` again to resume.
+The `bookcatalog-reference_sql-data` volume keeps the database between stops and container recreation.
+Keep `.env` too. The stored database still needs its original password.
+Use the same sample copy when you resume.
+
+Don't use `docker compose down --volumes` unless you intend to erase this reference's demo data.
+Stopping the container doesn't delete the volume. These commands don't stop your LocalDB instance or another Compose project.
+
+## If something doesn't start
+
+| Problem | What to do |
+| --- | --- |
+| Docker can't connect, or reports `windows` | Start Docker Desktop and switch to Linux containers. Repeat the checks above. |
+| PowerShell blocks the helper | Follow your organization's script policy. For a trusted downloaded file, use `Unblock-File .\Start-BookCatalog.ps1` if permitted. |
+| Port 14333 or 5099 is busy | Leave the other app running. Use `.\Start-BookCatalog.ps1 -AcceptSqlServerLicense -SqlPort 14334 -AppPort 5100` instead. Reuse those ports next time. |
+| SQL Server doesn't become healthy | Run `docker compose logs --tail 40 sql`. Check Docker memory and disk space. Don't share logs without reviewing them. |
+| Login fails after replacing `.env` | Restore the original `.env`. A new password doesn't change the password inside an existing SQL volume. |
+| Startup reports a schema mismatch | Stop the app. `EnsureCreated` can't update an existing schema. To erase this reference's disposable books and rebuild, run `docker compose down --volumes`, then rerun the helper. |
+
+## Prefer LocalDB?
+
+<a id="run-on-windows"></a>
+
+Already have LocalDB? You can skip Docker. Use the course's [setup checks](../../prerequisites/README.md#check-before-installing).
+
+**Stop your learner app first.** This path uses the same `BookCatalogModernizedLab` database in `(localdb)\MSSQLLocalDB`, even across separate clones.
+Unlike the Docker path, it can read and change your learner app's demo records.
+
+From `examples\modernized` in PowerShell:
 
 ```powershell
 dotnet run --project src\BookCatalog.Web
 ```
 
-Open the loopback URL from the console. Press Ctrl+C to stop the application.
+Open the console's URL. Press Ctrl+C to stop.
+For an incompatible schema, stop the app before deleting **BookCatalogModernizedLab** in Visual Studio's **SQL Server Object Explorer**.
+Delete it only if you no longer need its demo records.
+The next launch creates its schema and seeds. Don't add deletion to startup code.
 
-The reference creates the schema and seed data when the database doesn't exist. It doesn't reset data on restart.
+## Where to look in the code
 
-`EnsureCreated` can't upgrade an existing schema. If startup reports a schema mismatch, stop the app.
+<a id="intentional-differences"></a>
 
-You can recreate the disposable `BookCatalogModernizedLab` database, then run the reference again to create its EF Core schema and seeds.
+All paths below are under `src\BookCatalog.Web`.
 
-For this reset, open **View > SQL Server Object Explorer** in Visual Studio. Connect to `(localdb)\MSSQLLocalDB`.
+| File | Why it's here |
+| --- | --- |
+| `Program.cs` | Connects MVC and EF Core, maps the book routes, and creates the demo database when needed |
+| `Controllers\BooksController.cs` | Handles the book forms with asynchronous database calls and limits which fields a form can change |
+| `Models\ApplicationDbContext.cs` | Defines the EF Core context and fixed seed books |
+| `Views\Books` | Contains the catalog and forms |
+| `appsettings.json` | Keeps the default LocalDB connection and demo initialization setting |
 
-Under **Databases**, right-click **BookCatalogModernizedLab** and select **Delete**. Confirm that specific demo database, then rerun the command above.
+ASP.NET Core creates the database context and passes it to the controller. That's dependency injection.
+The reference keeps active filtering, title order, validation, local creation time, and creation dates during edits.
 
-This removes its demo records. Don't add deletion to `Program.cs` or a startup script.
+<a id="selected-records-are-a-separate-copy"></a>
 
-## Compare the behavior
+This reference doesn't transfer legacy records. The core course rebuilds demo data with EF Core.
 
-Try adding an active sample book, editing it, and restarting the app. Confirm that its saved values remain.
+<a id="portable-tests"></a>
+<a id="windows-localdb-checks"></a>
 
-For deeper checks, use the [optional behavior checklist](../../docs/learner-record.md#behavior-checks) and [advanced guidance](../../docs/advanced-checks.md).
-
-The reference preserves active filtering, title order, validation, local creation time, and creation dates during edits.
-
-The appearance stays close to the legacy sample. The footer names the new framework.
-
-The [author-filter challenge](../../docs/author-filter.md) is optional. Its absence from this reference is intentional.
-
-## Selected records are a separate copy
-
-The reference doesn't transfer legacy records. The core course rebuilds demo data through EF Core.
-
-For a separate import exercise, use the [standalone data-transfer reference](../../docs/data-transfer.md) and [data helper](../../tools/BookCatalog.Data/README.md).
-
-## Intentional differences
-
-- The reference has fixed seed records in `OnModelCreating`. EF Core adds them when it creates the schema.
-- Controllers use dependency injection and asynchronous calls.
-- Forms restrict binding to editable fields.
-- The project includes optional Key Vault configuration.
-- Tests use SQLite only inside the test host. The application uses SQL Server.
-
-Your agent can choose different file layouts and equivalent implementations. Compare responsibilities and observed behavior rather than requiring identical files.
-
-Without `KeyVaultName`, startup does not contact Azure. With that setting, startup requires `AZURE_CLIENT_ID` and a matching user-assigned managed identity.
-
-For Azure, disable `InitializeDatabase`. An approved administrator prepares schema and seeds before the app uses its restricted runtime identity.
-
-Required [Azure planning](../../04-cloud/README.md) does not deploy this reference. The [optional lab](../../04-cloud/deployment.md) deploys your learner application.
-
-## Portable tests
-
-From the repository root in PowerShell:
-
-```powershell
-dotnet test tests\BookCatalog.Tests\BookCatalog.Tests.csproj
-if ($LASTEXITCODE -ne 0) { throw "Reference application tests failed." }
-```
-
-These tests use HTTP handling, Razor forms, and a relational SQLite database. They do not test your generated app, Windows hosting, LocalDB, or Azure access.
-
-See [validation boundaries](../../docs/validation.md) for separate SQL Server and platform evidence.
-
-## Windows LocalDB checks
-
-The [modernized reference harness](../../docs/validation.md#windows-modernized-reference-checks) checks this app with real HTTP requests and an isolated LocalDB instance.
-
-It covers request protection, server validation, stored creation-time preservation, and persistence after process restart. It does not use your learner database.
-
-These checks complement the SQLite tests. Neither suite automatically validates a different agent-generated implementation.
+Maintaining the reference? See the [validation guide](../../docs/validation.md#completed-reference-docker-checks) for checks and cloud configuration.

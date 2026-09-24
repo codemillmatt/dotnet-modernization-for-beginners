@@ -107,6 +107,27 @@ function addChapterHeader(chapter) {
   const era = getEra(chapter.era);
   heading.before(panel);
   panel.append(heading);
+  if (chapter.era === "2050s") {
+    panel.classList.add("future-intro");
+    const copy = document.createElement("div");
+    copy.className = "future-copy";
+    const kicker = document.createElement("p");
+    kicker.className = "future-kicker";
+    kicker.textContent = "2050s / After the upgrade";
+    const caption = document.createElement("p");
+    caption.className = "future-caption";
+    caption.textContent = "AI can write the upgrade. You run the result.";
+    const stack = document.createElement("ul");
+    stack.className = "future-stack";
+    stack.setAttribute("aria-label", "Application stack");
+    for (const name of [".NET 10", "ASP.NET Core MVC", "EF Core + SQL Server"]) {
+      const item = document.createElement("li");
+      item.textContent = name;
+      stack.append(item);
+    }
+    copy.append(kicker, heading, caption, stack);
+    panel.append(copy);
+  }
   for (const [mode, file] of era.artDark ? [["light", era.art], ["dark", era.artDark]] : [["", era.art]]) {
     const image = document.createElement("img");
     image.src = siteUrl(`assets/${file}`);

@@ -105,7 +105,11 @@ The full interface changes with each chapter. Light/dark mode remains a separate
 
 The reader sets `data-era` before it loads chapter content. `data-theme` retains the selected color mode.
 
-References use a quiet 2020s treatment. They look the same on direct access and after chapter navigation.
+Most references use a quiet 2020s treatment.
+The completed BookCatalog reference uses a 2050s archive theme, with an illuminated book and circuit-style details.
+Its light and dark modes keep the instructions and code readable.
+The theme applies to the course page, not to the BookCatalog application's forms.
+References look the same on direct access and after chapter navigation.
 Setup doesn't move the existing eras to other chapters.
 Its expressive lettering stays in the header and artwork. Instructions and code use readable fonts.
 No page needs a visible decade badge.
@@ -148,8 +152,7 @@ The reader stores progress in this browser. It does not send progress to a serve
 Completion means the learner marked a step after following its instructions. It doesn't mean the website tested the application.
 
 There are six required steps: introduction, Setup, assessment, planning, upgrade, and Azure planning. The overview doesn't count.
-Chapter 04 completion means an Azure assessment and migration plan. Paid deployment remains an optional reference.
-Optional practice never changes required-step completion.
+Chapter 07 completion means an Azure assessment and migration plan.
 
 Storage schema 3 uses the existing `dotnet-modernization-workshop:v2:<site-root-path>` key for continuity.
 Each completion records the chapter's `exerciseRevision` from `scripts/chapters.js`.

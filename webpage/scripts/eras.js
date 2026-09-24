@@ -49,6 +49,14 @@ export const eras = {
     dark: { paper: "#102a3d", surface: "#163247", ink: "#f0f8ff", muted: "#bbd3e5", accent: "#a5d8ff", accentText: "#123045",
       soft: "#23465f", line: "#789cb5", selected: "#a5d8ff", selectedText: "#123045", a: "#66bfdf", b: "#448dbd", c: "#a6d49a" }
   },
+  "2050s": {
+    label: "2050s", art: "era-2050s.svg",
+    heading: 'Outfit, "Trebuchet MS", sans-serif', interface: '"Trebuchet MS", Verdana, sans-serif', radius: "2px", control: "3px",
+    light: { paper: "#e8eeea", surface: "#f7faf5", ink: "#102b28", muted: "#49605b", accent: "#166452", accentText: "#ffffff",
+      soft: "#e2ece5", line: "#829d91", selected: "#d9f56a", selectedText: "#102b28", a: "#2b8977", b: "#607669", c: "#d9f56a" },
+    dark: { paper: "#091612", surface: "#10211c", ink: "#eff8e7", muted: "#b3c9bb", accent: "#d9f56a", accentText: "#10211c",
+      soft: "#1b342a", line: "#648b78", selected: "#d9f56a", selectedText: "#10211c", a: "#79d9b8", b: "#8aac98", c: "#d9f56a" }
+  },
   "2020s": {
     label: "2020s", art: "era-2020s.svg",
     heading: 'Outfit, "Segoe UI", sans-serif', interface: '"Segoe UI", Arial, sans-serif', radius: "18px", control: "12px",

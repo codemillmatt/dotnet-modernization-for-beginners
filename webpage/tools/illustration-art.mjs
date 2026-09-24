@@ -71,7 +71,7 @@ function journey(p, { text, path, number, heading }, prefix) {
   }).join("");
   return {
     title: "A route to modernization",
-    description: "A travel-poster road follows six required steps in order: 00 Meet the app, Setup, 01 Assess, 02 Plan, 03 Upgrade and run, and 04 Azure plan. A dotted side route leads from Azure planning to optional deployment and cleanup, which require separate cost approval.",
+    description: "A travel-poster road follows seven course chapters in order: 01 Start here, 02 Meet the app, 03 Get ready, 04 Assess, 05 Plan, 06 Upgrade and run, and 07 Azure plan.",
     defs: `<clipPath id="${prefix}-landscape"><rect x="35" y="171" width="1030" height="492" rx="8"/></clipPath>`,
     art: `<rect x="24" y="24" width="1052" height="792" rx="8" fill="none" stroke="${p.line}" stroke-width="2"/>
       ${heading("A route to modernization", "Keep the working application in view.", { font: "Georgia, Times New Roman, serif", size: 51 })}
@@ -119,17 +119,8 @@ function journey(p, { text, path, number, heading }, prefix) {
       ${text(670, 621, "Review the changes", { size: 20, anchor: "middle", fill: p.muted })}
       ${text(924, 281, "Azure plan", { size: 29, weight: 700, anchor: "middle", font: "Georgia, serif" })}
       ${number(935, 320, "04", p.c, "#102e2a", 27)}
-      ${path("M961 335C1038 385 1020 482 971 528S931 585 934 625", { stroke: p.accent, width: 5, dash: "1 12", arrow: true })}
-      <g transform="translate(882 632)">
-        <path d="M0 39L50-28 102 39Z" fill="${p.b}"/>
-        <path d="M26 39L50 4 75 39Z" fill="${p.surface}"/>
-        <path d="M50-28V-65" stroke="${p.accent}" stroke-width="4"/>
-        <path d="M52-65h36L72-52H52Z" fill="${p.c}"/>
-        <path d="M-10 40h122" stroke="${p.accent}" stroke-width="3"/>
-      </g>
-      ${text(911, 714, "Deploy & clean up", { size: 25, weight: 700, anchor: "middle", font: "Georgia, serif" })}
-      ${text(911, 746, "Requires cost approval", { size: 19, anchor: "middle", fill: p.muted })}
-      ${text(911, 777, "OPTIONAL SIDE ROUTE", { size: 17, weight: 700, anchor: "middle", spacing: 1, fill: p.muted })}
+      ${text(911, 714, "Azure plan", { size: 25, weight: 700, anchor: "middle", font: "Georgia, serif" })}
+      ${text(911, 746, "Review the migration plan", { size: 19, anchor: "middle", fill: p.muted })}
       ${path("M319 756h210M319 768h161M319 780h188", { stroke: p.line, width: 2, opacity: .4 })}
       <circle cx="581" cy="766" r="18" fill="none" stroke="${p.line}" stroke-width="2" opacity=".4"/>`
   };
@@ -345,7 +336,7 @@ function plan(p, { text, path, heading }) {
     ${contents}`;
   return {
     title: "Shape the upgrade plan",
-    description: "A desktop planning scene links 1 Request plan: Ask the agent, to 2 Review choices: In-place and EF Core, to 3 Check plan: Read tasks and checks. The stage guidance is Review before execution. Building and running the app happens in Chapter 03, not during planning.",
+    description: "A desktop planning scene links 1 Request plan: Ask the agent, to 2 Review choices: In-place and EF Core, to 3 Check plan: Read tasks and checks. The stage guidance is Review before execution. Building and running the app happens in Chapter 06, not during planning.",
     art: `${heading("Shape the upgrade plan", "Review the options. Make the next action clear.", { font: "Verdana, Tahoma, sans-serif", size: 43 })}
       <rect x="35" y="177" width="1030" height="606" fill="${p.a}" opacity=".13"/>
       <path d="M35 783V177H1065" fill="none" stroke="${p.line}" stroke-width="3"/>

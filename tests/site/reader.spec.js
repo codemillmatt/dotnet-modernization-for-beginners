@@ -13,22 +13,22 @@ const publishedSections = {
     "checkpoint-what-would-a-build-miss", "save-a-baseline", "what-the-agent-does",
     "optional-your-first-assessment", "before-moving-on", "checkpoint-can-you-explain-the-starting-state",
     "-your-first-assessment"],
-  "01-assessment": ["chapter-01-assess-bookcatalog", "ask-for-an-assessment", "read-the-report-in-a-useful-order",
+  "01-assessment": ["chapter-04-assess-bookcatalog", "ask-for-an-assessment", "read-the-report-in-a-useful-order",
     "separate-compatibility-from-priority", "trace-a-finding-into-the-application",
     "your-decision-can-this-finding-wait", "tell-the-agent-what-must-survive",
     "what-the-numbers-do-not-prove", "save-the-assessment-for-planning", "if-the-assessment-differs-or-fails", "reference"],
-  "02-planning": ["chapter-02-choose-the-upgrade-plan", "understand-the-choices",
+  "02-planning": ["chapter-05-choose-the-upgrade-plan", "understand-the-choices",
     "choose-the-ef-approach-deliberately", "your-decision-what-evidence-justifies-ef-core-now",
     "know-which-artifact-you-are-changing", "ask-for-the-plan", "define-runnable-groups",
     "change-one-inadequate-plan-step", "export-the-selected-records-before-the-upgrade",
     "approve-the-plan-not-the-execution", "reference"],
-  "03-upgrade-execution": ["chapter-03-upgrade-and-check-the-application", "authorize-one-execution-group",
+  "03-upgrade-execution": ["chapter-06-upgrade-and-check-the-application", "authorize-one-execution-group",
     "check-the-sdk-and-project-changes", "inspect-responsibilities-not-only-filenames",
     "your-review-did-the-edit-preserve-the-behavior", "rebuild-run-and-repeat-the-checks",
     "preview-copy-and-verify-the-selected-records", "check-the-legacy-source-remains-unchanged",
     "check-your-actual-upgraded-application", "save-a-real-checkpoint", "recover-without-discarding-your-work",
     "make-an-independent-change", "finish-the-local-upgrade", "finish-the-core-workshop"],
-  "04-cloud": ["chapter-04-assess-and-plan-for-azure", "what-changes-when-the-app-moves",
+  "04-cloud": ["chapter-07-assess-and-plan-for-azure", "what-changes-when-the-app-moves",
     "ask-the-agent-for-cloud-readiness-findings", "compare-the-report-with-the-real-application",
     "choose-a-target-with-a-reason", "your-decision-what-finding-changes-the-plan",
     "generate-a-migration-plan-without-executing-it", "edit-and-reconcile-the-cloud-plan",
@@ -111,8 +111,12 @@ test("the assessment keeps old sections without the removed review-links panel",
   await expect(page.locator("#article")).toContainText("Keep it unchanged if it describes the right app and target.");
   await expect(page.locator("#article")).not.toContainText("This section moved.");
   await expect(page.getByText("Earlier detailed-review links", { exact: true })).toHaveCount(0);
-  await expect(page.locator(".source-link")).toHaveAttribute(
+  const sourceLink = page.locator(".source-link");
+  await expect(sourceLink).toHaveAttribute(
     "href", "https://github.com/microsoft/dotnet-modernization-for-beginners");
+  await expect(sourceLink).toHaveAttribute("aria-label", "View the course source on GitHub");
+  await expect(sourceLink.locator(".github-mark")).toBeVisible();
+  await expect(sourceLink).not.toContainText("Source");
 });
 
 test("legacy setup sections reveal their compatibility link inside collapsed details", async ({ page }) => {
@@ -155,7 +159,7 @@ test("code copy preserves the displayed code and reports clipboard failure", asy
   await expect(page.locator("#copy-notice")).toContainText("manually");
 });
 
-test("six required completions include Setup and Azure planning, not optional practice", async ({ page }) => {
+test("six required completions include Setup and Azure planning", async ({ page }) => {
   for (const chapter of chapters.filter(item => item.core)) {
     await open(page, `#/${chapter.slug}`);
     await page.getByRole("button", { name: "Mark step complete" }).click();
@@ -163,7 +167,7 @@ test("six required completions include Setup and Azure planning, not optional pr
   await page.reload();
   await expect(page.locator("#course-progress")).toHaveText("6 of 6 required steps complete");
   await expect(page.locator("#resume-link")).toHaveAttribute("href", "#/04-cloud");
-  await expect(page.locator(".chapter-completion")).toContainText("Azure assessment and migration plan. Deployment is optional.");
+  await expect(page.locator(".chapter-completion")).toContainText("Azure assessment and migration plan.");
   for (const path of ["04-cloud/deployment.md", "docs/learner-record.md", "docs/data-transfer.md",
     "docs/advanced-checks.md", "docs/author-filter.md", "examples/assessments/bookcatalog/README.md"]) {
     await open(page, `#/reference?path=${encodeURIComponent(path)}`);
@@ -173,18 +177,18 @@ test("six required completions include Setup and Azure planning, not optional pr
   }
 });
 
-test("Setup follows the introduction and leads to assessment without renumbering either", async ({ page }) => {
+test("Setup follows the introduction and leads to assessment", async ({ page }) => {
   await open(page, "#/00-introduction");
-  await expect(page.locator("#chapter-label")).toHaveText("00 / Core course");
+  await expect(page.locator("#chapter-label")).toHaveText("02 / Core course");
   await page.locator(".pager-grid a[href='#/prerequisites']").click();
   await expect(page.locator("#article")).not.toHaveAttribute("aria-busy", "true");
-  await expect(page.locator("#chapter-label")).toHaveText("Setup / Core course");
+  await expect(page.locator("#chapter-label")).toHaveText("03 / Core course");
   await expect(page.locator("html")).toHaveAttribute("data-era", "soundcheck");
-  await expect(page.locator("#chapter-nav a[aria-current]")).toContainText("Setup");
+  await expect(page.locator("#chapter-nav a[aria-current]")).toContainText("Get ready");
   await expect(page.locator(".pager-grid a").first()).toHaveAttribute("href", "#/00-introduction");
   await expect(page.locator("#resume-link")).toHaveAttribute("href", "#/prerequisites");
   await page.locator(".pager-grid a[href='#/01-assessment']").click();
-  await expect(page.locator("#chapter-label")).toHaveText("01 / Core course");
+  await expect(page.locator("#chapter-label")).toHaveText("04 / Core course");
   await expect(page.locator("html")).toHaveAttribute("data-era", "1980s");
   await expect(page.locator(".pager-grid a").first()).toHaveAttribute("href", "#/prerequisites");
 });
@@ -256,7 +260,7 @@ test("failed lesson fetch shows a retry without a false completion", async ({ pa
   await expect(page.locator("[data-complete]")).toHaveCount(0);
   await page.unroute("**/content/01-assessment/README.md");
   await page.getByRole("button", { name: "Try again" }).click();
-  await expect(page.locator("#article h1")).toContainText("Chapter 01");
+  await expect(page.locator("#article h1")).toContainText("Chapter 04");
 });
 
 test("mobile drawers trap focus and restore it on Escape", async ({ page }) => {
@@ -373,17 +377,11 @@ test("unchanged revision marks survive a later exercise revision", async ({ page
   await expect(page.locator("#chapter-nav a[href='#/01-assessment']")).toContainText("Earlier exercise completed");
 });
 
-test("optional workbook stays discoverable without becoming a required sidebar step", async ({ page }) => {
+test("support references stay outside the required chapter path", async ({ page }) => {
   await open(page, "#/03-upgrade-execution");
-  const workbook = page.locator(".optional-references a[href*='learner-record']");
-  await expect(workbook).toBeHidden();
-  await page.locator(".optional-references summary").click();
-  await expect(workbook).toBeVisible();
-  await workbook.click();
-  await expect(page).toHaveURL(/path=docs%2Flearner-record.md/);
-  await expect(page.locator("#article h1")).toBeVisible();
+  await expect(page.locator(".optional-references")).toHaveCount(0);
+  await expect(page.locator("#chapter-nav")).not.toContainText("Optional practice");
   await expect(page.locator("#resume-link")).toHaveAttribute("href", "#/03-upgrade-execution");
-  await expect(page.locator("#chapter-nav")).not.toContainText("instructor");
   await open(page, "#/reference?path=docs%2Fvalidation.md&section=behavior-contract");
   await expect(page.locator("#behavior-contract")).toBeAttached();
   await expect(page.locator("#article")).not.toContainText("This section moved.");

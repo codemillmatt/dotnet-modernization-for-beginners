@@ -79,7 +79,16 @@ button:hover, .resume-link:hover { box-shadow: 3px 3px 0 var(--shadow); }
 .brand-copy strong { font: 700 1.6rem/1 var(--heading-font, Outfit), sans-serif; letter-spacing: -.03em; }
 .brand-copy span { margin-top: .35rem; font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; }
 .header-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; }
-.source-link { font-weight: 700; }
+.source-link {
+  display: inline-grid;
+  place-items: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  color: var(--ink);
+  text-decoration: none;
+}
+.source-link:hover { color: var(--link); }
+.github-mark { display: block; width: 1.65rem; height: 1.65rem; fill: currentColor; }
 .mobile-only, .outline-toggle { display: none; }
 .sun-strip { height: 10px; background: repeating-linear-gradient(90deg, var(--coral) 0 25%, var(--gold) 25% 50%, var(--turquoise) 50% 75%, #14675f 75% 100%); }
 .course-shell { display: grid; grid-template-columns: 16rem minmax(0, 1fr) 13rem; max-width: 108rem; margin: auto; }
@@ -323,6 +332,76 @@ html[data-era="2020s"] .activity::before { display: none; }
 html[data-era="2020s"] .outline-decoration { width: 100px; height: 100px; border: 24px solid var(--turquoise); border-radius: 50%; background: var(--gold); transform: none; }
 html[data-era="2020s"] .chapter-completion { border: 1px solid var(--line); }
 html[data-era="2020s"] .site-footer { border-top: 1px solid var(--line); background: var(--surface); }
+
+/* A future archive frames the reference without changing the application it documents. */
+html[data-era="2050s"] .site-header { border-bottom: 1px solid var(--line); }
+html[data-era="2050s"] .brand-mark { border-radius: 2px; background: var(--selected); color: var(--selected-text); }
+html[data-era="2050s"] .sun-strip {
+  height: 5px;
+  background: repeating-linear-gradient(90deg, var(--turquoise) 0 2px, transparent 2px 20px);
+}
+html[data-era="2050s"] .course-nav::before {
+  height: 64px; border: 1px solid var(--line);
+  background: repeating-radial-gradient(ellipse at 50% 140%, transparent 0 10px, var(--turquoise) 11px 12px, transparent 13px 24px);
+}
+html[data-era="2050s"] .chapter-label {
+  border: 0; border-left: 3px solid var(--turquoise); padding-left: .8rem;
+  background: transparent; font-family: Consolas, "Liberation Mono", monospace; letter-spacing: .08em;
+}
+html[data-era="2050s"] .article { max-width: 58rem; }
+html[data-era="2050s"] .future-intro {
+  position: relative; isolation: isolate; overflow: hidden;
+  grid-template-columns: minmax(0, 1.3fr) minmax(160px, .9fr);
+  gap: .5rem; margin: 1.5rem 0 2.2rem; padding: clamp(1.3rem, 3vw, 2.4rem);
+  border: 1px solid #648b78; border-top: 3px solid #d9f56a; border-radius: 2px 2px 42px 2px;
+  background-color: #091612;
+  background-image: radial-gradient(ellipse at 100% 10%, #79d9b818, transparent 65%);
+  color: #eff8e7;
+}
+.future-intro::after {
+  content: ""; position: absolute; bottom: 0; left: 0; width: 38%; height: 4px;
+  background: #79d9b8;
+}
+.future-copy { min-width: 0; z-index: 1; }
+html[data-era="2050s"] .future-kicker {
+  margin: 0 0 1.5rem; color: #d9f56a; font: 700 .75rem/1.7 Consolas, "Liberation Mono", monospace;
+  text-transform: uppercase; letter-spacing: .14em;
+}
+html[data-era="2050s"] .future-intro h1 {
+  font-size: clamp(2.1rem, 3.5vw, 4rem); line-height: 1.05; letter-spacing: -.04em;
+  margin: 0 0 1.5rem; overflow-wrap: anywhere; text-wrap: balance;
+}
+html[data-era="2050s"] .future-caption { color: #b3c9bb; font-size: .95rem; max-width: 30ch; }
+html[data-era="2050s"] .future-stack {
+  display: flex; flex-wrap: wrap; gap: .4rem; padding: 0; margin: 1.5rem 0 0; list-style: none;
+}
+html[data-era="2050s"] .future-stack li {
+  margin: 0; padding: .3rem .5rem; border: 1px solid #648b78; color: #eff8e7;
+  font: .7rem/1.5 Consolas, "Liberation Mono", monospace;
+}
+html[data-era="2050s"] .future-intro .era-art { height: auto; min-height: 160px; max-height: 370px; }
+html[data-era="2050s"] .article h2 {
+  border-top: 1px solid var(--line); padding-top: 1.4rem; margin-top: 3rem; letter-spacing: -.02em;
+}
+html[data-era="2050s"] .article pre { border-radius: 0; border-left: 3px solid var(--turquoise); }
+html[data-era="2050s"] .code-toolbar {
+  border-radius: 0; font-family: Consolas, "Liberation Mono", monospace; letter-spacing: .04em;
+}
+html[data-era="2050s"] button:hover, html[data-era="2050s"] .resume-link:hover {
+  box-shadow: none; outline: 1px solid var(--link); outline-offset: 3px;
+}
+html[data-era="2050s"] .chapter-link[aria-current] { box-shadow: none; }
+html[data-era="2050s"] .progress-card { box-shadow: none; border-width: 1px; border-top: 3px solid var(--turquoise); }
+html[data-era="2050s"] .outline-decoration {
+  width: 82px; height: 82px; border: 1px solid var(--turquoise); border-radius: 50%; transform: none;
+  background: repeating-radial-gradient(circle, transparent 0 8px, var(--line) 9px 10px, transparent 11px 18px);
+}
+html[data-era="2050s"] .site-footer { border-top: 1px solid var(--line); }
+@media (max-width: 650px) {
+  html[data-era="2050s"] .future-intro { grid-template-columns: minmax(0, 1fr); }
+  html[data-era="2050s"] .future-intro .era-art { height: 200px; min-height: 0; }
+  html[data-era="2050s"] .future-intro h1 { font-size: clamp(1.9rem, 7vw, 3.2rem); }
+}
 @media (max-width: 1250px) {
   .course-shell { grid-template-columns: 15rem minmax(0,1fr); }
   .page-outline { display: none; }

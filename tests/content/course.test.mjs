@@ -53,10 +53,10 @@ test("all declared local links and images resolve", () => {
   assert.deepEqual(failures, []);
 });
 
-test("manifest preserves identifiers, six required steps, and optional reference boundaries", () => {
+test("manifest preserves identifiers and the sequential chapter path", () => {
   assert.deepEqual(chapters.map(chapter => [chapter.slug, chapter.number]), [
-    ["overview", "Start"], ["00-introduction", "00"], ["prerequisites", "Setup"],
-    ["01-assessment", "01"], ["02-planning", "02"], ["03-upgrade-execution", "03"], ["04-cloud", "04"]
+    ["overview", "01"], ["00-introduction", "02"], ["prerequisites", "03"],
+    ["01-assessment", "04"], ["02-planning", "05"], ["03-upgrade-execution", "06"], ["04-cloud", "07"]
   ]);
   assert.equal(chapters.filter(chapter => chapter.core).length, 6);
   assert.equal(chapters.find(chapter => chapter.slug === "overview").core, false);
@@ -82,10 +82,20 @@ test("routes constrain references and preserve sections", () => {
   assert.equal(parseRoute("#/reference?path=docs%2Fvalidation.md").chapter.path, "docs/validation.md");
   assert.equal(routeForPath("prerequisites/README.md", "run-bookcatalog"),
     "#/prerequisites?section=run-bookcatalog");
-  assert.equal(parseRoute("#/prerequisites").chapter.number, "Setup");
+  assert.equal(parseRoute("#/prerequisites").chapter.number, "03");
   assert.throws(() => parseRoute("#/reference?path=../../secret"), /not in the course/);
   assert.throws(() => normalizePath("../../secret"), /leaves the course/);
   assert.throws(() => parseRoute("#/unknown"), /not in the course/);
+});
+
+test("the completed reference has its own future era without adding a course step", () => {
+  const reference = parseRoute("#/reference?path=examples%2Fmodernized%2FREADME.md").chapter;
+  assert.equal(reference.era, "2050s");
+  assert.equal(reference.slug, "reference");
+  assert.ok(!reference.core);
+  assert.deepEqual(references.filter(item => item.era).map(item => item.path), ["examples/modernized/README.md"]);
+  assert.ok(existsSync(join(root, "webpage/assets", getEra("2050s").art)));
+  assert.equal(routeForPath(reference.path), "#/reference?path=examples%2Fmodernized%2FREADME.md");
 });
 
 function memory(entries = []) {
@@ -213,6 +223,8 @@ test("sample source downloads retain required project source", {
     "docs/data-transfer.md", "docs/advanced-checks.md", "docs/author-filter.md",
     ...recordedBookCatalogFiles,
     "04-cloud/deployment.md", ".config/dotnet-tools.json",
+    "examples/modernized/compose.yaml", "examples/modernized/Start-BookCatalog.ps1",
+    "examples/modernized/Test-Quickstart.ps1", "examples/modernized/.gitignore",
     "shared-legacy-app/src/BookCatalog.Web/Properties/AssemblyInfo.cs",
     "examples/modernized/src/BookCatalog.Web/Program.cs", "DOWNLOAD-README.txt"
   ]) assert.ok(entries.get(path)?.length > 0, path);
@@ -252,6 +264,8 @@ test("public previews include authored helper files without exposing untracked l
     "docs/illustrations/journey-light.svg", "docs/illustrations/azure-dark.svg",
     "docs/illustrations/soundcheck-light.svg", "docs/illustrations/soundcheck-dark.svg",
     "prerequisites/README.md", "docs/data-transfer.md", "docs/advanced-checks.md", "docs/author-filter.md",
+    "examples/modernized/compose.yaml", "examples/modernized/Start-BookCatalog.ps1",
+    "examples/modernized/Test-Quickstart.ps1", "examples/modernized/.gitignore",
     ...recordedBookCatalogFiles
   ];
   const privateFiles = [
@@ -260,6 +274,8 @@ test("public previews include authored helper files without exposing untracked l
     "tools/BookCatalog.Data/secrets.json", "shared-legacy-app/App_Data/books.mdf",
     "docs/private-notes.md", "scripts/private-script.ps1", "examples/azure/.env",
     "examples/azure/.azure-lab/state.json", "docs/illustrations/private.svg", "docs/illustrations/private-notes.md",
+    "examples/modernized/.env", "examples/modernized/.env.local", "examples/modernized/private-compose.yaml",
+    "examples/modernized/private-helper.ps1",
     "examples/assessments/bookcatalog/private-notes.md", "examples/assessments/bookcatalog/assessment.json",
     "examples/assessments/bookcatalog/images/private.png", "examples/assessments/bookcatalog/.appmod/report.md",
     "examples/assessments/bookcatalog/.github/upgrades/run/assessment.md", "examples/assessments/bookcatalog/books.mdf",
@@ -273,6 +289,7 @@ test("public previews include authored helper files without exposing untracked l
     [...recordedBookCatalogFiles].sort(), "Tracking raw evidence must not make it public.");
   assert.deepEqual(selectPublicContent([
     "examples/azure/secrets.json", "examples/azure/.bookcatalog-lab/records.json",
+    "examples/modernized/.env", "examples/modernized/.env.local", "examples/modernized/private-compose.yaml",
     "examples/modernized/appsettings.Test.Local.json", "tools/BookCatalog.Data/obj/Generated.cs",
     "examples/assessments/bookcatalog/private-notes.md", "examples/assessments/bookcatalog/assessment.json",
     "examples/assessments/bookcatalog/images/private.png", "shared-legacy-app/.appmod/report.md",
