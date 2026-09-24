@@ -83,6 +83,6 @@ test("an unavailable illustration reports the error and retains its text explana
   await expect(figure.locator(".illustration-light .notice")).toContainText("The image could not load.");
   await figure.getByText("Read the illustration", { exact: true }).click();
   await expect(figure.locator("details p")).toContainText("approved administrator");
-  await expect(page.locator("#article h1")).toContainText("Chapter 04");
+  await expect(page.locator("#article h1")).toContainText("Chapter 07");
   await expect(page.getByRole("alert")).toHaveCount(0);
 });

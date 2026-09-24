@@ -2,9 +2,9 @@
 
 Use GitHub Copilot in Visual Studio to upgrade a legacy .NET app, then plan its move to Azure.
 
-Our sample, BookCatalog, lets a catalog editor add, inspect, edit, and remove books. Its main list hides inactive books and sorts active books by title.
+Throughout this course we'll use a sample app named BookCatalog that lets a catalog editor add, inspect, edit, and remove books. Its main list hides inactive books and sorts active books by title.
 
-In this self-paced course, you'll use the GitHub Copilot modernization for .NET tooling to upgrade the application from .NET Framework 4.8 to .NET 10. You'll then assess and plan its move to Azure. Actual Azure deployment is optional.
+You'll use the GitHub Copilot modernization for .NET tooling to upgrade the application from .NET Framework 4.8 to .NET 10. You'll then assess and plan its move to Azure.
 
 You'll direct the modernization agent through **assess, decide, plan, change, and verify**. You'll finish with a working application on .NET 10 and generated artifacts that capture the plans and decisions behind it.
 
@@ -24,7 +24,7 @@ By the end of the course, you should be able to:
 - Launch your upgraded app and try its book forms.
 - Assess Azure readiness and edit a migration plan without creating resources.
 
-**You don't need an Azure subscription to complete the required course.** Data transfer, detailed checks, and deployment are separate optional exercises.
+**You don't need an Azure subscription to complete the course.**
 
 <a id="-prerequisites"></a>
 ## Prerequisites
@@ -39,7 +39,7 @@ You also need a stable .NET SDK 10 or later, the .NET 10 runtime, Git, and a Git
 
 **GitHub Copilot upgrade** handles the framework upgrade. In Visual Studio, start through **Modernize** or `@Modernize`.
 
-**GitHub Copilot modernization** handles Azure migration. Chapter 04 uses Visual Studio's **Modernize > Migrate to Azure** workflow.
+**GitHub Copilot modernization** handles Azure migration. Chapter 07 uses Visual Studio's **Modernize > Migrate to Azure** workflow.
 
 The modernization agent generates the reports and changes through Copilot Chat.
 You choose the options, adjust its instructions, and try the result.
@@ -47,18 +47,19 @@ You choose the options, adjust its instructions, and try the result.
 <a id="-course-structure"></a>
 ## Course structure
 
-![A travel-poster route through introduction, setup, assessment, planning, upgrade, and Azure planning. Deployment is a separate optional route.](docs/illustrations/journey-light.svg)
+![A travel-poster route through the seven course chapters, from the starting point to the Azure migration plan.](docs/illustrations/journey-light.svg)
 
 | Chapter | What you do | Result |
 | --- | --- | --- |
-| [00: Introduction](00-introduction/README.md) | Meet BookCatalog and the tools | Know what you're building |
-| [Setup: Get ready](prerequisites/README.md) | Check your tools and try the app | Working learner copy and Copilot access |
-| [01: Assessment](01-assessment/README.md) | Read the report and add a requirement if needed | An assessment you've reviewed |
-| [02: Planning](02-planning/README.md) | Review options and edit a plan instruction | A plan ready for execution |
-| [03: Upgrade execution](03-upgrade-execution/README.md) | Run the upgrade and use the changed app | Your working .NET 10 application |
-| [04: Azure planning](04-cloud/README.md) | Review the Azure report and edit a migration plan | A cloud plan, without deployed resources |
+| [01: Start here](README.md) | Understand BookCatalog and the course | A clear starting point |
+| [02: Meet the app and tools](00-introduction/README.md) | Meet BookCatalog and the tools | Know what you're building |
+| [03: Get ready](prerequisites/README.md) | Check your tools and try the app | Working learner copy and Copilot access |
+| [04: Assess the app](01-assessment/README.md) | Read the report and add a requirement if needed | An assessment you've reviewed |
+| [05: Choose the plan](02-planning/README.md) | Review options and edit a plan instruction | A plan ready for execution |
+| [06: Upgrade and check](03-upgrade-execution/README.md) | Run the upgrade and use the changed app | Your working .NET 10 application |
+| [07: Plan for Azure](04-cloud/README.md) | Review the Azure report and edit a migration plan | A cloud plan, without deployed resources |
 
-These are the six required completion steps. The [optional deployment lab](04-cloud/deployment.md) follows Chapter 04.
+The seven chapters take you from the starting point through the Azure migration plan.
 
 ## Work on your own copy
 
@@ -73,13 +74,9 @@ Tool output varies by version and application. Compare the report's meaning and 
 
 - [Legacy sample quickstart](shared-legacy-app/README.md)
 - [Completed reference and intentional differences](examples/modernized/README.md)
-- [Optional learner record](docs/learner-record.md)
-- [Optional data-transfer lab](docs/data-transfer.md)
-- [Optional advanced checks](docs/advanced-checks.md)
-- [Optional author-filter challenge](docs/author-filter.md)
 - [BookCatalog recording and examples](examples/assessments/bookcatalog/README.md)
 - [Historical console assessment](examples/assessments/README.md)
-- [Optional instructor companion](docs/instructor-guide.md)
+- [Instructor companion](docs/instructor-guide.md)
 - [GitHub Copilot upgrade documentation](https://learn.microsoft.com/dotnet/core/porting/github-copilot-upgrade/overview)
 - [GitHub Copilot modernization for Azure](https://learn.microsoft.com/dotnet/azure/migration/appmod/overview)
 - [Report a course issue](https://github.com/microsoft/dotnet-modernization-for-beginners/issues)

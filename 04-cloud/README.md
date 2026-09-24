@@ -1,9 +1,9 @@
 <a id="chapter-04-prepare-for-azure"></a>
-# Chapter 04: Assess and plan for Azure
+# Chapter 07: Assess and plan for Azure
 
 Your upgraded app runs locally. Now use Visual Studio's Azure modernization workflow to find what must change before it can run in Azure.
 
-Open `shared-legacy-app\BookCatalog.sln`, containing the app you upgraded in Chapter 03.
+Open `shared-legacy-app\BookCatalog.sln`, containing the app you upgraded in Chapter 06.
 The result of this chapter is an Azure assessment and an edited migration plan.
 **Don't create Azure resources or deploy the app in this chapter.**
 
@@ -14,7 +14,7 @@ You don't need Azure CLI, Node, or an Azure subscription for this planning path.
 
 LocalDB runs on your Windows machine. Uploading the web application wouldn't move that database with it.
 
-Use these components as the proposed target. The optional deployment files use the same design:
+Use these components as the proposed target:
 
 | Component | Responsibility |
 | --- | --- |
@@ -71,7 +71,7 @@ They aren't instructions to execute every suggested task.
 
 ## Choose a target with a reason
 
-Use **App Service on Linux** for this course's optional deployment path.
+Use **App Service on Linux** for the Azure design.
 It fits the .NET 10 web application without adding container packaging.
 
 Visual Studio documentation places assessment configuration under `.appmod\.appcat`, often in `assessment-config.json`.
@@ -105,7 +105,7 @@ Don't approve remediation to make the instructions appear to work.
 
 ## Edit and reconcile the cloud plan
 
-Open the Azure migration `plan.md`, not the .NET upgrade plan from Chapter 02.
+Open the Azure migration `plan.md`, not the .NET upgrade plan from Chapter 05.
 Find the configuration or validation section and add:
 
 ```text
@@ -137,7 +137,7 @@ Finish this chapter when you have the Azure assessment and a migration plan that
 You've used the modernization agent to assess, plan, and upgrade an application, then prepare its cloud plan.
 Keep the reports and plans so you can review the decisions with your team.
 
-**[Optional: deploy the reviewed plan](deployment.md)** · **[Course overview](../README.md)**
+**[Course overview](../README.md)**
 
 <details>
 <summary>Earlier activities and deployment links</summary>

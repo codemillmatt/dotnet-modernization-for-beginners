@@ -1,10 +1,10 @@
-# Chapter 02: Choose the upgrade plan
+# Chapter 05: Choose the upgrade plan
 
 The assessment lists the work. The plan puts that work in order.
 You'll ask the modernization agent for a plan, review its choices, and check how it will run the finished app.
 
 Keep `shared-legacy-app\BookCatalog.sln` open in Visual Studio.
-Use the same modernization chat and assessment from Chapter 01.
+Use the same modernization chat and assessment from Chapter 04.
 
 ## Ask for the plan
 

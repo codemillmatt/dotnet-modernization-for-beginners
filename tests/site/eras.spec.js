@@ -116,8 +116,8 @@ test("soundcheck has themed poster headers, readable instructions, and no decade
 
 test("references and unknown routes use the quiet modern era", async ({ page }) => {
   await ready(page, chapters[2]);
-  await page.locator(".optional-references summary").click();
-  await page.locator(".reference-link").first().click();
+  await page.goto("#/reference?path=shared-legacy-app%2FREADME.md");
+  await expect(page.locator("#article")).not.toHaveAttribute("aria-busy", "true");
   await expect(page.locator("html")).toHaveAttribute("data-era", "2020s");
   await expect(page.locator(".era-intro")).toHaveCount(0);
   await page.reload();
@@ -140,10 +140,10 @@ test("a delayed response cannot restore an old chapter era", async ({ page }) =>
   await expect.poll(() => Boolean(release)).toBeTruthy();
   await page.evaluate(() => { location.hash = "#/04-cloud"; });
   await expect(page.locator("html")).toHaveAttribute("data-era", "2020s");
-  await expect(page.locator("#article h1")).toContainText("Chapter 04");
+  await expect(page.locator("#article h1")).toContainText("Chapter 07");
   await release();
   await expect(page.locator("html")).toHaveAttribute("data-era", "2020s");
-  await expect(page.locator("#article h1")).toContainText("Chapter 04");
+  await expect(page.locator("#article h1")).toContainText("Chapter 07");
 });
 
 test("failed content retains its chapter era", async ({ page }) => {
@@ -151,7 +151,7 @@ test("failed content retains its chapter era", async ({ page }) => {
   await page.goto("#/02-planning");
   await expect(page.getByRole("alert")).toContainText("503");
   await expect(page.locator("html")).toHaveAttribute("data-era", "1990s");
-  await expect(page.locator("#chapter-label")).toContainText("02");
+  await expect(page.locator("#chapter-label")).toContainText("05");
 });
 
 test("built illustrations follow chapter palettes without a diagram renderer", async ({ request }) => {

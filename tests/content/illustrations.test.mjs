@@ -34,8 +34,9 @@ test("each chapter embeds its own original illustration as a normal README image
 
 test("the tool-first artwork includes setup and keeps technical relationships accurate", () => {
   const text = id => renderIllustration(id, "light").replace(/<[^>]+>/g, " ");
-  assert.match(text("journey"), /six required steps/);
+  assert.match(text("journey"), /seven course chapters/);
   assert.match(text("journey"), /Setup/);
+  assert.doesNotMatch(text("journey"), /OPTIONAL SIDE ROUTE|Deploy & clean up|Requires cost approval/);
   for (const id of ["journey", "workflow", "investigation", "plan"]) {
     assert.doesNotMatch(text(id), /baseline|inspect source|preserve stored values|compare selected records/i);
   }

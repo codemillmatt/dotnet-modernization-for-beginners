@@ -1,4 +1,4 @@
-# Setup: Get ready
+# Chapter 03: Get ready
 
 Let's run BookCatalog before we ask the modernization agent to upgrade it. You'll check your tools, download the course, and try the app.
 

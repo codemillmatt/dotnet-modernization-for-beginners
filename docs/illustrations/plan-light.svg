@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1100" height="820" viewBox="0 0 1100 820" role="img" aria-labelledby="illustration-plan-light-title illustration-plan-light-desc" data-illustration="plan" data-era="1990s" data-theme="light">
   <title id="illustration-plan-light-title">Shape the upgrade plan</title>
-  <desc id="illustration-plan-light-desc">A desktop planning scene links 1 Request plan: Ask the agent, to 2 Review choices: In-place and EF Core, to 3 Check plan: Read tasks and checks. The stage guidance is Review before execution. Building and running the app happens in Chapter 03, not during planning.</desc>
+  <desc id="illustration-plan-light-desc">A desktop planning scene links 1 Request plan: Ask the agent, to 2 Review choices: In-place and EF Core, to 3 Check plan: Read tasks and checks. The stage guidance is Review before execution. Building and running the app happens in Chapter 06, not during planning.</desc>
   <defs>
     <marker id="illustration-plan-light-arrow" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="18" markerHeight="18" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M1 1L11 6 1 11Z" fill="#173e82"/></marker>
     <marker id="illustration-plan-light-return" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="16" markerHeight="16" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M1 1L11 6 1 11" fill="none" stroke="#465761" stroke-width="2"/></marker>

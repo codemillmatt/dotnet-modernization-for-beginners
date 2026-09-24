@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1100" height="840" viewBox="0 0 1100 840" role="img" aria-labelledby="illustration-journey-light-title illustration-journey-light-desc" data-illustration="journey" data-era="1960s" data-theme="light">
   <title id="illustration-journey-light-title">A route to modernization</title>
-  <desc id="illustration-journey-light-desc">A travel-poster road follows six required steps in order: 00 Meet the app, Setup, 01 Assess, 02 Plan, 03 Upgrade and run, and 04 Azure plan. A dotted side route leads from Azure planning to optional deployment and cleanup, which require separate cost approval.</desc>
+  <desc id="illustration-journey-light-desc">A travel-poster road follows seven course chapters in order: 01 Start here, 02 Meet the app, 03 Get ready, 04 Assess, 05 Plan, 06 Upgrade and run, and 07 Azure plan.</desc>
   <defs>
     <marker id="illustration-journey-light-arrow" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="18" markerHeight="18" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M1 1L11 6 1 11Z" fill="#14675f"/></marker>
     <marker id="illustration-journey-light-return" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="16" markerHeight="16" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M1 1L11 6 1 11" fill="none" stroke="#405952" stroke-width="2"/></marker>
@@ -54,17 +54,8 @@
       <text x="670" y="621" fill="#405952" font-size="20" font-weight="400" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="670" dy="0">Review the changes</tspan></text>
       <text x="924" y="281" fill="#102e2a" font-size="29" font-weight="700" text-anchor="middle" font-family="Georgia, serif" letter-spacing="0"><tspan x="924" dy="0">Azure plan</tspan></text>
       <circle cx="935" cy="320" r="27" fill="#f0c24d" stroke="#fffbf2" stroke-width="4"/><text x="935" y="328" fill="#102e2a" font-size="24" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="935" dy="0">04</tspan></text>
-      <path d="M961 335C1038 385 1020 482 971 528S931 585 934 625" fill="none" stroke="#14675f" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity="1" stroke-dasharray="1 12" marker-end="url(#illustration-journey-light-arrow)"/>
-      <g transform="translate(882 632)">
-        <path d="M0 39L50-28 102 39Z" fill="#ef6b3b"/>
-        <path d="M26 39L50 4 75 39Z" fill="#fffbf2"/>
-        <path d="M50-28V-65" stroke="#14675f" stroke-width="4"/>
-        <path d="M52-65h36L72-52H52Z" fill="#f0c24d"/>
-        <path d="M-10 40h122" stroke="#14675f" stroke-width="3"/>
-      </g>
-      <text x="911" y="714" fill="#102e2a" font-size="25" font-weight="700" text-anchor="middle" font-family="Georgia, serif" letter-spacing="0"><tspan x="911" dy="0">Deploy &amp; clean up</tspan></text>
-      <text x="911" y="746" fill="#405952" font-size="19" font-weight="400" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="911" dy="0">Requires cost approval</tspan></text>
-      <text x="911" y="777" fill="#405952" font-size="17" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="1"><tspan x="911" dy="0">OPTIONAL SIDE ROUTE</tspan></text>
+      <text x="911" y="714" fill="#102e2a" font-size="25" font-weight="700" text-anchor="middle" font-family="Georgia, serif" letter-spacing="0"><tspan x="911" dy="0">Azure plan</tspan></text>
+      <text x="911" y="746" fill="#405952" font-size="19" font-weight="400" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="911" dy="0">Review the migration plan</tspan></text>
       <path d="M319 756h210M319 768h161M319 780h188" fill="none" stroke="#8d9b87" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"/>
       <circle cx="581" cy="766" r="18" fill="none" stroke="#8d9b87" stroke-width="2" opacity=".4"/>
 </svg>

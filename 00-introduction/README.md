@@ -1,5 +1,5 @@
 <a id="chapter-00-get-ready-to-modernize"></a>
-# Chapter 00: Meet BookCatalog and the tools
+# Chapter 02: Meet BookCatalog and the tools
 
 BookCatalog is a small .NET Framework app for keeping track of books. A catalog editor can add a book, edit its details, and browse the catalog.
 
@@ -24,7 +24,7 @@ You can also keep an assessment unchanged when its findings are correct.
 
 The destination is **ASP.NET Core MVC, EF Core, and .NET 10**. You'll review the changes and run your upgraded app in Visual Studio.
 
-**GitHub Copilot modernization** also provides the later **Migrate to Azure** workflow. You'll finish with an Azure assessment and migration plan. Deployment is optional.
+**GitHub Copilot modernization** also provides the later **Migrate to Azure** workflow. You'll finish with an Azure assessment and migration plan.
 
 ## What carries forward
 
@@ -32,8 +32,6 @@ You'll work on one learner copy of BookCatalog through the course. Each lesson u
 
 This is a demo, not a data-migration exercise.
 EF Core will create the upgraded database schema and seed books. Existing records don't need to survive the upgrade.
-
-The [learner record](../docs/learner-record.md) is optional if you want a place for notes.
 
 ## Before moving on
 
@@ -50,15 +48,15 @@ Next, check your tools and try BookCatalog before asking the modernization agent
 Setup has moved to [Get ready](../prerequisites/README.md). It includes tool checks, your learner copy, and the app tour.
 
 <a id="choose-the-records-that-must-survive"></a>
-Record selection is now part of the [optional data-transfer lab](../docs/data-transfer.md).
+Record selection is not part of this course. EF Core creates the demo database during the upgrade.
 
 <a id="check-behavior-with-a-separate-record"></a>
 <a id="checkpoint-can-you-explain-the-starting-state"></a>
 <a id="checkpoint-what-would-a-build-miss"></a>
-Detailed server and stored-value checks are in [optional advanced checks](../docs/advanced-checks.md).
+The required course checks the upgraded application directly.
 
 <a id="-your-first-assessment"></a>
 <a id="optional-your-first-assessment"></a>
-The [historical console example](../examples/assessments/README.md) remains an optional comparison. BookCatalog is the continuing course project.
+The [historical console example](../examples/assessments/README.md) is available as reference material. BookCatalog is the continuing course project.
 
 </details>

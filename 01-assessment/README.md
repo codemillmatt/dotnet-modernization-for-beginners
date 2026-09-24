@@ -1,4 +1,4 @@
-# Chapter 01: Assess BookCatalog
+# Chapter 04: Assess BookCatalog
 
 An assessment identifies what must change before an app can use your selected .NET version.
 The modernization agent generates the report through GitHub Copilot in Visual Studio.

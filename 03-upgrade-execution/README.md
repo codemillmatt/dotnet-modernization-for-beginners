@@ -1,10 +1,10 @@
-# Chapter 03: Upgrade and check the application
+# Chapter 06: Upgrade and check the application
 
 Now the modernization agent will change BookCatalog using the plan you reviewed.
 You'll inspect the result, launch it from Visual Studio, and try the book forms.
 
 Keep `shared-legacy-app\BookCatalog.sln` open.
-Use the same scenario and chat from Chapter 02.
+Use the same scenario and chat from Chapter 05.
 
 ## Authorize the upgrade
 
@@ -167,13 +167,10 @@ Read that task before approving more work.
 
 <a id="finish-the-core-workshop"></a>
 Continue when your generated .NET 10 app builds, opens, and keeps a saved edit after restart.
-Chapter 04 uses this upgraded solution.
+Chapter 07 uses this upgraded solution.
 
 <a id="preview-copy-and-verify-the-selected-records"></a>
 <a id="check-the-legacy-source-remains-unchanged"></a>
 <a id="make-an-independent-change"></a>
 <a id="optional-data-and-independent-change-exercises"></a>
-Optional practice is separate: [application checks](../docs/advanced-checks.md),
-[author-filter challenge](../docs/author-filter.md), and [data transfer](../docs/data-transfer.md).
-
 **[Next: assess and plan for Azure](../04-cloud/README.md)** · **[Course overview](../README.md)**

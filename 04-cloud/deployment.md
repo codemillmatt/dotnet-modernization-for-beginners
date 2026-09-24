@@ -1,6 +1,6 @@
 # Optional: deploy BookCatalog to Azure
 
-This lab executes the reviewed plan from [Chapter 04](README.md). It isn't required for course completion.
+This lab executes the reviewed plan from [Chapter 07](README.md). It isn't part of the course path.
 
 Use your upgraded learner application. Don't deploy the completed reference instead.
 
@@ -120,7 +120,7 @@ Inspect [the reference startup guard](../examples/modernized/src/BookCatalog.Web
 
 The restricted runtime identity must not create schema. The approved administrator performs that step separately.
 
-Rebuild and run locally as in Chapter 03. Add a book, edit it, restart the app, and confirm the saved edit remains.
+Rebuild and run locally as in Chapter 06. Add a book, edit it, restart the app, and confirm the saved edit remains.
 
 Save reviewed application changes yourself. Ask the agent to reconcile plan progress with those actual checks.
 

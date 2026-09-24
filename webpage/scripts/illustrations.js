@@ -2,8 +2,8 @@ export const illustrations = [
   {
     id: "journey", document: "README.md", era: "1960s",
     title: "One app, a new foundation",
-    caption: "Follow the required route through Azure planning. Deployment is a separate, optional trip.",
-    description: "Meet BookCatalog, get your tools ready in Setup, read the assessment report, shape the plan, run and review the upgrade, and prepare an Azure plan. These are the six required steps. Deployment and cleanup are optional and need separate cost approval."
+    caption: "Follow the seven chapters from the starting point through Azure planning.",
+    description: "Start with BookCatalog, meet the tools, get ready, read the assessment report, shape the plan, run and review the upgrade, and prepare an Azure plan."
   },
   {
     id: "workflow", document: "00-introduction/README.md", era: "1970s",
@@ -27,7 +27,7 @@ export const illustrations = [
     id: "plan", document: "02-planning/README.md", era: "1990s",
     title: "Shape the upgrade plan",
     caption: "Request the plan, review the choices, then check its tasks before execution.",
-    description: "Ask the modernization agent to create a .NET 10 plan. Choose an in-place ASP.NET Core MVC upgrade with EF Core and demo database creation. Read the saved plan and check that its final task includes launching, adding a book, editing it, and restarting. Run the app in Chapter 03, not while planning."
+    description: "Ask the modernization agent to create a .NET 10 plan. Choose an in-place ASP.NET Core MVC upgrade with EF Core and demo database creation. Read the saved plan and check that its final task includes launching, adding a book, editing it, and restarting. Run the app in Chapter 06, not while planning."
   },
   {
     id: "architecture", document: "03-upgrade-execution/README.md", era: "2000s-2010s",
