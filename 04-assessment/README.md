@@ -1,5 +1,10 @@
 # Chapter 04: Assess BookCatalog
 
+<!-- repo-only:start -->
+> [!TIP]
+> **Prefer the web experience?** [Open this page on the course website](https://microsoft.github.io/dotnet-modernization-for-beginners/#/01-assessment) for the best reading experience and navigation.
+<!-- repo-only:end -->
+
 The assessment is the first part of the upgrade process.
 It identifies what must change before an app can be upgraded to the .NET version you specify.
 The modernization agent generates an assessment report through GitHub Copilot in Visual Studio.
@@ -143,7 +148,7 @@ Don't create a second assessment or start the upgrade.
 
 Use that scenario for the next chapter.
 
-**[Next: shape the upgrade plan](../05-planning/README.md)**
+**[Next: Shape the upgrade plan](../05-planning/README.md)**
 
 ## Reference
 

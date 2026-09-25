@@ -1,6 +1,11 @@
 <a id="chapter-00-get-ready-to-modernize"></a>
 # Chapter 02: Meet BookCatalog and the tools
 
+<!-- repo-only:start -->
+> [!TIP]
+> **Prefer the web experience?** [Open this page on the course website](https://microsoft.github.io/dotnet-modernization-for-beginners/#/00-introduction) for the best reading experience and navigation.
+<!-- repo-only:end -->
+
 BookCatalog is a small .NET Framework 4.8 web app for keeping track of books.
 A catalog editor can add a book, edit its details, and browse the catalog.
 
@@ -44,7 +49,7 @@ You'll review those changes and run your upgraded app in Visual Studio.
 
 **GitHub Copilot modernization** also provides the later **Migrate to Azure** workflow. You'll finish with an Azure assessment and migration plan.
 
-## What carries forward
+## How you'll work
 
 <a id="choose-the-records-that-must-survive"></a>
 
@@ -68,4 +73,4 @@ Instead, EF Core will create the upgraded schema and seed books. Existing record
 
 Next, check your tools and try BookCatalog before asking the modernization agent to upgrade it.
 
-**[Next: get ready in Setup](../03-prerequisites/README.md)** · **[Already set up? Run BookCatalog](../03-prerequisites/README.md#run-bookcatalog)**
+**[Next: Get ready in Setup](../03-prerequisites/README.md)** · **[Already set up? Run BookCatalog](../03-prerequisites/README.md#run-bookcatalog)**

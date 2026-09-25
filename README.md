@@ -1,5 +1,10 @@
 # .NET Modernization for Beginners
 
+<!-- repo-only:start -->
+> [!TIP]
+> **Prefer the web experience?** [Open this page on the course website](https://microsoft.github.io/dotnet-modernization-for-beginners/#/overview) for the best reading experience and navigation.
+<!-- repo-only:end -->
+
 Use GitHub Copilot in Visual Studio to upgrade a legacy .NET app.
 Then plan its move to Azure, Microsoft's cloud platform.
 
@@ -14,7 +19,7 @@ You'll finish with a working application on .NET 10, plus reports and plans that
 
 This course assumes C#, basic ASP.NET MVC, Visual Studio, NuGet, and basic Git knowledge. You don't need previous modernization experience.
 
-[**Start: meet BookCatalog and the tools**](02-introduction/README.md) · [Go straight to Setup](03-prerequisites/README.md) · [Run the completed reference](examples/modernized/README.md)
+[**Start: Meet the Book Catalog app and the tools**](02-introduction/README.md) · [Go straight to Setup](03-prerequisites/README.md) · [Run the final upgraded and completed reference app](examples/modernized/README.md)
 
 <a id="-what-youll-learn"></a>
 ## What you'll learn
@@ -56,12 +61,12 @@ You choose the options, adjust its instructions, and try the result.
 
 ![A travel-poster route through the seven course chapters, from the starting point to the Azure migration plan.](docs/illustrations/journey-light.svg)
 
-| Chapter | What you do | Result |
+| Chapter | What you do | What you'll learn |
 | --- | --- | --- |
-| [01: Start here](README.md) | Understand BookCatalog and the course | A clear starting point |
-| [02: Meet the app and tools](02-introduction/README.md) | Meet BookCatalog and the tools | Know what you're building |
-| [03: Get ready](03-prerequisites/README.md) | Check your tools and try the app | Working learner copy and Copilot access |
-| [04: Assess the app](04-assessment/README.md) | Read the report and add a requirement if needed | An assessment you've reviewed |
+| [01: Start here](README.md) | Understand BookCatalog and the course | This page |
+| [02: Meet the app and tools](02-introduction/README.md) | Meet BookCatalog and the tools | See and understand the sample app |
+| [03: Get ready](03-prerequisites/README.md) | Check your tools and try the app | Get all the pre-reqs and the sample app running |
+| [04: Assess the app](04-assessment/README.md) | Read the assessment report and add a requirement if needed | An assessment you've reviewed |
 | [05: Choose the plan](05-planning/README.md) | Review options and edit a plan instruction | A plan ready for execution |
 | [06: Upgrade and check](06-upgrade-execution/README.md) | Run the upgrade and use the changed app | Your working .NET 10 application |
 | [07: Plan for Azure](07-cloud/README.md) | Review the Azure report and edit a migration plan | A cloud plan, without deployed resources |
@@ -70,7 +75,7 @@ The seven chapters take you from the starting point through the Azure migration 
 
 ## Work on your own copy
 
-[Setup](03-prerequisites/README.md#make-your-learner-copy) covers cloning and opening your learner workspace. BookCatalog is the continuing project.
+[Setup](03-prerequisites/README.md#make-your-copy-this-repo) covers cloning and opening your learner workspace. BookCatalog is the continuing project.
 
 Use the supplied demo data. The upgrade rebuilds the demo database and adds the supplied sample books.
 Existing books don't need to survive the upgrade. You don't need backups, snapshots, or a data-transfer step for this course.
@@ -91,8 +96,10 @@ Tool output varies by version and application. Compare the report's meaning and 
 
 Edit chapter READMEs, not generated website content. See [writing guidance](docs/writing.md), [maintainer validation](docs/validation.md), and [website preview instructions](webpage/README.md).
 
-A local preview does not publish the course.
-
 ## License
 
-MIT. See [LICENSE](LICENSE). Third-party font and tool licenses remain with their respective assets.
+This project is licensed under the terms of the [MIT open source license](LICENSE). Please refer to the `LICENSE` file for the full terms.
+
+Copyright (c) Microsoft Corporation.
+
+Third-party font and tool licenses remain with their respective assets.

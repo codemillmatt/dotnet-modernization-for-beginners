@@ -1,5 +1,10 @@
 # Chapter 06: Upgrade and check the application
 
+<!-- repo-only:start -->
+> [!TIP]
+> **Prefer the web experience?** [Open this page on the course website](https://microsoft.github.io/dotnet-modernization-for-beginners/#/03-upgrade-execution) for the best reading experience and navigation.
+<!-- repo-only:end -->
+
 Now we'll have the modernization agent upgrade BookCatalog using the plan you reviewed.
 You'll inspect the result, launch it from Visual Studio, and try the app running on the version of .NET you specified.
 
@@ -155,4 +160,4 @@ Chapter 07 uses this upgraded solution.
 <a id="check-the-legacy-source-remains-unchanged"></a>
 <a id="make-an-independent-change"></a>
 <a id="optional-data-and-independent-change-exercises"></a>
-**[Next: assess and plan for Azure](../07-cloud/README.md)** · **[Course overview](../README.md)**
+**[Next: Assess and plan for Azure](../07-cloud/README.md)** · **[Course overview](../README.md)**

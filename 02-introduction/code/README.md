@@ -1,5 +1,10 @@
 # Optional introductory assessment sample
 
+<!-- repo-only:start -->
+> [!TIP]
+> **Prefer the web experience?** [Open this page on the course website](https://microsoft.github.io/dotnet-modernization-for-beginners/#/reference?path=02-introduction%2Fcode%2FREADME.md) for the best reading experience and navigation.
+<!-- repo-only:end -->
+
 `SimpleLegacyApp` is a small SDK-style .NET Framework 4.8 console project.
 It isn't the BookCatalog web project used in the required course.
 

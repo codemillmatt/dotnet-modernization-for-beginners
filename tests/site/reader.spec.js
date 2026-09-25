@@ -134,7 +134,7 @@ test("legacy setup sections reach the current next step without the old links pa
   await open(page, "#/00-introduction?section=run-the-original-app");
   await expect(page.locator("#run-the-original-app")).toBeAttached();
   await expect(page.getByText("Earlier setup and exercise links", { exact: true })).toHaveCount(0);
-  await page.getByRole("link", { name: "Next: get ready in Setup", exact: true }).click();
+  await page.getByRole("link", { name: "Next: Get ready in Setup", exact: true }).click();
   await expect(page).toHaveURL(/#\/prerequisites$/);
   await expect(page.locator("#article")).not.toHaveAttribute("aria-busy", "true");
   await page.getByRole("link", { name: "Already set up? Run BookCatalog", exact: true }).click();

@@ -1,7 +1,13 @@
 <a id="workshop-website"></a>
 # Course website
 
+<!-- repo-only:start -->
+> [!TIP]
+> **Prefer the web experience?** [Open this page on the course website](https://microsoft.github.io/dotnet-modernization-for-beginners/#/reference?path=webpage%2FREADME.md) for the best reading experience and navigation.
+<!-- repo-only:end -->
+
 The reader uses the course READMEs as its source. Edit those files instead of generated HTML.
+Repository-only notes can use `<!-- repo-only:start -->` and `<!-- repo-only:end -->`. The build removes the marked content from the website while keeping it visible in repository Markdown.
 
 ## Build and preview
 

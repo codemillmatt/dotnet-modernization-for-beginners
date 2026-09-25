@@ -9,6 +9,7 @@ import { eras, eraPalette, getEra, referenceEra } from "../../webpage/scripts/er
 import { illustrations, illustrationPath } from "../../webpage/scripts/illustrations.js";
 import { zipEntries } from "./zip-entries.mjs";
 import { selectPublicContent } from "../../webpage/tools/public-content.mjs";
+import { stripRepositoryOnlySections } from "../../webpage/tools/repo-only.mjs";
 
 const root = resolve(import.meta.dirname, "../..");
 const read = path => readFileSync(join(root, path), "utf8");
@@ -56,6 +57,23 @@ test("all declared local links and images resolve", () => {
     }
   }
   assert.deepEqual(failures, []);
+});
+
+test("repository-only guidance stays out of the course site", {
+  skip: !existsSync(join(root, "_site")) && "Build the website before checking its artifact."
+}, () => {
+  const readmes = documents.filter(path => path === "README.md" || path.endsWith("/README.md"));
+  for (const path of readmes) {
+    const source = read(path);
+    const siteUrl = `https://microsoft.github.io/dotnet-modernization-for-beginners/${routeForPath(path)}`;
+    assert.match(source, /<!-- repo-only:start -->[\s\S]*<!-- repo-only:end -->/);
+    assert.ok(source.includes(siteUrl), `${path} should link to its generated page`);
+    assert.doesNotMatch(read(`_site/content/${path}`), /Prefer the web experience/);
+  }
+  assert.equal(stripRepositoryOnlySections("before\n<!-- repo-only:start -->\nhidden\n<!-- repo-only:end -->\nafter"),
+    "before\nafter");
+  assert.throws(() => stripRepositoryOnlySections("<!-- repo-only:start -->\nmissing end", "README.md"),
+    /unbalanced/);
 });
 
 test("manifest preserves identifiers and the sequential chapter path", () => {

@@ -1,5 +1,10 @@
 # Run the legacy BookCatalog sample
 
+<!-- repo-only:start -->
+> [!TIP]
+> **Prefer the web experience?** [Open this page on the course website](https://microsoft.github.io/dotnet-modernization-for-beginners/#/reference?path=shared-legacy-app%2FREADME.md) for the best reading experience and navigation.
+<!-- repo-only:end -->
+
 BookCatalog is an ASP.NET MVC 5 application using .NET Framework 4.8, EF6, and SQL Server LocalDB.
 
 Its users add, inspect, edit, and remove book records. The main list hides inactive books and sorts active books by title.

@@ -1,5 +1,10 @@
 # Completed BookCatalog reference
 
+<!-- repo-only:start -->
+> [!TIP]
+> **Prefer the web experience?** [Open this page on the course website](https://microsoft.github.io/dotnet-modernization-for-beginners/#/reference?path=examples%2Fmodernized%2FREADME.md) for the best reading experience and navigation.
+<!-- repo-only:end -->
+
 You'll run a completed .NET 10 application that lets you browse books, add one, and keep your changes.
 It uses ASP.NET Core MVC and Entity Framework Core (EF Core).
 Running it gives you a working example to compare with your own upgrade.

@@ -7,6 +7,7 @@ import { selectPublicContent } from "./public-content.mjs";
 import { renderIllustrations } from "./render-illustrations.mjs";
 import { illustrations, illustrationPath } from "../scripts/illustrations.js";
 import { publishSite } from "./publish-site.mjs";
+import { stripRepositoryOnlySections } from "./repo-only.mjs";
 import { runPython } from "../../tools/python.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
@@ -20,7 +21,11 @@ async function copyPublicFile(path) {
   }
   const destination = join(stage, "content", path);
   await mkdir(dirname(destination), { recursive: true });
-  await cp(source, destination);
+  if (path.endsWith(".md")) {
+    await writeFile(destination, stripRepositoryOnlySections(await readFile(source, "utf8"), path));
+  } else {
+    await cp(source, destination);
+  }
 }
 function gitFiles(args) {
   const result = spawnSync("git", ["ls-files", "-z", ...args], { cwd: root, encoding: "utf8" });

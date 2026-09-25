@@ -1,5 +1,10 @@
 # Chapter 03: Get ready
 
+<!-- repo-only:start -->
+> [!TIP]
+> **Prefer the web experience?** [Open this page on the course website](https://microsoft.github.io/dotnet-modernization-for-beginners/#/prerequisites) for the best reading experience and navigation.
+<!-- repo-only:end -->
+
 Let's run BookCatalog before we ask the modernization agent to upgrade it. You'll check your tools, download the course, and try the app.
 
 **[Already set up? Run BookCatalog](#run-bookcatalog)**
@@ -74,7 +79,7 @@ Open **GitHub Copilot Chat**. You'll check the `@Modernize` entry point after op
 Use the supplied sample code and demo data. Follow your organization's rules for sending source to Copilot.
 You don't need Azure CLI, Node, Python, or an Azure subscription for the required course.
 
-## Make your learner copy
+## Make your copy this repo
 
 Open PowerShell in the directory where you keep your projects. Run these commands:
 
@@ -170,4 +175,4 @@ If the command isn't available, check the installed modernization component and 
 
 Continue when BookCatalog runs and `@Modernize` responds.
 
-**[Next: assess BookCatalog](../04-assessment/README.md)** · **[Back: meet the app](../02-introduction/README.md)**
+**[Next: Assess Book Catalog](../04-assessment/README.md)** · **[Back: Meet the app](../02-introduction/README.md)**

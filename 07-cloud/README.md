@@ -1,6 +1,11 @@
 <a id="chapter-04-prepare-for-azure"></a>
 # Chapter 07: Assess and plan for Azure
 
+<!-- repo-only:start -->
+> [!TIP]
+> **Prefer the web experience?** [Open this page on the course website](https://microsoft.github.io/dotnet-modernization-for-beginners/#/04-cloud) for the best reading experience and navigation.
+<!-- repo-only:end -->
+
 Your upgraded app runs locally. Now use Visual Studio's Azure modernization workflow to find what must change before it can run in Azure.
 
 Open `shared-legacy-app\BookCatalog.sln`, containing the app you upgraded in Chapter 06.

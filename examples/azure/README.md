@@ -1,5 +1,10 @@
 # Azure lab support files
 
+<!-- repo-only:start -->
+> [!TIP]
+> **Prefer the web experience?** [Open this page on the course website](https://microsoft.github.io/dotnet-modernization-for-beginners/#/reference?path=examples%2Fazure%2FREADME.md) for the best reading experience and navigation.
+<!-- repo-only:end -->
+
 Use these files with the [optional deployment lab](../../07-cloud/deployment.md), after completing the required [Azure assessment and plan](../../07-cloud/README.md).
 
 Do not deploy without separate access, scope, and cost approval. The lab exposes a public sample application without user authentication.

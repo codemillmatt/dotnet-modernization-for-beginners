@@ -1,5 +1,10 @@
 # Copy selected BookCatalog records
 
+<!-- repo-only:start -->
+> [!TIP]
+> **Prefer the web experience?** [Open this page on the course website](https://microsoft.github.io/dotnet-modernization-for-beginners/#/reference?path=tools%2FBookCatalog.Data%2FREADME.md) for the best reading experience and navigation.
+<!-- repo-only:end -->
+
 This .NET 10 console helper copies a small, explicit set of book records.
 It is not part of the learner's BookCatalog solution.
 Do not include it in the agent's application upgrade scope.

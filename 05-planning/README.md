@@ -1,5 +1,10 @@
 # Chapter 05: Choose the upgrade plan
 
+<!-- repo-only:start -->
+> [!TIP]
+> **Prefer the web experience?** [Open this page on the course website](https://microsoft.github.io/dotnet-modernization-for-beginners/#/02-planning) for the best reading experience and navigation.
+<!-- repo-only:end -->
+
 The assessment lists the work. The plan puts that work in order.
 You'll ask the modernization agent for a plan, review its choices, and check how it will run the finished app.
 
@@ -152,7 +157,7 @@ Continue when the saved plan matches the choices above and includes the launch/a
 <a id="export-the-selected-records-before-the-upgrade"></a>
 <a id="optional-copy-your-own-records"></a>
 
-**[Next: run the upgrade](../06-upgrade-execution/README.md)**
+**[Next: Run the upgrade](../06-upgrade-execution/README.md)**
 
 ## Reference
 

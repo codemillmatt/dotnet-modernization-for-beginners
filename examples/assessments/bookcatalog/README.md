@@ -1,6 +1,11 @@
 <a id="bookcatalog-visual-studio-recording"></a>
 # BookCatalog: a previous sample run
 
+<!-- repo-only:start -->
+> [!TIP]
+> **Prefer the web experience?** [Open this page on the course website](https://microsoft.github.io/dotnet-modernization-for-beginners/#/reference?path=examples%2Fassessments%2Fbookcatalog%2FREADME.md) for the best reading experience and navigation.
+<!-- repo-only:end -->
+
 This page shows BookCatalog work done before the course: a legacy-app launch and a later assessment, plan, and upgrade attempt.
 Use it to see example output, not as a set of steps to copy.
 
