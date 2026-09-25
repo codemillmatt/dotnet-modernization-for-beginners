@@ -26,14 +26,15 @@ test("schema-2 revision-1 completions stay history and do not complete the new S
   assert.deepEqual(createProgressStore(data, key).value, store.value);
 });
 
-test("all five revision-2 marks survive the narrower lessons while Setup starts incomplete", () => {
+test("all five revision-2 marks survive while Start here and Setup stay incomplete", () => {
   const data = storage({
     ...old, version: 3, completionRevisions: Object.fromEntries(old.completed.map(slug => [slug, 2])),
     previousCompleted: [{ slug: "01-assessment", revision: 1 }]
   });
   const store = createProgressStore(data, key);
   assert.deepEqual(store.value.completed, old.completed);
-  assert.equal(chapters.filter(item => item.core).length, 6);
+  assert.equal(chapters.filter(item => item.core).length, 7);
+  assert.ok(!store.value.completed.includes("overview"));
   assert.ok(!store.value.completed.includes("prerequisites"));
   assert.equal(store.value.completionRevisions.prerequisites, undefined);
   assert.deepEqual(store.value.previousCompleted, [{ slug: "01-assessment", revision: 1 }]);
@@ -46,6 +47,32 @@ test("all five revision-2 marks survive the narrower lessons while Setup starts 
   assert.equal(restored.value.completed.length, 6);
   assert.equal(restored.value.lastVisited, "prerequisites");
   assert.equal(restored.value.completionRevisions.prerequisites, 2);
+});
+
+test("existing six-step completion survives marking and unmarking Start here", () => {
+  const completed = ["00-introduction", "prerequisites", "01-assessment", "02-planning", "03-upgrade-execution", "04-cloud"];
+  const data = storage({
+    ...old, version: 3, completed,
+    completionRevisions: Object.fromEntries(completed.map(slug => [slug, 2]))
+  });
+  const store = createProgressStore(data, key);
+  assert.deepEqual(store.value.completed, completed);
+  assert.equal(store.value.completionRevisions.overview, undefined);
+  store.toggle("overview");
+  const restored = createProgressStore(data, key);
+  assert.deepEqual(restored.value.completed, [...completed, "overview"]);
+  assert.equal(restored.value.completionRevisions.overview, 2);
+  assert.equal(restored.value.theme, "dark");
+  restored.visit("overview");
+  assert.equal(restored.value.lastVisited, old.lastVisited);
+  restored.toggle("overview");
+  assert.deepEqual(createProgressStore(data, key).value.completed, completed);
+});
+
+test("an old schema-2 overview mark stays history rather than completing Start here", () => {
+  const store = createProgressStore(storage({ ...old, completed: ["overview"] }), key);
+  assert.deepEqual(store.value.completed, []);
+  assert.deepEqual(store.value.previousCompleted, [{ slug: "overview", revision: 1 }]);
 });
 
 test("only changed exercise revisions lose current completion", () => {
@@ -96,7 +123,7 @@ test("unknown chapters and invalid revision values never count or become resume 
   const store = createProgressStore(data, key);
   assert.deepEqual(store.value.completed, []);
   assert.equal(store.value.lastVisited, "");
-  for (const slug of ["overview", "reference", "docs/data-transfer.md", "docs/author-filter.md"]) {
+  for (const slug of ["bad", "reference", "docs/data-transfer.md", "docs/author-filter.md"]) {
     assert.throws(() => store.toggle(slug), /Unknown chapter/);
   }
 });

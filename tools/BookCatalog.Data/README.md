@@ -58,7 +58,7 @@ Local operations do not run Azure CLI or acquire Azure credentials.
 
 The helper still targets .NET 10. A later SDK doesn't replace its required .NET 10 runtime.
 
-Run `dotnet --list-runtimes` and look for `Microsoft.NETCore.App 10.0.x`. If it's missing, add the .NET 10 runtime through the [setup instructions](../../prerequisites/README.md#check-before-installing).
+Run `dotnet --list-runtimes` and look for `Microsoft.NETCore.App 10.0.x`. If it's missing, add the .NET 10 runtime through the [setup instructions](../../03-prerequisites/README.md#check-before-installing).
 
 The helper reads the named configuration file only.
 It does not merge `appsettings.Development.json`, environment variables, or user secrets.
@@ -209,12 +209,12 @@ They contact Azure, including for preview and verification.
 Local helper tests do not establish that live Azure permissions or networking work.
 
 Use the exported snapshot of the records you intend to copy.
-The deployment lab uses [new-record checks](../../04-cloud/deployment.md#publish-your-learner-application), not this import procedure.
+The deployment lab uses [new-record checks](../../07-cloud/deployment.md#publish-your-learner-application), not this import procedure.
 
 Before this step:
 
 1. Use an approved deployed lab before its resource-group cleanup.
-   The [deployment procedure](../../04-cloud/deployment.md) prepares its resources, schema, and seeds.
+   The [deployment procedure](../../07-cloud/deployment.md) prepares its resources, schema, and seeds.
 2. Obtain unmodified deployment outputs from `examples\azure\main.bicep`.
    Keep the outputs object at `.azure-lab\outputs.json`.
    Each output must retain its `type` and `value` fields.

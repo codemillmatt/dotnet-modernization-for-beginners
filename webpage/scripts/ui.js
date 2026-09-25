@@ -18,7 +18,8 @@ export function renderProgress(store, chapter) {
   courseProgress.textContent = `${count} of ${core.length} required steps complete`;
   document.querySelector("#completion-bar").style.width = `${100 * count / core.length}%`;
   const resume = document.querySelector("#resume-link");
-  resume.href = `#/${lastVisited || "00-introduction"}`;
+  const start = core.find(item => !completed.includes(item.slug)) || core[0];
+  resume.href = `#/${lastVisited || start.slug}`;
   resume.textContent = lastVisited ? "Resume your last chapter" : "Start the course";
   const notice = document.querySelector("#storage-notice");
   notice.textContent = store.warning || (previousCompleted.length
@@ -72,7 +73,9 @@ export function renderPager(chapter, store) {
   const complete = store.value.completed.includes(chapter.slug);
   chapterPager.innerHTML = `
     ${chapter.core ? `<div class="chapter-completion"><div><strong>Ready for the next step?</strong>
-      <p>${chapter.slug === "04-cloud"
+      <p>${chapter.slug === "overview"
+        ? "Review the course goals and learning path, then continue to meet BookCatalog."
+        : chapter.slug === "04-cloud"
         ? "Complete the Azure assessment and migration plan."
         : chapter.slug === "prerequisites"
         ? "Check your tools, run BookCatalog, and try adding and editing a sample book."

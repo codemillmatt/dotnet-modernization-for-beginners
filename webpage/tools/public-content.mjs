@@ -11,10 +11,6 @@ const exact = new Set([
   "examples/modernized/compose.yaml",
   "examples/modernized/Start-BookCatalog.ps1",
   "examples/modernized/Test-Quickstart.ps1",
-  "examples/assessments/simple-legacy-app/scenario.json",
-  "examples/assessments/simple-legacy-app/assessment.md",
-  "examples/assessments/simple-legacy-app/assessment.json",
-  "examples/assessments/simple-legacy-app/assessment.csv",
   "examples/assessments/bookcatalog/images/legacy-preview.png",
   "examples/assessments/bookcatalog/images/ch1-1-upgrade-agent-dashboard.png",
   "examples/assessments/bookcatalog/images/ch1-2-dashboard-assessment.png",
@@ -24,7 +20,7 @@ const exact = new Set([
   "examples/assessments/bookcatalog/images/ch3-2-most-tasks-complete.png"
 ]);
 const roots = [
-  ...chapters.slice(1).map(item => item.slug), "shared-legacy-app", "examples/modernized",
+  ...chapters.slice(1).map(item => item.path.split("/")[0]), "shared-legacy-app", "examples/modernized",
   "examples/azure", "tests/BookCatalog.Tests",
   "tests/BookCatalog.Data.Tests", "tools/BookCatalog.Data", "scripts"
 ];

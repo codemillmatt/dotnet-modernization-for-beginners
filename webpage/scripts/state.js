@@ -65,7 +65,8 @@ export function createProgressStore(storage, key) {
       save();
     },
     visit(slug) {
-      if (!lessonIds.includes(slug)) return;
+      // Returning to the overview must not replace the learner's resume destination.
+      if (slug === "overview" || !lessonIds.includes(slug)) return;
       state.lastVisited = slug;
       save();
     },

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="380" viewBox="0 0 480 380" fill="none">
+  <title>The instructor's mission board</title>
+  <desc>A navy planning board connects three demonstration cards. A compass-like marker and a row of discussion notes suggest preparation and guidance, not completed work.</desc>
+  <rect x="24" y="29" width="432" height="302" rx="12" fill="#071b29" stroke="#6997a7" stroke-width="2"/>
+  <path d="M24 77h432" stroke="#6997a7"/>
+  <text x="45" y="59" fill="#80dfe9" font-family="monospace" font-size="18" letter-spacing="2">MISSION / BRIEFING</text>
+  <circle cx="426" cy="53" r="6" fill="#eda478"/>
+  <g stroke="#45b7c6" stroke-width="2">
+    <path d="M113 142h85v70h93m-1 0h80v-70"/>
+    <circle cx="198" cy="142" r="5" fill="#071b29"/>
+  </g>
+  <g fill="#193b49" stroke="#80dfe9" stroke-width="2">
+    <rect x="48" y="105" width="107" height="77" rx="4"/>
+    <rect x="238" y="184" width="107" height="77" rx="4"/>
+    <rect x="324" y="105" width="107" height="54" rx="4"/>
+  </g>
+  <g fill="#edfaff" font-family="monospace" font-size="15">
+    <text x="62" y="134">PREPARE</text><text x="251" y="213">DEMO</text><text x="337" y="137">DISCUSS</text>
+  </g>
+  <g stroke="#6997a7" stroke-width="3">
+    <path d="M62 153h67m122 79h70"/>
+  </g>
+  <g transform="translate(111 246)">
+    <circle r="39" stroke="#6997a7"/><circle r="26" stroke="#45b7c6" stroke-dasharray="3 6"/>
+    <path d="M-46 0h13m66 0h13M0-46v13m0 66v13" stroke="#80dfe9" stroke-width="2"/>
+    <path d="M-15 20L0-29l15 49L0 10Z" fill="#eda478"/>
+  </g>
+  <path d="M205 288h55m13 0h55m13 0h55" stroke="#80dfe9" stroke-width="5"/>
+  <path d="M80 331l-15 24m335-24 15 24" stroke="#6997a7" stroke-width="5"/>
+  <path d="M44 356h391" stroke="#45b7c6" stroke-width="2"/>
+</svg>

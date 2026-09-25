@@ -108,7 +108,7 @@ Stopping the container doesn't delete the volume. These commands don't stop your
 
 <a id="run-on-windows"></a>
 
-Already have LocalDB? You can skip Docker. Use the course's [setup checks](../../prerequisites/README.md#check-before-installing).
+Already have LocalDB? You can skip Docker. Use the course's [setup checks](../../03-prerequisites/README.md#check-before-installing).
 
 **Stop your learner app first.** This path uses the same `BookCatalogModernizedLab` database in `(localdb)\MSSQLLocalDB`, even across separate clones.
 Unlike the Docker path, it can read and change your learner app's demo records.

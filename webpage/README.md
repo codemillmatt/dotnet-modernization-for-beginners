@@ -72,8 +72,12 @@ A script error stops the command. The launcher does not retry the script with an
 | `../docs/illustrations/` | Generated image files used by the READMEs and website |
 
 New reference documents belong in `scripts/chapters.js`. The build uses this shared list.
+Chapter folders use their course numbers, from `02-introduction` through `07-cloud`.
+The root `README.md` is Chapter 01. Setup is in `03-prerequisites`.
+Keep the chapter slugs unchanged: they identify existing website links and saved progress, not source folders.
+The reader accepts old reference paths and maps them to the renamed folders.
 The data-transfer lab, application checks, author-filter challenge, learner record, and deployment are optional reference routes.
-The BookCatalog recorded run and historical console assessment are separate references.
+The previous BookCatalog sample run supplies example reports and screenshots for the continuing course app.
 Instructor preparation isn't a required step.
 
 The download contains sample source, helper source, both application test projects, and their supporting scripts.
@@ -106,6 +110,14 @@ The full interface changes with each chapter. Light/dark mode remains a separate
 The reader sets `data-era` before it loads chapter content. `data-theme` retains the selected color mode.
 
 Most references use a quiet 2020s treatment.
+The overview's local **Samples and help** pages each use a theme tied to their purpose.
+The legacy quickstart has a workshop-manual theme with olive ink, brass accents, typewriter headings, and an illustrated parts cabinet.
+The instructor companion has a mission-briefing theme with navy and cyan, a planning-board illustration, and structured section markers.
+Each local Samples and help page has its own theme. None reuses a chapter theme.
+The previous BookCatalog sample run uses a 1950s test-flight-log theme: ivory, navy, orange accents, and an original illustrated logbook.
+Dated tabs link to the September 18 launch and September 21 assessment and upgrade attempt.
+The theme doesn't imply a completed upgrade. The page keeps its unfinished checks explicit.
+Its linked excerpts retain the quiet reference style.
 The completed BookCatalog reference uses a 2050s archive theme, with an illuminated book and circuit-style details.
 Its light and dark modes keep the instructions and code readable.
 The theme applies to the course page, not to the BookCatalog application's forms.
@@ -151,14 +163,19 @@ The reader stores progress in this browser. It does not send progress to a serve
 
 Completion means the learner marked a step after following its instructions. It doesn't mean the website tested the application.
 
-There are six required steps: introduction, Setup, assessment, planning, upgrade, and Azure planning. The overview doesn't count.
+All seven numbered chapters count toward progress, including **Start here**.
+Each chapter has a **Mark step complete** button.
 Chapter 07 completion means an Azure assessment and migration plan.
 
 Storage schema 3 uses the existing `dotnet-modernization-workshop:v2:<site-root-path>` key for continuity.
 Each completion records the chapter's `exerciseRevision` from `scripts/chapters.js`.
 Increase that revision when a new required action makes an earlier completion incompatible, not for a wording-only edit.
 Marks with unchanged revisions still count. Earlier revisions remain in `previousCompleted` as history.
-The tool-focused lessons retain revision 2 completion.
+The existing lessons retain revision 2 completion.
+Start here uses revision 2 so older reading marks don't complete it automatically.
+Existing six-step progress keeps its completion marks. Start here remains incomplete until the learner marks it.
+Returning to Start here doesn't replace a saved resume destination.
+Without a saved destination, the Start link opens the first incomplete chapter.
 The demo rebuild removes data-preservation work. It doesn't add a new completion requirement.
 Making assessment edits optional also leaves earlier completions valid.
 Setup starts incomplete for learners who used the course before that chapter existed.

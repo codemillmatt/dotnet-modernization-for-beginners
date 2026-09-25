@@ -249,7 +249,7 @@ The [helper reference](../tools/BookCatalog.Data/README.md) contains command mod
 
 Azure deployment is a separate, paid opt-in lab. Local data transfer doesn't authorize Azure access or resource creation.
 
-Start with an approved deployed lab that hasn't been cleaned up. The [deployment procedure](../04-cloud/deployment.md) prepares EF Core schema and seeds.
+Start with an approved deployed lab that hasn't been cleaned up. The [deployment procedure](../07-cloud/deployment.md) prepares EF Core schema and seeds.
 
 Finish this separate exercise before deleting the dedicated Azure resource group.
 
@@ -305,6 +305,6 @@ If apply loses its connection, verify before retrying. Don't overwrite conflicts
 
 After verification and firewall cleanup, select **Start** on the App Service **Overview** page. Open the copied records through the deployed app.
 
-Complete [scoped resource cleanup](../04-cloud/deployment.md#delete-the-dedicated-lab-group) even if the import fails.
+Complete [scoped resource cleanup](../07-cloud/deployment.md#delete-the-dedicated-lab-group) even if the import fails.
 
-**[Return to the local upgrade](../03-upgrade-execution/README.md)** · **[Course overview](../README.md)**
+**[Return to the local upgrade](../06-upgrade-execution/README.md)** · **[Course overview](../README.md)**

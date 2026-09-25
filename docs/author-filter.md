@@ -2,7 +2,7 @@
 
 Your upgraded app works. Try a small feature with less step-by-step help: let a user filter the catalog by author.
 
-This challenge isn't required for course completion. You can go directly to [Azure planning](../04-cloud/README.md).
+This challenge isn't required for course completion. You can go directly to [Azure planning](../07-cloud/README.md).
 
 Start with your working .NET 10 learner app and a reviewed Git checkpoint.
 
@@ -68,4 +68,4 @@ If the experiment is incomplete, keep its changes separate from the working app 
 
 Inspect the diff before reverting any file. Don't reset over unrelated work or replace your solution with the completed reference.
 
-**[Next: Azure planning](../04-cloud/README.md)** · **[Return to the local upgrade](../03-upgrade-execution/README.md)**
+**[Next: Azure planning](../07-cloud/README.md)** · **[Return to the local upgrade](../06-upgrade-execution/README.md)**

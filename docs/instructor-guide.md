@@ -13,9 +13,15 @@ The required outcome combines two journeys:
 1. Use the modernization agent through Copilot Chat to assess, plan, and upgrade BookCatalog to .NET 10, then run the app.
 2. Assess Azure readiness and revise a migration plan without creating resources.
 
-The required path has six steps: introduction, Setup, assessment, planning, execution, and Azure planning.
+All seven numbered chapters count toward progress: Start here, introduction, Setup, assessment, planning, execution, and Azure planning.
+Learners mark Start here complete after reviewing the course goals and learning path.
 
 Keep the focus on the tool: read its assessment, generate a plan, review the choices, add a requirement, and run the result.
+
+Introduce each new concept where learners need it.
+Connect the names to BookCatalog: the controller handles requests, its context reads and saves books, and Razor views produce pages.
+Explain schema and seed data before discussing the demo rebuild.
+Keep these explanations in the learner chapters, not only in this companion.
 
 Keep an adequate assessment as-is. Learners can add context manually or through the modernization agent, but an edit isn't a completion requirement.
 
@@ -33,7 +39,7 @@ Optional deployment adds approved resource creation, cloud checks, and cleanup. 
 
 ## Prepare before facilitating
 
-- Follow [the introduction](../00-introduction/README.md), then [Setup](../prerequisites/README.md) on a clean Windows learner environment.
+- Follow [the introduction](../02-introduction/README.md), then [Setup](../03-prerequisites/README.md) on a clean Windows learner environment.
 - Check Visual Studio 2026 components and signed-in Copilot access.
 - Accept a stable .NET SDK 10 or later. Keep the .NET 10 runtime components installed because the upgraded app targets .NET 10.
 - Confirm the legacy app starts without a test-only setup step or empty MDF.
@@ -53,15 +59,24 @@ Open `shared-legacy-app\BookCatalog.sln` in Visual Studio. Use Copilot Chat for 
 
 Typing `@Modernize` can show **@Modernize Run an assessment for BookCatalog** and open the **Upgrade Agent Dashboard**.
 
-Send the contextual assessment prompt from Chapter 01. Approve repository inspection and assessment permissions when requested.
+Send the assessment prompt from Chapter 04. It names the solution, target, and stopping point.
+Approve repository inspection and assessment permissions when requested.
 
 Visual Studio opens the assessment automatically. Use that report and the dashboard to explain the findings.
 
-In Chapter 02, generate the plan first. Then review the proposed choices before authorizing implementation.
+In Chapter 05, generate the plan after its brief explanation of the chosen approach.
+Then review the proposed choices before authorizing implementation.
 
-Use the chapter's prompt beginning `@Modernize create plan.md for .NET 10 migration`. Keep its explicit in-place, EF Core, and direct-API constraints.
+Use the chapter's prompt beginning `@Modernize create plan.md for .NET 10 migration`.
+Keep its in-place, EF Core, direct-API, and demo-data requirements.
+Let the agent work out the implementation details within those boundaries.
 
 If a proposed choice keeps EF6 or adds a second host, change it to the required course approach.
+
+Before execution, inspect the saved plan and scenario instructions.
+The execution request refers to that reviewed plan instead of repeating every choice.
+Keep the restrictions on commits and Azure actions explicit.
+Use the detailed recovery prompts only when saved tasks conflict with the agreed approach.
 
 Keep the assessment and reviewed plan for later team or management discussions.
 
@@ -71,12 +86,12 @@ There is no measured course duration yet. Allocate time for reading, decisions, 
 
 | Transition | Demonstration or question | Evidence to review |
 | --- | --- | --- |
-| [Setup](../prerequisites/README.md#run-bookcatalog) | Add a sample book with **Active** selected, then edit it | Working app and available Copilot entry point |
-| [Assessment](../01-assessment/README.md) | Read a relevant report section and decide whether it needs more context | Correct app/target and a reviewed assessment |
-| [Plan](../02-planning/README.md) | Generate the plan, review its choices, then add the add/edit/restart requirement | In-place .NET 10 and EF Core plan, with execution still unapproved |
-| [Execution](../03-upgrade-execution/README.md) | Review representative project, startup, or controller changes | Learner's own app runs and its saved edit survives restart |
-| [Recovery](../03-upgrade-execution/README.md#recover-without-discarding-your-work) | Reopen the existing scenario | Correct branch, current incomplete state, and safe next action |
-| [Azure](../04-cloud/README.md) | Read the report, choose a relevant task, and edit its plan | Assessment and updated migration plan, without resource creation |
+| [Setup](../03-prerequisites/README.md#run-bookcatalog) | Add a sample book with **Active** selected, then edit it | Working app and available Copilot entry point |
+| [Assessment](../04-assessment/README.md) | Read a relevant report section and decide whether it needs more context | Correct app/target and a reviewed assessment |
+| [Plan](../05-planning/README.md) | Generate the plan, review its choices, then add the add/edit/restart requirement | In-place .NET 10 and EF Core plan, with execution still unapproved |
+| [Execution](../06-upgrade-execution/README.md) | Review representative project, startup, or controller changes | Learner's own app runs and its saved edit survives restart |
+| [Recovery](../06-upgrade-execution/README.md#recover-without-discarding-your-work) | Reopen the existing scenario | Correct branch, current incomplete state, and safe next action |
+| [Azure](../07-cloud/README.md) | Read the report, choose a relevant task, and edit its plan | Assessment and updated migration plan, without resource creation |
 
 ## Offer optional work at the right time
 
@@ -84,7 +99,7 @@ There is no measured course duration yet. Allocate time for reading, decisions, 
 - [Advanced checks](advanced-checks.md) cover actual server requests, antiforgery, and stored timestamps. Use disposable records.
 - [Author filter](author-filter.md) offers independent feature practice after the local app works.
 - [Learner record](learner-record.md) is a detailed workbook for learners who want it.
-- [Deployment](../04-cloud/deployment.md) prepares EF Core schema and seeds, then tests a new cloud record.
+- [Deployment](../07-cloud/deployment.md) generates SQL from EF Core to create tables and sample books, then tests a new cloud record.
 
 Keep these branches skippable. An instructor demonstration doesn't create a new learner prerequisite.
 
@@ -160,17 +175,25 @@ For a deeper discussion, change one assumption verbally. For example, ask whethe
 
 Accept a reasoned different choice for that larger application. Keep this lab's implementation in place with EF Core.
 
-Core completion requires [all six steps](../README.md#course-structure), including Setup and the reviewed Azure plan. Optional material doesn't count toward required completion.
+Core completion requires [all seven chapters](../README.md#course-structure), including Start here, Setup, and the reviewed Azure plan.
+Optional material doesn't count toward required completion.
 
 ## Optional deployment facilitation
 
-Use the [deployment procedure](../04-cloud/deployment.md) only after scope and cost approval.
+Use the [deployment procedure](../07-cloud/deployment.md) only after scope and cost approval.
 
 Confirm the subscription, region, budget, identities, and owner before login or provisioning. Warn that the sample website is public and unauthenticated.
 
 Review the broad Azure-services firewall rule and the temporary client rules. Do not loosen them during a demonstration to hide an access error.
 
-Use the learner's actual upgraded application. Basic deployment prepares schema and seeds, then checks a new disposable cloud record.
+Use the learner's actual upgraded application.
+Generate the schema SQL from its EF Core model.
+Have the approved administrator apply the schema and seed books before publishing the app.
+Then check a new disposable cloud record.
+
+Keep the application-preparation prompt more specific than the required chapter's planning prompt.
+Its configuration names, identity setup, and generated schema and seed SQL must match the supplied Azure helpers.
+Code preparation doesn't authorize resource creation or deployment.
 
 End with scoped resource-group cleanup and an observed result, even if application checks fail.
 

@@ -3,7 +3,7 @@
 
 Want a detailed workbook? Copy the sections you find useful into local notes. None of this record is required for course completion.
 
-The six core steps are introduction, Setup, assessment, planning, execution, and Azure planning.
+The seven core steps are Start here, introduction, Setup, assessment, planning, execution, and Azure planning.
 
 Use **Pass**, **Fail**, or **Not run** for checks, with actual observations and a short reason. Mark optional sections **Skipped** when appropriate.
 

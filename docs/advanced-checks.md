@@ -2,7 +2,7 @@
 
 These checks go beyond the core course's ordinary app use. Use them when you want to inspect server validation, request protection, or stored timestamps.
 
-You can skip them and continue with [the local upgrade](../03-upgrade-execution/README.md) or [Azure planning](../04-cloud/README.md).
+You can skip them and continue with [the local upgrade](../06-upgrade-execution/README.md) or [Azure planning](../07-cloud/README.md).
 
 Use your actual learner app. Tests of the completed reference don't automatically validate a different generated implementation.
 
@@ -105,11 +105,11 @@ Don't reduce timestamp precision, post a replacement creation date, or change th
 
 Use the deployed app's URL for browser requests. Use the approved SQL administrator and `BookCatalogLab` for SQL inspection.
 
-Follow deployment's [bounded client-access instructions](../04-cloud/deployment.md#verify-stored-values-after-restart). Keep the temporary firewall rule open only for those checks.
+Follow deployment's [bounded client-access instructions](../07-cloud/deployment.md#verify-stored-values-after-restart). Keep the temporary firewall rule open only for those checks.
 
 Don't broaden the firewall or grant schema permissions to the runtime identity to hide an access failure.
 
-The public sample has no user authentication. Use disposable sample data, then complete [scoped cleanup](../04-cloud/deployment.md#delete-the-dedicated-lab-group).
+The public sample has no user authentication. Use disposable sample data, then complete [scoped cleanup](../07-cloud/deployment.md#delete-the-dedicated-lab-group).
 
 ## Interpret the result
 
@@ -117,4 +117,4 @@ Keep **Not run**, **Fail**, and **Pass** distinct. A successful build, a screens
 
 If a check fails, keep the actual request or error and inspect the relevant controller, model, or configuration. Don't overwrite your learner app with the reference.
 
-**[Return to the local upgrade](../03-upgrade-execution/README.md)** · **[Optional workbook](learner-record.md)**
+**[Return to the local upgrade](../06-upgrade-execution/README.md)** · **[Optional workbook](learner-record.md)**
