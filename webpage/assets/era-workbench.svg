@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="380" viewBox="0 0 480 380" fill="none">
+  <title>The original BookCatalog workshop</title>
+  <desc>An olive parts cabinet holds labeled catalog cards. A brass ruler and a pencil sit beside the cabinet, ready to inspect the starting application.</desc>
+  <path d="M35 339h410" stroke="#b77932" stroke-width="5"/>
+  <rect x="55" y="38" width="324" height="290" rx="3" fill="#283b2a" stroke="#a7ba79" stroke-width="3"/>
+  <rect x="72" y="54" width="290" height="42" fill="#e2bb51"/>
+  <text x="90" y="82" font-family="monospace" font-size="19" font-weight="bold" fill="#283b2a">BOOKCATALOG / PARTS</text>
+  <g fill="#eeeddd" stroke="#718344" stroke-width="3">
+    <path d="M76 110h129v89H76zM221 110h129v89H221zM76 214h129v89H76zM221 214h129v89H221z"/>
+  </g>
+  <g fill="#faf8ed" stroke="#92987c" stroke-width="2">
+    <path d="M89 122h103v39H89zM234 122h103v39H234zM89 226h103v39H89zM234 226h103v39H234z"/>
+  </g>
+  <g fill="#283b2a" font-family="monospace" font-size="15" text-anchor="middle">
+    <text x="140" y="147">MVC 5</text><text x="285" y="147">EF6</text>
+    <text x="140" y="251">NET 4.8</text><text x="285" y="251">BOOKS</text>
+  </g>
+  <g stroke="#b77932" stroke-width="5" stroke-linecap="round">
+    <path d="M126 180h28m117 0h28M126 284h28m117 0h28"/>
+  </g>
+  <g transform="rotate(8 411 205)">
+    <path d="M397 72h27v249h-27z" fill="#e2bb51" stroke="#283b2a" stroke-width="2"/>
+    <path d="M398 91h15m-15 19h9m-9 19h15m-15 19h9m-9 19h15m-15 19h9m-9 19h15m-15 19h9m-9 19h15m-15 19h9m-9 19h15m-15 19h9" stroke="#283b2a" stroke-width="2"/>
+  </g>
+  <path d="M88 352h246l18 6-18 6H88z" fill="#e2bb51" stroke="#283b2a" stroke-width="2"/>
+  <path d="M334 352v12l18-6Z" fill="#faf8ed"/><path d="M345 355v6l7-3Z" fill="#283b2a"/>
+</svg>

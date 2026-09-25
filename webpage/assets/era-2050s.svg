@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="520" height="500" viewBox="0 0 520 500" fill="none">
+  <title>The library after the upgrade</title>
+  <desc>An open book floats above a circular archive. Fine circuits connect the pages to a surrounding network of nodes.</desc>
+  <defs>
+    <linearGradient id="pages" x1="161" y1="178" x2="349" y2="316" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#eff8e7"/><stop offset="1" stop-color="#a9ceba"/>
+    </linearGradient>
+    <linearGradient id="column" x1="260" y1="268" x2="260" y2="435" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#79d9b8" stop-opacity=".24"/><stop offset="1" stop-color="#79d9b8" stop-opacity="0"/>
+    </linearGradient>
+    <pattern id="grid" width="26" height="26" patternUnits="userSpaceOnUse">
+      <path d="M26 0H0V26" stroke="#79d9b8" stroke-opacity=".08"/>
+    </pattern>
+  </defs>
+  <path fill="url(#grid)" d="M15 20h490v460H15z"/>
+  <g stroke="#79d9b8">
+    <circle cx="260" cy="245" r="198" stroke-opacity=".16"/>
+    <circle cx="260" cy="245" r="165" stroke-opacity=".25" stroke-dasharray="2 12"/>
+    <path d="M63 245H29m462 0h-35M260 47V15m0 448v24" stroke-opacity=".7"/>
+    <ellipse cx="260" cy="384" rx="151" ry="47" stroke-opacity=".3"/>
+    <ellipse cx="260" cy="384" rx="113" ry="33" stroke-opacity=".55"/>
+    <path d="M109 383v18c0 26 68 47 151 47s151-21 151-47v-18" stroke-opacity=".25"/>
+    <path d="M116 227H65v-83h56M381 222h71v-60h-54M355 319h100v54h-28M160 314H68v48h38" stroke-opacity=".55"/>
+    <path d="M260 91v48M260 321v56" stroke-dasharray="3 7" stroke-opacity=".8"/>
+  </g>
+  <path d="M137 270L153 391Q260 438 367 391L383 270Z" fill="url(#column)"/>
+  <g stroke="#d9f56a" stroke-width="2">
+    <path d="M96 99h38v38H96zM394 136h26v26h-26zM428 373h18v18h-18z"/>
+    <circle cx="103" cy="370" r="7"/><circle cx="260" cy="87" r="7"/>
+    <path d="M111 109h10v18h-10m-8-9h26"/>
+  </g>
+  <path d="M134 196L257 165l129 30v111l-127 36-125-39Z" fill="#102b28" stroke="#79d9b8" stroke-width="2"/>
+  <path d="M146 181Q199 163 258 204q59-41 117-23v104q-60-18-117 21-57-39-112-21Z" fill="url(#pages)" stroke="#eff8e7" stroke-width="2"/>
+  <path d="M258 205v100" stroke="#166452" stroke-width="3"/>
+  <g stroke="#166452" stroke-width="2" stroke-linecap="round">
+    <path d="M164 202q40-6 76 16m-76 0q40-6 76 16m-76 0q40-6 76 16m-76 0q40-6 56 5"/>
+    <path d="M277 218q39-23 78-16m-78 32q39-23 78-16m-78 32q39-23 78-16m-78 32q26-16 55-16"/>
+  </g>
+  <path d="M144 301l115 33 117-33" stroke="#d9f56a" stroke-width="3"/>
+  <g fill="#d9f56a">
+    <circle cx="65" cy="227" r="4"/><circle cx="452" cy="222" r="4"/>
+    <circle cx="260" cy="384" r="5"/><circle cx="168" cy="90" r="3"/>
+    <circle cx="372" cy="97" r="3"/><circle cx="431" cy="290" r="3"/>
+  </g>
+  <path d="M28 39V20h19m445 0h19v19M28 460v19h19m445 0h19v-19" stroke="#79d9b8" stroke-opacity=".6" stroke-width="2"/>
+</svg>

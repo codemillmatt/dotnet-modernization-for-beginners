@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="520" height="440" viewBox="0 0 520 440" fill="none">
+  <title>BookCatalog test-flight notes</title>
+  <desc>A navy logbook with ivory pages, an orange paper airplane, a penciled flight path, and an unfinished checklist. Decorative artwork, not a report of completed checks.</desc>
+  <defs>
+    <pattern id="draft-grid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" stroke="#8eafb9" stroke-opacity=".3"/>
+    </pattern>
+  </defs>
+  <circle cx="272" cy="211" r="178" stroke="#8eafb9" stroke-dasharray="3 9"/>
+  <path d="M47 212h24m400 0h24M272 11v24m0 354v24" stroke="#8eafb9" stroke-width="2"/>
+  <path d="M63 329C3 201 59 95 144 72" stroke="#d56832" stroke-width="3" stroke-dasharray="7 8"/>
+  <g transform="rotate(-7 255 215)">
+    <rect x="111" y="53" width="286" height="350" rx="5" fill="#102331" fill-opacity=".2"/>
+    <rect x="99" y="39" width="286" height="350" rx="5" fill="#183449" stroke="#8eafb9" stroke-width="2"/>
+    <path d="M120 40v348" stroke="#416777" stroke-width="3"/>
+    <path d="M134 367h238v11H134" fill="#fffaf0"/>
+    <path d="M140 371h228" stroke="#c5b997"/>
+    <rect x="138" y="62" width="224" height="90" fill="#fffaf0"/>
+    <text x="155" y="89" fill="#183449" font-family="Georgia,serif" font-size="17" font-weight="bold" letter-spacing="1">BOOKCATALOG</text>
+    <path d="M155 100h188" stroke="#9a9d95"/>
+    <text x="155" y="127" fill="#9a391c" font-family="monospace" font-size="16" letter-spacing="2">SAMPLE RUN</text>
+    <text x="140" y="206" fill="#fffaf0" font-family="Georgia,serif" font-size="39" font-weight="bold">FLIGHT</text>
+    <text x="140" y="252" fill="#fffaf0" font-family="Georgia,serif" font-size="39" font-weight="bold">NOTES</text>
+    <path d="M142 274h196" stroke="#8eafb9"/>
+    <g stroke="#d5b77b" stroke-width="2">
+      <rect x="144" y="293" width="12" height="12"/>
+      <rect x="144" y="319" width="12" height="12"/>
+      <path d="M170 299h151m-151 26h115"/>
+    </g>
+    <path d="M337 39h21v28l-10-6-11 6Z" fill="#d56832"/>
+    <path d="M105 87h22m-22 80h22m-22 80h22m-22 80h22" stroke="#d5b77b" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <g transform="rotate(12 404 275)">
+    <path d="M350 189h117v175H350z" fill="#fffaf0" stroke="#9a9d95"/>
+    <path d="M359 198h99v149h-99z" fill="url(#draft-grid)"/>
+    <path d="M363 326c15-58 60-20 76-68" stroke="#183449" stroke-width="2" stroke-dasharray="5 5"/>
+    <circle cx="363" cy="326" r="5" fill="#d56832"/>
+    <circle cx="439" cy="258" r="5" fill="#fffaf0" stroke="#183449" stroke-width="2"/>
+    <path d="M363 212h77m-77 8h55" stroke="#183449" stroke-width="2"/>
+  </g>
+  <g transform="rotate(12 412 104)">
+    <path d="M346 94l133-44-44 106-26-43-63-19Z" fill="#d56832" stroke="#9a391c" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M479 50l-70 63 26 43" stroke="#fff1d5" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M409 113l-8 26 20-8" fill="#9a391c"/>
+  </g>
+  <g transform="rotate(31 437 347)">
+    <rect x="431" y="279" width="12" height="121" fill="#d5b77b" stroke="#183449" stroke-width="2"/>
+    <path d="M431 400l6 22 6-22" fill="#fffaf0" stroke="#183449" stroke-width="2"/>
+    <path d="M434 413l3 9 3-9" fill="#183449"/>
+    <path d="M431 288h12" stroke="#9a391c" stroke-width="8"/>
+  </g>
+</svg>

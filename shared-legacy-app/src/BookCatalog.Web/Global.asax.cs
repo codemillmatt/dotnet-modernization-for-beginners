@@ -1,4 +1,6 @@
+using System;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -11,6 +13,7 @@ namespace BookCatalog.Web
     {
         protected void Application_Start()
         {
+            Directory.CreateDirectory((string)AppDomain.CurrentDomain.GetData("DataDirectory"));
             Database.SetInitializer(new BookCatalogInitializer());
 
             // Force DB creation and seed if empty

@@ -1,185 +1,279 @@
-import { chapters, contentUrl, siteUrl } from "./config.js";
+import { contentUrl, siteUrl } from "./config.js";
+import { normalizePath, parseRoute, routeForPath } from "./routes.js";
 import { article, chapterPager, outlineNav } from "./dom.js";
-import { buildOutline, closeDrawers, renderChapterNav, renderPager } from "./ui.js";
+import { buildOutline, closeDrawers, escapeHtml, renderPager, renderProgress } from "./ui.js";
+import { applyEra, getEra, referenceEra } from "./eras.js";
+import { illustrations, illustrationPath } from "./illustrations.js";
 
-let diagramManifestPromise;
+let request;
+let current = parseRoute("#/overview").chapter;
+export const getCurrentChapter = () => current;
 
-function getRoute() {
-  const route = window.location.hash.replace(/^#\/?/, "");
-  const [slug = "overview", query = ""] = route.split("?");
-  const chapter = chapters.find((item) => item.slug === slug) || chapters[0];
-  const section = new URLSearchParams(query).get("section");
-
-  return { chapter, section };
+function reportImageFailure(image) {
+  image.addEventListener("error", () => {
+    const notice = document.createElement("p");
+    notice.className = "notice";
+    notice.setAttribute("role", "status");
+    notice.textContent = `The image could not load. ${image.alt}`;
+    image.replaceWith(notice);
+  }, { once: true });
 }
 
-export function getCurrentChapter() {
-  return getRoute().chapter;
-}
-
-function normalizePath(path) {
-  const parts = [];
-
-  path.replace(/\\/g, "/").split("/").forEach((part) => {
-    if (!part || part === ".") return;
-    if (part === "..") parts.pop();
-    else parts.push(part);
-  });
-
-  return parts.join("/");
-}
-
-function chapterForPath(path) {
-  const normalized = normalizePath(path);
-  return chapters.find((chapter) => normalizePath(chapter.path) === normalized);
-}
-
-function escapeHtml(value) {
-  const element = document.createElement("span");
-  element.textContent = value;
-  return element.innerHTML;
-}
-
-function rewriteDocumentLinks(chapter) {
-  const currentFolder = chapter.path.includes("/")
-    ? chapter.path.slice(0, chapter.path.lastIndexOf("/") + 1)
-    : "";
-
-  article.querySelectorAll("img[src]").forEach((image) => {
-    const source = image.getAttribute("src");
-    image.addEventListener("error", () => {
-      const notice = document.createElement("div");
-      notice.className = "media-unavailable";
-      notice.setAttribute("role", "note");
-      notice.innerHTML = `<strong>Image unavailable</strong><span>${escapeHtml(image.alt || "This image is not present in the repository.")}</span>`;
-      image.replaceWith(notice);
-    }, { once: true });
-
-    if (!source || /^(?:https?:|data:)/i.test(source)) return;
-    image.src = contentUrl(normalizePath(`${currentFolder}${source}`));
+function rewriteLinks(chapter) {
+  const folder = chapter.path.includes("/") ? chapter.path.slice(0, chapter.path.lastIndexOf("/") + 1) : "";
+  for (const image of article.querySelectorAll("img[src]")) {
+    const src = image.getAttribute("src");
+    if (/^https?:/i.test(src)) {
+      image.replaceWith(document.createTextNode(image.alt || "External image"));
+      continue;
+    }
+    image.src = contentUrl(normalizePath(folder + src));
     image.loading = "lazy";
-    image.decoding = "async";
-  });
-
-  article.querySelectorAll("a[href]").forEach((link) => {
+    reportImageFailure(image);
+  }
+  for (const link of article.querySelectorAll("a[href]")) {
     const href = link.getAttribute("href");
-    if (!href || /^(?:https?:|mailto:)/i.test(href)) {
-      if (/^https?:/i.test(href || "")) {
-        link.target = "_blank";
-        link.rel = "noreferrer";
-      }
-      return;
+    if (/^(https?:|mailto:)/i.test(href)) {
+      link.rel = "noreferrer";
+      continue;
     }
-
-    if (href.startsWith("#")) {
-      link.href = `#/${chapter.slug}?section=${encodeURIComponent(href.slice(1))}`;
-      return;
-    }
-
-    const [path, section] = href.split("#");
-    const targetPath = normalizePath(`${currentFolder}${path}`);
-    const targetChapter = chapterForPath(targetPath);
-
-    if (targetChapter) {
-      const sectionQuery = section ? `?section=${encodeURIComponent(section)}` : "";
-      link.href = `#/${targetChapter.slug}${sectionQuery}`;
-    } else {
-      link.href = contentUrl(targetPath);
-    }
-  });
+    const [path, section = ""] = href.split("#");
+    const target = path ? normalizePath(folder + path) : chapter.path;
+    link.href = routeForPath(target, section) || `${contentUrl(target)}${section ? `#${section}` : ""}`;
+  }
 }
 
-async function loadDiagramManifest() {
-  if (!diagramManifestPromise) {
-    diagramManifestPromise = fetch(siteUrl("diagrams/manifest.json"))
-      .then((response) => response.ok ? response.json() : null)
-      .catch(() => null);
+function addCodeCopy() {
+  for (const pre of article.querySelectorAll("pre")) {
+    const code = pre.querySelector("code");
+    if (!code) continue;
+    const toolbar = document.createElement("div");
+    toolbar.className = "code-toolbar";
+    const language = [...code.classList].find(value => value.startsWith("language-"))?.slice(9) || "text";
+    toolbar.innerHTML = `<span>${escapeHtml(language)}</span><button type="button">Copy code</button>`;
+    const button = toolbar.querySelector("button");
+    button.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(code.textContent);
+        button.textContent = "Copied";
+        document.querySelector("#copy-notice").textContent = "The code is copied.";
+      } catch {
+        button.textContent = "Copy failed";
+        document.querySelector("#copy-notice").textContent = "Copy failed. Select the code and copy it manually.";
+      }
+    });
+    pre.before(toolbar);
+    pre.classList.add("with-toolbar");
+    pre.tabIndex = 0;
+    pre.setAttribute("aria-label", `${language} code`);
+  }
+}
+
+function addHero() {
+  const hero = document.createElement("div");
+  hero.className = "workshop-hero";
+  const copy = document.createElement("div");
+  copy.className = "hero-copy";
+  for (const node of [...article.childNodes]) {
+    if (node.nodeType === Node.ELEMENT_NODE && node.tagName === "H2") break;
+    copy.append(node);
   }
 
-  return diagramManifestPromise;
+  const art = document.createElement("img");
+  art.src = siteUrl("assets/retro-workshop.svg");
+  art.alt = "";
+  art.className = "hero-art";
+  art.setAttribute("aria-hidden", "true");
+  hero.append(copy, art);
+  article.prepend(hero);
+  const actions = copy.querySelector("p:has(> strong > a)");
+  if (actions) {
+    const links = [...actions.querySelectorAll("a")];
+    actions.className = "hero-actions";
+    const primary = document.createElement("strong");
+    primary.append(links[0]);
+    const secondary = document.createElement("span");
+    secondary.className = "hero-secondary";
+    secondary.append(...links.slice(1));
+    actions.replaceChildren(primary, secondary);
+  }
 }
 
-function createDiagramVariant(diagram, theme) {
-  const link = document.createElement("a");
-  link.className = `diagram-variant diagram-${theme}`;
-  link.href = siteUrl(diagram[theme]);
-  link.target = "_blank";
-  link.rel = "noreferrer";
-  link.setAttribute("aria-label", `Open ${diagram.alt} in a new tab`);
-
-  const image = document.createElement("img");
-  image.src = siteUrl(diagram[theme]);
-  image.alt = diagram.alt;
-  image.loading = "lazy";
-  image.decoding = "async";
-  link.append(image);
-
-  return link;
+function addChapterHeader(chapter) {
+  const heading = article.querySelector("h1");
+  if (!heading) throw new Error("The chapter has no title. Check its source.");
+  const panel = document.createElement("div");
+  panel.className = "era-intro";
+  const era = getEra(chapter.era);
+  heading.before(panel);
+  panel.append(heading);
+  if (chapter.era === "1950s") {
+    panel.classList.add("flight-intro");
+    const copy = document.createElement("div");
+    copy.className = "flight-copy";
+    const kicker = document.createElement("p");
+    kicker.className = "flight-kicker";
+    kicker.textContent = "Sample notes / Test-flight log";
+    const caption = document.createElement("p");
+    caption.className = "flight-caption";
+    caption.textContent = "Earlier observations. Not a finished upgrade.";
+    copy.append(kicker, heading, caption);
+    panel.append(copy);
+    const tabs = document.createElement("nav");
+    tabs.className = "flight-tabs";
+    tabs.setAttribute("aria-label", "Sample run dates");
+    for (const [date, label, description, section] of [
+      ["2026-09-18", "18 Sep 2026", "Legacy launch", "sample-run-environment"],
+      ["2026-09-21", "21 Sep 2026", "Assessment and upgrade attempt", "september-21-supplied-assessment-and-upgrade"]
+    ]) {
+      const link = document.createElement("a");
+      link.href = routeForPath(chapter.path, section);
+      const time = document.createElement("time");
+      time.dateTime = date;
+      time.textContent = label;
+      const detail = document.createElement("span");
+      detail.textContent = description;
+      link.append(time, detail);
+      tabs.append(link);
+    }
+    panel.append(tabs);
+  }
+  if (chapter.era === "2050s") {
+    panel.classList.add("future-intro");
+    const copy = document.createElement("div");
+    copy.className = "future-copy";
+    const kicker = document.createElement("p");
+    kicker.className = "future-kicker";
+    kicker.textContent = "2050s / After the upgrade";
+    const caption = document.createElement("p");
+    caption.className = "future-caption";
+    caption.textContent = "AI can write the upgrade. You run the result.";
+    const stack = document.createElement("ul");
+    stack.className = "future-stack";
+    stack.setAttribute("aria-label", "Application stack");
+    for (const name of [".NET 10", "ASP.NET Core MVC", "EF Core + SQL Server"]) {
+      const item = document.createElement("li");
+      item.textContent = name;
+      stack.append(item);
+    }
+    copy.append(kicker, heading, caption, stack);
+    panel.append(copy);
+  }
+  for (const [mode, file] of era.artDark ? [["light", era.art], ["dark", era.artDark]] : [["", era.art]]) {
+    const image = document.createElement("img");
+    image.src = siteUrl(`assets/${file}`);
+    image.alt = "";
+    image.className = `era-art${mode ? ` era-art-${mode}` : ""}`;
+    image.setAttribute("aria-hidden", "true");
+    if (chapter.era === "1950s") reportImageFailure(image);
+    panel.append(image);
+  }
 }
 
-async function renderDiagrams(chapter) {
-  const diagrams = article.querySelectorAll("pre code.language-mermaid");
-  if (!diagrams.length) return;
-
-  const manifest = await loadDiagramManifest();
-  const assets = manifest?.documents?.[chapter.path];
-  if (!assets || assets.length !== diagrams.length) return;
-
-  diagrams.forEach((code, index) => {
+function renderIllustrations() {
+  for (const image of article.querySelectorAll("img[src]")) {
+    const illustration = illustrations.find(item => image.src === contentUrl(illustrationPath(item.id, "light")));
+    if (!illustration) continue;
     const figure = document.createElement("figure");
-    figure.className = "diagram-asset";
-    figure.append(
-      createDiagramVariant(assets[index], "light"),
-      createDiagramVariant(assets[index], "dark")
-    );
-    code.parentElement.replaceWith(figure);
-  });
+    figure.className = "course-illustration";
+    figure.dataset.illustration = illustration.id;
+    for (const theme of ["light", "dark"]) {
+      const link = document.createElement("a");
+      link.className = `illustration-version illustration-${theme}`;
+      link.href = contentUrl(illustrationPath(illustration.id, theme));
+      link.target = "_blank";
+      link.rel = "noreferrer";
+      link.setAttribute("aria-label", `Open full-size image: ${illustration.title} (new tab)`);
+      const img = document.createElement("img");
+      img.src = link.href;
+      img.alt = illustration.description;
+      img.loading = "lazy";
+      reportImageFailure(img);
+      const label = document.createElement("span");
+      label.className = "illustration-open";
+      label.textContent = "Open full-size image";
+      link.append(img, label);
+      figure.append(link);
+    }
+    const caption = document.createElement("figcaption");
+    caption.textContent = illustration.caption;
+    const details = document.createElement("details");
+    const summary = document.createElement("summary");
+    summary.textContent = "Read the illustration";
+    const description = document.createElement("p");
+    description.textContent = illustration.description;
+    details.append(summary, description);
+    figure.append(caption, details);
+    const parent = image.parentElement;
+    if (parent.tagName === "P" && parent.childNodes.length === 1) parent.replaceWith(figure);
+    else image.replaceWith(figure);
+  }
 }
 
-export async function renderRoute() {
-  const { chapter, section } = getRoute();
+export async function renderRoute(store) {
+  request?.abort();
+  request = new AbortController();
+  const { signal } = request;
   closeDrawers();
-  renderChapterNav(chapter);
   article.setAttribute("aria-busy", "true");
-  article.innerHTML = `
-    <div class="loading-state" role="status">
-      <span class="loading-line loading-line-short"></span>
-      <span class="loading-line"></span>
-      <span class="loading-line"></span>
-      <span class="loading-line loading-line-medium"></span>
-      <span class="sr-only">Loading ${chapter.title}</span>
-    </div>
-  `;
-
+  article.innerHTML = '<p role="status">The lesson is loading.</p>';
+  chapterPager.innerHTML = "";
+  outlineNav.innerHTML = "";
+  let routeResolved = false;
   try {
-    const response = await fetch(contentUrl(chapter.path));
-    if (!response.ok) throw new Error(`Request failed with status ${response.status}`);
-
+    const { chapter, section } = parseRoute(location.hash);
+    const era = chapter.era || referenceEra;
+    applyEra(era, document.documentElement.dataset.theme);
+    document.querySelector("#chapter-label").textContent = chapter.slug === "overview"
+      ? "A .NET course with GitHub Copilot" : chapter.slug === "reference"
+      ? "Your course reference" : `${chapter.number} / Core course`;
+    document.body.classList.toggle("is-overview", chapter.slug === "overview");
+    routeResolved = true;
+    const response = await fetch(contentUrl(chapter.path), { signal });
+    if (!response.ok) throw new Error(`The lesson could not load (HTTP ${response.status}).`);
     const markdown = await response.text();
-    const rendered = marked.parse(markdown, { gfm: true });
-    article.innerHTML = DOMPurify.sanitize(rendered, { USE_PROFILES: { html: true } });
-    rewriteDocumentLinks(chapter);
+    if (signal.aborted) return;
+    current = chapter;
+    article.innerHTML = DOMPurify.sanitize(marked.parse(markdown, { gfm: true }), { USE_PROFILES: { html: true } });
+    rewriteLinks(chapter);
+    renderIllustrations();
+    if (chapter.slug === "overview") addHero();
+    else if (chapter.era) addChapterHeader(chapter);
     buildOutline(chapter);
-    renderPager(chapter);
-    await renderDiagrams(chapter);
-    document.title = `${chapter.title} | .NET Modernization for Beginners`;
+    addCodeCopy();
+    document.body.classList.toggle("is-overview", chapter.slug === "overview");
+    store.visit(chapter.slug);
+    renderProgress(store, chapter);
+    renderPager(chapter, store);
+    document.title = `${chapter.title} | .NET Modernization`;
     article.removeAttribute("aria-busy");
-
-    requestAnimationFrame(() => {
-      const target = section ? document.getElementById(section) : null;
-      if (target) target.scrollIntoView();
-      else window.scrollTo({ top: 0 });
-    });
+    const main = document.querySelector("#main-content");
+    main.focus({ preventScroll: true });
+    const target = section ? document.getElementById(section) : null;
+    if (section && !target) {
+      const notice = document.createElement("p");
+      notice.className = "notice";
+      notice.textContent = "This section moved. Use the page outline to find it.";
+      article.prepend(notice);
+    }
+    if (target) {
+      for (let ancestor = target.parentElement; ancestor; ancestor = ancestor.parentElement) {
+        if (ancestor.tagName === "DETAILS") ancestor.open = true;
+      }
+      target.scrollIntoView({ behavior: "instant", block: "start" });
+    } else window.scrollTo({ top: 0, behavior: "instant" });
   } catch (error) {
+    if (signal.aborted) return;
+    if (!routeResolved) {
+      applyEra(referenceEra, document.documentElement.dataset.theme);
+      document.querySelector("#chapter-label").textContent = "Course";
+      document.body.classList.remove("is-overview");
+    }
     article.removeAttribute("aria-busy");
-    article.innerHTML = `
-      <div class="error-state" role="alert">
-        <h1>We couldn't load this chapter</h1>
-        <p>Open <a href="${contentUrl(chapter.path)}">${chapter.path}</a> directly or refresh the page.</p>
-      </div>
-    `;
-    outlineNav.innerHTML = "";
-    chapterPager.innerHTML = "";
+    article.innerHTML = `<div class="notice" role="alert"><h1>The lesson could not load</h1>
+      <p>${escapeHtml(error.message)}</p><button id="retry-lesson" type="button">Try again</button>
+      <a href="#/overview">Return to the overview</a></div>`;
+    document.querySelector("#retry-lesson").addEventListener("click", () => renderRoute(store));
     console.error(error);
   }
 }

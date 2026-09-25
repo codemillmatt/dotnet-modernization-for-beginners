@@ -16,7 +16,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  validate:
+    uses: ./.github/workflows/course-validation.yml
   deploy:
+    if: github.ref == 'refs/heads/main'
+    needs: validate
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -31,26 +35,16 @@ jobs:
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 24
+          cache: npm
 
       - name: Configure Pages
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
 
-      - name: Prepare static site
-        shell: bash
-        run: |
-          mkdir -p _site/content
-          cp -R webpage/. _site/
-          cp README.md LICENSE _site/content/
+      - name: Restore course tools
+        run: npm ci
 
-          for chapter in 00-introduction 01-assessment 02-planning 03-upgrade-execution 04-cloud; do
-            cp -R "$chapter" "_site/content/$chapter"
-          done
-
-      - name: Generate Mermaid SVGs
-        shell: bash
-        run: |
-          npm install --global --no-audit --no-fund --allow-scripts=puppeteer @mermaid-js/mermaid-cli@11.16.0
-          node webpage/tools/render-mermaid.mjs _site/content _site/diagrams
+      - name: Build the course artifact
+        run: npm run build
 
       - name: Upload static site
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
