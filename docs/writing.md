@@ -14,6 +14,11 @@ Each lesson needs a clear starting state, a useful change or decision, and obser
 
 Explain the concept before the action that needs it. Keep its purpose, instructions, and expected result close together.
 
+Introduce a technical term before its first use in a prompt or procedure.
+Give a short definition where the learner needs it, not only in an optional reference.
+For application components, name their BookCatalog responsibility instead of listing technologies.
+Don't reteach assumed C# and MVC basics unless the next action needs a distinction.
+
 Use **what, why, and how** as a reasoning check, not mandatory headings.
 
 Keep one useful participation point near a tool action. Let learners read a report, review choices, add a requirement, or inspect a result.
@@ -28,11 +33,11 @@ Preserve standalone sample quickstarts. Do not make reference users complete the
 
 ## Required path and optional work
 
-Keep six required steps: introduction, Setup, assessment, planning, execution, and Azure planning.
+Keep all seven numbered chapters completable: Start here, introduction, Setup, assessment, planning, execution, and Azure planning.
 
 The introduction explains the project and tool workflow. Setup checks existing tools before installation and finishes with running and exploring BookCatalog.
 
-Use `prerequisites/README.md#check-before-installing` for readiness links and `prerequisites/README.md#run-bookcatalog` for the app shortcut. Adjust relative paths to the linking file.
+Use `03-prerequisites/README.md#check-before-installing` for readiness links and `03-prerequisites/README.md#run-bookcatalog` for the app shortcut. Adjust relative paths to the linking file.
 
 The modernization agent writes the learner's assessment and plan. Copilot Chat is the interface, not the actor that writes these artifacts.
 
@@ -42,7 +47,8 @@ Assessment edits are optional. Learners can keep an adequate report, edit it man
 
 Generate the plan immediately after the planning introduction. Then explain the generated choices and ask the learner to review them.
 
-Start the planning prompt with `@Modernize create plan.md for .NET 10 migration`. Follow it with the explicit upgrade constraints.
+Start the planning prompt with `@Modernize create plan.md for .NET 10 migration`.
+State the target, application scope, chosen approach, demo-data rules, and planning-only boundary.
 
 Require an in-place ASP.NET Core MVC rewrite on .NET 10 with EF Core. Don't keep the old host, shared schema, YARP, or System.Web adapters.
 
@@ -105,13 +111,28 @@ Do not claim that a rewrite proves technical accuracy or official ASD-STE100 com
 | Apply | Explicit transactional selected-record import |
 | Verify | Comparison of stored target values with the source snapshot |
 | Managed identity | Azure identity the running application uses for supported service access |
-| Core completion | Learner-confirmed outcomes for introduction, Setup, assessment, planning, execution, and Azure planning |
+| Core completion | Learner-confirmed outcomes for all seven numbered chapters, from Start here through Azure planning |
 
 Do not use seed, copy, and schema migration as synonyms.
 
 Use **modernization agent** for the actor and **Copilot Chat** for the interface. Both journeys start through Visual Studio's Modernize experience.
 
 Begin every pasted upgrade request with `@Modernize`. Name the open solution, selected UI action, and scope before the prompt.
+
+Use a short request for the current stage, not a repeated specification of the entire upgrade.
+The agent can inspect the project and choose implementation details within the reviewed requirements.
+Don't prescribe package versions, code layout, or every rejected alternative unless the task needs that detail.
+
+Save the chosen approach in the plan and scenario instructions.
+Have learners inspect those files before asking the agent to execute the reviewed plan.
+Execution prompts should refer to that plan rather than repeat it.
+Keep approval boundaries explicit, including restrictions on application changes, commits, Azure access, and deployment where needed.
+
+Recovery prompts can be more detailed.
+Name the error or conflicting decision and the saved files that need correction.
+Protect completed work and require review before execution resumes.
+For optional deployment, retain the configuration names, identity requirements, schema and seed behavior that the supplied helpers require.
+Don't remove a required contract merely to shorten a prompt.
 
 Document actual artifact paths and purposes. Do not assume Azure and framework-upgrade state share a schema.
 
@@ -154,10 +175,11 @@ Preserve public chapter routes and existing deep links. Keep compact compatibili
 Use direct canonical links for normal navigation. An old local anchor doesn't redirect to another document on its own.
 
 Retain compatible completion marks when a lesson's outcome narrows. New Setup completion starts incomplete.
+Start here also starts incomplete for existing readers. Don't award completion from an earlier reading mark.
 
 If a required action genuinely changes, revise only the affected completion criterion. Preserve the learner's theme and valid resume destination.
 
-Keep the existing era styles and Setup's concert-poster interlude. Artwork and optional routes don't change the six-step completion count.
+Keep the existing era styles and Setup's concert-poster interlude. Artwork and optional routes don't change the seven-step completion count.
 
 ## Language checks
 

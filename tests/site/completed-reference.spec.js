@@ -23,7 +23,7 @@ for (const [hosting, base] of [["subpath", "/workshop/"], ["root", "http://127.0
       await expect(page.locator("#article")).toContainText("Docker");
       await expect(page.locator("#article pre").filter({ hasText: "dotnet test" })).toHaveCount(0);
       await expect(page.locator("[data-complete]")).toHaveCount(0);
-      await expect(page.locator("#course-progress")).toHaveText("1 of 6 required steps complete");
+      await expect(page.locator("#course-progress")).toHaveText("1 of 7 required steps complete");
       await expect(page.locator("#resume-link")).toHaveAttribute("href", "#/02-planning");
       const art = page.locator(".future-intro .era-art");
       await expect(art).toHaveAttribute("src", /\/assets\/era-2050s.svg$/);
@@ -64,7 +64,7 @@ for (const [hosting, base] of [["subpath", "/workshop/"], ["root", "http://127.0
       await page.locator("#resume-link").click();
       await expect(page.locator("html")).toHaveAttribute("data-era", "1990s");
       await expect(page.locator(".future-intro")).toHaveCount(0);
-      await page.goto(`${base}#/reference?path=shared-legacy-app%2FREADME.md`);
+      await page.goto(`${base}#/reference?path=docs%2Fwriting.md`);
       await expect(page.locator("html")).toHaveAttribute("data-era", "2020s");
       await expect(page.locator(".future-intro")).toHaveCount(0);
       expect(errors).toEqual([]);

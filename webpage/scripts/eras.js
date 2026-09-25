@@ -1,6 +1,30 @@
 export const referenceEra = "2020s";
 
 export const eras = {
+  workbench: {
+    label: "Workshop manual", art: "era-workbench.svg",
+    heading: '"Courier New", Consolas, monospace', interface: 'Verdana, Tahoma, sans-serif', radius: "0px", control: "2px",
+    light: { paper: "#e5e2cf", surface: "#faf8ed", ink: "#283b2a", muted: "#59604d", accent: "#4a6028", accentText: "#ffffff",
+      soft: "#eeeddd", line: "#92987c", selected: "#e2bb51", selectedText: "#283b2a", a: "#718344", b: "#b77932", c: "#e2bb51" },
+    dark: { paper: "#1c251a", surface: "#263122", ink: "#f5f2d9", muted: "#c9ccb6", accent: "#d8de9c", accentText: "#263122",
+      soft: "#34422e", line: "#8b9974", selected: "#e2bb51", selectedText: "#283b2a", a: "#a7ba79", b: "#d69b51", c: "#e2bb51" }
+  },
+  briefing: {
+    label: "Mission briefing", art: "era-briefing.svg",
+    heading: 'Outfit, "Trebuchet MS", sans-serif', interface: '"Trebuchet MS", Verdana, sans-serif', radius: "6px", control: "6px",
+    light: { paper: "#e0edf0", surface: "#f6fcfc", ink: "#102d42", muted: "#46616d", accent: "#006577", accentText: "#ffffff",
+      soft: "#e5f1f2", line: "#799ba5", selected: "#006577", selectedText: "#ffffff", a: "#218d9b", b: "#d28153", c: "#badbe2" },
+    dark: { paper: "#071b29", surface: "#102736", ink: "#edfaff", muted: "#b8d2dc", accent: "#80dfe9", accentText: "#071b29",
+      soft: "#193b49", line: "#6997a7", selected: "#80dfe9", selectedText: "#071b29", a: "#45b7c6", b: "#eda478", c: "#badbe2" }
+  },
+  "1950s": {
+    label: "1950s", art: "era-1950s.svg",
+    heading: 'Georgia, "Times New Roman", serif', interface: '"Trebuchet MS", Verdana, sans-serif', radius: "2px", control: "3px",
+    light: { paper: "#eee6d5", surface: "#fffaf0", ink: "#183449", muted: "#52616a", accent: "#9a391c", accentText: "#fffaf0",
+      soft: "#ece4d4", line: "#9a9d95", selected: "#183449", selectedText: "#fffaf0", a: "#416777", b: "#d56832", c: "#d5b77b" },
+    dark: { paper: "#102331", surface: "#172d3c", ink: "#f7eedc", muted: "#c4cbbf", accent: "#ffb280", accentText: "#102331",
+      soft: "#203a49", line: "#789099", selected: "#ffb280", selectedText: "#102331", a: "#8eafb9", b: "#f29860", c: "#d5b77b" }
+  },
   "1960s": {
     label: "1960s", art: "retro-workshop.svg",
     heading: 'Outfit, "Segoe UI", sans-serif', interface: '"Segoe UI", Arial, sans-serif', radius: "10px", control: "8px",

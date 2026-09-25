@@ -1,6 +1,6 @@
 # Azure lab support files
 
-Use these files with the [optional deployment lab](../../04-cloud/deployment.md), after completing the required [Azure assessment and plan](../../04-cloud/README.md).
+Use these files with the [optional deployment lab](../../07-cloud/deployment.md), after completing the required [Azure assessment and plan](../../07-cloud/README.md).
 
 Do not deploy without separate access, scope, and cost approval. The lab exposes a public sample application without user authentication.
 

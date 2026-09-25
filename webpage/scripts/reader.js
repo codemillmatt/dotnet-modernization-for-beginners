@@ -107,6 +107,37 @@ function addChapterHeader(chapter) {
   const era = getEra(chapter.era);
   heading.before(panel);
   panel.append(heading);
+  if (chapter.era === "1950s") {
+    panel.classList.add("flight-intro");
+    const copy = document.createElement("div");
+    copy.className = "flight-copy";
+    const kicker = document.createElement("p");
+    kicker.className = "flight-kicker";
+    kicker.textContent = "Sample notes / Test-flight log";
+    const caption = document.createElement("p");
+    caption.className = "flight-caption";
+    caption.textContent = "Earlier observations. Not a finished upgrade.";
+    copy.append(kicker, heading, caption);
+    panel.append(copy);
+    const tabs = document.createElement("nav");
+    tabs.className = "flight-tabs";
+    tabs.setAttribute("aria-label", "Sample run dates");
+    for (const [date, label, description, section] of [
+      ["2026-09-18", "18 Sep 2026", "Legacy launch", "sample-run-environment"],
+      ["2026-09-21", "21 Sep 2026", "Assessment and upgrade attempt", "september-21-supplied-assessment-and-upgrade"]
+    ]) {
+      const link = document.createElement("a");
+      link.href = routeForPath(chapter.path, section);
+      const time = document.createElement("time");
+      time.dateTime = date;
+      time.textContent = label;
+      const detail = document.createElement("span");
+      detail.textContent = description;
+      link.append(time, detail);
+      tabs.append(link);
+    }
+    panel.append(tabs);
+  }
   if (chapter.era === "2050s") {
     panel.classList.add("future-intro");
     const copy = document.createElement("div");
@@ -134,6 +165,7 @@ function addChapterHeader(chapter) {
     image.alt = "";
     image.className = `era-art${mode ? ` era-art-${mode}` : ""}`;
     image.setAttribute("aria-hidden", "true");
+    if (chapter.era === "1950s") reportImageFailure(image);
     panel.append(image);
   }
 }

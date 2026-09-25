@@ -12,6 +12,11 @@ import { selectPublicContent } from "../../webpage/tools/public-content.mjs";
 
 const root = resolve(import.meta.dirname, "../..");
 const read = path => readFileSync(join(root, path), "utf8");
+function firstModernizationPrompt(text) {
+  const match = text.match(/```text\r?\n(@Modernize [\s\S]*?)```/);
+  assert.ok(match, "The lesson must include a copyable modernization prompt.");
+  return match[1];
+}
 const documents = [...chapters, ...references].map(item => item.path);
 const recordedBookCatalogFiles = [
   "examples/assessments/bookcatalog/README.md",
@@ -58,11 +63,11 @@ test("manifest preserves identifiers and the sequential chapter path", () => {
     ["overview", "01"], ["00-introduction", "02"], ["prerequisites", "03"],
     ["01-assessment", "04"], ["02-planning", "05"], ["03-upgrade-execution", "06"], ["04-cloud", "07"]
   ]);
-  assert.equal(chapters.filter(chapter => chapter.core).length, 6);
-  assert.equal(chapters.find(chapter => chapter.slug === "overview").core, false);
+  assert.equal(chapters.filter(chapter => chapter.core).length, 7);
+  assert.equal(chapters.find(chapter => chapter.slug === "overview").core, true);
   assert.equal(chapters.find(chapter => chapter.slug === "04-cloud").core, true);
   assert.ok(chapters.filter(chapter => chapter.core).every(chapter => chapter.exerciseRevision > 1));
-  assert.ok(references.some(item => item.path === "04-cloud/deployment.md"));
+  assert.ok(references.some(item => item.path === "07-cloud/deployment.md"));
   assert.ok(references.some(item => item.path === "docs/learner-record.md"));
   assert.ok(references.some(item => item.path === "docs/instructor-guide.md"));
   assert.ok(references.some(item => item.path === "tools/BookCatalog.Data/README.md"));
@@ -75,12 +80,23 @@ test("manifest preserves identifiers and the sequential chapter path", () => {
   for (const item of [...chapters, ...references]) assert.ok(existsSync(join(root, item.path)));
 });
 
+test("chapter source folders match course numbers without changing progress identifiers", () => {
+  assert.equal(chapters[0].path, "README.md");
+  for (const chapter of chapters.slice(1)) {
+    assert.ok(chapter.path.startsWith(`${chapter.number}-`), chapter.path);
+    assert.ok(!existsSync(join(root, chapter.slug)), `Remove the old ${chapter.slug} folder.`);
+    assert.equal(parseRoute(`#/${chapter.slug}`).chapter.path, chapter.path);
+    assert.equal(routeForPath(chapter.path), `#/${chapter.slug}`);
+    assert.equal(routeForPath(`${chapter.slug}/README.md`), `#/${chapter.slug}`);
+  }
+});
+
 test("routes constrain references and preserve sections", () => {
-  assert.equal(routeForPath("01-assessment/../README.md", "-prerequisites"), "#/overview?section=-prerequisites");
-  assert.equal(routeForPath("04-cloud/deployment.md", "delete-the-dedicated-lab-group"),
-    "#/reference?path=04-cloud%2Fdeployment.md&section=delete-the-dedicated-lab-group");
+  assert.equal(routeForPath("04-assessment/../README.md", "-prerequisites"), "#/overview?section=-prerequisites");
+  assert.equal(routeForPath("07-cloud/deployment.md", "delete-the-dedicated-lab-group"),
+    "#/reference?path=07-cloud%2Fdeployment.md&section=delete-the-dedicated-lab-group");
   assert.equal(parseRoute("#/reference?path=docs%2Fvalidation.md").chapter.path, "docs/validation.md");
-  assert.equal(routeForPath("prerequisites/README.md", "run-bookcatalog"),
+  assert.equal(routeForPath("03-prerequisites/README.md", "run-bookcatalog"),
     "#/prerequisites?section=run-bookcatalog");
   assert.equal(parseRoute("#/prerequisites").chapter.number, "03");
   assert.throws(() => parseRoute("#/reference?path=../../secret"), /not in the course/);
@@ -88,14 +104,68 @@ test("routes constrain references and preserve sections", () => {
   assert.throws(() => parseRoute("#/unknown"), /not in the course/);
 });
 
+test("old reference links resolve to the renamed chapter folders", () => {
+  for (const [oldPath, newPath] of [
+    ["00-introduction/code/README.md", "02-introduction/code/README.md"],
+    ["04-cloud/deployment.md", "07-cloud/deployment.md"]
+  ]) {
+    const route = routeForPath(newPath, "reference");
+    assert.equal(routeForPath(oldPath, "reference"), route);
+    const parsed = parseRoute(`#/reference?path=${encodeURIComponent(oldPath)}&section=reference`);
+    assert.equal(parsed.chapter.path, newPath);
+    assert.equal(parsed.section, "reference");
+  }
+  assert.throws(() => parseRoute("#/reference?path=04-cloud%2Fprivate.md"), /not in the course/);
+  assert.throws(() => parseRoute("#/reference?path=..%2F..%2Fsecret"), /not in the course/);
+});
+
 test("the completed reference has its own future era without adding a course step", () => {
   const reference = parseRoute("#/reference?path=examples%2Fmodernized%2FREADME.md").chapter;
   assert.equal(reference.era, "2050s");
   assert.equal(reference.slug, "reference");
   assert.ok(!reference.core);
-  assert.deepEqual(references.filter(item => item.era).map(item => item.path), ["examples/modernized/README.md"]);
+  assert.deepEqual(references.filter(item => item.era).map(item => item.path),
+    ["shared-legacy-app/README.md", "examples/modernized/README.md",
+      "examples/assessments/bookcatalog/README.md", "docs/instructor-guide.md"]);
   assert.ok(existsSync(join(root, "webpage/assets", getEra("2050s").art)));
   assert.equal(routeForPath(reference.path), "#/reference?path=examples%2Fmodernized%2FREADME.md");
+});
+
+test("the previous sample run has its own logbook theme without claiming a completed upgrade", () => {
+  const path = "examples/assessments/bookcatalog/README.md";
+  const reference = parseRoute(`#/reference?path=${encodeURIComponent(path)}`).chapter;
+  assert.equal(reference.title, "Previous BookCatalog sample run");
+  assert.equal(reference.era, "1950s");
+  assert.ok(!reference.core);
+  assert.match(read(path), /# BookCatalog: a previous sample run/);
+  assert.match(read(path), /not a completed upgrade/);
+  assert.match(read(path), /id="bookcatalog-visual-studio-recording"/);
+  assert.match(read(path), /id="recording-environment"/);
+  assert.match(read("README.md"), /\[Previous BookCatalog sample run\]/);
+  const art = read(`webpage/assets/${getEra("1950s").art}`);
+  assert.match(art, /<title>BookCatalog test-flight notes<\/title>/);
+  assert.doesNotMatch(art, /<script|<image|<animate|(?:href|src)=["']https?:/i);
+  assert.ok(!references.find(item => item.path.endsWith("bookcatalog/assessment-excerpts.md")).era);
+});
+
+test("Samples and help keeps useful themed references and excludes the old console report", () => {
+  const section = read("README.md").split("## Samples and help")[1].split("## Contributing")[0];
+  const links = [...section.matchAll(/\[[^\]]+\]\(([^)]+)\)/g)].map(match => match[1]);
+  const local = links.filter(path => !path.startsWith("https:"));
+  assert.deepEqual(local, ["shared-legacy-app/README.md", "examples/modernized/README.md",
+    "examples/assessments/bookcatalog/README.md", "docs/instructor-guide.md"]);
+  for (const path of local) assert.ok(references.find(item => item.path === path)?.era, path);
+  const themes = local.map(path => references.find(item => item.path === path).era);
+  assert.equal(new Set(themes).size, local.length, "Every Samples and help page needs a distinct theme.");
+  for (const theme of themes) {
+    assert.ok(!chapters.some(chapter => chapter.era === theme), "Support pages must not reuse chapter themes.");
+  }
+  assert.equal(new Set(themes.map(theme => getEra(theme).art)).size, local.length,
+    "Support page headers must have distinct artwork.");
+  assert.equal(links.length, 7);
+  assert.ok(!existsSync(join(root, "examples/assessments/README.md")));
+  assert.ok(!existsSync(join(root, "examples/assessments/simple-legacy-app")));
+  assert.deepEqual(selectPublicContent(["examples/assessments/simple-legacy-app/assessment.json"], []), []);
 });
 
 function memory(entries = []) {
@@ -103,9 +173,9 @@ function memory(entries = []) {
   return { values, getItem: key => values.get(key) ?? null, setItem: (key, value) => values.set(key, value) };
 }
 test("old reading marks do not award new activity completion", () => {
-  const storage = memory([["dotnet-modernization-course-progress", '["01-assessment","unknown"]'], ["other-app", "keep"]]);
+  const storage = memory([["dotnet-modernization-course-progress", '["overview","01-assessment","unknown"]'], ["other-app", "keep"]]);
   const store = createProgressStore(storage, "course");
-  assert.deepEqual(store.value.previousReading, ["01-assessment"]);
+  assert.deepEqual(store.value.previousReading, ["overview", "01-assessment"]);
   assert.deepEqual(store.value.completed, []);
   store.toggle("01-assessment");
   store.visit("01-assessment");
@@ -117,7 +187,7 @@ test("old reading marks do not award new activity completion", () => {
   assert.deepEqual(reloaded.value.completed, []);
   assert.equal(reloaded.value.theme, "dark");
   assert.equal(storage.values.get("other-app"), "keep");
-  assert.equal(storage.values.get("dotnet-modernization-course-progress"), '["01-assessment","unknown"]');
+  assert.equal(storage.values.get("dotnet-modernization-course-progress"), '["overview","01-assessment","unknown"]');
 });
 test("unavailable storage reports its limit and retains in-session changes", () => {
   const store = createProgressStore({ getItem() { throw Error("blocked"); }, setItem() { throw Error("blocked"); } }, "course");
@@ -158,43 +228,105 @@ test("new lesson prose does not restore the recorded-run guarantees", () => {
   assert.ok(!existsSync(join(root, ".github/upgrades/scenarios/dotnet-version-upgrade/scenario.json")));
 });
 test("setup uses a copyable official clone and accepts newer stable SDKs", () => {
-  const setup = read("prerequisites/README.md");
+  const setup = read("03-prerequisites/README.md");
   assert.match(setup, /git clone https:\/\/github\.com\/microsoft\/dotnet-modernization-for-beginners\.git bookcatalog-course/);
   assert.doesNotMatch(setup, /<course-repository-url>/);
-  assert.match(setup, /\*\*`10\.0\.401` is supported\.\*\*/);
+  assert.match(setup, /stable SDK version of `10\.0\.100` or later/);
+  assert.doesNotMatch(setup, /`10\.0\.401` is supported/);
   assert.match(setup, /later stable major versions/i);
   assert.match(setup, /Visual Studio Installer[\s\S]*Individual components/);
 });
 test("assessment uses the recorded dashboard workflow without a mandatory report edit", () => {
-  const assessment = read("01-assessment/README.md");
+  const assessment = read("04-assessment/README.md");
   assert.match(assessment, /Why assess the app/);
   assert.match(assessment, /team or management/);
-  assert.match(assessment, /@Modernize Run an assessment for BookCatalog/);
+  assert.match(assessment, /First, send just `@Modernize`/);
+  assert.match(assessment, /@Modernize open the web version of the dashboard/);
   assert.match(assessment, /Upgrade Agent Dashboard/);
   assert.match(assessment, /Keep it unchanged/);
   assert.match(assessment, /zero packages[\s\S]*seven package issues/);
   assert.doesNotMatch(assessment, /<details>|Earlier detailed-review links|Copilot writes the report/);
 });
-test("the required upgrade rebuilds demo data without preservation or side-by-side prerequisites", () => {
-  const planning = read("02-planning/README.md");
-  const execution = read("03-upgrade-execution/README.md");
+test("lessons introduce concepts before prompts and application inspections", () => {
+  const introduction = read("02-introduction/README.md");
+  assert.match(introduction, /Entity Framework 6 \(EF6\)[\s\S]*reads and saves book records/);
+  assert.match(introduction, /`BooksController` asks `ApplicationDbContext` for the active books/);
+  assert.match(introduction, /schema[\s\S]*tables and columns/);
+  assert.match(introduction, /Seed data[\s\S]*sample content/);
+  assert.doesNotMatch(introduction, /Earlier setup and exercise links|Setup has moved to/);
+  const setup = read("03-prerequisites/README.md");
+  assert.match(setup, /Date Added[\s\S]*`CreatedDate`/);
+  const assessment = read("04-assessment/README.md");
+  const assessmentPrompt = assessment.indexOf("```text");
+  for (const term of ["**Guided mode**", "**scenario**"]) {
+    const definition = assessment.indexOf(term);
+    assert.ok(definition >= 0 && definition < assessmentPrompt, `${term} must precede the assessment prompt.`);
+  }
+  const planning = read("05-planning/README.md");
+  const definition = planning.indexOf("**in-place upgrade**");
+  assert.ok(definition >= 0 && definition < planning.indexOf("```text"));
+  const execution = read("06-upgrade-execution/README.md");
+  const injection = execution.indexOf("**dependency injection**");
+  assert.ok(injection >= 0 && injection < execution.indexOf("| `Program.cs`"));
+  const cloud = read("07-cloud/README.md");
+  for (const term of ["**subscription**", "**resource group**", "**region**"]) {
+    const definition = cloud.indexOf(term);
+    assert.ok(definition >= 0 && definition < cloud.indexOf("Keep local BookCatalog development working"), term);
+  }
+});
+test("the reviewed plan owns the demo scope without preservation or side-by-side prerequisites", () => {
+  const planning = read("05-planning/README.md");
+  const execution = read("06-upgrade-execution/README.md");
   assert.ok(planning.indexOf("## Ask for the plan") < planning.indexOf("## Understand the choices"));
+  const prompt = firstModernizationPrompt(planning);
+  assert.match(prompt, /only BookCatalog\.Web in place[\s\S]*EF Core/i);
+  assert.match(prompt, /ASP\.NET Core APIs directly[\s\S]*without a second web app or compatibility adapters/);
+  assert.match(prompt, /BookCatalogModernizedLab/);
+  assert.match(prompt, /Only that disposable database may be recreated/);
+  assert.match(prompt, /Don't transfer old records/i);
+  assert.match(prompt, /Saved edits must survive normal app restarts/i);
+  assert.match(prompt, /Stop for review without changing application code or creating Git commits/);
   for (const lesson of [planning, execution]) {
-    const match = lesson.match(/```text\r?\n([\s\S]*?)```/);
-    assert.ok(match, "The lesson must include a copyable modernization prompt.");
-    const prompt = match[1];
-    assert.match(prompt, /^@Modernize /);
-    assert.match(prompt, /in place[\s\S]*EF Core/i);
-    assert.match(prompt, /BookCatalogModernizedLab/);
-    assert.match(prompt, /recreate that demo database/i);
-    assert.match(prompt, /Do not add [^\n]*(?:preservation|shared-schema)/i);
-    assert.match(prompt, /saved edits (?:must survive a restart|across normal app restarts)/i);
     assert.doesNotMatch(lesson, /Leave the legacy database unchanged|separate-database boundary|finish its export first|import your snapshot|Stop before the first upgraded-app launch/i);
   }
   assert.match(planning, /Direct Migration to ASP\.NET Core APIs/);
-  assert.match(planning, /Some versions also create `upgrade-options\.md`/);
-  assert.match(execution, /Stop[\s\S]*plan\.md, scenario-instructions\.md, tasks\.md, and pending task instructions/);
-  assert.match(execution, /still in progress after more than five hours/);
+  assert.match(planning, /You may also see `upgrade-options\.md`/);
+  assert.doesNotMatch(execution, /## If the agent keeps working on database preservation/);
+  assert.doesNotMatch(execution, /still in progress after more than five hours/);
+});
+test("execution follows the saved plan and retains approval and reporting boundaries", () => {
+  const execution = read("06-upgrade-execution/README.md");
+  const prompt = firstModernizationPrompt(execution);
+  assert.match(execution, /saved plan and `scenario-instructions\.md` contain the scope you reviewed/i);
+  assert.match(prompt, /Execute this scenario's reviewed plan/);
+  assert.match(prompt, /Follow the plan through to completion/);
+  assert.match(prompt, /Build the app and report which checks ran/);
+  assert.match(prompt, /Visual Studio profile[\s\S]*app-use checks remain/);
+  assert.match(prompt, /Don't create Git commits, create Azure resources, or deploy/);
+  assert.match(execution, /only `BookCatalogModernizedLab`, not the original database/);
+  assert.match(execution, /keeping saved edits across normal restarts/);
+  assert.match(execution, /checks it didn't run marked \*\*not run\*\*/);
+  assert.match(execution, /^> \*\*It may take up to an hour\.\*\*/m);
+  assert.match(execution, /^> .*tell the agent to `continue`/m);
+});
+test("cloud assessment starts in chat without the old deployment-links panel", () => {
+  const cloud = read("07-cloud/README.md");
+  assert.match(cloud, /Start the process from Copilot Chat/);
+  assert.match(cloud, /Back to course overview/);
+  assert.doesNotMatch(cloud, /Right-click the solution|Earlier activities and deployment links|<details>/);
+});
+test("optional application preparation retains the Azure helper contract", () => {
+  const deployment = read("07-cloud/deployment.md");
+  const prompt = firstModernizationPrompt(deployment);
+  for (const setting of ["KeyVaultName", "AZURE_CLIENT_ID", "InitializeDatabase", "BookCatalogModernizedLab"]) {
+    assert.ok(prompt.includes(setting), setting);
+  }
+  assert.match(prompt, /user-assigned managed identity/);
+  assert.match(prompt, /local startup independent of Azure/);
+  assert.match(prompt, /saved edits across restarts/);
+  assert.match(prompt, /Disable automatic schema creation in Azure/);
+  assert.match(prompt, /schema SQL, including the demo seed books, without a live database connection/);
+  assert.match(prompt, /Don't create Azure resources, deploy, or commit/);
 });
 test("cloud reference keeps initialization and identity permissions separate", () => {
   assert.match(read("examples/azure/main.bicep"), /azureADOnlyAuthentication: true/);
@@ -222,7 +354,7 @@ test("sample source downloads retain required project source", {
     "scripts/Test-LegacyApp.ps1", "scripts/Test-ModernizedApp.ps1", "docs/learner-record.md", "docs/instructor-guide.md",
     "docs/data-transfer.md", "docs/advanced-checks.md", "docs/author-filter.md",
     ...recordedBookCatalogFiles,
-    "04-cloud/deployment.md", ".config/dotnet-tools.json",
+    "07-cloud/deployment.md", ".config/dotnet-tools.json",
     "examples/modernized/compose.yaml", "examples/modernized/Start-BookCatalog.ps1",
     "examples/modernized/Test-Quickstart.ps1", "examples/modernized/.gitignore",
     "shared-legacy-app/src/BookCatalog.Web/Properties/AssemblyInfo.cs",
@@ -233,7 +365,7 @@ test("sample source downloads retain required project source", {
   assert.ok(![...entries.keys()].some(path =>
     /(^|\/)(bin|obj|packages|history|\.bookcatalog-lab|\.azure-lab|snapshots|secrets\.json)(\/|$)|\.(mdf|ldf|pfx)$/i.test(path)));
   assert.match(entries.get("README.md").toString("utf8"),
-    /https:\/\/github.com\/microsoft\/dotnet-modernization-for-beginners\/blob\/main\/00-introduction\/README.md/);
+    /https:\/\/github.com\/microsoft\/dotnet-modernization-for-beginners\/blob\/main\/02-introduction\/README.md/);
   const brokenLinks = [];
   for (const [path, bytes] of entries) {
     if (!path.endsWith(".md")) continue;
@@ -260,10 +392,10 @@ test("public previews include authored helper files without exposing untracked l
   const safe = [
     "tools/BookCatalog.Data/Program.cs", "tools/BookCatalog.Data/BookCatalog.Data.csproj",
     "tools/BookCatalog.Data/README.md", "tests/BookCatalog.Data.Tests/TransferTests.cs",
-    "scripts/Test-DataTransfer.ps1", "docs/learner-record.md", "docs/instructor-guide.md", "04-cloud/deployment.md",
+    "scripts/Test-DataTransfer.ps1", "docs/learner-record.md", "docs/instructor-guide.md", "07-cloud/deployment.md",
     "docs/illustrations/journey-light.svg", "docs/illustrations/azure-dark.svg",
     "docs/illustrations/soundcheck-light.svg", "docs/illustrations/soundcheck-dark.svg",
-    "prerequisites/README.md", "docs/data-transfer.md", "docs/advanced-checks.md", "docs/author-filter.md",
+    "03-prerequisites/README.md", "docs/data-transfer.md", "docs/advanced-checks.md", "docs/author-filter.md",
     "examples/modernized/compose.yaml", "examples/modernized/Start-BookCatalog.ps1",
     "examples/modernized/Test-Quickstart.ps1", "examples/modernized/.gitignore",
     ...recordedBookCatalogFiles
@@ -284,6 +416,8 @@ test("public previews include authored helper files without exposing untracked l
     "examples/assessments/bookcatalog/images/ch4-private-dashboard.png"
   ];
   assert.deepEqual(selectPublicContent([], [...safe, ...privateFiles]), [...safe].sort());
+  assert.deepEqual(selectPublicContent(["07-cloud/example.bicep", "04-cloud/obsolete.bicep"], []),
+    ["07-cloud/example.bicep"], "Tracked chapter support files must use the new folder roots.");
   const rawEvidence = privateFiles.filter(path => path.startsWith("examples/assessments/bookcatalog/"));
   assert.deepEqual(selectPublicContent([...recordedBookCatalogFiles, ...rawEvidence], []),
     [...recordedBookCatalogFiles].sort(), "Tracking raw evidence must not make it public.");

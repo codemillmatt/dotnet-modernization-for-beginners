@@ -12,11 +12,19 @@ export function normalizePath(path) {
   return parts.join("/");
 }
 
+function canonicalPath(normalized) {
+  const legacyChapter = chapters.find(item => normalized.startsWith(`${item.slug}/`));
+  if (!legacyChapter || legacyChapter.path === "README.md") return normalized;
+  const folder = legacyChapter.path.slice(0, legacyChapter.path.lastIndexOf("/"));
+  return `${folder}${normalized.slice(legacyChapter.slug.length)}`;
+}
+
 export function parseRoute(hash) {
   const [slug = "overview", query = ""] = hash.replace(/^#\/?/, "").split("?");
   const parameters = new URLSearchParams(query);
   if (slug === "reference") {
-    const reference = references.find(item => item.path === parameters.get("path"));
+    const path = canonicalPath(parameters.get("path") || "");
+    const reference = references.find(item => item.path === path);
     if (!reference) throw new Error("This reference is not in the course.");
     return { chapter: { ...reference, slug: "reference", number: "Reference" }, section: parameters.get("section") };
   }
@@ -26,7 +34,7 @@ export function parseRoute(hash) {
 }
 
 export function routeForPath(path, section = "") {
-  const normalized = normalizePath(path);
+  const normalized = canonicalPath(normalizePath(path));
   const chapter = chapters.find(item => item.path === normalized);
   const params = new URLSearchParams();
   let slug;

@@ -1,15 +1,20 @@
-# BookCatalog Visual Studio recording
+<a id="bookcatalog-visual-studio-recording"></a>
+# BookCatalog: a previous sample run
 
-This page separates captured output from lesson instructions and work that hasn't been recorded.
-It contains the September 18 observed launch and the September 21 assessment, planning, and execution artifacts supplied later.
-The later artifacts establish an assessment and plan, not a completed upgrade.
+This page shows BookCatalog work done before the course: a legacy-app launch and a later assessment, plan, and upgrade attempt.
+Use it to see example output, not as a set of steps to copy.
 
-## Recording environment
+The launch was observed on September 18, 2026.
+The September 21 sample run supplied the assessment, planning, and execution artifacts below.
+Those later artifacts show an assessment and plan, not a completed upgrade.
 
-This environment table belongs to the September 18 recording only.
-The later supplied run is described separately below.
+<a id="recording-environment"></a>
+## Sample run environment
 
-| Item | Recorded value |
+This environment table belongs to the September 18 sample run only.
+The later run is described separately below.
+
+| Item | Value used |
 | --- | --- |
 | Date | September 18, 2026 |
 | Sample source | `8a03066708b478c700fcfdf60119a1de46cae56b` |
@@ -21,9 +26,9 @@ The later supplied run is described separately below.
 | Target solution | `shared-legacy-app\BookCatalog.sln` in a separate tracked-source copy |
 
 Extension versions came from the installed VSIX manifests.
-Insiders was the recording environment, not a requirement to install preview software.
-The recording used a dedicated LocalDB instance, separate MDF paths, and an unused local port.
-Those recording-only settings aren't learner prerequisites.
+Insiders was used for this sample run. You don't need to install preview software for the course.
+The run used a dedicated LocalDB instance, separate MDF paths, and an unused local port.
+Those run-specific settings aren't learner prerequisites.
 
 The original checkout, its README edits, and its database weren't used as the upgrade target.
 No resources were created in Azure. Nothing was committed, pushed, or published.
@@ -36,7 +41,7 @@ The browser showed six active seed books in title order, with the MVC 5, EF6, an
 ![The isolated legacy BookCatalog app shows six active seed books and its original book-management links.](images/legacy-preview.png)
 
 The **Add New Book** form started with **Active** cleared.
-After explicit approval, the recording saved an active sample book named `Soundcheck field notes`.
+After explicit approval, an active sample book named `Soundcheck field notes` was saved.
 It appeared in the list with details and edit links for assigned ID `8`.
 That ID belongs to this run, not a learner requirement.
 
@@ -83,7 +88,7 @@ The successful launch and chat response remain valid observations. They don't tu
 
 The tool chapters use the [official upgrade workflow](https://learn.microsoft.com/dotnet/core/porting/github-copilot-upgrade/how-to-upgrade-with-github-copilot?pivots=visualstudio)
 and [Visual Studio Azure workflow](https://learn.microsoft.com/dotnet/azure/migration/appmod/quickstart?pivots=visualstudio) for the remaining procedures.
-Their prompts are course instructions, not claimed recorded responses.
+Their prompts are course instructions, not responses from this sample run.
 
 ## September 21 supplied assessment and upgrade
 
@@ -229,7 +234,7 @@ Generated-app launch, saved-edit persistence after restart, final adapter cleanu
 
 ## Provenance and excerpt boundaries
 
-The raw recording copy is retained in the implementation session's private artifact directory as `bookcatalog-vs-walkthrough`.
+The raw sample-run copy is retained in the implementation session's private artifact directory as `bookcatalog-vs-walkthrough`.
 The private `walkthrough-evidence.md` records its environment and observations.
 
 | Public item | Original source | Treatment |
@@ -238,8 +243,8 @@ The private `walkthrough-evidence.md` records its environment and observations.
 | Modernize excerpt | Visual Studio Copilot Chat, `@modernize` thread | Greeting paragraph and two follow-up labels only. No rewritten tool text |
 | Observation prose | Maintainer interpretation of UI and browser observations | Explanation, not verbatim tool output |
 
-No framework or Azure scenario artifact path was captured in the September 18 recording.
-The later framework paths above come from the supplied notes and scripts, not that recording.
+No framework or Azure scenario artifact path was captured in the September 18 sample run.
+The later framework paths above come from the supplied notes and scripts, not that run.
 
 The September 21 review covered all 151 files in the supplied `mod-course-notes` folder, including `final-mod-agent-files`.
 It included the notes attachment, both assessment snapshots, plans, preferences, task narratives, scripts, logs, HTTP responses, and all six screenshots.
@@ -266,6 +271,5 @@ Those files, raw scripts, configuration, database assets, and credential locatio
 No raw folder was copied into the repository.
 
 Raw scenarios, local database files, and session paths aren't included in the site or sample ZIP.
-The [historical console assessment](../README.md) is a different example and isn't presented as BookCatalog output.
 
-**[Back to assessment](../../../01-assessment/README.md)** · **[Maintainer evidence](../../../docs/validation.md)**
+**[Back to assessment](../../../04-assessment/README.md)** · **[Maintainer evidence](../../../docs/validation.md)**

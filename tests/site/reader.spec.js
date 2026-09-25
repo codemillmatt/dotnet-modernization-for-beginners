@@ -105,6 +105,17 @@ test("keyboard skip stays in the selected lesson", async ({ page }) => {
   await expect(page.locator("#main-content")).toBeFocused();
 });
 
+test("legacy reference URLs load content from renamed chapter folders", async ({ page }) => {
+  for (const [oldPath, newPath] of [
+    ["00-introduction/code/README.md", "02-introduction/code/README.md"],
+    ["04-cloud/deployment.md", "07-cloud/deployment.md"]
+  ]) {
+    const response = page.waitForResponse(url => url.url().includes(`/content/${newPath}`));
+    await open(page, `#/reference?path=${encodeURIComponent(oldPath)}`);
+    expect((await response).ok()).toBeTruthy();
+  }
+});
+
 test("the assessment keeps old sections without the removed review-links panel", async ({ page }) => {
   await open(page, "#/01-assessment?section=tell-the-agent-what-must-survive");
   await expect(page.locator("#tell-the-agent-what-must-survive")).toBeAttached();
@@ -119,12 +130,11 @@ test("the assessment keeps old sections without the removed review-links panel",
   await expect(sourceLink).not.toContainText("Source");
 });
 
-test("legacy setup sections reveal their compatibility link inside collapsed details", async ({ page }) => {
+test("legacy setup sections reach the current next step without the old links panel", async ({ page }) => {
   await open(page, "#/00-introduction?section=run-the-original-app");
-  const notice = page.locator("details").filter({ has: page.locator("#run-the-original-app") });
-  await expect(notice).toHaveAttribute("open", "");
-  await expect(notice.getByRole("link", { name: "Get ready", exact: true })).toBeVisible();
-  await notice.getByRole("link", { name: "Get ready", exact: true }).click();
+  await expect(page.locator("#run-the-original-app")).toBeAttached();
+  await expect(page.getByText("Earlier setup and exercise links", { exact: true })).toHaveCount(0);
+  await page.getByRole("link", { name: "Next: get ready in Setup", exact: true }).click();
   await expect(page).toHaveURL(/#\/prerequisites$/);
   await expect(page.locator("#article")).not.toHaveAttribute("aria-busy", "true");
   await page.getByRole("link", { name: "Already set up? Run BookCatalog", exact: true }).click();
@@ -135,7 +145,8 @@ test("legacy setup sections reveal their compatibility link inside collapsed det
 
 test("code copy preserves the displayed code and reports clipboard failure", async ({ page, context }) => {
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
-  for (const route of ["#/04-cloud", "#/reference?path=04-cloud%2Fdeployment.md",
+  for (const route of ["#/01-assessment", "#/02-planning", "#/03-upgrade-execution",
+    "#/04-cloud", "#/reference?path=07-cloud%2Fdeployment.md",
     "#/reference?path=tools%2FBookCatalog.Data%2FREADME.md"]) {
     await open(page, route);
     const expected = await page.locator("pre code").first().textContent();
@@ -159,20 +170,74 @@ test("code copy preserves the displayed code and reports clipboard failure", asy
   await expect(page.locator("#copy-notice")).toContainText("manually");
 });
 
-test("six required completions include Setup and Azure planning", async ({ page }) => {
+for (const width of [1440, 390]) {
+  test(`Start here completion persists and can be undone at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 1000 });
+    await open(page);
+    await expect(page.locator("#course-progress")).toHaveText("0 of 7 required steps complete");
+    await expect(page.locator("#resume-link")).toHaveAttribute("href", "#/overview");
+    await expect(page.locator(".chapter-completion")).toContainText("Review the course goals and learning path");
+    const button = page.getByRole("button", { name: "Mark step complete", exact: true });
+    await expect(button).toHaveAttribute("data-complete", "overview");
+    await button.click();
+    await expect(page.locator("#course-progress")).toHaveText("1 of 7 required steps complete");
+    await expect(page.locator("#chapter-nav a[href='#/overview'] .is-complete")).toHaveCount(1);
+    await expect(page.locator("#resume-link")).toHaveAttribute("href", "#/00-introduction");
+    expect(await page.locator("#completion-bar").evaluate(element => parseFloat(element.style.width)))
+      .toBeCloseTo(100 / 7, 4);
+    await page.reload();
+    const completed = page.getByRole("button", { name: "Marked complete", exact: true });
+    await expect(completed).toHaveAttribute("aria-pressed", "true");
+    await expect(page.locator("#course-progress")).toHaveText("1 of 7 required steps complete");
+    await completed.click();
+    await page.reload();
+    await expect(page.getByRole("button", { name: "Mark step complete", exact: true })).toHaveAttribute("aria-pressed", "false");
+    await expect(page.locator("#course-progress")).toHaveText("0 of 7 required steps complete");
+    await expect(page.locator("#chapter-nav a[href='#/overview'] .is-complete")).toHaveCount(0);
+  });
+}
+
+test("adding Start here preserves all six existing completions and the resume destination", async ({ page }) => {
+  const completed = ["00-introduction", "prerequisites", "01-assessment", "02-planning", "03-upgrade-execution", "04-cloud"];
+  await page.addInitScript(completed => {
+    const key = "dotnet-modernization-workshop:v2:/workshop/";
+    if (localStorage.getItem(key)) return;
+    localStorage.setItem(key, JSON.stringify({
+      version: 3, completed, completionRevisions: Object.fromEntries(completed.map(slug => [slug, 2])),
+      previousCompleted: [], previousReading: [], lastVisited: "04-cloud", theme: "dark"
+    }));
+    localStorage.setItem("unrelated-app", "keep");
+  }, completed);
+  await open(page);
+  await expect(page.locator("#course-progress")).toHaveText("6 of 7 required steps complete");
+  await expect(page.locator("#resume-link")).toHaveAttribute("href", "#/04-cloud");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await page.getByRole("button", { name: "Mark step complete", exact: true }).click();
+  await page.reload();
+  await expect(page.locator("#course-progress")).toHaveText("7 of 7 required steps complete");
+  await expect(page.locator("#resume-link")).toHaveAttribute("href", "#/04-cloud");
+  await page.getByRole("button", { name: "Marked complete", exact: true }).click();
+  await page.reload();
+  await expect(page.locator("#course-progress")).toHaveText("6 of 7 required steps complete");
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem("dotnet-modernization-workshop:v2:/workshop/")).completed))
+    .toEqual(completed);
+  expect(await page.evaluate(() => localStorage.getItem("unrelated-app"))).toBe("keep");
+});
+
+test("seven required completions include Start here, Setup, and Azure planning", async ({ page }) => {
   for (const chapter of chapters.filter(item => item.core)) {
     await open(page, `#/${chapter.slug}`);
     await page.getByRole("button", { name: "Mark step complete" }).click();
   }
   await page.reload();
-  await expect(page.locator("#course-progress")).toHaveText("6 of 6 required steps complete");
+  await expect(page.locator("#course-progress")).toHaveText("7 of 7 required steps complete");
   await expect(page.locator("#resume-link")).toHaveAttribute("href", "#/04-cloud");
   await expect(page.locator(".chapter-completion")).toContainText("Azure assessment and migration plan.");
-  for (const path of ["04-cloud/deployment.md", "docs/learner-record.md", "docs/data-transfer.md",
+  for (const path of ["07-cloud/deployment.md", "docs/learner-record.md", "docs/data-transfer.md",
     "docs/advanced-checks.md", "docs/author-filter.md", "examples/assessments/bookcatalog/README.md"]) {
     await open(page, `#/reference?path=${encodeURIComponent(path)}`);
     await expect(page.locator("[data-complete]")).toHaveCount(0);
-    await expect(page.locator("#course-progress")).toHaveText("6 of 6 required steps complete");
+    await expect(page.locator("#course-progress")).toHaveText("7 of 7 required steps complete");
     await expect(page.locator("#resume-link")).toHaveAttribute("href", "#/04-cloud");
   }
 });
@@ -193,7 +258,7 @@ test("Setup follows the introduction and leads to assessment", async ({ page }) 
   await expect(page.locator(".pager-grid a").first()).toHaveAttribute("href", "#/prerequisites");
 });
 
-test("revision-2 completions survive slimming and the newly added Setup remains incomplete", async ({ page }) => {
+test("revision-2 completions survive while Start here and Setup remain incomplete", async ({ page }) => {
   await page.addInitScript(() => {
     const key = "dotnet-modernization-workshop:v2:/workshop/";
     if (localStorage.getItem(key)) return;
@@ -206,16 +271,17 @@ test("revision-2 completions survive slimming and the newly added Setup remains 
     localStorage.setItem("unrelated-app", "keep");
   });
   await open(page);
-  await expect(page.locator("#course-progress")).toHaveText("5 of 6 required steps complete");
+  await expect(page.locator("#course-progress")).toHaveText("5 of 7 required steps complete");
   await expect(page.locator("#resume-link")).toHaveAttribute("href", "#/02-planning");
   await expect(page.locator("#chapter-nav .is-complete")).toHaveCount(5);
+  await expect(page.locator("#chapter-nav a[href='#/overview'] .is-complete")).toHaveCount(0);
   await expect(page.locator("#chapter-nav a[href='#/prerequisites'] .is-complete")).toHaveCount(0);
   await open(page, "#/prerequisites");
   await expect(page.getByRole("button", { name: "Mark step complete" })).toHaveAttribute("aria-pressed", "false");
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await page.getByRole("button", { name: "Mark step complete" }).click();
   await page.reload();
-  await expect(page.locator("#course-progress")).toHaveText("6 of 6 required steps complete");
+  await expect(page.locator("#course-progress")).toHaveText("6 of 7 required steps complete");
   expect(await page.evaluate(() => localStorage.getItem("unrelated-app"))).toBe("keep");
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem("dotnet-modernization-workshop:v2:/workshop/"))))
     .toMatchObject({ completionRevisions: { prerequisites: 2 }, previousCompleted: [{ slug: "01-assessment", revision: 1 }] });
@@ -230,15 +296,15 @@ test("migration and reset preserve unrelated storage", async ({ page }) => {
     }
   });
   await open(page, "#/01-assessment");
-  await expect(page.locator("#course-progress")).toHaveText("0 of 6 required steps complete");
+  await expect(page.locator("#course-progress")).toHaveText("0 of 7 required steps complete");
   await expect(page.locator("#storage-notice")).toContainText("previous reading");
   await page.getByRole("button", { name: "Mark step complete" }).click();
   page.once("dialog", dialog => dialog.dismiss());
   await page.getByRole("button", { name: "Reset progress" }).click();
-  await expect(page.locator("#course-progress")).toContainText("1 of 6");
+  await expect(page.locator("#course-progress")).toContainText("1 of 7");
   page.once("dialog", dialog => dialog.accept());
   await page.getByRole("button", { name: "Reset progress" }).click();
-  await expect(page.locator("#course-progress")).toContainText("0 of 6");
+  await expect(page.locator("#course-progress")).toContainText("0 of 7");
   expect(await page.evaluate(() => localStorage.getItem("unrelated-app"))).toBe("keep");
   expect(await page.evaluate(() => localStorage.getItem("dotnet-modernization-course-progress"))).toBe('["01-assessment"]');
 });
@@ -250,15 +316,15 @@ test("blocked storage leaves a clear notice and usable completion", async ({ pag
   await open(page, "#/01-assessment");
   await page.getByRole("button", { name: "Mark step complete" }).click();
   await expect(page.locator("#storage-notice")).toContainText("this visit only");
-  await expect(page.locator("#course-progress")).toContainText("1 of 6");
+  await expect(page.locator("#course-progress")).toContainText("1 of 7");
 });
 
 test("failed lesson fetch shows a retry without a false completion", async ({ page }) => {
-  await page.route("**/content/01-assessment/README.md", route => route.fulfill({ status: 503, body: "Unavailable" }));
+  await page.route("**/content/04-assessment/README.md", route => route.fulfill({ status: 503, body: "Unavailable" }));
   await page.goto("#/01-assessment");
   await expect(page.getByRole("alert")).toContainText("HTTP 503");
   await expect(page.locator("[data-complete]")).toHaveCount(0);
-  await page.unroute("**/content/01-assessment/README.md");
+  await page.unroute("**/content/04-assessment/README.md");
   await page.getByRole("button", { name: "Try again" }).click();
   await expect(page.locator("#article h1")).toContainText("Chapter 04");
 });
@@ -329,7 +395,7 @@ test("local assets, layout, contrast, and code remain usable", async ({ page }) 
   expect(entries.has("tools/BookCatalog.Data/BookCatalog.Data.csproj")).toBeTruthy();
   expect(entries.has("tests/BookCatalog.Data.Tests/BookCatalog.Data.Tests.csproj")).toBeTruthy();
   expect(entries.has("docs/learner-record.md")).toBeTruthy();
-  expect(entries.has("04-cloud/deployment.md")).toBeTruthy();
+  expect(entries.has("07-cloud/deployment.md")).toBeTruthy();
   expect([...entries.keys()].some(path => path.includes(".bookcatalog-lab"))).toBeFalsy();
   expect(remote).toEqual([]);
 });
@@ -344,7 +410,7 @@ test("earlier completions remain history while theme and valid resume survive", 
     }));
   });
   await open(page);
-  await expect(page.locator("#course-progress")).toHaveText("0 of 6 required steps complete");
+  await expect(page.locator("#course-progress")).toHaveText("0 of 7 required steps complete");
   await expect(page.locator("#storage-notice")).toContainText("history");
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await expect(page.locator("#resume-link")).toHaveAttribute("href", "#/02-planning");
@@ -353,13 +419,13 @@ test("earlier completions remain history while theme and valid resume survive", 
   await expect(page.getByRole("button", { name: "Mark step complete" })).toHaveAttribute("aria-pressed", "false");
   await page.getByRole("button", { name: "Mark step complete" }).click();
   await page.reload();
-  await expect(page.locator("#course-progress")).toHaveText("1 of 6 required steps complete");
+  await expect(page.locator("#course-progress")).toHaveText("1 of 7 required steps complete");
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem("dotnet-modernization-workshop:v2:/workshop/"))))
     .toMatchObject({ completionRevisions: { "02-planning": 2 }, previousCompleted: expect.any(Array) });
   page.once("dialog", dialog => dialog.accept());
   await page.getByRole("button", { name: "Reset progress" }).click();
   await page.reload();
-  await expect(page.locator("#course-progress")).toHaveText("0 of 6 required steps complete");
+  await expect(page.locator("#course-progress")).toHaveText("0 of 7 required steps complete");
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
 });
 
@@ -372,7 +438,7 @@ test("unchanged revision marks survive a later exercise revision", async ({ page
     }));
   });
   await open(page);
-  await expect(page.locator("#course-progress")).toHaveText("1 of 6 required steps complete");
+  await expect(page.locator("#course-progress")).toHaveText("1 of 7 required steps complete");
   await expect(page.locator("#chapter-nav a[href='#/00-introduction'] .is-complete")).toBeVisible();
   await expect(page.locator("#chapter-nav a[href='#/01-assessment']")).toContainText("Earlier exercise completed");
 });

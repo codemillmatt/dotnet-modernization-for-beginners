@@ -1,30 +1,30 @@
+// Slugs also identify saved progress. Keep them stable when source folders move.
 export const chapters = [
-  { slug: "overview", number: "01", title: "Start here", path: "README.md", core: false, era: "1960s" },
-  { slug: "00-introduction", number: "02", title: "Meet the app & tools", path: "00-introduction/README.md", core: true, era: "1970s", exerciseRevision: 2 },
-  { slug: "prerequisites", number: "03", title: "Get ready", path: "prerequisites/README.md", core: true, era: "soundcheck", exerciseRevision: 2 },
-  { slug: "01-assessment", number: "04", title: "Assess the app", path: "01-assessment/README.md", core: true, era: "1980s", exerciseRevision: 2 },
-  { slug: "02-planning", number: "05", title: "Choose the plan", path: "02-planning/README.md", core: true, era: "1990s", exerciseRevision: 2 },
-  { slug: "03-upgrade-execution", number: "06", title: "Upgrade & check", path: "03-upgrade-execution/README.md", core: true, era: "2000s-2010s", exerciseRevision: 2 },
-  { slug: "04-cloud", number: "07", title: "Plan for Azure", path: "04-cloud/README.md", core: true, era: "2020s", exerciseRevision: 2 }
+  { slug: "overview", number: "01", title: "Start here", path: "README.md", core: true, era: "1960s", exerciseRevision: 2 },
+  { slug: "00-introduction", number: "02", title: "Meet the app & tools", path: "02-introduction/README.md", core: true, era: "1970s", exerciseRevision: 2 },
+  { slug: "prerequisites", number: "03", title: "Get ready", path: "03-prerequisites/README.md", core: true, era: "soundcheck", exerciseRevision: 2 },
+  { slug: "01-assessment", number: "04", title: "Assess the app", path: "04-assessment/README.md", core: true, era: "1980s", exerciseRevision: 2 },
+  { slug: "02-planning", number: "05", title: "Choose the plan", path: "05-planning/README.md", core: true, era: "1990s", exerciseRevision: 2 },
+  { slug: "03-upgrade-execution", number: "06", title: "Upgrade & check", path: "06-upgrade-execution/README.md", core: true, era: "2000s-2010s", exerciseRevision: 2 },
+  { slug: "04-cloud", number: "07", title: "Plan for Azure", path: "07-cloud/README.md", core: true, era: "2020s", exerciseRevision: 2 }
 ];
 
 export const references = [
-  { path: "shared-legacy-app/README.md", title: "Legacy sample" },
+  { path: "shared-legacy-app/README.md", title: "Legacy sample", era: "workbench" },
   { path: "examples/modernized/README.md", title: "Completed reference", era: "2050s" },
   { path: "examples/azure/README.md", title: "Azure helper" },
-  { path: "examples/assessments/README.md", title: "Historical console assessment" },
-  { path: "examples/assessments/bookcatalog/README.md", title: "BookCatalog recorded run" },
+  { path: "examples/assessments/bookcatalog/README.md", title: "Previous BookCatalog sample run", era: "1950s" },
   { path: "examples/assessments/bookcatalog/assessment-excerpts.md", title: "Recorded BookCatalog assessment" },
   { path: "examples/assessments/bookcatalog/planning-excerpts.md", title: "Recorded BookCatalog plan" },
   { path: "examples/assessments/bookcatalog/execution-excerpts.md", title: "BookCatalog upgrade in progress" },
-  { path: "00-introduction/code/README.md", title: "Optional console sample" },
+  { path: "02-introduction/code/README.md", title: "Optional console sample" },
   { path: "docs/learner-record.md", title: "Optional learner record" },
   { path: "docs/data-transfer.md", title: "Optional data-transfer lab" },
   { path: "docs/advanced-checks.md", title: "Optional application checks" },
   { path: "docs/author-filter.md", title: "Optional author-filter challenge" },
-  { path: "04-cloud/deployment.md", title: "Optional Azure deployment" },
+  { path: "07-cloud/deployment.md", title: "Optional Azure deployment" },
   { path: "tools/BookCatalog.Data/README.md", title: "Selected-record helper" },
-  { path: "docs/instructor-guide.md", title: "Optional instructor guide" },
+  { path: "docs/instructor-guide.md", title: "Optional instructor guide", era: "briefing" },
   { path: "docs/validation.md", title: "Maintainer validation" },
   { path: "docs/writing.md", title: "Writing guide" },
   { path: "webpage/README.md", title: "Website guide" }

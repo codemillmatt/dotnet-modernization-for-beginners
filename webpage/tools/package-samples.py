@@ -9,7 +9,7 @@ destination = Path(sys.argv[2])
 with ZipFile(destination, "w", ZIP_DEFLATED) as archive:
     for relative in ["shared-legacy-app", "examples", "tests/BookCatalog.Tests",
                      "tests/BookCatalog.Data.Tests", "tools/BookCatalog.Data", ".config",
-                     "scripts", "docs", "04-cloud/deployment.md", "webpage/README.md", "package.json", "package-lock.json",
+                     "scripts", "docs", "07-cloud/deployment.md", "webpage/README.md", "package.json", "package-lock.json",
                      "README.md", "LICENSE"]:
         target = root / relative
         paths = sorted(target.rglob("*")) if target.is_dir() else [target]
@@ -25,11 +25,11 @@ with ZipFile(destination, "w", ZIP_DEFLATED) as archive:
                         resolved = (path.parent / relative_target).resolve()
                         if not resolved.is_relative_to(root):
                             return match.group(0)
-                        if (resolved.relative_to(root).as_posix() != "04-cloud/deployment.md"
+                        if (resolved.relative_to(root).as_posix() != "07-cloud/deployment.md"
                                 and resolved.parts[len(root.parts):]
                                 and resolved.parts[len(root.parts):][0] in (
-                                "00-introduction", "prerequisites", "01-assessment", "02-planning",
-                                "03-upgrade-execution", "04-cloud")):
+                                "02-introduction", "03-prerequisites", "04-assessment", "05-planning",
+                                "06-upgrade-execution", "07-cloud")):
                             target = ("https://github.com/microsoft/dotnet-modernization-for-beginners/blob/main/"
                                       + resolved.relative_to(root).as_posix()
                                       + (("#" + anchor) if anchor else ""))

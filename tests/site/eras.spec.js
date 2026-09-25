@@ -116,7 +116,7 @@ test("soundcheck has themed poster headers, readable instructions, and no decade
 
 test("references and unknown routes use the quiet modern era", async ({ page }) => {
   await ready(page, chapters[2]);
-  await page.goto("#/reference?path=shared-legacy-app%2FREADME.md");
+  await page.goto("#/reference?path=docs%2Fwriting.md");
   await expect(page.locator("#article")).not.toHaveAttribute("aria-busy", "true");
   await expect(page.locator("html")).toHaveAttribute("data-era", "2020s");
   await expect(page.locator(".era-intro")).toHaveCount(0);
@@ -129,7 +129,7 @@ test("references and unknown routes use the quiet modern era", async ({ page }) 
 
 test("a delayed response cannot restore an old chapter era", async ({ page }) => {
   let release;
-  await page.route("**/content/00-introduction/README.md", route => new Promise(resolve => {
+  await page.route("**/content/02-introduction/README.md", route => new Promise(resolve => {
     release = async () => {
       await route.fulfill({ status: 200, body: "# Outdated response" });
       resolve();
@@ -147,7 +147,7 @@ test("a delayed response cannot restore an old chapter era", async ({ page }) =>
 });
 
 test("failed content retains its chapter era", async ({ page }) => {
-  await page.route("**/content/02-planning/README.md", route => route.fulfill({ status: 503, body: "Unavailable" }));
+  await page.route("**/content/05-planning/README.md", route => route.fulfill({ status: 503, body: "Unavailable" }));
   await page.goto("#/02-planning");
   await expect(page.getByRole("alert")).toContainText("503");
   await expect(page.locator("html")).toHaveAttribute("data-era", "1990s");

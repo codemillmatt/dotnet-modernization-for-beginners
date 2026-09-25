@@ -4,6 +4,9 @@ This page is for maintainers. The [learner record](learner-record.md) is an opti
 
 Keep planned checks separate from actual results. Record the command, environment, date, and limitations before claiming a result.
 
+Progress now includes all seven numbered chapters, including Start here.
+Existing completion marks remain valid. Earlier records below describe the six-step course that excluded Start here.
+
 ## Behavior contract
 
 The [optional behavior checklist](learner-record.md#behavior-checks) owns the reusable detailed cases. Maintainers should check the original and actual upgraded applications.
@@ -387,7 +390,7 @@ Computer Use intermittently exposed an incomplete accessibility tree.
 Some actions returned `no_viable_candidate` or UIA focus failures. Other clicks reported dispatch without an observed UI change.
 The recorded success doesn't establish a completed unattended walkthrough.
 
-The [curated recording](../examples/assessments/bookcatalog/README.md) contains the real app preview, verbatim Modernize greeting, provenance, and capture limits.
+The [previous sample run](../examples/assessments/bookcatalog/README.md) contains the real app preview, verbatim Modernize greeting, provenance, and capture limits.
 Raw source and database files remain in the private session workspace. No raw scenario directory is publicly allowlisted.
 
 At that point, the remaining tool procedures were checked against current Microsoft Learn documentation.
