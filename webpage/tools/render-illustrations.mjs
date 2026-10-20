@@ -11,7 +11,7 @@ export async function seasonArtOutputs() {
   const outputs = [];
   for (const id of globalThis.courseSeasons.seasonConfig.packs) {
     const art = await import(`../seasons/${id}/art.mjs`).catch(error => {
-      if (error.code === "ERR_MODULE_NOT_FOUND" && error.message.includes(`seasons/${id}/art.mjs`)) return null;
+      if (error.code === "ERR_MODULE_NOT_FOUND" && error.url === new URL(`../seasons/${id}/art.mjs`, import.meta.url).href) return null;
       throw error;
     });
     if (art) outputs.push(...await art.renderSeasonArt());
