@@ -138,65 +138,8 @@ No page needs a visible decade badge.
 
 ## Seasonal looks
 
-The classic eras are the default look. A season pack can restyle every stop for a holiday or event.
-Seasons change only the look and some decorative copy. Chapter slugs, era IDs, lesson text, and saved progress stay the same.
-
-### Turn a season on or off
-
-Edit `seasonConfig` at the top of `seasons/seasons.js`:
-
-- `active: "auto"` follows the `calendar` windows. Outside every window, the site uses `fallback`.
-- `active: "halloween"` or `active: "classic"` pins one season, whatever the date.
-- Each calendar window uses inclusive `MM-DD` dates in the visitor's local time. A window can cross the new year, such as `12-15` to `01-05`.
-
-Add `?season=<id>` before the `#` in a URL to preview any listed season, for example `/?season=halloween#/overview`.
-An unknown ID is ignored.
-
-### Change a season
-
-Each pack lives in `seasons/<id>/` and owns everything about its look:
-
-| File | Responsibility |
-| --- | --- |
-| `season.js` | Era palettes, fonts, header art names, hero art, and decorative copy |
-| `season.css` | The complete stylesheet for the season |
-| `assets/` | Header art and `favicon.svg` |
-| `art.mjs` | Optional generator for the pack's SVG files |
-| `illustrations/` | Optional seasonal versions of the lesson illustrations |
-
-To restyle a season, edit only its folder. Colors and fonts are in `season.js`. Layout and decoration are in `season.css`.
-If you change generated art or palettes, run `npm run illustrations`.
-Preview with `?season=<id>`, then run the checks.
-Each `season.css` is a complete stylesheet. A layout fix that applies to every season must go into each `season.css`.
-
-### Add a season
-
-1. Copy an existing folder, such as `seasons/halloween/`, to `seasons/<new-id>/`.
-2. Set `id` in `season.js` to the folder name. Keep every era ID. The tests reject a pack with a missing era.
-3. Add the ID to `packs` in `seasons/seasons.js`. Add a calendar window if the season should start on its own.
-4. Replace the art, palettes, copy, and styles. Run `npm run illustrations` if the pack has `art.mjs`.
-5. Run the checks. The site tests check every chapter in each pinned season for contrast, art, and narrow layouts. Add the new pack to the season list in `tests/site/eras.spec.js`.
-
-Packs with `illustrations: true` must ship light and dark versions of every lesson illustration in `illustrations/`.
-Packs can replace an illustration's title or text description with `illustrationText`.
-Repository READMEs always show the classic illustrations from `docs/illustrations/`.
-
-### Halloween
-
-| Page | Setting | Visual language |
-| --- | --- | --- |
-| Start | Pumpkin patch | Harvest orange, pumpkin-shaped markers, an illustrated trail, and a smiling ghost |
-| Meet the app and tools | Haunted library | Moss-green book spines, serif type, double rules, and an arched reading room |
-| Setup | Trick-or-treat porch | Candy pink and plum, dashed tickets, porch lights, and friendly pumpkins |
-| Assess the app | Ghost detective bureau | Misty blue, case-file frames, typewriter headings, and a ghost under a magnifying glass |
-| Choose the plan | Witch's spellbook | Lilac, ornamental book covers, page-like panels, and an illustrated witch's hat |
-| Upgrade and check | Monster laboratory | Botanical green, bolted-looking controls, potion glassware, and a smiling monster |
-| Plan for Azure | Moonlit sky | Twilight blue, crescent moon, bats, stars, and cloud-shaped curves |
-
-References use the moonlit sky. The legacy quickstart is a pumpkin shed, and the instructor companion is a raven's lookout.
-The previous sample run is a ghost story scrapbook. The completed reference is an enchanted conservatory.
-The themes stay friendly: no jump scares, flashing, gore, or decoration behind lesson text.
-Halloween edits its lesson artwork in `seasons/halloween/illustration-art.mjs` and its headers in `seasons/halloween/art.mjs`.
+The classic eras are the default look. Season packs, such as Halloween, restyle every stop for a holiday or event.
+Read the [seasonal looks guide](seasons/README.md) to turn a season on or off, change a pack, or add a new one.
 
 ## Course illustrations
 

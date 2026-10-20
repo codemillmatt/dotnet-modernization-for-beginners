@@ -13,7 +13,7 @@ spec.loader.exec_module(linter)
 paths = [root / "README.md"]
 paths += sorted(root.glob("[0-9][0-9]-*/README.md"))
 paths += [root / name for name in [
-    "02-introduction/code/README.md", "shared-legacy-app/README.md", "webpage/README.md",
+    "02-introduction/code/README.md", "shared-legacy-app/README.md", "webpage/README.md", "webpage/seasons/README.md",
     "examples/modernized/README.md", "examples/azure/README.md",
     "examples/assessments/bookcatalog/README.md",
     "examples/assessments/bookcatalog/assessment-excerpts.md",
