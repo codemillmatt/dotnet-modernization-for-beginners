@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="820" viewBox="0 0 1100 820" role="img" aria-labelledby="illustration-plan-dark-title illustration-plan-dark-desc" data-illustration="plan" data-era="1990s" data-theme="dark">
+  <title id="illustration-plan-dark-title">Shape the upgrade plan</title>
+  <desc id="illustration-plan-dark-desc">Three spellbook panels link 1 Request plan: Ask the agent, to 2 Review choices: In-place and EF Core, to 3 Check plan: Read tasks and checks. The stage guidance is Review before execution. Building and running the app happens in Chapter 06, not during planning.</desc>
+  <defs>
+    <marker id="illustration-plan-dark-arrow" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="18" markerHeight="18" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M1 1L11 6 1 11Z" fill="#d6bfe9"/></marker>
+    <marker id="illustration-plan-dark-return" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="16" markerHeight="16" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M1 1L11 6 1 11" fill="none" stroke="#c0c8c2" stroke-width="2"/></marker>
+    <marker id="illustration-plan-dark-trail" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="18" markerHeight="18" markerUnits="userSpaceOnUse" orient="auto"><path d="M1 1L11 6 1 11Z" fill="#342b44"/></marker>
+
+  </defs>
+  <rect width="1100" height="820" fill="#282237"/>
+  <text x="60" y="89" fill="#f2eee4" font-size="49" font-weight="400" text-anchor="start" font-family="Georgia, serif" letter-spacing="0"><tspan x="60" dy="0">Shape the upgrade plan</tspan></text><text x="63" y="132" fill="#c0c8c2" font-size="23" font-weight="400" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="63" dy="0">Review the options. Make the next action clear.</tspan></text>
+      <rect x="35" y="177" width="1030" height="606" fill="#a08cb9" opacity=".13"/>
+      <path d="M35 783V177H1065V783Z" fill="none" stroke="#54645f" stroke-width="1"/>
+
+    <rect x="64" y="219" width="436" height="213" rx="2" fill="#342b44" stroke="#54645f" stroke-width="1"/>
+    <path d="M72 227h420v197H72Z" fill="none" stroke="#54645f" stroke-width="1"/>
+    <text x="87" y="257" fill="#d6bfe9" font-size="25" font-weight="400" text-anchor="start" font-family="Georgia, serif" letter-spacing="0"><tspan x="87" dy="0">01  Request plan</tspan></text>
+    <path d="M87 274h390" fill="none" stroke="#54645f" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+
+        <path d="M96 291h57l23 23v88H96Z" fill="#342b44" stroke="#d6bfe9" stroke-width="3"/>
+        <path d="M153 291v23h23" fill="#ddca95" stroke="#d6bfe9" stroke-width="3"/>
+        <path d="M112 339h47M112 356h37M112 373h45" stroke="#54645f" stroke-width="4"/>
+        <text x="202" y="333" fill="#f2eee4" font-size="29" font-weight="400" text-anchor="start" font-family="Verdana, Tahoma, sans-serif" letter-spacing="0"><tspan x="202" dy="0">Ask the</tspan><tspan x="202" dy="37.12">agent</tspan></text>
+
+      <path d="M512 326H609" fill="none" stroke="#d6bfe9" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity="1" marker-end="url(#illustration-plan-dark-arrow)"/>
+
+    <rect x="625" y="219" width="409" height="213" rx="2" fill="#342b44" stroke="#54645f" stroke-width="1"/>
+    <path d="M633 227h393v197H633Z" fill="none" stroke="#54645f" stroke-width="1"/>
+    <text x="648" y="257" fill="#d6bfe9" font-size="25" font-weight="400" text-anchor="start" font-family="Georgia, serif" letter-spacing="0"><tspan x="648" dy="0">02  Review choices</tspan></text>
+    <path d="M648 274h363" fill="none" stroke="#54645f" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+
+        <path d="M652 315v-24h40l14 14h45v83H652Z" fill="#ce9b7e" stroke="#d6bfe9" stroke-width="3"/>
+        <path d="M652 323h111l-13 65h-98Z" fill="#ddca95" stroke="#d6bfe9" stroke-width="3"/>
+        <text x="780" y="315" fill="#f2eee4" font-size="25" font-weight="400" text-anchor="start" font-family="Verdana, Tahoma, sans-serif" letter-spacing="0"><tspan x="780" dy="0">In-place</tspan><tspan x="780" dy="32">and</tspan><tspan x="780" dy="32">EF Core</tspan></text>
+
+      <path d="M835 445V468H734V492" fill="none" stroke="#d6bfe9" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity="1" marker-end="url(#illustration-plan-dark-arrow)"/>
+
+    <rect x="281" y="504" width="572" height="184" rx="2" fill="#342b44" stroke="#54645f" stroke-width="1"/>
+    <path d="M289 512h556v168H289Z" fill="none" stroke="#54645f" stroke-width="1"/>
+    <text x="304" y="542" fill="#d6bfe9" font-size="25" font-weight="400" text-anchor="start" font-family="Georgia, serif" letter-spacing="0"><tspan x="304" dy="0">03  Check plan</tspan></text>
+    <path d="M304 559h526" fill="none" stroke="#54645f" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+
+        <path d="M311 573h58v80h-58Z" fill="#342b44" stroke="#d6bfe9" stroke-width="3"/>
+        <path d="M399 573h58v80h-58Z" fill="#342b44" stroke="#d6bfe9" stroke-width="3"/>
+        <path d="M323 593h33M323 610h33M323 627h24M410 593h33M410 610h33M410 627h24" stroke="#54645f" stroke-width="4"/>
+        <path d="M378 604h12M378 618h12" stroke="#d6bfe9" stroke-width="4"/>
+        <text x="486" y="603" fill="#f2eee4" font-size="28" font-weight="400" text-anchor="start" font-family="Verdana, Tahoma, sans-serif" letter-spacing="0"><tspan x="486" dy="0">Read tasks</tspan><tspan x="486" dy="35.84">and checks</tspan></text>
+
+      <path d="M79 590h139M79 604h95M903 569h99M903 583h66" stroke="#54645f" stroke-width="2" opacity=".5"/>
+      <rect x="48" y="714" width="1004" height="56" fill="#413650" stroke="#54645f" stroke-width="2"/>
+      <text x="75" y="749" fill="#c0c8c2" font-size="19" font-weight="700" text-anchor="start" font-family="Verdana, sans-serif" letter-spacing="1"><tspan x="75" dy="0">STAGE</tspan></text>
+      <path d="M173 725v34" stroke="#54645f" stroke-width="2"/>
+      <text x="199" y="751" fill="#f2eee4" font-size="27" font-weight="400" text-anchor="start" font-family="Verdana, Tahoma, sans-serif" letter-spacing="0"><tspan x="199" dy="0">Review before execution</tspan></text>
+      <g fill="#d6bfe9" opacity=".65"><rect x="974" y="733" width="8" height="18"/><rect x="989" y="727" width="8" height="24"/><rect x="1004" y="721" width="8" height="30"/></g>
+  <g aria-hidden="true"><g transform="translate(1028 75) scale(0.45)">
+    <path d="M-38 43q-3-27 0-56C-35-64 33-67 38-15q0 39 18 53-21 3-29-7-10 24-29 13-18 19-36-1Z" fill="#f3ecda"/>
+    <path d="M-25-22q-8 29 0 43M28 3q3 16 10 25" fill="none" stroke="#a08cb9" stroke-width="2" opacity=".6"/>
+    <ellipse cx="-10" cy="-10" rx="3" ry="5" fill="#263b34"/><ellipse cx="12" cy="-12" rx="3" ry="5" fill="#263b34"/>
+    <path d="M-3 7q6 6 12-2" fill="none" stroke="#263b34" stroke-width="2" stroke-linecap="round"/>
+  </g><path transform="translate(984 37) scale(0.5)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#ddca95"/></g>
+</svg>

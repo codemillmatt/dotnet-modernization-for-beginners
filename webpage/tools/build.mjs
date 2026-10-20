@@ -34,8 +34,8 @@ function gitFiles(args) {
 }
 try {
   await renderIllustrations({ check: true });
-  for (const path of ["index.html", "styles.css", "app.js", ".nojekyll", "scripts", "assets"]) {
-    await cp(join(root, "webpage", path), join(stage, path), { recursive: true });
+  for (const path of ["index.html", "app.js", ".nojekyll", "scripts", "seasons"]) {
+    await cp(join(root, "webpage", path), join(stage, path), { recursive: true, filter: source => !source.endsWith(".mjs") && !source.endsWith("README.md") });
   }
   await mkdir(join(stage, "content"), { recursive: true });
   const publicFiles = selectPublicContent(gitFiles([]), gitFiles(["--others", "--exclude-standard"]));
@@ -52,6 +52,7 @@ try {
   }
   for (const path of publicFiles) await copyPublicFile(path);
   await mkdir(join(stage, "vendor/github-slugger"), { recursive: true });
+  await mkdir(join(stage, "assets"), { recursive: true });
   for (const [source, target] of [
     ["marked/lib/marked.umd.js", "vendor/marked.umd.js"],
     ["marked/LICENSE", "vendor/marked-LICENSE"],

@@ -2,23 +2,25 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
-import { illustrations, illustrationPath } from "../scripts/illustrations.js";
-import { renderIllustration, renderSoundcheckHeader } from "./illustration-art.mjs";
-import { getEra } from "../scripts/eras.js";
+import "../seasons/seasons.js";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 
-export async function renderIllustrations({ check = false } = {}) {
+// Every season pack may ship an art.mjs that returns [path, svg] pairs to generate.
+export async function seasonArtOutputs() {
   const outputs = [];
-  for (const illustration of illustrations) {
-    for (const mode of ["light", "dark"]) {
-      outputs.push([illustrationPath(illustration.id, mode), renderIllustration(illustration.id, mode)]);
-    }
+  for (const id of globalThis.courseSeasons.seasonConfig.packs) {
+    const art = await import(`../seasons/${id}/art.mjs`).catch(error => {
+      if (error.code === "ERR_MODULE_NOT_FOUND" && error.message.includes(`seasons/${id}/art.mjs`)) return null;
+      throw error;
+    });
+    if (art) outputs.push(...await art.renderSeasonArt());
   }
-  const soundcheck = getEra("soundcheck");
-  for (const [mode, file] of [["light", soundcheck.art], ["dark", soundcheck.artDark]]) {
-    outputs.push([`webpage/assets/${file}`, renderSoundcheckHeader(mode)]);
-  }
+  return outputs;
+}
+
+export async function renderIllustrations({ check = false } = {}) {
+  const outputs = await seasonArtOutputs();
   for (const [path, artwork] of outputs) {
     const file = join(root, path);
     const svg = `${artwork.trim().replace(/[ \t]+$/gm, "")}\n`;
@@ -43,5 +45,5 @@ export async function renderIllustrations({ check = false } = {}) {
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const { values } = parseArgs({ options: { check: { type: "boolean", default: false } } });
   await renderIllustrations(values);
-  console.log(`${values.check ? "Checked" : "Created"} ${illustrations.length} original illustrations in light and dark themes.`);
+  console.log(`${values.check ? "Checked" : "Created"} generated season artwork in light and dark themes.`);
 }

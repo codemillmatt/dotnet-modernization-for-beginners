@@ -1,4 +1,7 @@
-import { getEra } from "../scripts/eras.js";
+import { getEra as eraFor } from "../scripts/eras.js";
+import classic from "../seasons/classic/season.js";
+
+const getEra = id => eraFor(id, classic);
 
 const illustrations = {
   journey: { era: "1960s", height: 840, draw: journey },

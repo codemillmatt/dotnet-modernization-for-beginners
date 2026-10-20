@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures.js";
 import { chapters, references, sectionAliases } from "../../webpage/scripts/chapters.js";
 import { parseRoute } from "../../webpage/scripts/routes.js";
 import { zipEntries } from "../content/zip-entries.mjs";

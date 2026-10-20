@@ -70,11 +70,12 @@ A script error stops the command. The launcher does not retry the script with an
 | `scripts/illustrations.js` | Illustration locations, captions, and text descriptions |
 | `scripts/state.js` | Exercise revisions, completion history, and old reading marks |
 | `scripts/ui.js` | Navigation, outline, drawers, and theme |
-| `styles.css` | Color, typography, and responsive layout |
-| `assets/` | Original illustrations |
+| `seasons/seasons.js` | Active season, calendar windows, and the `?season=` preview |
+| `seasons/<id>/` | One seasonal look: palettes, stylesheet, art, and copy |
+| `scripts/eras.js` | Applies the active season's era palette and art |
 | `tools/build.mjs` | Curated content and local dependency assets |
 | `tools/public-content.mjs` | Public source allowlist for tracked and new files |
-| `tools/illustration-art.mjs` | Original vector compositions using the page palettes |
+| `tools/illustration-art.mjs` | Classic vector compositions using the page palettes |
 | `tools/render-illustrations.mjs` | Reproducible light and dark SVG images |
 | `../docs/illustrations/` | Generated image files used by the READMEs and website |
 
@@ -112,9 +113,11 @@ The full interface changes with each chapter. Light/dark mode remains a separate
 | Upgrade and check | 2000s / 2010s | Glossy details and layered web-app surfaces |
 | Plan for Azure | 2020s | Sculptural shapes and quieter controls |
 
-`scripts/chapters.js` selects the era. `scripts/eras.js` supplies its palettes and typography.
+`scripts/chapters.js` selects the era. The active season supplies its palettes, typography, and art.
+This table describes the classic season. Other seasons restyle the same eras.
 
 The reader sets `data-era` before it loads chapter content. `data-theme` retains the selected color mode.
+`data-season` names the active season. Seasons with named scenes also set `data-scene`.
 
 Most references use a quiet 2020s treatment.
 The overview's local **Samples and help** pages each use a theme tied to their purpose.
@@ -132,6 +135,11 @@ References look the same on direct access and after chapter navigation.
 Setup doesn't move the existing eras to other chapters.
 Its expressive lettering stays in the header and artwork. Instructions and code use readable fonts.
 No page needs a visible decade badge.
+
+## Seasonal looks
+
+The classic eras are the default look. Season packs, such as Halloween, restyle every stop for a holiday or event.
+Read the [seasonal looks guide](seasons/README.md) to turn a season on or off, change a pack, or add a new one.
 
 ## Course illustrations
 
@@ -151,7 +159,7 @@ npm run illustrations
 npm run build
 ```
 
-The generator also creates both soundcheck header variants in `assets/`.
+The generator also creates the classic soundcheck headers and each season's generated art.
 The build checks that the saved images match their source. It stops with regeneration instructions if an image is missing or outdated.
 Include both variants from `docs/illustrations/` when committing an artwork change.
 README wording changes need only a normal site build.

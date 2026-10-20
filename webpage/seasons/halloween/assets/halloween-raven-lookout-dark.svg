@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="640" viewBox="0 0 720 640" role="img" aria-labelledby="title" data-scene="raven-lookout" data-theme="dark">
+    <title id="title">Raven's lookout</title>
+    <defs>
+      <clipPath id="scene"><path d="M24 616V287a336 263 0 0 1 672 0v329Z"/></clipPath>
+      <pattern id="engraving" width="9" height="9" patternUnits="userSpaceOnUse"><path d="m0 9 9-9" stroke="#ddc99f" stroke-width=".6" opacity=".11"/></pattern>
+    </defs>
+    <g clip-path="url(#scene)">
+      <path d="M0 0h720v640H0Z" fill="#293d4a"/>
+      <circle cx="438" cy="212" r="102" fill="#ddc99f"/><path d="M366.6 217q71.39999999999999 -91.8 142.79999999999998 0" fill="none" stroke="#293d4a" stroke-width="1" opacity="0.18" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M0 530 209 285l107 114 103-62 301 238v65H0Z" fill="#8ea9bc" opacity=".55"/>
+      <path d="m0 610 230-157 183 81 154-99 153 181v24H0Z" fill="#8ea9bc"/>
+      <g transform="translate(102 640) scale(1.8 1.8)">
+    <path d="M-14 0 0-271 12-3Z" fill="#293d4a"/>
+    <path d="M0-40q-18-89-75-109m72 57q40-75 91-87M-5-182q-28-48-61-53M2-217q28-47 55-55M-40-133l-6-59M41-140l5-68M-28-218l-8-55" fill="none" stroke="#293d4a" stroke-width="8" opacity="1" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M-1-12 5-117" fill="none" stroke="#8ea9bc" stroke-width="1.5" opacity="0.65" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+      <path d="M141 414q145-8 293 40" fill="none" stroke="#293d4a" stroke-width="13" opacity="1" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M282 406q-50-97 11-143 33-27 61 11l49 18-42 16q-6 61-51 83l-43 70Z" fill="#293d4a"/>
+      <circle cx="342" cy="282" r="4" fill="#ddc99f"/>
+      <path d="M301 307q-31 30-10 64m20-50q-19 28-9 41M304 392l-9 31m24-34-4 38" fill="none" stroke="#8ea9bc" stroke-width="2" opacity="1" stroke-linecap="round" stroke-linejoin="round"/>
+      <path transform="translate(168 173) scale(0.4)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#ddc99f"/><path transform="translate(295 103) scale(0.4)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#ddc99f"/><path transform="translate(574 312) scale(0.4)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#ddc99f"/><path transform="translate(544 93) scale(0.4)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#ddc99f"/>
+      <path d="M0 0h720v640H0Z" fill="url(#engraving)"/>
+    </g>
+    <path d="M35 605V287a325 252 0 0 1 650 0v318Z" fill="none" stroke="#ddc99f" stroke-width="1" opacity=".6"/>
+    <path d="M335 626h50m-25-5v10" stroke="#c1d2df" stroke-width="1"/>
+  </svg>

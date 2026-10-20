@@ -1,12 +1,15 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures.js";
 import { chapters } from "../../webpage/scripts/chapters.js";
 import { illustrations, illustrationPath } from "../../webpage/scripts/illustrations.js";
+import halloween from "../../webpage/seasons/halloween/season.js";
 
-for (const illustration of illustrations) {
+for (const season of ["classic", "halloween"]) for (const illustration of illustrations) {
   for (const mode of ["light", "dark"]) {
-    test(`${illustration.id} ${mode}: standalone art has readable, unclipped labels`, async ({ page }) => {
+    test(`${season} ${illustration.id} ${mode}: standalone art has readable, unclipped labels`, async ({ page }) => {
       await page.setViewportSize({ width: 1440, height: 1100 });
-      await page.goto(`content/${illustrationPath(illustration.id, mode)}`);
+      await page.goto(season === "classic"
+        ? `content/${illustrationPath(illustration.id, mode)}`
+        : `seasons/halloween/illustrations/${illustration.id}-${mode}.svg`);
       await expect(page.locator("svg")).toHaveAttribute("data-illustration", illustration.id);
       await expect(page.locator("svg")).toHaveAttribute("data-era", illustration.era);
       await expect(page.locator("svg")).toHaveAttribute("data-theme", mode);
@@ -40,10 +43,12 @@ for (const illustration of illustrations) {
     });
   }
 
-  test(`${illustration.id}: image theme, full-size link, and text alternative work on mobile`, async ({ page }) => {
+  test(`${season} ${illustration.id}: image theme, full-size link, and text alternative work on mobile`, async ({ page }) => {
     const chapter = chapters.find(item => item.path === illustration.document);
+    const description = (season === "halloween" && halloween.illustrationText?.[illustration.id]?.description)
+      || illustration.description;
     await page.setViewportSize({ width: 390, height: 844 });
-    await page.goto(`?clawpilotTheme=light#/${chapter.slug}`);
+    await page.goto(`?season=${season}&clawpilotTheme=light#/${chapter.slug}`);
     const figure = page.locator(`[data-illustration="${illustration.id}"]`);
     await expect(figure).toBeVisible();
     await figure.scrollIntoViewIfNeeded();
@@ -57,9 +62,9 @@ for (const illustration of illustrations) {
     await expect(dark).toBeVisible();
     await dark.scrollIntoViewIfNeeded();
     await expect.poll(() => dark.locator("img").evaluate(img => img.complete && img.naturalWidth > 0)).toBeTruthy();
-    await expect(dark.locator("img")).toHaveAttribute("alt", illustration.description);
+    await expect(dark.locator("img")).toHaveAttribute("alt", description);
     await figure.getByText("Read the illustration", { exact: true }).click();
-    await expect(figure.locator("details p")).toHaveText(illustration.description);
+    await expect(figure.locator("details p")).toHaveText(description);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBeTruthy();
     const opened = page.waitForEvent("popup");
     await dark.click();

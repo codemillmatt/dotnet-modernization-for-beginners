@@ -2,7 +2,7 @@ import { contentUrl, siteUrl } from "./config.js";
 import { normalizePath, parseRoute, routeForPath } from "./routes.js";
 import { article, chapterPager, outlineNav } from "./dom.js";
 import { buildOutline, closeDrawers, escapeHtml, renderPager, renderProgress } from "./ui.js";
-import { applyEra, getEra, referenceEra } from "./eras.js";
+import { activeSeason, applyEra, getEra, referenceEra, seasonAsset } from "./eras.js";
 import { illustrations, illustrationPath } from "./illustrations.js";
 
 let request;
@@ -69,6 +69,16 @@ function addCodeCopy() {
   }
 }
 
+function heroImage(file, className) {
+  const art = document.createElement("img");
+  art.src = siteUrl(seasonAsset(file));
+  art.alt = "";
+  art.className = className;
+  art.setAttribute("aria-hidden", "true");
+  reportImageFailure(art);
+  return art;
+}
+
 function addHero() {
   const hero = document.createElement("div");
   hero.className = "workshop-hero";
@@ -79,12 +89,21 @@ function addHero() {
     copy.append(node);
   }
 
-  const art = document.createElement("img");
-  art.src = siteUrl("assets/retro-workshop.svg");
-  art.alt = "";
-  art.className = "hero-art";
-  art.setAttribute("aria-hidden", "true");
-  hero.append(copy, art);
+  const { art: lightArt, artDark, caption: sceneCaption } = activeSeason().hero;
+  if (artDark) {
+    const artwork = document.createElement("div");
+    artwork.className = "hero-scene";
+    for (const [mode, file] of [["light", lightArt], ["dark", artDark]]) artwork.append(heroImage(file, `hero-art era-art-${mode}`));
+    if (sceneCaption) {
+      const caption = document.createElement("p");
+      caption.className = "scene-caption";
+      caption.textContent = sceneCaption;
+      artwork.append(caption);
+    }
+    hero.append(copy, artwork);
+  } else {
+    hero.append(copy, heroImage(lightArt, "hero-art"));
+  }
   article.prepend(hero);
   const actions = copy.querySelector("p:has(> strong > a)");
   if (actions) {
@@ -107,13 +126,19 @@ function addChapterHeader(chapter) {
   const era = getEra(chapter.era);
   heading.before(panel);
   panel.append(heading);
+  if (activeSeason().sceneLabels) {
+    const setting = document.createElement("div");
+    setting.className = "scene-name";
+    setting.textContent = era.label;
+    panel.before(setting);
+  }
   if (chapter.era === "1950s") {
     panel.classList.add("flight-intro");
     const copy = document.createElement("div");
     copy.className = "flight-copy";
     const kicker = document.createElement("p");
     kicker.className = "flight-kicker";
-    kicker.textContent = "Sample notes / Test-flight log";
+    kicker.textContent = activeSeason().copy.sampleKicker;
     const caption = document.createElement("p");
     caption.className = "flight-caption";
     caption.textContent = "Earlier observations. Not a finished upgrade.";
@@ -144,7 +169,7 @@ function addChapterHeader(chapter) {
     copy.className = "future-copy";
     const kicker = document.createElement("p");
     kicker.className = "future-kicker";
-    kicker.textContent = "2050s / After the upgrade";
+    kicker.textContent = activeSeason().copy.futureKicker;
     const caption = document.createElement("p");
     caption.className = "future-caption";
     caption.textContent = "AI can write the upgrade. You run the result.";
@@ -161,26 +186,31 @@ function addChapterHeader(chapter) {
   }
   for (const [mode, file] of era.artDark ? [["light", era.art], ["dark", era.artDark]] : [["", era.art]]) {
     const image = document.createElement("img");
-    image.src = siteUrl(`assets/${file}`);
+    image.src = siteUrl(seasonAsset(file));
     image.alt = "";
     image.className = `era-art${mode ? ` era-art-${mode}` : ""}`;
     image.setAttribute("aria-hidden", "true");
-    if (chapter.era === "1950s") reportImageFailure(image);
+    reportImageFailure(image);
     panel.append(image);
   }
 }
 
 function renderIllustrations() {
   for (const image of article.querySelectorAll("img[src]")) {
-    const illustration = illustrations.find(item => image.src === contentUrl(illustrationPath(item.id, "light")));
-    if (!illustration) continue;
+    const match = illustrations.find(item => image.src === contentUrl(illustrationPath(item.id, "light")));
+    if (!match) continue;
+    const season = activeSeason();
+    const illustration = { ...match, ...season.illustrationText?.[match.id] };
+    const versionUrl = theme => season.illustrations
+      ? siteUrl(`seasons/${season.id}/illustrations/${illustration.id}-${theme}.svg`)
+      : contentUrl(illustrationPath(illustration.id, theme));
     const figure = document.createElement("figure");
     figure.className = "course-illustration";
     figure.dataset.illustration = illustration.id;
     for (const theme of ["light", "dark"]) {
       const link = document.createElement("a");
       link.className = `illustration-version illustration-${theme}`;
-      link.href = contentUrl(illustrationPath(illustration.id, theme));
+      link.href = versionUrl(theme);
       link.target = "_blank";
       link.rel = "noreferrer";
       link.setAttribute("aria-label", `Open full-size image: ${illustration.title} (new tab)`);
