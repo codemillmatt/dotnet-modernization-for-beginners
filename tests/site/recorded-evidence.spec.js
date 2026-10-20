@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures.js";
 import { eraPalette } from "../../webpage/scripts/eras.js";
 
 const evidenceRoot = "examples/assessments/bookcatalog";
@@ -52,9 +52,8 @@ for (const [host, base] of [
       await expect(page.locator(".flight-caption")).toContainText("Not a finished upgrade");
       await expect(page.locator("#bookcatalog-visual-studio-recording")).toBeAttached();
       await expect(page.locator("#recording-environment")).toBeAttached();
-      const art = page.locator(".flight-intro .era-art:visible");
-      await expect(art).toHaveAttribute("src", new RegExp(`/assets/halloween-ghost-scrapbook-${theme}\\.svg$`));
-      await expect(page.locator("html")).toHaveAttribute("data-scene", "ghost-scrapbook");
+      const art = page.locator(".flight-intro .era-art");
+      await expect(art).toHaveAttribute("src", /\/assets\/era-1950s\.svg$/);
       await expect.poll(() => art.evaluate(image => image.complete && image.naturalWidth > 0)).toBeTruthy();
       await checkLogbookContrast(page);
       const screenshots = page.locator(`#article img[src*="/${evidenceRoot}/images/"]`);

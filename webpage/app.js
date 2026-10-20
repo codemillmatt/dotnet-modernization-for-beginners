@@ -2,7 +2,21 @@ import { completionKey } from "./scripts/config.js";
 import { createProgressStore } from "./scripts/state.js";
 import { getCurrentChapter, renderRoute } from "./scripts/reader.js";
 import { closeDrawers, handleDrawerKey, renderPager, renderProgress, setTheme, syncDrawers, toggleDrawer } from "./scripts/ui.js";
+import { activeSeason, useSeason } from "./scripts/eras.js";
 import { chaptersToggle, outlineToggle, courseNavPanel, outlinePanel, themeToggle, drawerBackdrop, chapterPager } from "./scripts/dom.js";
+
+const seasonId = document.documentElement.dataset.season || "classic";
+try {
+  useSeason((await import(`./seasons/${seasonId}/season.js`)).default);
+} catch (error) {
+  console.error(`The ${seasonId} season could not load; using classic.`, error);
+  document.documentElement.dataset.season = "classic";
+  document.querySelector("#season-stylesheet")?.setAttribute("href", "seasons/classic/season.css");
+}
+for (const element of document.querySelectorAll("[data-season-copy]")) {
+  const text = activeSeason().copy[element.dataset.seasonCopy];
+  if (text) element.textContent = text;
+}
 
 const storage = {
   getItem: key => window.localStorage.getItem(key),

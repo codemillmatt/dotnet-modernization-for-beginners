@@ -1,4 +1,7 @@
-import { getEra } from "../scripts/eras.js";
+import { getEra as eraFor } from "../../scripts/eras.js";
+import halloween from "./season.js";
+
+const getEra = id => eraFor(id, halloween);
 
 export function halloweenMotifs(p) {
   const pumpkin = (x, y, scale = 1) => `<g transform="translate(${x} ${y}) scale(${scale})">
@@ -110,4 +113,17 @@ export function renderHalloweenHeader(id, mode) {
     <rect width="520" height="480" rx="26" fill="${p.paper}"/>
     ${scenes[era.scene]()}
   </svg>`;
+}
+
+export async function renderSeasonArt() {
+  const { illustrations } = await import("../../scripts/illustrations.js");
+  const { renderIllustration } = await import("./illustration-art.mjs");
+  const outputs = illustrations.flatMap(item => ["light", "dark"].map(mode =>
+    [`webpage/seasons/halloween/illustrations/${item.id}-${mode}.svg`, renderIllustration(item.id, mode)]));
+  for (const [id, era] of Object.entries(halloween.eras)) {
+    for (const [mode, file] of [["light", era.art], ["dark", era.artDark]]) {
+      outputs.push([`webpage/seasons/halloween/assets/${file}`, renderHalloweenHeader(id, mode)]);
+    }
+  }
+  return outputs;
 }

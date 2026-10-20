@@ -48,8 +48,8 @@ test("each chapter has the planned era and complete palettes", () => {
     ["1960s", "1970s", "soundcheck", "1980s", "1990s", "2000s-2010s", "2020s"]);
   const keys = Object.keys(eraPalette("1960s", "light")).sort();
   for (const [id, era] of Object.entries(eras)) {
-    assert.ok(existsSync(join(root, "webpage/assets", era.art)));
-    if (era.artDark) assert.ok(existsSync(join(root, "webpage/assets", era.artDark)));
+    assert.ok(existsSync(join(root, "webpage/seasons/classic/assets", era.art)));
+    if (era.artDark) assert.ok(existsSync(join(root, "webpage/seasons/classic/assets", era.artDark)));
     for (const mode of ["light", "dark"]) {
       const palette = eraPalette(id, mode);
       assert.deepEqual(Object.keys(palette).sort(), keys);
@@ -159,7 +159,7 @@ test("the completed reference has its own future era without adding a course ste
   assert.deepEqual(references.filter(item => item.era).map(item => item.path),
     ["shared-legacy-app/README.md", "examples/modernized/README.md",
       "examples/assessments/bookcatalog/README.md", "docs/instructor-guide.md"]);
-  assert.ok(existsSync(join(root, "webpage/assets", getEra("2050s").art)));
+  assert.ok(existsSync(join(root, "webpage/seasons/classic/assets", getEra("2050s").art)));
   assert.equal(routeForPath(reference.path), "#/reference?path=examples%2Fmodernized%2FREADME.md");
 });
 
@@ -174,8 +174,8 @@ test("the previous sample run has its own logbook theme without claiming a compl
   assert.match(read(path), /id="bookcatalog-visual-studio-recording"/);
   assert.match(read(path), /id="recording-environment"/);
   assert.match(read("README.md"), /\[Previous BookCatalog sample run\]/);
-  const art = read(`webpage/assets/${getEra("1950s").art}`);
-  assert.match(art, /<title[^>]*>Ghost story scrapbook<\/title>/);
+  const art = read(`webpage/seasons/classic/assets/${getEra("1950s").art}`);
+  assert.match(art, /<title>BookCatalog test-flight notes<\/title>/);
   assert.doesNotMatch(art, /<script|<image|<animate|(?:href|src)=["']https?:/i);
   assert.ok(!references.find(item => item.path.endsWith("bookcatalog/assessment-excerpts.md")).era);
 });

@@ -1,14 +1,15 @@
 <!doctype html>
-<html lang="en" data-theme="light" data-era="1960s" data-scene="pumpkin-patch">
+<html lang="en" data-theme="light" data-era="1960s" data-season="classic">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Use GitHub Copilot in Visual Studio to assess BookCatalog, shape its upgrade plan, run the .NET 10 app, and plan an Azure migration.">
-  <meta name="theme-color" content="#f8dfbc">
+  <meta name="theme-color" content="#FFF2D5">
   <title>.NET Modernization for Beginners</title>
-  <link rel="icon" href="assets/pumpkin.svg" type="image/svg+xml">
+  <link rel="icon" href="seasons/classic/assets/favicon.svg" type="image/svg+xml">
   <link rel="preload" href="assets/outfit-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="styles.css">
+  <link id="season-stylesheet" rel="stylesheet" href="seasons/classic/season.css">
+  <script src="seasons/seasons.js"></script>
   <script type="text/javascript">
     (function(c,l,a,r,i,t,y){
       c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
@@ -25,7 +26,7 @@
   <header class="site-header">
     <a class="brand" href="#/overview" aria-label=".NET Modernization course home">
       <span class="brand-mark" aria-hidden="true">.NET</span>
-      <span class="brand-copy"><strong>Modernization</strong><span>A Halloween learning adventure</span></span>
+      <span class="brand-copy"><strong>Modernization</strong><span data-season-copy="tagline">A self-paced course</span></span>
     </a>
     <div class="header-actions">
       <button class="mobile-only" id="chapters-toggle" type="button" aria-controls="course-nav" aria-expanded="false">Chapters</button>
@@ -42,7 +43,7 @@
   <div class="course-shell">
     <aside class="course-nav" id="course-nav" aria-label="Course chapters">
       <p class="eyebrow">Your learning path</p>
-      <p class="nav-description">Seven stops. No scary surprises.</p>
+      <p class="nav-description" data-season-copy="navDescription">One app. A new foundation.</p>
       <nav id="chapter-nav" aria-label="Chapters"></nav>
       <div class="progress-card">
         <p class="eyebrow">Your progress</p>
@@ -71,7 +72,7 @@
     </aside>
   </div>
   <footer class="site-footer">
-    <span>Friendly ghosts. Fresh starts.</span>
+    <span data-season-copy="footer">Built for a new chapter.</span>
     <a href="#/reference?path=shared-legacy-app%2FREADME.md">Run the sample</a>
     <a href="content/LICENSE">MIT license</a>
   </footer>

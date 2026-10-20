@@ -59,7 +59,7 @@ You choose the options, adjust its instructions, and try the result.
 <a id="-course-structure"></a>
 ## Course structure
 
-![A friendly Halloween trail through all seven course chapters, from the pumpkin patch starting point to the moonlit Azure migration plan.](docs/illustrations/journey-light.svg)
+![A travel-poster route through the seven course chapters, from the starting point to the Azure migration plan.](docs/illustrations/journey-light.svg)
 
 | Chapter | What you do | What you'll learn |
 | --- | --- | --- |

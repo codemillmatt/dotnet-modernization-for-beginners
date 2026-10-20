@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="840" viewBox="0 0 1100 840" role="img" aria-labelledby="illustration-journey-light-title illustration-journey-light-desc" data-illustration="journey" data-era="1960s" data-theme="light">
+  <title id="illustration-journey-light-title">A friendly-spooky route to modernization</title>
+  <desc id="illustration-journey-light-desc">A Halloween trail follows seven course chapters in order: 01 Start here, 02 Meet the app, 03 Setup and get ready, 04 Assess, 05 Plan, 06 Upgrade and run, and 07 Azure plan. Each stop has its own friendly Halloween setting.</desc>
+  <defs>
+    <marker id="illustration-journey-light-arrow" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="18" markerHeight="18" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M1 1L11 6 1 11Z" fill="#97400d"/></marker>
+    <marker id="illustration-journey-light-return" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="16" markerHeight="16" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M1 1L11 6 1 11" fill="none" stroke="#62506a" stroke-width="2"/></marker>
+    <marker id="illustration-journey-light-trail" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="18" markerHeight="18" markerUnits="userSpaceOnUse" orient="auto"><path d="M1 1L11 6 1 11Z" fill="#fff9ed"/></marker>
+
+  </defs>
+  <rect width="1100" height="840" fill="#f8dfbc"/>
+  <text x="60" y="89" fill="#291d30" font-size="46" font-weight="700" text-anchor="start" font-family="Georgia, serif" letter-spacing="0"><tspan x="60" dy="0">A little spooky. A new foundation.</tspan></text><text x="63" y="132" fill="#62506a" font-size="23" font-weight="400" text-anchor="start" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="63" dy="0">Seven stops. One working application.</tspan></text>
+      <path d="M135 287H960Q1060 438 825 589H190" fill="none" stroke="#7a8c40" stroke-width="32" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+      <path d="M135 287H960Q1060 438 825 589H190" fill="none" stroke="#fff9ed" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="1" stroke-dasharray="7 13"/>
+      <circle cx="135" cy="287" r="23" fill="#97400d" stroke="#fff9ed" stroke-width="4"/><text x="135" y="295" fill="#ffffff" font-size="24" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="135" dy="0">01</tspan></text>
+        <text x="135" y="349" fill="#291d30" font-size="27" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="135" dy="0">Start here</tspan></text>
+        <text x="135" y="382" fill="#62506a" font-size="17" font-weight="400" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="135" dy="0">Pumpkin patch</tspan></text><circle cx="410" cy="287" r="23" fill="#97400d" stroke="#fff9ed" stroke-width="4"/><text x="410" y="295" fill="#ffffff" font-size="24" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="410" dy="0">02</tspan></text>
+        <text x="410" y="349" fill="#291d30" font-size="27" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="410" dy="0">Meet the app</tspan></text>
+        <text x="410" y="382" fill="#62506a" font-size="17" font-weight="400" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="410" dy="0">Haunted library</tspan></text><circle cx="685" cy="287" r="23" fill="#97400d" stroke="#fff9ed" stroke-width="4"/><text x="685" y="295" fill="#ffffff" font-size="24" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="685" dy="0">03</tspan></text>
+        <text x="685" y="349" fill="#291d30" font-size="27" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="685" dy="0">Get ready</tspan></text>
+        <text x="685" y="382" fill="#62506a" font-size="17" font-weight="400" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="685" dy="0">Trick-or-treat porch</tspan></text><circle cx="960" cy="287" r="23" fill="#97400d" stroke="#fff9ed" stroke-width="4"/><text x="960" y="295" fill="#ffffff" font-size="24" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="960" dy="0">04</tspan></text>
+        <text x="960" y="349" fill="#291d30" font-size="27" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="960" dy="0">Assess</tspan></text>
+        <text x="960" y="382" fill="#62506a" font-size="17" font-weight="400" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="960" dy="0">Ghost detective bureau</tspan></text><circle cx="825" cy="589" r="23" fill="#97400d" stroke="#fff9ed" stroke-width="4"/><text x="825" y="597" fill="#ffffff" font-size="24" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="825" dy="0">05</tspan></text>
+        <text x="825" y="651" fill="#291d30" font-size="27" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="825" dy="0">Plan</tspan></text>
+        <text x="825" y="684" fill="#62506a" font-size="17" font-weight="400" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="825" dy="0">Witch&apos;s spellbook</tspan></text><circle cx="510" cy="589" r="23" fill="#97400d" stroke="#fff9ed" stroke-width="4"/><text x="510" y="597" fill="#ffffff" font-size="24" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="510" dy="0">06</tspan></text>
+        <text x="510" y="651" fill="#291d30" font-size="27" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="510" dy="0">Upgrade &amp; run</tspan></text>
+        <text x="510" y="684" fill="#62506a" font-size="17" font-weight="400" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="510" dy="0">Monster laboratory</tspan></text><circle cx="190" cy="589" r="23" fill="#97400d" stroke="#fff9ed" stroke-width="4"/><text x="190" y="597" fill="#ffffff" font-size="24" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="190" dy="0">07</tspan></text>
+        <text x="190" y="651" fill="#291d30" font-size="27" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="190" dy="0">Azure plan</tspan></text>
+        <text x="190" y="684" fill="#62506a" font-size="17" font-weight="400" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="190" dy="0">Moonlit sky</tspan></text>
+      <g transform="translate(135 211) scale(0.8)">
+    <path d="M-4-38q-4-20 12-26" fill="none" stroke="#7a8c40" stroke-width="9" stroke-linecap="round"/>
+    <ellipse rx="55" ry="43" fill="#db7029" stroke="#291d30" stroke-width="3"/>
+    <ellipse rx="30" ry="43" fill="none" stroke="#291d30" stroke-width="2"/>
+    <path d="M-30-8l10-13 8 13M12-8l8-13 10 13" fill="#291d30"/>
+    <path d="M-21 9q21 26 42 0" fill="#edb947" stroke="#291d30" stroke-width="3" stroke-linejoin="round"/>
+  </g><g transform="translate(410 209) scale(0.7)">
+    <path d="M-42 47V-12a42 42 0 0 1 84 0v59L22 35 0 49-22 35Z" fill="#fff9ed" stroke="#97400d" stroke-width="3"/>
+    <ellipse cx="-14" cy="-8" rx="4" ry="7" fill="#291d30"/><ellipse cx="14" cy="-8" rx="4" ry="7" fill="#291d30"/>
+    <path d="M-8 11q8 9 16 0" fill="none" stroke="#291d30" stroke-width="3" stroke-linecap="round"/>
+    <ellipse cx="-25" cy="7" rx="7" ry="4" fill="#db7029" opacity=".55"/><ellipse cx="25" cy="7" rx="7" ry="4" fill="#db7029" opacity=".55"/>
+  </g><g transform="translate(685 214) scale(0.65)">
+    <path d="M-4-38q-4-20 12-26" fill="none" stroke="#7a8c40" stroke-width="9" stroke-linecap="round"/>
+    <ellipse rx="55" ry="43" fill="#db7029" stroke="#291d30" stroke-width="3"/>
+    <ellipse rx="30" ry="43" fill="none" stroke="#291d30" stroke-width="2"/>
+    <path d="M-30-8l10-13 8 13M12-8l8-13 10 13" fill="#291d30"/>
+    <path d="M-21 9q21 26 42 0" fill="#edb947" stroke="#291d30" stroke-width="3" stroke-linejoin="round"/>
+  </g>
+      <g transform="translate(960 211) scale(0.7)">
+    <path d="M-42 47V-12a42 42 0 0 1 84 0v59L22 35 0 49-22 35Z" fill="#fff9ed" stroke="#97400d" stroke-width="3"/>
+    <ellipse cx="-14" cy="-8" rx="4" ry="7" fill="#291d30"/><ellipse cx="14" cy="-8" rx="4" ry="7" fill="#291d30"/>
+    <path d="M-8 11q8 9 16 0" fill="none" stroke="#291d30" stroke-width="3" stroke-linecap="round"/>
+    <ellipse cx="-25" cy="7" rx="7" ry="4" fill="#db7029" opacity=".55"/><ellipse cx="25" cy="7" rx="7" ry="4" fill="#db7029" opacity=".55"/>
+  </g><path transform="translate(825 506) scale(1.7)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#edb947"/><g transform="translate(510 507) scale(0.7)">
+    <path d="M-42 47V-12a42 42 0 0 1 84 0v59L22 35 0 49-22 35Z" fill="#fff9ed" stroke="#97400d" stroke-width="3"/>
+    <ellipse cx="-14" cy="-8" rx="4" ry="7" fill="#291d30"/><ellipse cx="14" cy="-8" rx="4" ry="7" fill="#291d30"/>
+    <path d="M-8 11q8 9 16 0" fill="none" stroke="#291d30" stroke-width="3" stroke-linecap="round"/>
+    <ellipse cx="-25" cy="7" rx="7" ry="4" fill="#db7029" opacity=".55"/><ellipse cx="25" cy="7" rx="7" ry="4" fill="#db7029" opacity=".55"/>
+  </g><circle cx="190" cy="505" r="37" fill="#edb947"/><circle cx="207.76" cy="496.12" r="30.34" fill="#f8dfbc"/>
+      <path transform="translate(422 434) scale(0.7)" d="M0 0-5-9-9-3Q-29-24-52-14q15 5 11 22 14-11 21 5Q-7 5 0 14 7 5 20 13q7-16 21-5-4-17 11-22Q29-24 9-3L5-9Z" fill="#97400d"/><path transform="translate(729 425) scale(1)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#edb947"/><path transform="translate(94 460) scale(0.8)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#edb947"/>
+      <text x="550" y="762" fill="#62506a" font-size="25" font-weight="400" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="550" dy="0">Keep the learning. Leave the cobwebs behind.</tspan></text>
+  <g aria-hidden="true"><g transform="translate(1028 75) scale(0.45)">
+    <path d="M-42 47V-12a42 42 0 0 1 84 0v59L22 35 0 49-22 35Z" fill="#fff9ed" stroke="#97400d" stroke-width="3"/>
+    <ellipse cx="-14" cy="-8" rx="4" ry="7" fill="#291d30"/><ellipse cx="14" cy="-8" rx="4" ry="7" fill="#291d30"/>
+    <path d="M-8 11q8 9 16 0" fill="none" stroke="#291d30" stroke-width="3" stroke-linecap="round"/>
+    <ellipse cx="-25" cy="7" rx="7" ry="4" fill="#db7029" opacity=".55"/><ellipse cx="25" cy="7" rx="7" ry="4" fill="#db7029" opacity=".55"/>
+  </g><path transform="translate(984 37) scale(0.5)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#edb947"/></g>
+</svg>

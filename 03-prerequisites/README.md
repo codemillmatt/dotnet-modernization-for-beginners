@@ -9,7 +9,7 @@ Let's run BookCatalog before we ask the modernization agent to upgrade it. You'l
 
 **[Already set up? Run BookCatalog](#run-bookcatalog)**
 
-![Three Halloween trick-or-treat tickets: check your tools, open your learner copy, and run BookCatalog before the assessment.](../docs/illustrations/soundcheck-light.svg)
+![A concert-poster soundcheck: check your tools, open your learner copy, and run BookCatalog before the assessment.](../docs/illustrations/soundcheck-light.svg)
 
 ## Check before installing
 

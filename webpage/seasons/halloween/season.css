@@ -1,6 +1,6 @@
 @font-face {
   font-family: Outfit;
-  src: url("assets/outfit-latin-700-normal.woff2") format("woff2");
+  src: url("../../assets/outfit-latin-700-normal.woff2") format("woff2");
   font-weight: 700;
   font-display: swap;
 }

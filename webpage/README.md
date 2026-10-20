@@ -70,11 +70,12 @@ A script error stops the command. The launcher does not retry the script with an
 | `scripts/illustrations.js` | Illustration locations, captions, and text descriptions |
 | `scripts/state.js` | Exercise revisions, completion history, and old reading marks |
 | `scripts/ui.js` | Navigation, outline, drawers, and theme |
-| `styles.css` | Color, typography, and responsive layout |
-| `assets/` | Original illustrations |
+| `seasons/seasons.js` | Active season, calendar windows, and the `?season=` preview |
+| `seasons/<id>/` | One seasonal look: palettes, stylesheet, art, and copy |
+| `scripts/eras.js` | Applies the active season's era palette and art |
 | `tools/build.mjs` | Curated content and local dependency assets |
 | `tools/public-content.mjs` | Public source allowlist for tracked and new files |
-| `tools/illustration-art.mjs` | Original vector compositions using the page palettes |
+| `tools/illustration-art.mjs` | Classic vector compositions using the page palettes |
 | `tools/render-illustrations.mjs` | Reproducible light and dark SVG images |
 | `../docs/illustrations/` | Generated image files used by the READMEs and website |
 
@@ -96,11 +97,91 @@ Recorded examples use exact filenames, including their images. Never allowlist a
 The sample ZIP includes these curated files and images.
 Links to lessons outside the ZIP, including Setup, point to `microsoft/dotnet-modernization-for-beginners` instead.
 
-The Start page welcomes learners into a friendly Halloween pumpkin patch. Each chapter has its own Halloween setting. Your saved light/dark choice remains separate.
+The Start page uses the retro-resort design. The chapter controls the visual era. Your saved light/dark choice remains separate.
 
-## Halloween journey
+## Visual eras
 
 The full interface changes with each chapter. Light/dark mode remains a separate choice.
+
+| Page | Era | Main accents |
+| --- | --- | --- |
+| Start | 1960s | Resort-poster illustration and geometric sunbursts |
+| Meet the app and tools | 1970s | Broad curved stripes and warm layered panels |
+| Setup | Soundcheck interlude | Cream concert poster, plum lettering, orange and teal ribbons, starbursts, and tickets |
+| Assess the app | 1980s | Large angular shapes and bright geometric frames |
+| Choose the plan | 1990s | Beveled controls and desktop-style panels |
+| Upgrade and check | 2000s / 2010s | Glossy details and layered web-app surfaces |
+| Plan for Azure | 2020s | Sculptural shapes and quieter controls |
+
+`scripts/chapters.js` selects the era. The active season supplies its palettes, typography, and art.
+This table describes the classic season. Other seasons restyle the same eras.
+
+The reader sets `data-era` before it loads chapter content. `data-theme` retains the selected color mode.
+`data-season` names the active season. Seasons with named scenes also set `data-scene`.
+
+Most references use a quiet 2020s treatment.
+The overview's local **Samples and help** pages each use a theme tied to their purpose.
+The legacy quickstart has a workshop-manual theme with olive ink, brass accents, typewriter headings, and an illustrated parts cabinet.
+The instructor companion has a mission-briefing theme with navy and cyan, a planning-board illustration, and structured section markers.
+Each local Samples and help page has its own theme. None reuses a chapter theme.
+The previous BookCatalog sample run uses a 1950s test-flight-log theme: ivory, navy, orange accents, and an original illustrated logbook.
+Dated tabs link to the September 18 launch and September 21 assessment and upgrade attempt.
+The theme doesn't imply a completed upgrade. The page keeps its unfinished checks explicit.
+Its linked excerpts retain the quiet reference style.
+The completed BookCatalog reference uses a 2050s archive theme, with an illuminated book and circuit-style details.
+Its light and dark modes keep the instructions and code readable.
+The theme applies to the course page, not to the BookCatalog application's forms.
+References look the same on direct access and after chapter navigation.
+Setup doesn't move the existing eras to other chapters.
+Its expressive lettering stays in the header and artwork. Instructions and code use readable fonts.
+No page needs a visible decade badge.
+
+## Seasonal looks
+
+The classic eras are the default look. A season pack can restyle every stop for a holiday or event.
+Seasons change only the look and some decorative copy. Chapter slugs, era IDs, lesson text, and saved progress stay the same.
+
+### Turn a season on or off
+
+Edit `seasonConfig` at the top of `seasons/seasons.js`:
+
+- `active: "auto"` follows the `calendar` windows. Outside every window, the site uses `fallback`.
+- `active: "halloween"` or `active: "classic"` pins one season, whatever the date.
+- Each calendar window uses inclusive `MM-DD` dates in the visitor's local time. A window can cross the new year, such as `12-15` to `01-05`.
+
+Add `?season=<id>` before the `#` in a URL to preview any listed season, for example `/?season=halloween#/overview`.
+An unknown ID is ignored.
+
+### Change a season
+
+Each pack lives in `seasons/<id>/` and owns everything about its look:
+
+| File | Responsibility |
+| --- | --- |
+| `season.js` | Era palettes, fonts, header art names, hero art, and decorative copy |
+| `season.css` | The complete stylesheet for the season |
+| `assets/` | Header art and `favicon.svg` |
+| `art.mjs` | Optional generator for the pack's SVG files |
+| `illustrations/` | Optional seasonal versions of the lesson illustrations |
+
+To restyle a season, edit only its folder. Colors and fonts are in `season.js`. Layout and decoration are in `season.css`.
+If you change generated art or palettes, run `npm run illustrations`.
+Preview with `?season=<id>`, then run the checks.
+Each `season.css` is a complete stylesheet. A layout fix that applies to every season must go into each `season.css`.
+
+### Add a season
+
+1. Copy an existing folder, such as `seasons/halloween/`, to `seasons/<new-id>/`.
+2. Set `id` in `season.js` to the folder name. Keep every era ID. The tests reject a pack with a missing era.
+3. Add the ID to `packs` in `seasons/seasons.js`. Add a calendar window if the season should start on its own.
+4. Replace the art, palettes, copy, and styles. Run `npm run illustrations` if the pack has `art.mjs`.
+5. Run the checks. The site tests check every chapter in each pinned season for contrast, art, and narrow layouts. Add the new pack to the season list in `tests/site/eras.spec.js`.
+
+Packs with `illustrations: true` must ship light and dark versions of every lesson illustration in `illustrations/`.
+Packs can replace an illustration's title or text description with `illustrationText`.
+Repository READMEs always show the classic illustrations from `docs/illustrations/`.
+
+### Halloween
 
 | Page | Setting | Visual language |
 | --- | --- | --- |
@@ -112,26 +193,10 @@ The full interface changes with each chapter. Light/dark mode remains a separate
 | Upgrade and check | Monster laboratory | Botanical green, bolted-looking controls, potion glassware, and a smiling monster |
 | Plan for Azure | Moonlit sky | Twilight blue, crescent moon, bats, stars, and cloud-shaped curves |
 
-`scripts/chapters.js` selects a stable internal era ID. `scripts/eras.js` maps it to a Halloween scene, palettes, typography, and header assets. Keep those IDs unchanged; the seasonal theme doesn't change routes, chapter order, or saved progress.
-
-The reader sets `data-era` and `data-scene` before it loads chapter content. `data-theme` retains the selected color mode.
-
-Most references use the readable moonlit sky treatment.
-The overview's local **Samples and help** pages each use a theme tied to their purpose.
-The legacy quickstart uses a pumpkin shed with timber colors and an illustrated tool shelf.
-The instructor companion uses a raven's lookout with slate-blue panels and an illustrated watchful bird.
-Each local Samples and help page has its own theme. None reuses a chapter theme.
-The previous BookCatalog sample run uses a ghost story scrapbook with rose-brown paper, dashed frames, and a friendly ghost photograph.
-Dated tabs link to the September 18 launch and September 21 assessment and upgrade attempt.
-The theme doesn't imply a completed upgrade. The page keeps its unfinished checks explicit.
-Its linked excerpts retain the quiet reference style.
-The completed BookCatalog reference uses an enchanted conservatory with a greenhouse arch, climbing plants, and a ghost reading a book.
-Its light and dark modes keep the instructions and code readable.
-The theme applies to the course page, not to the BookCatalog application's forms.
-References look the same on direct access and after chapter navigation.
+References use the moonlit sky. The legacy quickstart is a pumpkin shed, and the instructor companion is a raven's lookout.
+The previous sample run is a ghost story scrapbook. The completed reference is an enchanted conservatory.
 The themes stay friendly: no jump scares, flashing, gore, or decoration behind lesson text.
-Expressive lettering stays in headings and artwork. Instructions and code use readable fonts.
-No page needs a visible decade badge.
+Halloween edits its lesson artwork in `seasons/halloween/illustration-art.mjs` and its headers in `seasons/halloween/art.mjs`.
 
 ## Course illustrations
 
@@ -141,7 +206,7 @@ The READMEs embed ordinary SVG images with descriptive alternative text. They wo
 The website switches between light and dark image files when the reader changes the theme.
 Each image has a full-size link and an expandable text explanation. These remain useful on small screens.
 
-Edit lesson artwork in `tools/illustration-art.mjs` and Halloween header scenes in `tools/halloween-art.mjs`. Edit captions and descriptions in `scripts/illustrations.js`.
+Edit the artwork in `tools/illustration-art.mjs`. Edit captions and descriptions in `scripts/illustrations.js`.
 Edit the shared colors in `scripts/eras.js`. Do not edit the generated SVG files by hand.
 
 After changing artwork or palettes, regenerate the images from the repository root:
@@ -151,7 +216,7 @@ npm run illustrations
 npm run build
 ```
 
-The generator also creates light and dark header variants for every Halloween scene in `assets/`.
+The generator also creates the classic soundcheck headers and each season's generated art.
 The build checks that the saved images match their source. It stops with regeneration instructions if an image is missing or outdated.
 Include both variants from `docs/illustrations/` when committing an artwork change.
 README wording changes need only a normal site build.
