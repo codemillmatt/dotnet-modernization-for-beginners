@@ -1,16 +1,36 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="520" height="480" viewBox="0 0 520 480" role="img" aria-labelledby="title" data-scene="ghost-bureau" data-theme="light">
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="640" viewBox="0 0 720 640" role="img" aria-labelledby="title" data-scene="ghost-bureau" data-theme="light">
     <title id="title">Ghost detective bureau</title>
-    <rect width="520" height="480" rx="26" fill="#dce9e9"/>
-    <rect x="58" y="65" width="389" height="346" rx="4" transform="rotate(-5 250 240)" fill="#e7c977" stroke="#306364" stroke-width="4"/>
-      <rect x="94" y="88" width="329" height="330" rx="3" fill="#f6fcfa" stroke="#306364" stroke-width="3"/>
-      <path d="M123 121h152m-152 19h94M125 340h246m-246 23h180" stroke="#99849d" stroke-width="6"/>
-      <g transform="translate(248 242) scale(1.4)">
-    <path d="M-42 47V-12a42 42 0 0 1 84 0v59L22 35 0 49-22 35Z" fill="#f6fcfa" stroke="#306364" stroke-width="3"/>
-    <ellipse cx="-14" cy="-8" rx="4" ry="7" fill="#291d30"/><ellipse cx="14" cy="-8" rx="4" ry="7" fill="#291d30"/>
-    <path d="M-8 11q8 9 16 0" fill="none" stroke="#291d30" stroke-width="3" stroke-linecap="round"/>
-    <ellipse cx="-25" cy="7" rx="7" ry="4" fill="#ad7653" opacity=".55"/><ellipse cx="25" cy="7" rx="7" ry="4" fill="#ad7653" opacity=".55"/>
+    <defs>
+      <clipPath id="scene"><path d="M24 616V287a336 263 0 0 1 672 0v329Z"/></clipPath>
+      <pattern id="engraving" width="9" height="9" patternUnits="userSpaceOnUse"><path d="m0 9 9-9" stroke="#d9c58e" stroke-width=".6" opacity=".11"/></pattern>
+    </defs>
+    <g clip-path="url(#scene)">
+      <path d="M0 0h720v640H0Z" fill="#243f4b"/>
+      <path d="M379 361v-184.5a91.5 91.5 0 0 1 183 0v184.5Z" fill="#d9c58e"/>
+    <path d="M470.5 85v276M379 223h183" fill="none" stroke="#243f4b" stroke-width="5" opacity="1" stroke-linecap="round" stroke-linejoin="round"/><path d="M400 133h140m-140 39h140m-140 39h140m-140 39h140m-140 39h140" fill="none" stroke="#243f4b" stroke-width="3" opacity="1" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M76 462h569v19H76Zm29 19h14v159h-14Zm493 0h14v159h-14Z" fill="#b28660"/>
+      <g transform="rotate(-9 287 347)">
+        <path d="M148 205h236l25 30v215H148Z" fill="#d9c58e"/>
+        <rect x="169" y="227" width="217" height="202" fill="#f3ecda"/>
+        <path d="M194 250h93m-93 15h68m-68 122h161m-161 14h118" fill="none" stroke="#7e9fa1" stroke-width="3" opacity="1" stroke-linecap="round" stroke-linejoin="round"/>
+        <g transform="translate(276 330) scale(0.65)">
+    <path d="M-38 43q-3-27 0-56C-35-64 33-67 38-15q0 39 18 53-21 3-29-7-10 24-29 13-18 19-36-1Z" fill="#f3ecda"/>
+    <path d="M-25-22q-8 29 0 43M28 3q3 16 10 25" fill="none" stroke="#7e9fa1" stroke-width="2" opacity=".6"/>
+    <ellipse cx="-10" cy="-10" rx="3" ry="5" fill="#263b34"/><ellipse cx="12" cy="-12" rx="3" ry="5" fill="#263b34"/>
+    <path d="M-3 7q6 6 12-2" fill="none" stroke="#263b34" stroke-width="2" stroke-linecap="round"/>
   </g>
-      <circle cx="353" cy="313" r="66" fill="#dce9e9" fill-opacity=".65" stroke="#306364" stroke-width="12"/>
-      <path d="m399 363 66 65" stroke="#306364" stroke-width="23" stroke-linecap="round"/>
-      <path transform="translate(415 74) scale(0.9)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#e7c977"/>
+      </g>
+      <circle cx="420" cy="376" r="65" fill="#7e9fa1" fill-opacity=".2" stroke="#d9c58e" stroke-width="8"/>
+      <path d="m466 423 63 65" fill="none" stroke="#d9c58e" stroke-width="16" opacity="1" stroke-linecap="round" stroke-linejoin="round"/><path d="M385 346q20-27 50-12" fill="none" stroke="#f3ecda" stroke-width="2" opacity="0.7" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M114 194h83l-26-49h-31Z" fill="#7e9fa1"/>
+      <path d="M154 192v234m-27 4h55" fill="none" stroke="#d9c58e" stroke-width="4" opacity="1" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M549 477q-7 52-83 58m-3 0h-38" fill="none" stroke="#7e9fa1" stroke-width="2" opacity="1" stroke-linecap="round" stroke-linejoin="round"/>
+      <g transform="translate(84 637) scale(1.15 1.15)">
+    <path d="M0 0Q-5-65 17-129" fill="none" stroke="#7e9fa1" stroke-width="2" opacity="1" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M0 -16q-38-8-27-25 21 1 27 25m2 -11q34-9 29-28-24 4-29 28" fill="#7e9fa1"/><path d="M2 -38q-38-8-27-25 21 1 27 25m4 -33q34-9 29-28-24 4-29 28" fill="#7e9fa1"/><path d="M4 -60q-38-8-27-25 21 1 27 25m6 -55q34-9 29-28-24 4-29 28" fill="#7e9fa1"/><path d="M6 -82q-38-8-27-25 21 1 27 25m8 -77q34-9 29-28-24 4-29 28" fill="#7e9fa1"/><path d="M8 -104q-38-8-27-25 21 1 27 25m10 -99q34-9 29-28-24 4-29 28" fill="#7e9fa1"/>
+  </g>
+      <path d="M0 0h720v640H0Z" fill="url(#engraving)"/>
+    </g>
+    <path d="M35 605V287a325 252 0 0 1 650 0v318Z" fill="none" stroke="#d9c58e" stroke-width="1" opacity=".6"/>
+    <path d="M335 626h50m-25-5v10" stroke="#315a65" stroke-width="1"/>
   </svg>

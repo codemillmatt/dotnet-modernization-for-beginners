@@ -1,12 +1,33 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="520" height="480" viewBox="0 0 520 480" role="img" aria-labelledby="title" data-scene="spellbook" data-theme="dark">
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="640" viewBox="0 0 720 640" role="img" aria-labelledby="title" data-scene="spellbook" data-theme="dark">
     <title id="title">Witch's spellbook</title>
-    <rect width="520" height="480" rx="26" fill="#281b3c"/>
-    <circle cx="415" cy="88" r="44" fill="#dbcd8b"/><circle cx="436.12" cy="77.44" r="36.08" fill="#281b3c"/><path transform="translate(112 120) scale(1)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#dbcd8b"/><path transform="translate(340 179) scale(0.7)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#dbcd8b"/>
-      <path d="M166 220 259 35l68 185Z" fill="#dac0fa"/>
-      <path d="m208 146 85 9-11 31-91-12Z" fill="#e6a784"/><path d="M124 223q130-64 263 0-129 42-263 0" fill="#dac0fa"/>
-      <g transform="translate(260 337) scale(1.8)">
-    <path d="M-90-50Q-45-66 0-40q45-26 90-10V65Q45 49 0 76-45 49-90 65Z" fill="#342449" stroke="#dac0fa" stroke-width="5"/>
-    <path d="M0-40V76M-70-24l48 6m-48 16 48 6m-48 16 48 6M22-18l48-6M22 4l48-6M22 26l48-6" fill="none" stroke="#9b86a8" stroke-width="3"/>
-    <path transform="translate(48 42) scale(0.6)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#dbcd8b"/>
-  </g><path transform="translate(262 330) scale(1.8)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#dbcd8b"/><path transform="translate(70 265) scale(0.6)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#dbcd8b"/><path transform="translate(453 333) scale(1)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#dbcd8b"/>
+    <defs>
+      <clipPath id="scene"><path d="M24 616V287a336 263 0 0 1 672 0v329Z"/></clipPath>
+      <pattern id="engraving" width="9" height="9" patternUnits="userSpaceOnUse"><path d="m0 9 9-9" stroke="#ddca95" stroke-width=".6" opacity=".11"/></pattern>
+    </defs>
+    <g clip-path="url(#scene)">
+      <path d="M0 0h720v640H0Z" fill="#382e4b"/>
+      <circle cx="360" cy="295" r="211" fill="none" stroke="#a08cb9" stroke-width="1"/>
+      <circle cx="360" cy="295" r="188" fill="none" stroke="#ddca95" stroke-width="1"/>
+      <path d="M360 68v46m0 363v46M131 295h46m366 0h46M199 134l32 32m258 258 32 32m0-322-32 32M231 424l-32 32" fill="none" stroke="#ddca95" stroke-width="2" opacity="1" stroke-linecap="round" stroke-linejoin="round"/>
+      <path transform="translate(206 222) scale(0.7)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#ddca95"/><path transform="translate(492 231) scale(0.6)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#ddca95"/><path transform="translate(359 154) scale(1)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#ddca95"/><path transform="translate(531 382) scale(0.4)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#ddca95"/><path transform="translate(183 388) scale(0.4)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#ddca95"/>
+      <path d="M273 292q56-77 70-127 29 73 96 126Z" fill="#a08cb9"/>
+      <path d="M241 300q104-61 226 0-98 32-226 0" fill="#ce9b7e"/>
+      <g transform="translate(360 435) scale(1.95)">
+    <path d="M-90-50Q-45-66 0-40q45-26 90-10V65Q45 49 0 76-45 49-90 65Z" fill="#f3ecda" stroke="#d6bfe9" stroke-width="5"/>
+    <path d="M0-40V76M-70-24l48 6m-48 16 48 6m-48 16 48 6M22-18l48-6M22 4l48-6M22 26l48-6" fill="none" stroke="#54645f" stroke-width="3"/>
+    <path transform="translate(48 42) scale(0.6)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#ddca95"/>
+  </g>
+      <path transform="translate(286 433) scale(1.1)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#ddca95"/><path d="M405 405h75m-75 18h59m-59 18h69" fill="none" stroke="#a08cb9" stroke-width="2" opacity="1" stroke-linecap="round" stroke-linejoin="round"/>
+      <g transform="translate(90 621) scale(1.3 1.3)">
+    <path d="M0 0Q-5-65 17-129" fill="none" stroke="#a08cb9" stroke-width="2" opacity="1" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M0 -16q-38-8-27-25 21 1 27 25m2 -11q34-9 29-28-24 4-29 28" fill="#a08cb9"/><path d="M2 -38q-38-8-27-25 21 1 27 25m4 -33q34-9 29-28-24 4-29 28" fill="#a08cb9"/><path d="M4 -60q-38-8-27-25 21 1 27 25m6 -55q34-9 29-28-24 4-29 28" fill="#a08cb9"/><path d="M6 -82q-38-8-27-25 21 1 27 25m8 -77q34-9 29-28-24 4-29 28" fill="#a08cb9"/><path d="M8 -104q-38-8-27-25 21 1 27 25m10 -99q34-9 29-28-24 4-29 28" fill="#a08cb9"/>
+  </g><g transform="translate(628 621) scale(-1.3 1.3)">
+    <path d="M0 0Q-5-65 17-129" fill="none" stroke="#a08cb9" stroke-width="2" opacity="1" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M0 -16q-38-8-27-25 21 1 27 25m2 -11q34-9 29-28-24 4-29 28" fill="#a08cb9"/><path d="M2 -38q-38-8-27-25 21 1 27 25m4 -33q34-9 29-28-24 4-29 28" fill="#a08cb9"/><path d="M4 -60q-38-8-27-25 21 1 27 25m6 -55q34-9 29-28-24 4-29 28" fill="#a08cb9"/><path d="M6 -82q-38-8-27-25 21 1 27 25m8 -77q34-9 29-28-24 4-29 28" fill="#a08cb9"/><path d="M8 -104q-38-8-27-25 21 1 27 25m10 -99q34-9 29-28-24 4-29 28" fill="#a08cb9"/>
+  </g>
+      <circle cx="359" cy="62" r="15" fill="#ddca95"/><path d="M348.5 67q10.5 -13.5 21 0" fill="none" stroke="#382e4b" stroke-width="1" opacity="0.18" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M0 0h720v640H0Z" fill="url(#engraving)"/>
+    </g>
+    <path d="M35 605V287a325 252 0 0 1 650 0v318Z" fill="none" stroke="#ddca95" stroke-width="1" opacity=".6"/>
+    <path d="M335 626h50m-25-5v10" stroke="#d6bfe9" stroke-width="1"/>
   </svg>

@@ -104,7 +104,9 @@ test("Halloween headers are distinct and generated for every stop in both modes"
       const svg = renderHalloweenHeader(id, mode);
       assert.equal((await readFile(resolve(root, "webpage/seasons/halloween/assets", file), "utf8")).trim(), svg.trim());
       assert.ok(svg.includes(`data-scene="${era.scene}"`));
-      assert.ok(svg.includes(era[mode].paper));
+      assert.ok(svg.includes(era[mode].a));
+      assert.ok(svg.includes(era[mode].c));
+      assert.ok(svg.includes(`data-theme="${mode}"`));
       assert.doesNotMatch(svg, /<script|<image|<animate|(?:href|src)=["']https?:/i);
       variants.add(svg);
     }

@@ -2,55 +2,48 @@
   <title id="illustration-soundcheck-dark-title">Trick-or-treat: get ready</title>
   <desc id="illustration-soundcheck-dark-desc">Three trick-or-treat tickets show the setup sequence: 1 Check tools and Copilot access; 2 Open the BookCatalog solution in a learner copy; 3 Run the app, add a sample book, and edit it. Already set up? Go straight to running BookCatalog. Friendly ghosts and candy colors decorate the tickets, but the body instructions remain plain and readable.</desc>
   <defs>
-    <marker id="illustration-soundcheck-dark-arrow" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="18" markerHeight="18" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M1 1L11 6 1 11Z" fill="#f5b8df"/></marker>
-    <marker id="illustration-soundcheck-dark-return" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="16" markerHeight="16" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M1 1L11 6 1 11" fill="none" stroke="#d9cbde" stroke-width="2"/></marker>
-    <marker id="illustration-soundcheck-dark-trail" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="18" markerHeight="18" markerUnits="userSpaceOnUse" orient="auto"><path d="M1 1L11 6 1 11Z" fill="#402643"/></marker>
+    <marker id="illustration-soundcheck-dark-arrow" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="18" markerHeight="18" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M1 1L11 6 1 11Z" fill="#e9b5c7"/></marker>
+    <marker id="illustration-soundcheck-dark-return" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="16" markerHeight="16" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M1 1L11 6 1 11" fill="none" stroke="#c0c8c2" stroke-width="2"/></marker>
+    <marker id="illustration-soundcheck-dark-trail" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="18" markerHeight="18" markerUnits="userSpaceOnUse" orient="auto"><path d="M1 1L11 6 1 11Z" fill="#3b2938"/></marker>
 
   </defs>
-  <rect width="1100" height="850" fill="#331d37"/>
-  <rect x="24" y="24" width="1052" height="802" rx="38" fill="none" stroke="#f5b8df" stroke-width="3"/>
-      <g transform="translate(0 48)">
-      <path d="M-30 312C118 163 218 417 409 310S706 89 868 258 1027 321 1140 259" fill="none" stroke="#bf9dd9" stroke-width="27" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
-      <path d="M-30 345C118 196 218 450 409 343S706 122 868 291 1027 354 1140 292" fill="none" stroke="#f0a16d" stroke-width="21" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
-      <path d="M-30 371C118 222 218 476 409 369S706 148 868 317 1027 380 1140 318" fill="none" stroke="#edcd84" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
-      </g>
-      <text x="69" y="71" fill="#d9cbde" font-size="23" font-weight="700" text-anchor="start" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="3"><tspan x="69" dy="0">BEFORE THE FIRST REPORT</tspan></text>
-      <g transform="rotate(-4 455 174)">
-        <text x="61" y="214" fill="#f5b8df" font-size="85" font-weight="700" text-anchor="start" font-family="Georgia, Times New Roman, serif" letter-spacing="-3"><tspan x="61" dy="0">Trick or treat?</tspan></text>
-      </g>
-      <g transform="translate(947 193) scale(1.2)">
-    <path d="M-4-38q-4-20 12-26" fill="none" stroke="#bf9dd9" stroke-width="9" stroke-linecap="round"/>
-    <ellipse rx="55" ry="43" fill="#f0a16d" stroke="#fff5e8" stroke-width="3"/>
-    <ellipse rx="30" ry="43" fill="none" stroke="#fff5e8" stroke-width="2"/>
-    <path d="M-30-8l10-13 8 13M12-8l8-13 10 13" fill="#fff5e8"/>
-    <path d="M-21 9q21 26 42 0" fill="#edcd84" stroke="#fff5e8" stroke-width="3" stroke-linejoin="round"/>
+  <rect width="1100" height="850" fill="#30202e"/>
+  <rect x="24" y="24" width="1052" height="802" rx="12" fill="none" stroke="#54645f" stroke-width="1"/>
+      <path d="M60 260q490 90 980 0" fill="none" stroke="#aa8da9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+      <circle cx="130" cy="273" r="6" fill="#df9f73"/><circle cx="270" cy="289" r="6" fill="#df9f73"/><circle cx="410" cy="300.71281292110206" r="6" fill="#df9f73"/><circle cx="550" cy="305" r="6" fill="#df9f73"/><circle cx="690" cy="300.71281292110206" r="6" fill="#df9f73"/><circle cx="830" cy="289" r="6" fill="#df9f73"/><circle cx="970" cy="273" r="6" fill="#df9f73"/>
+      <text x="69" y="71" fill="#c0c8c2" font-size="23" font-weight="700" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" letter-spacing="3"><tspan x="69" dy="0">BEFORE THE FIRST REPORT</tspan></text>
+      <text x="65" y="194" fill="#e9b5c7" font-size="72" font-weight="400" text-anchor="start" font-family="Georgia, Times New Roman, serif" letter-spacing="-2"><tspan x="65" dy="0">Trick or treat?</tspan></text>
+      <g transform="translate(947 193) scale(0.9)">
+    <path d="M-3-35q-5-18 10-25" fill="none" stroke="#aa8da9" stroke-width="7" stroke-linecap="round"/>
+    <path d="M0-34c-70-24-78 74-22 76q22 7 44 0C78 40 70-58 0-34Z" fill="#df9f73"/>
+    <path d="M-13-31q-35 40-8 70M10-31q31 42 10 70M0-31v69" fill="none" stroke="#e8c78c" stroke-width="2" opacity=".7"/>
+    <path d="m-29-2 10-12 6 12m24 0 7-12 10 12M-18 14q18 17 36 0l-8 14H-9Z" fill="#f2eee4"/>
   </g>
 
-    <path d="M60 346h300v76a20 20 0 0 0 0 40v163H60V462a20 20 0 0 0 0-40Z" fill="#402643" stroke="#f5b8df" stroke-width="3"/>
-    <path d="M81 445h258" fill="none" stroke="#9b86a8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="1" stroke-dasharray="5 8"/>
-    <text x="210" y="402" fill="#f5b8df" font-size="24" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="3"><tspan x="210" dy="0">01</tspan></text>
-    <text x="210" y="499" fill="#fff5e8" font-size="31" font-weight="700" text-anchor="middle" font-family="Georgia, Times New Roman, serif" letter-spacing="0"><tspan x="210" dy="0">Check tools</tspan></text>
-    <text x="210" y="550" fill="#d9cbde" font-size="23" font-weight="400" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="210" dy="0">Installed tools</tspan><tspan x="210" dy="29.44">+ Copilot access</tspan></text>
+    <path d="M60 346h300v76a20 20 0 0 0 0 40v163H60V462a20 20 0 0 0 0-40Z" fill="#3b2938" stroke="#e9b5c7" stroke-width="3"/>
+    <path d="M81 445h258" fill="none" stroke="#54645f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="1" stroke-dasharray="5 8"/>
+    <text x="210" y="402" fill="#e9b5c7" font-size="24" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="3"><tspan x="210" dy="0">01</tspan></text>
+    <text x="210" y="499" fill="#f2eee4" font-size="31" font-weight="700" text-anchor="middle" font-family="Georgia, Times New Roman, serif" letter-spacing="0"><tspan x="210" dy="0">Check tools</tspan></text>
+    <text x="210" y="550" fill="#c0c8c2" font-size="23" font-weight="400" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="210" dy="0">Installed tools</tspan><tspan x="210" dy="29.44">+ Copilot access</tspan></text>
 
-    <path d="M400 346h300v76a20 20 0 0 0 0 40v163H400V462a20 20 0 0 0 0-40Z" fill="#402643" stroke="#f5b8df" stroke-width="3"/>
-    <path d="M421 445h258" fill="none" stroke="#9b86a8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="1" stroke-dasharray="5 8"/>
-    <text x="550" y="402" fill="#f5b8df" font-size="24" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="3"><tspan x="550" dy="0">02</tspan></text>
-    <text x="550" y="499" fill="#fff5e8" font-size="31" font-weight="700" text-anchor="middle" font-family="Georgia, Times New Roman, serif" letter-spacing="0"><tspan x="550" dy="0">Open the app</tspan></text>
-    <text x="550" y="550" fill="#d9cbde" font-size="23" font-weight="400" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="550" dy="0">BookCatalog solution</tspan><tspan x="550" dy="29.44">in your learner copy</tspan></text>
+    <path d="M400 346h300v76a20 20 0 0 0 0 40v163H400V462a20 20 0 0 0 0-40Z" fill="#3b2938" stroke="#e9b5c7" stroke-width="3"/>
+    <path d="M421 445h258" fill="none" stroke="#54645f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="1" stroke-dasharray="5 8"/>
+    <text x="550" y="402" fill="#e9b5c7" font-size="24" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="3"><tspan x="550" dy="0">02</tspan></text>
+    <text x="550" y="499" fill="#f2eee4" font-size="31" font-weight="700" text-anchor="middle" font-family="Georgia, Times New Roman, serif" letter-spacing="0"><tspan x="550" dy="0">Open the app</tspan></text>
+    <text x="550" y="550" fill="#c0c8c2" font-size="23" font-weight="400" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="550" dy="0">BookCatalog solution</tspan><tspan x="550" dy="29.44">in your learner copy</tspan></text>
 
-    <path d="M740 346h300v76a20 20 0 0 0 0 40v163H740V462a20 20 0 0 0 0-40Z" fill="#402643" stroke="#f5b8df" stroke-width="3"/>
-    <path d="M761 445h258" fill="none" stroke="#9b86a8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="1" stroke-dasharray="5 8"/>
-    <text x="890" y="402" fill="#f5b8df" font-size="24" font-weight="700" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="3"><tspan x="890" dy="0">03</tspan></text>
-    <text x="890" y="499" fill="#fff5e8" font-size="31" font-weight="700" text-anchor="middle" font-family="Georgia, Times New Roman, serif" letter-spacing="0"><tspan x="890" dy="0">Try the app</tspan></text>
-    <text x="890" y="550" fill="#d9cbde" font-size="23" font-weight="400" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="890" dy="0">Run, add a book,</tspan><tspan x="890" dy="29.44">then edit it</tspan></text>
-      <text x="550" y="706" fill="#fff5e8" font-size="32" font-weight="700" text-anchor="middle" font-family="Georgia, Times New Roman, serif" letter-spacing="0"><tspan x="550" dy="0">Already set up?</tspan></text>
-      <text x="550" y="751" fill="#fff5e8" font-size="26" font-weight="400" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" letter-spacing="0"><tspan x="550" dy="0">Go straight to running BookCatalog.</tspan></text>
-      <path d="M289 788Q550 818 811 788" fill="none" stroke="#bf9dd9" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
-      <polygon points="116.00,700.00 121.62,716.75 133.22,703.43 132.00,721.05 147.82,713.18 139.95,729.00 157.57,727.78 144.25,739.38 161.00,745.00 144.25,750.62 157.57,762.22 139.95,761.00 147.82,776.82 132.00,768.95 133.22,786.57 121.62,773.25 116.00,790.00 110.38,773.25 98.78,786.57 100.00,768.95 84.18,776.82 92.05,761.00 74.43,762.22 87.75,750.62 71.00,745.00 87.75,739.38 74.43,727.78 92.05,729.00 84.18,713.18 100.00,721.05 98.78,703.43 110.38,716.75" fill="#edcd84"/><polygon points="984.00,700.00 989.62,716.75 1001.22,703.43 1000.00,721.05 1015.82,713.18 1007.95,729.00 1025.57,727.78 1012.25,739.38 1029.00,745.00 1012.25,750.62 1025.57,762.22 1007.95,761.00 1015.82,776.82 1000.00,768.95 1001.22,786.57 989.62,773.25 984.00,790.00 978.38,773.25 966.78,786.57 968.00,768.95 952.18,776.82 960.05,761.00 942.43,762.22 955.75,750.62 939.00,745.00 955.75,739.38 942.43,727.78 960.05,729.00 952.18,713.18 968.00,721.05 966.78,703.43 978.38,716.75" fill="#bf9dd9"/>
+    <path d="M740 346h300v76a20 20 0 0 0 0 40v163H740V462a20 20 0 0 0 0-40Z" fill="#3b2938" stroke="#e9b5c7" stroke-width="3"/>
+    <path d="M761 445h258" fill="none" stroke="#54645f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="1" stroke-dasharray="5 8"/>
+    <text x="890" y="402" fill="#e9b5c7" font-size="24" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="3"><tspan x="890" dy="0">03</tspan></text>
+    <text x="890" y="499" fill="#f2eee4" font-size="31" font-weight="700" text-anchor="middle" font-family="Georgia, Times New Roman, serif" letter-spacing="0"><tspan x="890" dy="0">Try the app</tspan></text>
+    <text x="890" y="550" fill="#c0c8c2" font-size="23" font-weight="400" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="890" dy="0">Run, add a book,</tspan><tspan x="890" dy="29.44">then edit it</tspan></text>
+      <text x="550" y="706" fill="#f2eee4" font-size="32" font-weight="700" text-anchor="middle" font-family="Georgia, Times New Roman, serif" letter-spacing="0"><tspan x="550" dy="0">Already set up?</tspan></text>
+      <text x="550" y="751" fill="#f2eee4" font-size="26" font-weight="400" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="550" dy="0">Go straight to running BookCatalog.</tspan></text>
+      <path d="M360 790h380" fill="none" stroke="#54645f" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
   <g aria-hidden="true"><g transform="translate(1028 75) scale(0.45)">
-    <path d="M-42 47V-12a42 42 0 0 1 84 0v59L22 35 0 49-22 35Z" fill="#402643" stroke="#f5b8df" stroke-width="3"/>
-    <ellipse cx="-14" cy="-8" rx="4" ry="7" fill="#fff5e8"/><ellipse cx="14" cy="-8" rx="4" ry="7" fill="#fff5e8"/>
-    <path d="M-8 11q8 9 16 0" fill="none" stroke="#fff5e8" stroke-width="3" stroke-linecap="round"/>
-    <ellipse cx="-25" cy="7" rx="7" ry="4" fill="#f0a16d" opacity=".55"/><ellipse cx="25" cy="7" rx="7" ry="4" fill="#f0a16d" opacity=".55"/>
-  </g><path transform="translate(984 37) scale(0.5)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#edcd84"/></g>
+    <path d="M-38 43q-3-27 0-56C-35-64 33-67 38-15q0 39 18 53-21 3-29-7-10 24-29 13-18 19-36-1Z" fill="#f3ecda"/>
+    <path d="M-25-22q-8 29 0 43M28 3q3 16 10 25" fill="none" stroke="#aa8da9" stroke-width="2" opacity=".6"/>
+    <ellipse cx="-10" cy="-10" rx="3" ry="5" fill="#263b34"/><ellipse cx="12" cy="-12" rx="3" ry="5" fill="#263b34"/>
+    <path d="M-3 7q6 6 12-2" fill="none" stroke="#263b34" stroke-width="2" stroke-linecap="round"/>
+  </g><path transform="translate(984 37) scale(0.5)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#e8c78c"/></g>
 </svg>

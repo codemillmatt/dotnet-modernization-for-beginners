@@ -5,7 +5,7 @@ import { illustrations, illustrationPath } from "../scripts/illustrations.js";
 const exact = new Set([
   ...chapters.map(item => item.path), ...references.map(item => item.path),
   ...illustrations.flatMap(item => ["light", "dark"].map(mode => illustrationPath(item.id, mode))),
-  "LICENSE", "package.json", "package-lock.json", ".config/dotnet-tools.json",
+  "LICENSE", "package.json", "package-lock.json", ".config/dotnet-tools.json", "webpage/seasons/README.md",
   "scripts/Test-DataTransfer.ps1", "scripts/Test-ModernizedApp.ps1",
   "examples/modernized/.gitignore",
   "examples/modernized/compose.yaml",

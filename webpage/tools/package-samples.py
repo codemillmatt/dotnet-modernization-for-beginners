@@ -9,7 +9,7 @@ destination = Path(sys.argv[2])
 with ZipFile(destination, "w", ZIP_DEFLATED) as archive:
     for relative in ["shared-legacy-app", "examples", "tests/BookCatalog.Tests",
                      "tests/BookCatalog.Data.Tests", "tools/BookCatalog.Data", ".config",
-                     "scripts", "docs", "07-cloud/deployment.md", "webpage/README.md", "package.json", "package-lock.json",
+                     "scripts", "docs", "07-cloud/deployment.md", "webpage/README.md", "webpage/seasons/README.md", "package.json", "package-lock.json",
                      "README.md", "LICENSE"]:
         target = root / relative
         paths = sorted(target.rglob("*")) if target.is_dir() else [target]

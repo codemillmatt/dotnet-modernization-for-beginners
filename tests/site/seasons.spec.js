@@ -69,3 +69,28 @@ test("switching seasons keeps progress, color mode, and the route", async ({ pag
   await expect(page.getByRole("button", { name: "Marked complete" })).toHaveAttribute("aria-pressed", "true");
   await expect(page.locator("html")).toHaveAttribute("data-era", "1980s");
 });
+
+test("the Halloween field guide keeps its opening action and mobile navigation usable", async ({ page }) => {
+  for (const mode of ["light", "dark"]) {
+    await page.setViewportSize({ width: 1440, height: 1000 });
+    await open(page, "overview", `season=halloween&clawpilotTheme=${mode}`);
+    const start = page.locator(".hero-copy p > a:has(> strong)");
+    await expect(start).toBeInViewport();
+    await expect(page.locator(".hero-art:visible")).toBeInViewport();
+    await expect(page.locator(".hero-copy > p").filter({ hasText: /\S/ })).toHaveCount(7);
+
+    await page.setViewportSize({ width: 390, height: 844 });
+    await expect(start).toBeInViewport();
+    await page.getByRole("button", { name: "Chapters", exact: true }).click();
+    await expect(page.locator("#course-nav")).toBeVisible();
+    await page.locator("#chapter-nav a[href='#/02-planning']").click();
+    await expect(page.locator("#article")).not.toHaveAttribute("aria-busy", "true");
+    await expect(page.locator("html")).toHaveAttribute("data-scene", "spellbook");
+    await expect(page.locator("html")).toHaveAttribute("data-theme", mode);
+    await expect(page.locator("#course-nav")).not.toBeVisible();
+    await page.getByRole("button", { name: "On this page" }).click();
+    await expect(page.locator("#page-outline")).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(page.locator("#page-outline")).not.toBeVisible();
+  }
+});

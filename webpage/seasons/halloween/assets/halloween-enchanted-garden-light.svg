@@ -1,24 +1,42 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="520" height="480" viewBox="0 0 520 480" role="img" aria-labelledby="title" data-scene="enchanted-garden" data-theme="light">
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="640" viewBox="0 0 720 640" role="img" aria-labelledby="title" data-scene="enchanted-garden" data-theme="light">
     <title id="title">Enchanted conservatory</title>
-    <rect width="520" height="480" rx="26" fill="#dceadd"/>
-    <path d="M62 428V231a198 198 0 0 1 396 0v197Z" fill="#e5f0df" stroke="#3b6751" stroke-width="6"/>
-      <path d="M260 33v395M62 231h396M118 92q48 132 0 336M402 92q-48 132 0 336" fill="none" stroke="#99849d" stroke-width="3"/>
-      <path d="M91 428q-30-147 77-195m-16 195q34-109-28-145M419 428q15-146-91-204" fill="none" stroke="#87ac88" stroke-width="11"/>
-      <ellipse cx="101" cy="349" rx="24" ry="10" transform="rotate(-30 101 349)" fill="#87ac88"/><ellipse cx="113" cy="319" rx="24" ry="10" transform="rotate(-30 113 319)" fill="#87ac88"/><ellipse cx="125" cy="289" rx="24" ry="10" transform="rotate(-30 125 289)" fill="#87ac88"/><ellipse cx="137" cy="259" rx="24" ry="10" transform="rotate(-30 137 259)" fill="#87ac88"/>
-      <g transform="translate(260 350) scale(1.05)">
-    <path d="M-90-50Q-45-66 0-40q45-26 90-10V65Q45 49 0 76-45 49-90 65Z" fill="#f6fcf3" stroke="#3b6751" stroke-width="5"/>
-    <path d="M0-40V76M-70-24l48 6m-48 16 48 6m-48 16 48 6M22-18l48-6M22 4l48-6M22 26l48-6" fill="none" stroke="#99849d" stroke-width="3"/>
-    <path transform="translate(48 42) scale(0.6)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#d5ba74"/>
-  </g><g transform="translate(261 196) scale(0.9)">
-    <path d="M-42 47V-12a42 42 0 0 1 84 0v59L22 35 0 49-22 35Z" fill="#f6fcf3" stroke="#3b6751" stroke-width="3"/>
-    <ellipse cx="-14" cy="-8" rx="4" ry="7" fill="#291d30"/><ellipse cx="14" cy="-8" rx="4" ry="7" fill="#291d30"/>
-    <path d="M-8 11q8 9 16 0" fill="none" stroke="#291d30" stroke-width="3" stroke-linecap="round"/>
-    <ellipse cx="-25" cy="7" rx="7" ry="4" fill="#b383af" opacity=".55"/><ellipse cx="25" cy="7" rx="7" ry="4" fill="#b383af" opacity=".55"/>
-  </g><path transform="translate(164 170) scale(1)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#d5ba74"/><path transform="translate(354 157) scale(1)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#d5ba74"/><g transform="translate(388 398) scale(0.65)">
-    <path d="M-4-38q-4-20 12-26" fill="none" stroke="#87ac88" stroke-width="9" stroke-linecap="round"/>
-    <ellipse rx="55" ry="43" fill="#b383af" stroke="#291d30" stroke-width="3"/>
-    <ellipse rx="30" ry="43" fill="none" stroke="#291d30" stroke-width="2"/>
-    <path d="M-30-8l10-13 8 13M12-8l8-13 10 13" fill="#291d30"/>
-    <path d="M-21 9q21 26 42 0" fill="#d5ba74" stroke="#291d30" stroke-width="3" stroke-linejoin="round"/>
+    <defs>
+      <clipPath id="scene"><path d="M24 616V287a336 263 0 0 1 672 0v329Z"/></clipPath>
+      <pattern id="engraving" width="9" height="9" patternUnits="userSpaceOnUse"><path d="m0 9 9-9" stroke="#cfb97d" stroke-width=".6" opacity=".11"/></pattern>
+    </defs>
+    <g clip-path="url(#scene)">
+      <path d="M0 0h720v640H0Z" fill="#204638"/>
+      <path d="M126 566V252a234 234 0 0 1 468 0v314Z" fill="#7fa78d" opacity=".25"/>
+      <path d="M126 566V252a234 234 0 0 1 468 0v314M360 18v550M126 252h468M160 130q95 169 0 436M560 130q-95 169 0 436M126 407h468" fill="none" stroke="#cfb97d" stroke-width="2" opacity="1" stroke-linecap="round" stroke-linejoin="round"/>
+      <g transform="translate(173 572) scale(2 2)">
+    <path d="M0 0Q-5-65 17-129" fill="none" stroke="#7fa78d" stroke-width="2" opacity="1" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M0 -16q-38-8-27-25 21 1 27 25m2 -11q34-9 29-28-24 4-29 28" fill="#7fa78d"/><path d="M2 -38q-38-8-27-25 21 1 27 25m4 -33q34-9 29-28-24 4-29 28" fill="#7fa78d"/><path d="M4 -60q-38-8-27-25 21 1 27 25m6 -55q34-9 29-28-24 4-29 28" fill="#7fa78d"/><path d="M6 -82q-38-8-27-25 21 1 27 25m8 -77q34-9 29-28-24 4-29 28" fill="#7fa78d"/><path d="M8 -104q-38-8-27-25 21 1 27 25m10 -99q34-9 29-28-24 4-29 28" fill="#7fa78d"/>
+  </g><g transform="translate(547 572) scale(-2 2)">
+    <path d="M0 0Q-5-65 17-129" fill="none" stroke="#7fa78d" stroke-width="2" opacity="1" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M0 -16q-38-8-27-25 21 1 27 25m2 -11q34-9 29-28-24 4-29 28" fill="#7fa78d"/><path d="M2 -38q-38-8-27-25 21 1 27 25m4 -33q34-9 29-28-24 4-29 28" fill="#7fa78d"/><path d="M4 -60q-38-8-27-25 21 1 27 25m6 -55q34-9 29-28-24 4-29 28" fill="#7fa78d"/><path d="M6 -82q-38-8-27-25 21 1 27 25m8 -77q34-9 29-28-24 4-29 28" fill="#7fa78d"/><path d="M8 -104q-38-8-27-25 21 1 27 25m10 -99q34-9 29-28-24 4-29 28" fill="#7fa78d"/>
+  </g><g transform="translate(250 570) scale(-0.9 0.9)">
+    <path d="M0 0Q-5-65 17-129" fill="none" stroke="#7fa78d" stroke-width="2" opacity="1" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M0 -16q-38-8-27-25 21 1 27 25m2 -11q34-9 29-28-24 4-29 28" fill="#7fa78d"/><path d="M2 -38q-38-8-27-25 21 1 27 25m4 -33q34-9 29-28-24 4-29 28" fill="#7fa78d"/><path d="M4 -60q-38-8-27-25 21 1 27 25m6 -55q34-9 29-28-24 4-29 28" fill="#7fa78d"/><path d="M6 -82q-38-8-27-25 21 1 27 25m8 -77q34-9 29-28-24 4-29 28" fill="#7fa78d"/><path d="M8 -104q-38-8-27-25 21 1 27 25m10 -99q34-9 29-28-24 4-29 28" fill="#7fa78d"/>
   </g>
+      <path d="M143 559h88l-14 61h-59Zm345 0h88l-15 61h-58Z" fill="#af8fac"/>
+      <g transform="translate(360 481) scale(1.15)">
+    <path d="M-90-50Q-45-66 0-40q45-26 90-10V65Q45 49 0 76-45 49-90 65Z" fill="#f3ecda" stroke="#39624e" stroke-width="5"/>
+    <path d="M0-40V76M-70-24l48 6m-48 16 48 6m-48 16 48 6M22-18l48-6M22 4l48-6M22 26l48-6" fill="none" stroke="#bdc6bd" stroke-width="3"/>
+    <path transform="translate(48 42) scale(0.6)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#cfb97d"/>
+  </g><g transform="translate(367 325) scale(0.7)">
+    <path d="M-38 43q-3-27 0-56C-35-64 33-67 38-15q0 39 18 53-21 3-29-7-10 24-29 13-18 19-36-1Z" fill="#f3ecda"/>
+    <path d="M-25-22q-8 29 0 43M28 3q3 16 10 25" fill="none" stroke="#7fa78d" stroke-width="2" opacity=".6"/>
+    <ellipse cx="-10" cy="-10" rx="3" ry="5" fill="#263b34"/><ellipse cx="12" cy="-12" rx="3" ry="5" fill="#263b34"/>
+    <path d="M-3 7q6 6 12-2" fill="none" stroke="#263b34" stroke-width="2" stroke-linecap="round"/>
+  </g>
+      <path transform="translate(295 205) scale(0.7)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#cfb97d"/><path transform="translate(438 175) scale(0.4)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#cfb97d"/><path transform="translate(467 382) scale(0.4)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#cfb97d"/><g transform="translate(476 587) scale(0.6)">
+    <path d="M-3-35q-5-18 10-25" fill="none" stroke="#7fa78d" stroke-width="7" stroke-linecap="round"/>
+    <path d="M0-34c-70-24-78 74-22 76q22 7 44 0C78 40 70-58 0-34Z" fill="#af8fac"/>
+    <path d="M-13-31q-35 40-8 70M10-31q31 42 10 70M0-31v69" fill="none" stroke="#cfb97d" stroke-width="2" opacity=".7"/>
+    <path d="m-29-2 10-12 6 12m24 0 7-12 10 12M-18 14q18 17 36 0l-8 14H-9Z" fill="#204638"/>
+  </g>
+      <path d="M0 0h720v640H0Z" fill="url(#engraving)"/>
+    </g>
+    <path d="M35 605V287a325 252 0 0 1 650 0v318Z" fill="none" stroke="#cfb97d" stroke-width="1" opacity=".6"/>
+    <path d="M335 626h50m-25-5v10" stroke="#39624e" stroke-width="1"/>
   </svg>

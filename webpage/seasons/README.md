@@ -116,15 +116,26 @@ Repository READMEs always show the classic illustrations from `docs/illustration
 
 ## Halloween
 
+The pack is an illustrated **Halloween field guide**, not a costume over the classic eras.
+Original ink-cut-style scenes use a shared arched frame, fine engraving lines, botanical silhouettes,
+and small, friendly characters. The interface stays quiet: tinted navigation, restrained controls,
+generous reading space, and no texture behind lesson text. Each scene has its own palette and header
+material in both light and dark modes.
+
 | Page | Setting | Visual language |
 | --- | --- | --- |
-| Start | Pumpkin patch | Harvest orange, pumpkin-shaped markers, an illustrated trail, and a smiling ghost |
-| Meet the app and tools | Haunted library | Moss-green book spines, serif type, double rules, and an arched reading room |
-| Setup | Trick-or-treat porch | Candy pink and plum, dashed tickets, porch lights, and friendly pumpkins |
-| Assess the app | Ghost detective bureau | Misty blue, case-file frames, typewriter headings, and a ghost under a magnifying glass |
-| Choose the plan | Witch's spellbook | Lilac, ornamental book covers, page-like panels, and an illustrated witch's hat |
-| Upgrade and check | Monster laboratory | Botanical green, bolted-looking controls, potion glassware, and a smiling monster |
-| Plan for Azure | Moonlit sky | Twilight blue, crescent moon, bats, stars, and cloud-shaped curves |
+| Start | Pumpkin patch | Forest green and burnt orange, a winding moonlit trail, carved pumpkins, and woodland foliage |
+| Meet the app and tools | Haunted library | Moss-green shelves, warm brass, bookish type, double rules, and a lantern-lit reading room |
+| Setup | Trick-or-treat porch | Mulberry and dusty rose, rounded panels, hanging porch lights, and printed setup tickets |
+| Assess the app | Ghost detective bureau | Petrol blue, square case-file frames, typewriter headings, and a lamplit investigation desk |
+| Choose the plan | Witch's spellbook | Aubergine and muted lilac, fine inset cover rules, celestial geometry, and open spellbook pages |
+| Upgrade and check | Monster laboratory | Botanical green, precise instrument-like panels, etched glassware, and a friendly monster |
+| Plan for Azure | Moonlit sky | Twilight blue, spacious open headers, a large crescent, distant hills, and fine star shapes |
 
 References use the moonlit sky. The legacy quickstart is a pumpkin shed, and the instructor companion is a raven's lookout.
 The previous sample run is a ghost story scrapbook. The completed reference is an enchanted conservatory.
+
+`art.mjs` owns the header compositions and the shared pumpkin, ghost, and botanical motifs.
+`illustration-art.mjs` uses the same palettes and characters for the technical diagrams. Keep its labels,
+arrows, and access boundaries intact when restyling it. Regenerate and commit both light and dark SVGs
+after changing either source. No image service, remote font, or extra runtime dependency is required.
