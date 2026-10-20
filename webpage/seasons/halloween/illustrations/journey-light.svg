@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="840" viewBox="0 0 1100 840" role="img" aria-labelledby="illustration-journey-light-title illustration-journey-light-desc" data-illustration="journey" data-era="1960s" data-theme="light">
+  <title id="illustration-journey-light-title">A friendly-spooky route to modernization</title>
+  <desc id="illustration-journey-light-desc">A Halloween trail follows seven course chapters in order: 01 Start here, 02 Meet the app, 03 Setup and get ready, 04 Assess, 05 Plan, 06 Upgrade and run, and 07 Azure plan. Each stop has its own friendly Halloween setting.</desc>
+  <defs>
+    <marker id="illustration-journey-light-arrow" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="18" markerHeight="18" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M1 1L11 6 1 11Z" fill="#923e24"/></marker>
+    <marker id="illustration-journey-light-return" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="16" markerHeight="16" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M1 1L11 6 1 11" fill="none" stroke="#55615b" stroke-width="2"/></marker>
+    <marker id="illustration-journey-light-trail" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="18" markerHeight="18" markerUnits="userSpaceOnUse" orient="auto"><path d="M1 1L11 6 1 11Z" fill="#fbfcf7"/></marker>
+
+  </defs>
+  <rect width="1100" height="840" fill="#e6ebe2"/>
+  <text x="60" y="89" fill="#252b29" font-size="46" font-weight="400" text-anchor="start" font-family="Georgia, serif" letter-spacing="0"><tspan x="60" dy="0">A little spooky. A new foundation.</tspan></text><text x="63" y="132" fill="#55615b" font-size="23" font-weight="400" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="63" dy="0">Seven stops. One working application.</tspan></text>
+      <path d="M135 287H960Q1060 438 825 589H190" fill="none" stroke="#6a8663" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+      <path d="M135 298H960Q1045 438 825 578H190" fill="none" stroke="#6a8663" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" opacity="0.45"/>
+      <circle cx="135" cy="287" r="23" fill="#923e24" stroke="#fbfcf7" stroke-width="4"/><text x="135" y="295" fill="#ffffff" font-size="24" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="135" dy="0">01</tspan></text>
+        <text x="135" y="349" fill="#252b29" font-size="27" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="135" dy="0">Start here</tspan></text>
+        <text x="135" y="382" fill="#55615b" font-size="17" font-weight="400" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="135" dy="0">Pumpkin patch</tspan></text><circle cx="410" cy="287" r="23" fill="#923e24" stroke="#fbfcf7" stroke-width="4"/><text x="410" y="295" fill="#ffffff" font-size="24" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="410" dy="0">02</tspan></text>
+        <text x="410" y="349" fill="#252b29" font-size="27" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="410" dy="0">Meet the app</tspan></text>
+        <text x="410" y="382" fill="#55615b" font-size="17" font-weight="400" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="410" dy="0">Haunted library</tspan></text><circle cx="685" cy="287" r="23" fill="#923e24" stroke="#fbfcf7" stroke-width="4"/><text x="685" y="295" fill="#ffffff" font-size="24" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="685" dy="0">03</tspan></text>
+        <text x="685" y="349" fill="#252b29" font-size="27" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="685" dy="0">Get ready</tspan></text>
+        <text x="685" y="382" fill="#55615b" font-size="17" font-weight="400" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="685" dy="0">Trick-or-treat porch</tspan></text><circle cx="960" cy="287" r="23" fill="#923e24" stroke="#fbfcf7" stroke-width="4"/><text x="960" y="295" fill="#ffffff" font-size="24" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="960" dy="0">04</tspan></text>
+        <text x="960" y="349" fill="#252b29" font-size="27" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="960" dy="0">Assess</tspan></text>
+        <text x="960" y="382" fill="#55615b" font-size="17" font-weight="400" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="960" dy="0">Ghost detective bureau</tspan></text><circle cx="825" cy="589" r="23" fill="#923e24" stroke="#fbfcf7" stroke-width="4"/><text x="825" y="597" fill="#ffffff" font-size="24" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="825" dy="0">05</tspan></text>
+        <text x="825" y="651" fill="#252b29" font-size="27" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="825" dy="0">Plan</tspan></text>
+        <text x="825" y="684" fill="#55615b" font-size="17" font-weight="400" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="825" dy="0">Witch&apos;s spellbook</tspan></text><circle cx="510" cy="589" r="23" fill="#923e24" stroke="#fbfcf7" stroke-width="4"/><text x="510" y="597" fill="#ffffff" font-size="24" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="510" dy="0">06</tspan></text>
+        <text x="510" y="651" fill="#252b29" font-size="27" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="510" dy="0">Upgrade &amp; run</tspan></text>
+        <text x="510" y="684" fill="#55615b" font-size="17" font-weight="400" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="510" dy="0">Monster laboratory</tspan></text><circle cx="190" cy="589" r="23" fill="#923e24" stroke="#fbfcf7" stroke-width="4"/><text x="190" y="597" fill="#ffffff" font-size="24" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="190" dy="0">07</tspan></text>
+        <text x="190" y="651" fill="#252b29" font-size="27" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="190" dy="0">Azure plan</tspan></text>
+        <text x="190" y="684" fill="#55615b" font-size="17" font-weight="400" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="190" dy="0">Moonlit sky</tspan></text>
+      <g transform="translate(135 211) scale(0.8)">
+    <path d="M-3-35q-5-18 10-25" fill="none" stroke="#6a8663" stroke-width="7" stroke-linecap="round"/>
+    <path d="M0-34c-70-24-78 74-22 76q22 7 44 0C78 40 70-58 0-34Z" fill="#da773e"/>
+    <path d="M-13-31q-35 40-8 70M10-31q31 42 10 70M0-31v69" fill="none" stroke="#e6bd76" stroke-width="2" opacity=".7"/>
+    <path d="m-29-2 10-12 6 12m24 0 7-12 10 12M-18 14q18 17 36 0l-8 14H-9Z" fill="#252b29"/>
+  </g><g transform="translate(410 209) scale(0.7)">
+    <path d="M-38 43q-3-27 0-56C-35-64 33-67 38-15q0 39 18 53-21 3-29-7-10 24-29 13-18 19-36-1Z" fill="#f3ecda"/>
+    <path d="M-25-22q-8 29 0 43M28 3q3 16 10 25" fill="none" stroke="#6a8663" stroke-width="2" opacity=".6"/>
+    <ellipse cx="-10" cy="-10" rx="3" ry="5" fill="#263b34"/><ellipse cx="12" cy="-12" rx="3" ry="5" fill="#263b34"/>
+    <path d="M-3 7q6 6 12-2" fill="none" stroke="#263b34" stroke-width="2" stroke-linecap="round"/>
+  </g><g transform="translate(685 214) scale(0.65)">
+    <path d="M-3-35q-5-18 10-25" fill="none" stroke="#6a8663" stroke-width="7" stroke-linecap="round"/>
+    <path d="M0-34c-70-24-78 74-22 76q22 7 44 0C78 40 70-58 0-34Z" fill="#da773e"/>
+    <path d="M-13-31q-35 40-8 70M10-31q31 42 10 70M0-31v69" fill="none" stroke="#e6bd76" stroke-width="2" opacity=".7"/>
+    <path d="m-29-2 10-12 6 12m24 0 7-12 10 12M-18 14q18 17 36 0l-8 14H-9Z" fill="#252b29"/>
+  </g>
+      <g transform="translate(960 211) scale(0.7)">
+    <path d="M-38 43q-3-27 0-56C-35-64 33-67 38-15q0 39 18 53-21 3-29-7-10 24-29 13-18 19-36-1Z" fill="#f3ecda"/>
+    <path d="M-25-22q-8 29 0 43M28 3q3 16 10 25" fill="none" stroke="#6a8663" stroke-width="2" opacity=".6"/>
+    <ellipse cx="-10" cy="-10" rx="3" ry="5" fill="#263b34"/><ellipse cx="12" cy="-12" rx="3" ry="5" fill="#263b34"/>
+    <path d="M-3 7q6 6 12-2" fill="none" stroke="#263b34" stroke-width="2" stroke-linecap="round"/>
+  </g><path transform="translate(825 506) scale(1.7)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#e6bd76"/><g transform="translate(510 507) scale(0.7)">
+    <path d="M-38 43q-3-27 0-56C-35-64 33-67 38-15q0 39 18 53-21 3-29-7-10 24-29 13-18 19-36-1Z" fill="#f3ecda"/>
+    <path d="M-25-22q-8 29 0 43M28 3q3 16 10 25" fill="none" stroke="#6a8663" stroke-width="2" opacity=".6"/>
+    <ellipse cx="-10" cy="-10" rx="3" ry="5" fill="#263b34"/><ellipse cx="12" cy="-12" rx="3" ry="5" fill="#263b34"/>
+    <path d="M-3 7q6 6 12-2" fill="none" stroke="#263b34" stroke-width="2" stroke-linecap="round"/>
+  </g><circle cx="190" cy="505" r="37" fill="#e6bd76"/><circle cx="207.76" cy="496.12" r="30.34" fill="#e6ebe2"/>
+      <path transform="translate(422 434) scale(0.7)" d="M0 0-5-9-9-3Q-29-24-52-14q15 5 11 22 14-11 21 5Q-7 5 0 14 7 5 20 13q7-16 21-5-4-17 11-22Q29-24 9-3L5-9Z" fill="#923e24"/><path transform="translate(729 425) scale(1)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#e6bd76"/><path transform="translate(94 460) scale(0.8)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#e6bd76"/>
+      <text x="550" y="762" fill="#55615b" font-size="25" font-weight="400" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="550" dy="0">Keep the learning. Leave the cobwebs behind.</tspan></text>
+  <g aria-hidden="true"><g transform="translate(1028 75) scale(0.45)">
+    <path d="M-38 43q-3-27 0-56C-35-64 33-67 38-15q0 39 18 53-21 3-29-7-10 24-29 13-18 19-36-1Z" fill="#f3ecda"/>
+    <path d="M-25-22q-8 29 0 43M28 3q3 16 10 25" fill="none" stroke="#6a8663" stroke-width="2" opacity=".6"/>
+    <ellipse cx="-10" cy="-10" rx="3" ry="5" fill="#263b34"/><ellipse cx="12" cy="-12" rx="3" ry="5" fill="#263b34"/>
+    <path d="M-3 7q6 6 12-2" fill="none" stroke="#263b34" stroke-width="2" stroke-linecap="round"/>
+  </g><path transform="translate(984 37) scale(0.5)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#e6bd76"/></g>
+</svg>

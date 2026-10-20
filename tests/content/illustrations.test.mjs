@@ -55,7 +55,7 @@ test("the tool-first artwork includes setup and keeps technical relationships ac
 test("soundcheck headers are generated for both modes without external or animated artwork", async () => {
   for (const [mode, file] of [["light", eras.soundcheck.art], ["dark", eras.soundcheck.artDark]]) {
     const svg = renderSoundcheckHeader(mode);
-    assert.equal((await readFile(resolve(root, "webpage/assets", file), "utf8")).trim(),
+    assert.equal((await readFile(resolve(root, "webpage/seasons/classic/assets", file), "utf8")).trim(),
       svg.trim().replace(/[ \t]+$/gm, ""));
     assert.match(svg, /SOUND/);
     assert.match(svg, /CHECK/);
@@ -92,4 +92,35 @@ test("illustration selection rejects unknown IDs and themes", () => {
   assert.throws(() => illustrationPath("journey", "sepia"), /Unknown color mode/);
   assert.throws(() => renderIllustration("../private", "light"));
   assert.throws(() => renderIllustration("journey", "sepia"));
+});
+
+test("Halloween headers are distinct and generated for every stop in both modes", async () => {
+  const { default: halloween } = await import("../../webpage/seasons/halloween/season.js");
+  const { renderHalloweenHeader } = await import("../../webpage/seasons/halloween/art.mjs");
+  assert.equal(new Set(Object.values(halloween.eras).map(era => era.scene)).size, Object.keys(halloween.eras).length);
+  const variants = new Set();
+  for (const [id, era] of Object.entries(halloween.eras)) {
+    for (const [mode, file] of [["light", era.art], ["dark", era.artDark]]) {
+      const svg = renderHalloweenHeader(id, mode);
+      assert.equal((await readFile(resolve(root, "webpage/seasons/halloween/assets", file), "utf8")).trim(), svg.trim());
+      assert.ok(svg.includes(`data-scene="${era.scene}"`));
+      assert.ok(svg.includes(era[mode].a));
+      assert.ok(svg.includes(era[mode].c));
+      assert.ok(svg.includes(`data-theme="${mode}"`));
+      assert.doesNotMatch(svg, /<script|<image|<animate|(?:href|src)=["']https?:/i);
+      variants.add(svg);
+    }
+  }
+  assert.equal(variants.size, Object.keys(halloween.eras).length * 2);
+});
+
+test("Halloween lesson illustrations cover every lesson illustration in both modes", async () => {
+  const { default: halloween } = await import("../../webpage/seasons/halloween/season.js");
+  for (const illustration of illustrations) {
+    for (const mode of ["light", "dark"]) {
+      const svg = await readFile(resolve(root, `webpage/seasons/halloween/illustrations/${illustration.id}-${mode}.svg`), "utf8");
+      assert.ok(svg.includes(halloween.eras[illustration.era][mode].ink));
+      assert.doesNotMatch(svg, /<script|<image|<animate|(?:href|src)=["']https?:/i);
+    }
+  }
 });

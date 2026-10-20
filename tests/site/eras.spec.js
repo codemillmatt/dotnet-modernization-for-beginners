@@ -1,24 +1,27 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures.js";
 import { chapters } from "../../webpage/scripts/chapters.js";
 import { eraPalette } from "../../webpage/scripts/eras.js";
 import { illustrations, illustrationPath } from "../../webpage/scripts/illustrations.js";
+import classic from "../../webpage/seasons/classic/season.js";
+import halloween from "../../webpage/seasons/halloween/season.js";
 
-async function ready(page, chapter, mode = "light") {
-  await page.goto(`?clawpilotTheme=${mode}#/${chapter.slug}`);
+async function ready(page, chapter, mode = "light", season = null) {
+  await page.goto(`?${season ? `season=${season}&` : ""}clawpilotTheme=${mode}#/${chapter.slug}`);
   await expect(page.locator("#article")).not.toHaveAttribute("aria-busy", "true");
   await expect(page.locator("html")).toHaveAttribute("data-era", chapter.era);
   await expect(page.getByRole("alert")).toHaveCount(0);
 }
 
-for (const chapter of chapters) {
+for (const season of [classic, halloween]) for (const chapter of chapters) {
   for (const mode of ["light", "dark"]) {
-    test(`${chapter.era} ${mode}: direct route, accents, contrast, and narrow layout`, async ({ page }) => {
+    test(`${season.id} ${chapter.era} ${mode}: direct route, accents, contrast, and narrow layout`, async ({ page }) => {
       await page.setViewportSize({ width: 1440, height: 1000 });
-      await ready(page, chapter, mode);
+      await ready(page, chapter, mode, season.id);
       await expect(page.locator("html")).toHaveAttribute("data-theme", mode);
+      await expect(page.locator("html")).toHaveAttribute("data-season", season.id);
       expect(await page.locator("html").evaluate(element => element.style.getPropertyValue("--paper")))
-        .toBe(eraPalette(chapter.era, mode).paper);
-      const art = page.locator(chapter.slug === "overview" ? ".hero-art" : ".era-art:visible");
+        .toBe(eraPalette(chapter.era, mode, season).paper);
+      const art = page.locator(chapter.slug === "overview" ? ".hero-art:visible" : ".era-art:visible");
       await expect(art).toBeVisible();
       await expect.poll(() => art.evaluate(image => image.complete && image.naturalWidth > 0)).toBeTruthy();
       const box = await art.boundingBox();

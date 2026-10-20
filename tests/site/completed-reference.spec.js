@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures.js";
 import { eraPalette } from "../../webpage/scripts/eras.js";
 
 const route = "#/reference?path=examples%2Fmodernized%2FREADME.md";

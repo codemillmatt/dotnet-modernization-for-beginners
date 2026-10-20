@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="860" viewBox="0 0 1100 860" role="img" aria-labelledby="illustration-architecture-dark-title illustration-architecture-dark-desc" data-illustration="architecture" data-era="2000s-2010s" data-theme="dark">
+  <title id="illustration-architecture-dark-title">Follow one request</title>
+  <desc id="illustration-architecture-dark-desc">The browser sends a request to BooksController. The controller uses its injected ApplicationDbContext for data access to BookCatalogModernizedLab, and data returns to the context. The controller selects a Razor view. The view renders HTML back to the browser; the view does not query the database directly. Solid arrows show requests or data access, and dashed arrows show the response or returned data.</desc>
+  <defs>
+    <marker id="illustration-architecture-dark-arrow" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="18" markerHeight="18" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M1 1L11 6 1 11Z" fill="#bcd698"/></marker>
+    <marker id="illustration-architecture-dark-return" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="16" markerHeight="16" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M1 1L11 6 1 11" fill="none" stroke="#c0c8c2" stroke-width="2"/></marker>
+    <marker id="illustration-architecture-dark-trail" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="18" markerHeight="18" markerUnits="userSpaceOnUse" orient="auto"><path d="M1 1L11 6 1 11Z" fill="#27372b"/></marker>
+
+  </defs>
+  <rect width="1100" height="860" fill="#1d2b24"/>
+  <text x="60" y="89" fill="#f2eee4" font-size="53" font-weight="400" text-anchor="start" font-family="Georgia, serif" letter-spacing="0"><tspan x="60" dy="0">Follow one request</tspan></text><text x="63" y="132" fill="#c0c8c2" font-size="23" font-weight="400" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="63" dy="0">The controller coordinates the page and its data.</tspan></text>
+      <ellipse cx="572" cy="731" rx="229" ry="22" fill="#f2eee4" opacity=".08"/>
+      <ellipse cx="952" cy="629" rx="117" ry="17" fill="#f2eee4" opacity=".09"/>
+      <rect x="376" y="235" width="423" height="481" rx="8" fill="#344735" stroke="#54645f" stroke-width="2"/>
+      <text x="588" y="209" fill="#f2eee4" font-size="28" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="588" dy="0">Application</tspan></text>
+      <g transform="translate(46 305)">
+        <rect width="247" height="231" rx="6" fill="#27372b" stroke="#bcd698" stroke-width="2"/>
+        <path d="M0 47H247" stroke="#54645f" stroke-width="2"/>
+        <path d="M16 12h80l14 25H16Z" fill="#27372b" stroke="#54645f" stroke-width="2"/>
+        <circle cx="202" cy="24" r="5" fill="#8fae78"/><circle cx="219" cy="24" r="5" fill="#b19cc2"/>
+        <rect x="16" y="63" width="214" height="27" rx="4" fill="#bcd698"/>
+        <rect x="19" y="107" width="208" height="98" rx="5" fill="#27372b" stroke="#54645f" stroke-width="2"/>
+        <path d="M29 123h30v64H29Z" fill="#8fae78"/><path d="M65 134h27v53H65Z" fill="#b19cc2"/>
+        <path d="M100 118l28-4 10 73h-27Z" fill="#ddc38b"/>
+        <path d="M24 190H146M159 124h50M159 144h42M159 165h49" stroke="#54645f" stroke-width="4"/>
+      </g>
+      <text x="170" y="278" fill="#f2eee4" font-size="28" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="170" dy="0">Browser</tspan></text>
+      <path d="M294 352H413" fill="none" stroke="#bcd698" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity="1" marker-end="url(#illustration-architecture-dark-arrow)"/>
+      <text x="337" y="331" fill="#c0c8c2" font-size="19" font-weight="400" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="337" dy="0">Request</tspan></text>
+      <g>
+        <rect x="417" y="300" width="345" height="95" rx="17" fill="#bcd698"/>
+        <text x="589" y="357" fill="#172722" font-size="29" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="589" dy="0">BooksController</tspan></text>
+        <path d="M447 286v-14m28 14v-14m229 14v-14m28 14v-14" stroke="#54645f" stroke-width="5" stroke-linecap="round"/>
+      </g>
+      <path d="M591 397V446" fill="none" stroke="#bcd698" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="1" marker-end="url(#illustration-architecture-dark-arrow)"/>
+      <text x="620" y="430" fill="#c0c8c2" font-size="19" font-weight="400" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="620" dy="0">uses</tspan></text>
+      <rect x="429" y="452" width="333" height="95" rx="12" fill="#27372b" stroke="#bcd698" stroke-width="3"/>
+      <text x="595" y="481" fill="#c0c8c2" font-size="19" font-weight="400" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="595" dy="0">injected</tspan></text>
+      <text x="595" y="520" fill="#f2eee4" font-size="26" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="595" dy="0">ApplicationDbContext</tspan></text>
+      <path d="M764 485H862" fill="none" stroke="#bcd698" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="1" marker-end="url(#illustration-architecture-dark-arrow)"/>
+      <text x="829" y="466" fill="#c0c8c2" font-size="19" font-weight="400" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="829" dy="0">query</tspan></text>
+      <path d="M862 531H765" fill="none" stroke="#c0c8c2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="1" stroke-dasharray="7 7" marker-end="url(#illustration-architecture-dark-return)"/>
+      <text x="829" y="560" fill="#c0c8c2" font-size="19" font-weight="400" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="829" dy="0">data</tspan></text>
+      <g transform="translate(865 405)">
+        <path d="M0 34V166C0 210 182 210 182 166V34" fill="#8fae78" stroke="#bcd698" stroke-width="3"/>
+        <ellipse cx="91" cy="34" rx="91" ry="30" fill="#344735" stroke="#bcd698" stroke-width="3"/>
+        <ellipse cx="91" cy="31" rx="72" ry="20" fill="#27372b" opacity=".75"/>
+        <path d="M0 94c0 43 182 43 182 0M0 148c0 43 182 43 182 0" fill="none" stroke="#bcd698" stroke-width="3"/>
+        <path d="M18 75v15m0 39v16m0 35v9" stroke="#27372b" stroke-width="6" stroke-linecap="round"/>
+      </g>
+      <text x="956" y="379" fill="#f2eee4" font-size="26" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="956" dy="0">Data store</tspan></text>
+      <g aria-label="BookCatalogModernizedLab">
+        <text x="956" y="672" fill="#f2eee4" font-size="25" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="956" dy="0">BookCatalog</tspan><tspan x="956" dy="32">ModernizedLab</tspan></text>
+      </g>
+      <path d="M418 378H399V638H434" fill="none" stroke="#bcd698" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="1" marker-end="url(#illustration-architecture-dark-arrow)"/>
+      <text x="443" y="584" fill="#c0c8c2" font-size="19" font-weight="400" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="443" dy="0">selects</tspan></text>
+      <rect x="441" y="604" width="292" height="78" rx="10" fill="#27372b" stroke="#bcd698" stroke-width="3"/>
+      <path d="M460 619h30l13 13v36h-43Z" fill="#344735" stroke="#54645f" stroke-width="2"/>
+      <path d="M490 619v13h13M469 643h25m-25 10h18" fill="none" stroke="#54645f" stroke-width="2"/>
+      <text x="613" y="652" fill="#f2eee4" font-size="27" font-weight="700" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="613" dy="0">Razor view</tspan></text>
+      <path d="M439 657H172V538" fill="none" stroke="#c0c8c2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="1" stroke-dasharray="8 8" marker-end="url(#illustration-architecture-dark-return)"/>
+      <text x="258" y="625" fill="#c0c8c2" font-size="20" font-weight="400" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="258" dy="0">Rendered HTML</tspan></text>
+      <path d="M88 796h65" fill="none" stroke="#bcd698" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="1" marker-end="url(#illustration-architecture-dark-arrow)"/>
+      <text x="172" y="803" fill="#f2eee4" font-size="21" font-weight="400" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="172" dy="0">Request / data access</tspan></text>
+      <path d="M563 796h65" fill="none" stroke="#c0c8c2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="1" stroke-dasharray="7 7" marker-end="url(#illustration-architecture-dark-return)"/>
+      <text x="647" y="803" fill="#f2eee4" font-size="21" font-weight="400" text-anchor="start" font-family="Segoe UI, Arial, sans-serif" letter-spacing="0"><tspan x="647" dy="0">Response / returned data</tspan></text>
+  <g aria-hidden="true"><g transform="translate(1028 75) scale(0.45)">
+    <path d="M-38 43q-3-27 0-56C-35-64 33-67 38-15q0 39 18 53-21 3-29-7-10 24-29 13-18 19-36-1Z" fill="#f3ecda"/>
+    <path d="M-25-22q-8 29 0 43M28 3q3 16 10 25" fill="none" stroke="#8fae78" stroke-width="2" opacity=".6"/>
+    <ellipse cx="-10" cy="-10" rx="3" ry="5" fill="#263b34"/><ellipse cx="12" cy="-12" rx="3" ry="5" fill="#263b34"/>
+    <path d="M-3 7q6 6 12-2" fill="none" stroke="#263b34" stroke-width="2" stroke-linecap="round"/>
+  </g><path transform="translate(984 37) scale(0.5)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#ddc38b"/></g>
+</svg>
