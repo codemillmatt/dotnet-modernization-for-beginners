@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="520" height="480" viewBox="0 0 520 480" role="img" aria-labelledby="title" data-scene="enchanted-garden" data-theme="dark">
+    <title id="title">Enchanted conservatory</title>
+    <rect width="520" height="480" rx="26" fill="#152b27"/>
+    <path d="M62 428V231a198 198 0 0 1 396 0v197Z" fill="#2f4d40" stroke="#b6e4bc" stroke-width="6"/>
+      <path d="M260 33v395M62 231h396M118 92q48 132 0 336M402 92q-48 132 0 336" fill="none" stroke="#9b86a8" stroke-width="3"/>
+      <path d="M91 428q-30-147 77-195m-16 195q34-109-28-145M419 428q15-146-91-204" fill="none" stroke="#8dc9aa" stroke-width="11"/>
+      <ellipse cx="101" cy="349" rx="24" ry="10" transform="rotate(-30 101 349)" fill="#8dc9aa"/><ellipse cx="113" cy="319" rx="24" ry="10" transform="rotate(-30 113 319)" fill="#8dc9aa"/><ellipse cx="125" cy="289" rx="24" ry="10" transform="rotate(-30 125 289)" fill="#8dc9aa"/><ellipse cx="137" cy="259" rx="24" ry="10" transform="rotate(-30 137 259)" fill="#8dc9aa"/>
+      <g transform="translate(260 350) scale(1.05)">
+    <path d="M-90-50Q-45-66 0-40q45-26 90-10V65Q45 49 0 76-45 49-90 65Z" fill="#213b32" stroke="#b6e4bc" stroke-width="5"/>
+    <path d="M0-40V76M-70-24l48 6m-48 16 48 6m-48 16 48 6M22-18l48-6M22 4l48-6M22 26l48-6" fill="none" stroke="#9b86a8" stroke-width="3"/>
+    <path transform="translate(48 42) scale(0.6)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#e2cc8f"/>
+  </g><g transform="translate(261 196) scale(0.9)">
+    <path d="M-42 47V-12a42 42 0 0 1 84 0v59L22 35 0 49-22 35Z" fill="#213b32" stroke="#b6e4bc" stroke-width="3"/>
+    <ellipse cx="-14" cy="-8" rx="4" ry="7" fill="#fff5e8"/><ellipse cx="14" cy="-8" rx="4" ry="7" fill="#fff5e8"/>
+    <path d="M-8 11q8 9 16 0" fill="none" stroke="#fff5e8" stroke-width="3" stroke-linecap="round"/>
+    <ellipse cx="-25" cy="7" rx="7" ry="4" fill="#d0a1d2" opacity=".55"/><ellipse cx="25" cy="7" rx="7" ry="4" fill="#d0a1d2" opacity=".55"/>
+  </g><path transform="translate(164 170) scale(1)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#e2cc8f"/><path transform="translate(354 157) scale(1)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#e2cc8f"/><g transform="translate(388 398) scale(0.65)">
+    <path d="M-4-38q-4-20 12-26" fill="none" stroke="#8dc9aa" stroke-width="9" stroke-linecap="round"/>
+    <ellipse rx="55" ry="43" fill="#d0a1d2" stroke="#fff5e8" stroke-width="3"/>
+    <ellipse rx="30" ry="43" fill="none" stroke="#fff5e8" stroke-width="2"/>
+    <path d="M-30-8l10-13 8 13M12-8l8-13 10 13" fill="#fff5e8"/>
+    <path d="M-21 9q21 26 42 0" fill="#e2cc8f" stroke="#fff5e8" stroke-width="3" stroke-linejoin="round"/>
+  </g>
+  </svg>

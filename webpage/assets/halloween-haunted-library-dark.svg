@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="520" height="480" viewBox="0 0 520 480" role="img" aria-labelledby="title" data-scene="haunted-library" data-theme="dark">
+    <title id="title">Haunted library</title>
+    <rect width="520" height="480" rx="26" fill="#1b2620"/>
+    <path d="M38 443V160a222 222 0 0 1 444 0v283Z" fill="#324139" stroke="#d0d994" stroke-width="7"/>
+      <g stroke="#d0d994" stroke-width="3"><rect x="70" y="143" width="31" height="89" rx="3" fill="#97b87b"/><path d="M78 155h15"/><rect x="110" y="125" width="31" height="107" rx="3" fill="#d9a276"/><path d="M118 137h15"/><rect x="150" y="157" width="31" height="75" rx="3" fill="#d9c18a"/><path d="M158 169h15"/><rect x="190" y="136" width="31" height="96" rx="3" fill="#97b87b"/><path d="M198 148h15"/><rect x="230" y="150" width="31" height="82" rx="3" fill="#d9a276"/><path d="M238 162h15"/><rect x="270" y="132" width="31" height="100" rx="3" fill="#d9c18a"/><path d="M278 144h15"/><rect x="310" y="145" width="31" height="87" rx="3" fill="#97b87b"/><path d="M318 157h15"/><rect x="350" y="139" width="31" height="93" rx="3" fill="#d9a276"/><path d="M358 151h15"/><rect x="390" y="161" width="31" height="71" rx="3" fill="#d9c18a"/><path d="M398 173h15"/><rect x="430" y="144" width="31" height="88" rx="3" fill="#97b87b"/><path d="M438 156h15"/><path d="M53 232H455" stroke-width="9"/></g>
+      <g stroke="#d0d994" stroke-width="3"><rect x="70" y="281" width="31" height="111" rx="3" fill="#97b87b"/><path d="M78 293h15"/><rect x="110" y="303" width="31" height="89" rx="3" fill="#d9a276"/><path d="M118 315h15"/><rect x="150" y="288" width="31" height="104" rx="3" fill="#d9c18a"/><path d="M158 300h15"/><rect x="190" y="308" width="31" height="84" rx="3" fill="#97b87b"/><path d="M198 320h15"/><rect x="230" y="294" width="31" height="98" rx="3" fill="#d9a276"/><path d="M238 306h15"/><rect x="270" y="289" width="31" height="103" rx="3" fill="#d9c18a"/><path d="M278 301h15"/><rect x="310" y="313" width="31" height="79" rx="3" fill="#97b87b"/><path d="M318 325h15"/><rect x="350" y="286" width="31" height="106" rx="3" fill="#d9a276"/><path d="M358 298h15"/><rect x="390" y="304" width="31" height="88" rx="3" fill="#d9c18a"/><path d="M398 316h15"/><rect x="430" y="298" width="31" height="94" rx="3" fill="#97b87b"/><path d="M438 310h15"/><path d="M53 392H455" stroke-width="9"/></g>
+      <g transform="translate(263 115) scale(0.9)">
+    <path d="M-42 47V-12a42 42 0 0 1 84 0v59L22 35 0 49-22 35Z" fill="#253229" stroke="#d0d994" stroke-width="3"/>
+    <ellipse cx="-14" cy="-8" rx="4" ry="7" fill="#fff5e8"/><ellipse cx="14" cy="-8" rx="4" ry="7" fill="#fff5e8"/>
+    <path d="M-8 11q8 9 16 0" fill="none" stroke="#fff5e8" stroke-width="3" stroke-linecap="round"/>
+    <ellipse cx="-25" cy="7" rx="7" ry="4" fill="#d9a276" opacity=".55"/><ellipse cx="25" cy="7" rx="7" ry="4" fill="#d9a276" opacity=".55"/>
+  </g><g transform="translate(260 348) scale(1.15)">
+    <path d="M-90-50Q-45-66 0-40q45-26 90-10V65Q45 49 0 76-45 49-90 65Z" fill="#253229" stroke="#d0d994" stroke-width="5"/>
+    <path d="M0-40V76M-70-24l48 6m-48 16 48 6m-48 16 48 6M22-18l48-6M22 4l48-6M22 26l48-6" fill="none" stroke="#9b86a8" stroke-width="3"/>
+    <path transform="translate(48 42) scale(0.6)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#d9c18a"/>
+  </g><path transform="translate(414 92) scale(1)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#d9c18a"/><path transform="translate(94 101) scale(0.6)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#d9c18a"/>
+  </svg>

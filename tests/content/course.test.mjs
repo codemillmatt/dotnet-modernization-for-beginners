@@ -175,7 +175,7 @@ test("the previous sample run has its own logbook theme without claiming a compl
   assert.match(read(path), /id="recording-environment"/);
   assert.match(read("README.md"), /\[Previous BookCatalog sample run\]/);
   const art = read(`webpage/assets/${getEra("1950s").art}`);
-  assert.match(art, /<title>BookCatalog test-flight notes<\/title>/);
+  assert.match(art, /<title[^>]*>Ghost story scrapbook<\/title>/);
   assert.doesNotMatch(art, /<script|<image|<animate|(?:href|src)=["']https?:/i);
   assert.ok(!references.find(item => item.path.endsWith("bookcatalog/assessment-excerpts.md")).era);
 });

@@ -79,12 +79,23 @@ function addHero() {
     copy.append(node);
   }
 
-  const art = document.createElement("img");
-  art.src = siteUrl("assets/retro-workshop.svg");
-  art.alt = "";
-  art.className = "hero-art";
-  art.setAttribute("aria-hidden", "true");
-  hero.append(copy, art);
+  const scene = getEra("1960s");
+  const artwork = document.createElement("div");
+  artwork.className = "hero-scene";
+  for (const [mode, file] of [["light", scene.art], ["dark", scene.artDark]]) {
+    const art = document.createElement("img");
+    art.src = siteUrl(`assets/${file}`);
+    art.alt = "";
+    art.className = `hero-art era-art-${mode}`;
+    art.setAttribute("aria-hidden", "true");
+    reportImageFailure(art);
+    artwork.append(art);
+  }
+  const caption = document.createElement("p");
+  caption.className = "scene-caption";
+  caption.textContent = "A little spooky. A new foundation.";
+  artwork.append(caption);
+  hero.append(copy, artwork);
   article.prepend(hero);
   const actions = copy.querySelector("p:has(> strong > a)");
   if (actions) {
@@ -107,13 +118,17 @@ function addChapterHeader(chapter) {
   const era = getEra(chapter.era);
   heading.before(panel);
   panel.append(heading);
+  const setting = document.createElement("div");
+  setting.className = "scene-name";
+  setting.textContent = era.label;
+  panel.before(setting);
   if (chapter.era === "1950s") {
     panel.classList.add("flight-intro");
     const copy = document.createElement("div");
     copy.className = "flight-copy";
     const kicker = document.createElement("p");
     kicker.className = "flight-kicker";
-    kicker.textContent = "Sample notes / Test-flight log";
+    kicker.textContent = "Sample notes";
     const caption = document.createElement("p");
     caption.className = "flight-caption";
     caption.textContent = "Earlier observations. Not a finished upgrade.";
@@ -144,7 +159,7 @@ function addChapterHeader(chapter) {
     copy.className = "future-copy";
     const kicker = document.createElement("p");
     kicker.className = "future-kicker";
-    kicker.textContent = "2050s / After the upgrade";
+    kicker.textContent = "After the upgrade";
     const caption = document.createElement("p");
     caption.className = "future-caption";
     caption.textContent = "AI can write the upgrade. You run the result.";
@@ -165,7 +180,7 @@ function addChapterHeader(chapter) {
     image.alt = "";
     image.className = `era-art${mode ? ` era-art-${mode}` : ""}`;
     image.setAttribute("aria-hidden", "true");
-    if (chapter.era === "1950s") reportImageFailure(image);
+    reportImageFailure(image);
     panel.append(image);
   }
 }

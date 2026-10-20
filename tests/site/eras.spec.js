@@ -1,12 +1,13 @@
 import { test, expect } from "@playwright/test";
 import { chapters } from "../../webpage/scripts/chapters.js";
-import { eraPalette } from "../../webpage/scripts/eras.js";
+import { eraPalette, getEra } from "../../webpage/scripts/eras.js";
 import { illustrations, illustrationPath } from "../../webpage/scripts/illustrations.js";
 
 async function ready(page, chapter, mode = "light") {
   await page.goto(`?clawpilotTheme=${mode}#/${chapter.slug}`);
   await expect(page.locator("#article")).not.toHaveAttribute("aria-busy", "true");
   await expect(page.locator("html")).toHaveAttribute("data-era", chapter.era);
+  await expect(page.locator("html")).toHaveAttribute("data-scene", getEra(chapter.era).scene);
   await expect(page.getByRole("alert")).toHaveCount(0);
 }
 
@@ -18,7 +19,7 @@ for (const chapter of chapters) {
       await expect(page.locator("html")).toHaveAttribute("data-theme", mode);
       expect(await page.locator("html").evaluate(element => element.style.getPropertyValue("--paper")))
         .toBe(eraPalette(chapter.era, mode).paper);
-      const art = page.locator(chapter.slug === "overview" ? ".hero-art" : ".era-art:visible");
+      const art = page.locator(chapter.slug === "overview" ? ".hero-art:visible" : ".era-art:visible");
       await expect(art).toBeVisible();
       await expect.poll(() => art.evaluate(image => image.complete && image.naturalWidth > 0)).toBeTruthy();
       const box = await art.boundingBox();
@@ -97,16 +98,17 @@ test("era follows history and Resume without changing color mode", async ({ page
   await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
 });
 
-test("soundcheck has themed poster headers, readable instructions, and no decade badge", async ({ page }) => {
+test("setup has trick-or-treat headers, readable instructions, and no decade badge", async ({ page }) => {
   const chapter = chapters.find(item => item.slug === "prerequisites");
   await ready(page, chapter);
-  await expect(page.locator(".era-art:visible")).toHaveAttribute("src", /era-soundcheck-light\.svg$/);
+  await expect(page.locator(".era-art:visible")).toHaveAttribute("src", /halloween-trick-or-treat-light\.svg$/);
+  await expect(page.locator(".scene-name")).toHaveText("Trick-or-treat porch");
   await expect(page.locator("#era-label")).toHaveCount(0);
   expect(await page.locator("#article p").first().evaluate(element => getComputedStyle(element).fontFamily))
     .toContain("Trebuchet");
   expect(await page.locator(".era-intro h1").evaluate(element => getComputedStyle(element).fontStyle)).toBe("italic");
   await page.getByRole("button", { name: "Use dark theme" }).click();
-  await expect(page.locator(".era-art:visible")).toHaveAttribute("src", /era-soundcheck-dark\.svg$/);
+  await expect(page.locator(".era-art:visible")).toHaveAttribute("src", /halloween-trick-or-treat-dark\.svg$/);
   await expect(page.locator(".illustration-dark img")).toHaveAttribute("src", /soundcheck-dark\.svg$/);
   await page.locator(".brand").click();
   await page.locator("#resume-link").click();
@@ -114,7 +116,7 @@ test("soundcheck has themed poster headers, readable instructions, and no decade
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
 });
 
-test("references and unknown routes use the quiet modern era", async ({ page }) => {
+test("references and unknown routes use the readable moonlit sky theme", async ({ page }) => {
   await ready(page, chapters[2]);
   await page.goto("#/reference?path=docs%2Fwriting.md");
   await expect(page.locator("#article")).not.toHaveAttribute("aria-busy", "true");

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="520" height="480" viewBox="0 0 520 480" role="img" aria-labelledby="title" data-scene="raven-lookout" data-theme="light">
+    <title id="title">Raven's lookout</title>
+    <rect width="520" height="480" rx="26" fill="#e0e4e9"/>
+    <circle cx="344" cy="142" r="97" fill="#d5ba82"/><circle cx="390.56" cy="118.72" r="79.53999999999999" fill="#e0e4e9"/>
+      <path d="M70 422 251 244l64 72 63-38 100 144Z" fill="#8a99b0"/>
+      <path d="M57 407h357M132 407V144m0 86-69-48m69 97 72-64" stroke="#4c526d" stroke-width="13" stroke-linecap="round"/>
+      <path d="M155 230q-9-80 58-100 44-12 53 26l38 19-39 9q6 57-54 69l-54 52Z" fill="#4c526d"/>
+      <circle cx="244" cy="158" r="5" fill="#d5ba82"/>
+      <path d="M209 187q-45 8-44 48" fill="none" stroke="#8a99b0" stroke-width="4"/>
+      <path transform="translate(64 85) scale(1)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#d5ba82"/><path transform="translate(437 67) scale(0.6)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#d5ba82"/><path transform="translate(429 244) scale(0.8)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#d5ba82"/>
+  </svg>

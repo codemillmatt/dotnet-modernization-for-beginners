@@ -1,93 +1,83 @@
 export const referenceEra = "2020s";
 
+function palette(paper, surface, soft, accent, a, b, c, dark = false) {
+  return {
+    paper, surface, soft, accent, a, b, c,
+    ink: dark ? "#fff5e8" : "#291d30",
+    muted: dark ? "#d9cbde" : "#62506a",
+    line: dark ? "#9b86a8" : "#99849d",
+    accentText: dark ? "#21172a" : "#ffffff",
+    selected: accent, selectedText: dark ? "#21172a" : "#ffffff"
+  };
+}
+
+// Stable era IDs preserve existing routes and saved progress; scenes own the seasonal identity.
 export const eras = {
-  workbench: {
-    label: "Workshop manual", art: "era-workbench.svg",
-    heading: '"Courier New", Consolas, monospace', interface: 'Verdana, Tahoma, sans-serif', radius: "0px", control: "2px",
-    light: { paper: "#e5e2cf", surface: "#faf8ed", ink: "#283b2a", muted: "#59604d", accent: "#4a6028", accentText: "#ffffff",
-      soft: "#eeeddd", line: "#92987c", selected: "#e2bb51", selectedText: "#283b2a", a: "#718344", b: "#b77932", c: "#e2bb51" },
-    dark: { paper: "#1c251a", surface: "#263122", ink: "#f5f2d9", muted: "#c9ccb6", accent: "#d8de9c", accentText: "#263122",
-      soft: "#34422e", line: "#8b9974", selected: "#e2bb51", selectedText: "#283b2a", a: "#a7ba79", b: "#d69b51", c: "#e2bb51" }
-  },
-  briefing: {
-    label: "Mission briefing", art: "era-briefing.svg",
-    heading: 'Outfit, "Trebuchet MS", sans-serif', interface: '"Trebuchet MS", Verdana, sans-serif', radius: "6px", control: "6px",
-    light: { paper: "#e0edf0", surface: "#f6fcfc", ink: "#102d42", muted: "#46616d", accent: "#006577", accentText: "#ffffff",
-      soft: "#e5f1f2", line: "#799ba5", selected: "#006577", selectedText: "#ffffff", a: "#218d9b", b: "#d28153", c: "#badbe2" },
-    dark: { paper: "#071b29", surface: "#102736", ink: "#edfaff", muted: "#b8d2dc", accent: "#80dfe9", accentText: "#071b29",
-      soft: "#193b49", line: "#6997a7", selected: "#80dfe9", selectedText: "#071b29", a: "#45b7c6", b: "#eda478", c: "#badbe2" }
-  },
-  "1950s": {
-    label: "1950s", art: "era-1950s.svg",
-    heading: 'Georgia, "Times New Roman", serif', interface: '"Trebuchet MS", Verdana, sans-serif', radius: "2px", control: "3px",
-    light: { paper: "#eee6d5", surface: "#fffaf0", ink: "#183449", muted: "#52616a", accent: "#9a391c", accentText: "#fffaf0",
-      soft: "#ece4d4", line: "#9a9d95", selected: "#183449", selectedText: "#fffaf0", a: "#416777", b: "#d56832", c: "#d5b77b" },
-    dark: { paper: "#102331", surface: "#172d3c", ink: "#f7eedc", muted: "#c4cbbf", accent: "#ffb280", accentText: "#102331",
-      soft: "#203a49", line: "#789099", selected: "#ffb280", selectedText: "#102331", a: "#8eafb9", b: "#f29860", c: "#d5b77b" }
-  },
   "1960s": {
-    label: "1960s", art: "retro-workshop.svg",
-    heading: 'Outfit, "Segoe UI", sans-serif', interface: '"Segoe UI", Arial, sans-serif', radius: "10px", control: "8px",
-    light: { paper: "#fff2d5", surface: "#fffbf2", ink: "#102e2a", muted: "#405952", accent: "#14675f", accentText: "#fff2d5",
-      soft: "#f6e9c7", line: "#8d9b87", selected: "#f0c24d", selectedText: "#102e2a", a: "#40b7a5", b: "#ef6b3b", c: "#f0c24d" },
-    dark: { paper: "#103d3d", surface: "#153331", ink: "#fff2d5", muted: "#c7d5c4", accent: "#86e1cd", accentText: "#102e2a",
-      soft: "#204642", line: "#638f85", selected: "#f0c24d", selectedText: "#102e2a", a: "#40b7a5", b: "#ef6b3b", c: "#f0c24d" }
+    label: "Pumpkin patch", scene: "pumpkin-patch", art: "halloween-pumpkin-patch-light.svg", artDark: "halloween-pumpkin-patch-dark.svg",
+    heading: 'Georgia, "Times New Roman", serif', interface: '"Trebuchet MS", Verdana, sans-serif', radius: "30px", control: "12px",
+    light: palette("#f8dfbc", "#fff9ed", "#f7e7cc", "#97400d", "#7a8c40", "#db7029", "#edb947"),
+    dark: palette("#241827", "#302231", "#403046", "#ffba77", "#a1b96d", "#ed985b", "#f4ce79", true)
   },
   "1970s": {
-    label: "1970s", art: "era-1970s.svg",
-    heading: 'Georgia, "Times New Roman", serif', interface: '"Trebuchet MS", Arial, sans-serif', radius: "28px", control: "30px",
-    light: { paper: "#f5dfb7", surface: "#fff7e7", ink: "#442710", muted: "#65503a", accent: "#883718", accentText: "#fff7e7",
-      soft: "#f1e1bf", line: "#9c7950", selected: "#63702c", selectedText: "#fff7e7", a: "#c87132", b: "#63702c", c: "#e6b947" },
-    dark: { paper: "#2e2117", surface: "#34271b", ink: "#fff0d0", muted: "#decaad", accent: "#ffc37c", accentText: "#34271b",
-      soft: "#463221", line: "#a08663", selected: "#d4d486", selectedText: "#34271b", a: "#c87132", b: "#8e9b48", c: "#e6b947" }
+    label: "Haunted library", scene: "haunted-library", art: "halloween-haunted-library-light.svg", artDark: "halloween-haunted-library-dark.svg",
+    heading: 'Georgia, "Palatino Linotype", serif', interface: 'Georgia, "Times New Roman", serif', radius: "4px", control: "4px",
+    light: palette("#e4d9b8", "#fcf6e5", "#eee5ca", "#526033", "#81935b", "#ae714b", "#cfad68"),
+    dark: palette("#1b2620", "#253229", "#324139", "#d0d994", "#97b87b", "#d9a276", "#d9c18a", true)
   },
   soundcheck: {
-    label: "Soundcheck", art: "era-soundcheck-light.svg", artDark: "era-soundcheck-dark.svg",
-    heading: 'Georgia, "Times New Roman", serif', interface: '"Trebuchet MS", Verdana, sans-serif', radius: "16px", control: "8px",
-    light: { paper: "#fff1d5", surface: "#fffaf0", ink: "#44213e", muted: "#685261", accent: "#7b285d", accentText: "#fffaf0",
-      soft: "#f6e4ca", line: "#a27e90", selected: "#f6b574", selectedText: "#44213e", a: "#087e80", b: "#de692e", c: "#f5ba67" },
-    dark: { paper: "#261a2b", surface: "#312137", ink: "#fff1d5", muted: "#e1c7d4", accent: "#ffc189", accentText: "#312137",
-      soft: "#452b45", line: "#b58b9e", selected: "#ffc189", selectedText: "#312137", a: "#56c6bd", b: "#ef925a", c: "#e9b8d4" }
+    label: "Trick-or-treat porch", scene: "trick-or-treat", art: "halloween-trick-or-treat-light.svg", artDark: "halloween-trick-or-treat-dark.svg",
+    heading: 'Georgia, "Times New Roman", serif', interface: '"Trebuchet MS", Verdana, sans-serif', radius: "20px", control: "18px",
+    light: palette("#f8e2ed", "#fff8fc", "#f3dfed", "#873665", "#b188c6", "#d76d33", "#eac36a"),
+    dark: palette("#331d37", "#402643", "#503250", "#f5b8df", "#bf9dd9", "#f0a16d", "#edcd84", true)
   },
   "1980s": {
-    label: "1980s", art: "era-1980s.svg",
-    heading: 'Outfit, "Arial Black", sans-serif', interface: '"Trebuchet MS", Arial, sans-serif', radius: "0px", control: "0px",
-    light: { paper: "#e6e0fa", surface: "#fffcff", ink: "#271443", muted: "#5f4b75", accent: "#742393", accentText: "#ffffff",
-      soft: "#f1e8fa", line: "#786391", selected: "#ffcc46", selectedText: "#271443", a: "#37d5dd", b: "#ee4d9a", c: "#ffcc46" },
-    dark: { paper: "#201130", surface: "#251537", ink: "#fcf2ff", muted: "#d5bee9", accent: "#66e8ea", accentText: "#201130",
-      soft: "#352148", line: "#a17cba", selected: "#ffcc46", selectedText: "#271443", a: "#37d5dd", b: "#ee4d9a", c: "#ffcc46" }
+    label: "Ghost detective bureau", scene: "ghost-bureau", art: "halloween-ghost-bureau-light.svg", artDark: "halloween-ghost-bureau-dark.svg",
+    heading: '"Courier New", Consolas, monospace', interface: 'Verdana, Tahoma, sans-serif', radius: "2px", control: "2px",
+    light: palette("#dce9e9", "#f6fcfa", "#e4f0ed", "#306364", "#72aaa4", "#ad7653", "#e7c977"),
+    dark: palette("#142a2e", "#20373b", "#2c474c", "#a0e0d7", "#7db9b9", "#e4ad80", "#edcd8f", true)
   },
   "1990s": {
-    label: "1990s", art: "era-1990s.svg",
-    heading: 'Verdana, Tahoma, Arial, sans-serif', interface: 'Tahoma, Verdana, Arial, sans-serif', radius: "0px", control: "0px",
-    light: { paper: "#bdcecf", surface: "#f7f7f1", ink: "#142a35", muted: "#465761", accent: "#173e82", accentText: "#ffffff",
-      soft: "#e2e6e5", line: "#697e83", selected: "#173e82", selectedText: "#ffffff", a: "#168b8e", b: "#658ab4", c: "#f5d36e" },
-    dark: { paper: "#10282b", surface: "#1d2e35", ink: "#f4f5eb", muted: "#c4d1d5", accent: "#a6ceff", accentText: "#142a35",
-      soft: "#30424a", line: "#83989f", selected: "#a6ceff", selectedText: "#142a35", a: "#249fa1", b: "#658ab4", c: "#f5d36e" }
+    label: "Witch's spellbook", scene: "spellbook", art: "halloween-spellbook-light.svg", artDark: "halloween-spellbook-dark.svg",
+    heading: 'Georgia, "Times New Roman", serif', interface: '"Palatino Linotype", Georgia, serif', radius: "8px", control: "6px",
+    light: palette("#e6dcf0", "#fcf8ff", "#eee5f7", "#69408c", "#ac8dc7", "#bf805d", "#c9ba72"),
+    dark: palette("#281b3c", "#342449", "#45315c", "#dac0fa", "#b09bdb", "#e6a784", "#dbcd8b", true)
   },
   "2000s-2010s": {
-    label: "2000s / 2010s", art: "era-2000s.svg",
-    heading: 'Arial, "Segoe UI", sans-serif', interface: 'Arial, "Segoe UI", sans-serif', radius: "12px", control: "7px",
-    light: { paper: "#dbe9f3", surface: "#ffffff", ink: "#173449", muted: "#476073", accent: "#155b91", accentText: "#ffffff",
-      soft: "#eaf3fa", line: "#8caabd", selected: "#155b91", selectedText: "#ffffff", a: "#66bfdf", b: "#448dbd", c: "#a6d49a" },
-    dark: { paper: "#102a3d", surface: "#163247", ink: "#f0f8ff", muted: "#bbd3e5", accent: "#a5d8ff", accentText: "#123045",
-      soft: "#23465f", line: "#789cb5", selected: "#a5d8ff", selectedText: "#123045", a: "#66bfdf", b: "#448dbd", c: "#a6d49a" }
-  },
-  "2050s": {
-    label: "2050s", art: "era-2050s.svg",
-    heading: 'Outfit, "Trebuchet MS", sans-serif', interface: '"Trebuchet MS", Verdana, sans-serif', radius: "2px", control: "3px",
-    light: { paper: "#e8eeea", surface: "#f7faf5", ink: "#102b28", muted: "#49605b", accent: "#166452", accentText: "#ffffff",
-      soft: "#e2ece5", line: "#829d91", selected: "#d9f56a", selectedText: "#102b28", a: "#2b8977", b: "#607669", c: "#d9f56a" },
-    dark: { paper: "#091612", surface: "#10211c", ink: "#eff8e7", muted: "#b3c9bb", accent: "#d9f56a", accentText: "#10211c",
-      soft: "#1b342a", line: "#648b78", selected: "#d9f56a", selectedText: "#10211c", a: "#79d9b8", b: "#8aac98", c: "#d9f56a" }
+    label: "Monster laboratory", scene: "monster-lab", art: "halloween-monster-lab-light.svg", artDark: "halloween-monster-lab-dark.svg",
+    heading: '"Trebuchet MS", Verdana, sans-serif', interface: '"Trebuchet MS", Verdana, sans-serif', radius: "16px", control: "8px",
+    light: palette("#e0edc8", "#f9fdeb", "#eaf2d7", "#426124", "#96b45b", "#a581b4", "#dcad60"),
+    dark: palette("#1e291c", "#293523", "#39492e", "#c9e98a", "#a2c570", "#c7a5db", "#e7c37f", true)
   },
   "2020s": {
-    label: "2020s", art: "era-2020s.svg",
-    heading: 'Outfit, "Segoe UI", sans-serif', interface: '"Segoe UI", Arial, sans-serif', radius: "18px", control: "12px",
-    light: { paper: "#f2f2f0", surface: "#ffffff", ink: "#252332", muted: "#625f6c", accent: "#5143b5", accentText: "#ffffff",
-      soft: "#f0eef9", line: "#a4a0b7", selected: "#e3ddfc", selectedText: "#3c2e91", a: "#a395e7", b: "#7d68d5", c: "#dce9a7" },
-    dark: { paper: "#191921", surface: "#20202b", ink: "#f5f3ff", muted: "#c5c0d4", accent: "#c5baff", accentText: "#252332",
-      soft: "#302e41", line: "#837d97", selected: "#433761", selectedText: "#f5f3ff", a: "#a395e7", b: "#7d68d5", c: "#dce9a7" }
+    label: "Moonlit sky", scene: "moonlit-sky", art: "halloween-moonlit-sky-light.svg", artDark: "halloween-moonlit-sky-dark.svg",
+    heading: 'Georgia, "Times New Roman", serif', interface: '"Segoe UI", Arial, sans-serif', radius: "32px", control: "24px",
+    light: palette("#dfe3f7", "#f9faff", "#e9ebfa", "#4d528e", "#8d9dce", "#b187b8", "#e3c17e"),
+    dark: palette("#191c39", "#242846", "#333856", "#c8ceff", "#99aadf", "#d0a5d7", "#f2d69e", true)
+  },
+  workbench: {
+    label: "Pumpkin shed", scene: "pumpkin-shed", art: "halloween-pumpkin-shed-light.svg", artDark: "halloween-pumpkin-shed-dark.svg",
+    heading: '"Courier New", Consolas, monospace', interface: 'Verdana, Tahoma, sans-serif', radius: "0px", control: "2px",
+    light: palette("#ead5b8", "#fff5e5", "#f1e2cc", "#835124", "#899c56", "#cc783b", "#d5b66e"),
+    dark: palette("#2c251b", "#383024", "#4b3e2e", "#efc68e", "#b2c57e", "#e9a168", "#e0c187", true)
+  },
+  briefing: {
+    label: "Raven's lookout", scene: "raven-lookout", art: "halloween-raven-lookout-light.svg", artDark: "halloween-raven-lookout-dark.svg",
+    heading: '"Trebuchet MS", Verdana, sans-serif', interface: '"Trebuchet MS", Verdana, sans-serif', radius: "6px", control: "6px",
+    light: palette("#e0e4e9", "#f8fafc", "#e9edf2", "#4c526d", "#8a99b0", "#b28c62", "#d5ba82"),
+    dark: palette("#1e2432", "#2b3242", "#3a4355", "#c6d5f2", "#9baec7", "#dab18a", "#e0cb99", true)
+  },
+  "1950s": {
+    label: "Ghost story scrapbook", scene: "ghost-scrapbook", art: "halloween-ghost-scrapbook-light.svg", artDark: "halloween-ghost-scrapbook-dark.svg",
+    heading: 'Georgia, "Times New Roman", serif', interface: '"Trebuchet MS", Verdana, sans-serif', radius: "2px", control: "3px",
+    light: palette("#efdcce", "#fff7f0", "#f3e4da", "#8a4746", "#b69684", "#c17f56", "#d2b66e"),
+    dark: palette("#302025", "#3f2a30", "#50373e", "#f4bfac", "#c7a496", "#e6a87e", "#e0c18b", true)
+  },
+  "2050s": {
+    label: "Enchanted conservatory", scene: "enchanted-garden", art: "halloween-enchanted-garden-light.svg", artDark: "halloween-enchanted-garden-dark.svg",
+    heading: 'Georgia, "Times New Roman", serif', interface: '"Trebuchet MS", Verdana, sans-serif', radius: "40px", control: "10px",
+    light: palette("#dceadd", "#f6fcf3", "#e5f0df", "#3b6751", "#87ac88", "#b383af", "#d5ba74"),
+    dark: palette("#152b27", "#213b32", "#2f4d40", "#b6e4bc", "#8dc9aa", "#d0a1d2", "#e2cc8f", true)
   }
 };
 
@@ -112,6 +102,7 @@ export function eraPalette(id, mode) {
 export function applyEra(id, mode, root = document.documentElement) {
   const palette = eraPalette(id, mode);
   root.dataset.era = id;
+  root.dataset.scene = getEra(id).scene;
   for (const [name, value] of Object.entries(palette)) root.style.setProperty(`--${name}`, value);
   root.ownerDocument.querySelector('meta[name="theme-color"]')?.setAttribute("content", palette.paper);
 }

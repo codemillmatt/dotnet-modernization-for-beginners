@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="520" height="480" viewBox="0 0 520 480" role="img" aria-labelledby="title" data-scene="spellbook" data-theme="dark">
+    <title id="title">Witch's spellbook</title>
+    <rect width="520" height="480" rx="26" fill="#281b3c"/>
+    <circle cx="415" cy="88" r="44" fill="#dbcd8b"/><circle cx="436.12" cy="77.44" r="36.08" fill="#281b3c"/><path transform="translate(112 120) scale(1)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#dbcd8b"/><path transform="translate(340 179) scale(0.7)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#dbcd8b"/>
+      <path d="M166 220 259 35l68 185Z" fill="#dac0fa"/>
+      <path d="m208 146 85 9-11 31-91-12Z" fill="#e6a784"/><path d="M124 223q130-64 263 0-129 42-263 0" fill="#dac0fa"/>
+      <g transform="translate(260 337) scale(1.8)">
+    <path d="M-90-50Q-45-66 0-40q45-26 90-10V65Q45 49 0 76-45 49-90 65Z" fill="#342449" stroke="#dac0fa" stroke-width="5"/>
+    <path d="M0-40V76M-70-24l48 6m-48 16 48 6m-48 16 48 6M22-18l48-6M22 4l48-6M22 26l48-6" fill="none" stroke="#9b86a8" stroke-width="3"/>
+    <path transform="translate(48 42) scale(0.6)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#dbcd8b"/>
+  </g><path transform="translate(262 330) scale(1.8)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#dbcd8b"/><path transform="translate(70 265) scale(0.6)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#dbcd8b"/><path transform="translate(453 333) scale(1)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#dbcd8b"/>
+  </svg>

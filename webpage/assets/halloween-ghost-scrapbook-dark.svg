@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="520" height="480" viewBox="0 0 520 480" role="img" aria-labelledby="title" data-scene="ghost-scrapbook" data-theme="dark">
+    <title id="title">Ghost story scrapbook</title>
+    <rect width="520" height="480" rx="26" fill="#302025"/>
+    <rect x="58" y="67" width="398" height="362" rx="3" fill="#e6a87e" transform="rotate(5 260 240)"/>
+      <rect x="55" y="59" width="390" height="362" rx="3" fill="#50373e" stroke="#f4bfac" stroke-width="4"/>
+      <path d="M87 59v362" stroke="#f4bfac" stroke-width="5" stroke-dasharray="4 18"/>
+      <rect x="126" y="114" width="255" height="242" fill="#3f2a30" stroke="#9b86a8" stroke-width="3" transform="rotate(-7 250 240)"/>
+      <g transform="translate(254 226) scale(1.3)">
+    <path d="M-42 47V-12a42 42 0 0 1 84 0v59L22 35 0 49-22 35Z" fill="#3f2a30" stroke="#f4bfac" stroke-width="3"/>
+    <ellipse cx="-14" cy="-8" rx="4" ry="7" fill="#fff5e8"/><ellipse cx="14" cy="-8" rx="4" ry="7" fill="#fff5e8"/>
+    <path d="M-8 11q8 9 16 0" fill="none" stroke="#fff5e8" stroke-width="3" stroke-linecap="round"/>
+    <ellipse cx="-25" cy="7" rx="7" ry="4" fill="#e6a87e" opacity=".55"/><ellipse cx="25" cy="7" rx="7" ry="4" fill="#e6a87e" opacity=".55"/>
+  </g><path d="M156 329h177" stroke="#9b86a8" stroke-width="4"/>
+      <path d="m109 103 84-16m117 269 82-15" stroke="#e0c18b" stroke-width="25" opacity=".8"/>
+      <g transform="translate(403 389) scale(0.7)">
+    <path d="M-4-38q-4-20 12-26" fill="none" stroke="#c7a496" stroke-width="9" stroke-linecap="round"/>
+    <ellipse rx="55" ry="43" fill="#e6a87e" stroke="#fff5e8" stroke-width="3"/>
+    <ellipse rx="30" ry="43" fill="none" stroke="#fff5e8" stroke-width="2"/>
+    <path d="M-30-8l10-13 8 13M12-8l8-13 10 13" fill="#fff5e8"/>
+    <path d="M-21 9q21 26 42 0" fill="#e0c18b" stroke="#fff5e8" stroke-width="3" stroke-linejoin="round"/>
+  </g><path transform="translate(403 97) scale(0.7)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#e0c18b"/>
+  </svg>

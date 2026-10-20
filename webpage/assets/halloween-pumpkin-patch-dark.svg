@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="520" height="480" viewBox="0 0 520 480" role="img" aria-labelledby="title" data-scene="pumpkin-patch" data-theme="dark">
+    <title id="title">Pumpkin patch</title>
+    <rect width="520" height="480" rx="26" fill="#241827"/>
+    <circle cx="382" cy="86" r="52" fill="#f4ce79"/><circle cx="406.96" cy="73.52" r="42.64" fill="#241827"/><path transform="translate(150 87) scale(0.7)" d="M0 0-5-9-9-3Q-29-24-52-14q15 5 11 22 14-11 21 5Q-7 5 0 14 7 5 20 13q7-16 21-5-4-17 11-22Q29-24 9-3L5-9Z" fill="#ffba77"/>
+      <path d="M16 341Q129 230 254 326T504 308V458H16Z" fill="#a1b96d"/>
+      <path d="M16 409Q170 342 300 405T504 394V480H16Z" fill="#ffba77"/>
+      <path d="M244 450q-47-65 25-114t-8-57" fill="none" stroke="#f4ce79" stroke-width="20" stroke-linecap="round"/>
+      <g transform="translate(118 351) scale(1.25)">
+    <path d="M-4-38q-4-20 12-26" fill="none" stroke="#a1b96d" stroke-width="9" stroke-linecap="round"/>
+    <ellipse rx="55" ry="43" fill="#ed985b" stroke="#fff5e8" stroke-width="3"/>
+    <ellipse rx="30" ry="43" fill="none" stroke="#fff5e8" stroke-width="2"/>
+    <path d="M-30-8l10-13 8 13M12-8l8-13 10 13" fill="#fff5e8"/>
+    <path d="M-21 9q21 26 42 0" fill="#f4ce79" stroke="#fff5e8" stroke-width="3" stroke-linejoin="round"/>
+  </g><g transform="translate(389 378) scale(1.5)">
+    <path d="M-4-38q-4-20 12-26" fill="none" stroke="#a1b96d" stroke-width="9" stroke-linecap="round"/>
+    <ellipse rx="55" ry="43" fill="#ed985b" stroke="#fff5e8" stroke-width="3"/>
+    <ellipse rx="30" ry="43" fill="none" stroke="#fff5e8" stroke-width="2"/>
+    <path d="M-30-8l10-13 8 13M12-8l8-13 10 13" fill="#fff5e8"/>
+    <path d="M-21 9q21 26 42 0" fill="#f4ce79" stroke="#fff5e8" stroke-width="3" stroke-linejoin="round"/>
+  </g><g transform="translate(310 304) scale(0.65)">
+    <path d="M-4-38q-4-20 12-26" fill="none" stroke="#a1b96d" stroke-width="9" stroke-linecap="round"/>
+    <ellipse rx="55" ry="43" fill="#ed985b" stroke="#fff5e8" stroke-width="3"/>
+    <ellipse rx="30" ry="43" fill="none" stroke="#fff5e8" stroke-width="2"/>
+    <path d="M-30-8l10-13 8 13M12-8l8-13 10 13" fill="#fff5e8"/>
+    <path d="M-21 9q21 26 42 0" fill="#f4ce79" stroke="#fff5e8" stroke-width="3" stroke-linejoin="round"/>
+  </g><g transform="translate(263 192) scale(1.1)">
+    <path d="M-42 47V-12a42 42 0 0 1 84 0v59L22 35 0 49-22 35Z" fill="#302231" stroke="#ffba77" stroke-width="3"/>
+    <ellipse cx="-14" cy="-8" rx="4" ry="7" fill="#fff5e8"/><ellipse cx="14" cy="-8" rx="4" ry="7" fill="#fff5e8"/>
+    <path d="M-8 11q8 9 16 0" fill="none" stroke="#fff5e8" stroke-width="3" stroke-linecap="round"/>
+    <ellipse cx="-25" cy="7" rx="7" ry="4" fill="#ed985b" opacity=".55"/><ellipse cx="25" cy="7" rx="7" ry="4" fill="#ed985b" opacity=".55"/>
+  </g>
+      <path d="M58 433q-30-51 5-77m-5 57q40-44 61-6" fill="none" stroke="#f4ce79" stroke-width="5"/>
+  </svg>

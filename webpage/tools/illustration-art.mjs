@@ -1,4 +1,5 @@
 import { getEra } from "../scripts/eras.js";
+import { halloweenMotifs, renderHalloweenHeader } from "./halloween-art.mjs";
 
 const illustrations = {
   journey: { era: "1960s", height: 840, draw: journey },
@@ -59,70 +60,34 @@ export function renderIllustration(id, mode) {
   </defs>
   <rect width="1100" height="${height}" fill="${p.paper}"/>
   ${art}
+  <g aria-hidden="true">${halloweenMotifs(p).ghost(1028, 75, .45)}${halloweenMotifs(p).star(984, 37, .5)}</g>
 </svg>`;
 }
 
-function journey(p, { text, path, number, heading }, prefix) {
-  const road = "M140 645C158 560 243 566 245 490S335 330 465 365 629 552 700 490 790 329 935 320";
-  const rays = Array.from({ length: 12 }, (_, index) => {
-    const angle = index * Math.PI / 6;
-    const point = (radius) => `${940 + Math.cos(angle) * radius} ${185 + Math.sin(angle) * radius}`;
-    return path(`M${point(50)}L${point(70)}`, { stroke: p.c, width: 7 });
-  }).join("");
+function journey(p, { text, path, number, heading }) {
+  const { pumpkin, ghost, moon, bat, star } = halloweenMotifs(p);
+  const stops = [
+    [135, 287, "01", "Start here", "Pumpkin patch"],
+    [410, 287, "02", "Meet the app", "Haunted library"],
+    [685, 287, "03", "Get ready", "Trick-or-treat porch"],
+    [960, 287, "04", "Assess", "Ghost detective bureau"],
+    [825, 589, "05", "Plan", "Witch's spellbook"],
+    [510, 589, "06", "Upgrade & run", "Monster laboratory"],
+    [190, 589, "07", "Azure plan", "Moonlit sky"]
+  ];
   return {
-    title: "A route to modernization",
-    description: "A travel-poster road follows seven course chapters in order: 01 Start here, 02 Meet the app, 03 Get ready, 04 Assess, 05 Plan, 06 Upgrade and run, and 07 Azure plan.",
-    defs: `<clipPath id="${prefix}-landscape"><rect x="35" y="171" width="1030" height="492" rx="8"/></clipPath>`,
-    art: `<rect x="24" y="24" width="1052" height="792" rx="8" fill="none" stroke="${p.line}" stroke-width="2"/>
-      ${heading("A route to modernization", "Keep the working application in view.", { font: "Georgia, Times New Roman, serif", size: 51 })}
-      ${rays}<circle cx="940" cy="185" r="37" fill="${p.c}"/>
-      <g clip-path="url(#${prefix}-landscape)">
-        <path d="M35 519Q187 305 349 422T628 382T1065 442V663H35Z" fill="${p.soft}"/>
-        <path d="M35 594Q211 463 414 570T785 523T1065 556V663H35Z" fill="${p.a}" opacity=".22"/>
-        <path d="M35 636Q257 601 429 634T788 612T1065 635V663H35Z" fill="${p.a}" opacity=".35"/>
-        ${path(road, { stroke: p.surface, width: 70 })}
-        ${path(road, { stroke: p.accent, width: 56 })}
-        ${path(road, { stroke: p.accentText, width: 3, dash: "11 17" })}
-        ${path("M191 574l10-14-17 3M355 353l18 1-12 12M578 428l13 15-18-3M803 371l17-9-6 17", { stroke: p.accentText, width: 4 })}
-      </g>
-      ${text(64, 201, "THE REQUIRED ROUTE", { size: 18, weight: 700, spacing: 2, fill: p.muted })}
-      <circle cx="193" cy="570" r="29" fill="${p.surface}" stroke="${p.accent}" stroke-width="4"/>
-      <path d="M181 558q12-13 24 0v19h-6v-18q-6-7-12 0v18h-6Z" fill="${p.b}"/>
-      ${path("M226 570h24", { stroke: p.accent, width: 3 })}
-      ${text(268, 580, "Setup", { size: 29, weight: 700, font: "Georgia, serif" })}
-      ${number(140, 645, "00", p.c, "#102e2a", 27)}
-      ${text(140, 711, "Meet the app", { size: 29, weight: 700, anchor: "middle", font: "Georgia, serif" })}
-      ${text(140, 744, "Start here", { size: 20, anchor: "middle", fill: p.muted })}
-      <g transform="translate(130 355)">
-        <circle r="43" fill="${p.surface}" stroke="${p.accent}" stroke-width="4"/>
-        <circle r="33" fill="none" stroke="${p.line}" stroke-width="2"/>
-        <path d="M0-32L12 10 0 24-12-10Z" fill="${p.b}"/>
-        <path d="M0-32V24L-12-10Z" fill="${p.a}"/>
-        <circle r="5" fill="${p.ink}"/>
-      </g>
-      ${text(130, 438, "Assess", { size: 29, weight: 700, anchor: "middle", font: "Georgia, serif" })}
-      ${number(245, 490, "01", p.c, "#102e2a", 27)}
-      ${text(465, 306, "Plan", { size: 30, weight: 700, anchor: "middle", font: "Georgia, serif" })}
-      ${number(465, 365, "02", p.c, "#102e2a", 27)}
-      <g transform="translate(414 446) rotate(-7 52 37)">
-        <path d="M0 6L36-3 71 9 106 0v76L71 85 36 72 0 81Z" fill="${p.surface}" stroke="${p.accent}" stroke-width="3"/>
-        <path d="M36-3v75M71 9v76" stroke="${p.line}" stroke-width="2"/>
-        ${path("M12 61L28 39 50 49 76 25 92 30", { stroke: p.b, width: 5, dash: "3 7" })}
-        <circle cx="92" cy="30" r="6" fill="${p.accent}"/>
-      </g>
-      <g transform="translate(667 349) rotate(15 25 30)">
-        <path d="M14 4C-4 9-3 33 13 41v47a12 12 0 0 0 24 0V41C54 29 51 10 37 4v20H14Z" fill="${p.b}" stroke="${p.surface}" stroke-width="4"/>
-        <circle cx="25" cy="87" r="4" fill="${p.surface}"/>
-      </g>
-      ${number(700, 490, "03", p.c, "#102e2a", 27)}
-      ${text(670, 586, "Upgrade & run", { size: 29, weight: 700, anchor: "middle", font: "Georgia, serif" })}
-      ${text(670, 621, "Review the changes", { size: 20, anchor: "middle", fill: p.muted })}
-      ${text(924, 281, "Azure plan", { size: 29, weight: 700, anchor: "middle", font: "Georgia, serif" })}
-      ${number(935, 320, "04", p.c, "#102e2a", 27)}
-      ${text(911, 714, "Azure plan", { size: 25, weight: 700, anchor: "middle", font: "Georgia, serif" })}
-      ${text(911, 746, "Review the migration plan", { size: 19, anchor: "middle", fill: p.muted })}
-      ${path("M319 756h210M319 768h161M319 780h188", { stroke: p.line, width: 2, opacity: .4 })}
-      <circle cx="581" cy="766" r="18" fill="none" stroke="${p.line}" stroke-width="2" opacity=".4"/>`
+    title: "A friendly-spooky route to modernization",
+    description: "A Halloween trail follows seven course chapters in order: 01 Start here, 02 Meet the app, 03 Setup and get ready, 04 Assess, 05 Plan, 06 Upgrade and run, and 07 Azure plan. Each stop has its own friendly Halloween setting.",
+    art: `${heading("A little spooky. A new foundation.", "Seven stops. One working application.", { font: "Georgia, serif", size: 46 })}
+      ${path("M135 287H960Q1060 438 825 589H190", { stroke: p.a, width: 32 })}
+      ${path("M135 287H960Q1060 438 825 589H190", { stroke: p.surface, width: 3, dash: "7 13" })}
+      ${stops.map(([x, y, n, title, scene]) => `${number(x, y, n)}
+        ${text(x, y + 62, title, { size: 27, weight: 700, anchor: "middle" })}
+        ${text(x, y + 95, scene, { size: 17, anchor: "middle", fill: p.muted })}`).join("")}
+      ${pumpkin(135, 211, .8)}${ghost(410, 209, .7)}${pumpkin(685, 214, .65)}
+      ${ghost(960, 211, .7)}${star(825, 506, 1.7)}${ghost(510, 507, .7)}${moon(190, 505, 37)}
+      ${bat(422, 434, .7)}${star(729, 425)}${star(94, 460, .8)}
+      ${text(550, 762, "Keep the learning. Leave the cobwebs behind.", { size: 25, anchor: "middle", fill: p.muted })}`
   };
 }
 
@@ -202,25 +167,7 @@ function starburst(x, y, radius, fill) {
 }
 
 export function renderSoundcheckHeader(mode) {
-  if (!["light", "dark"].includes(mode)) throw new Error(`Unknown illustration theme: ${mode}`);
-  const p = getEra("soundcheck")[mode];
-  const { text, path } = primitives(p, `soundcheck-header-${mode}`);
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="520" height="480" viewBox="0 0 520 480" data-era="soundcheck" data-theme="${mode}">
-    <title>Soundcheck concert poster</title>
-    <rect x="12" y="12" width="496" height="456" rx="130" fill="${p.paper}"/>
-    ${path("M-20 295C119 482 139 63 307 80S462 378 553 188", { stroke: p.a, width: 28 })}
-    ${path("M-20 326C119 513 139 94 307 111S462 409 553 219", { stroke: p.b, width: 19 })}
-    ${path("M-20 350C119 537 139 118 307 135S462 433 553 243", { stroke: p.c, width: 12 })}
-    ${starburst(424, 89, 63, p.b)}
-    ${starburst(75, 390, 48, p.a)}
-    <g transform="rotate(-6 260 248)">
-      <path d="M54 212Q260 78 466 202L451 318Q268 387 69 325Z" fill="${p.accent}"/>
-      ${text(260, 236, "SOUND", { size: 87, weight: 700, anchor: "middle", fill: p.accentText, font: "Georgia, Times New Roman, serif", spacing: -6 })}
-      ${text(260, 311, "CHECK", { size: 87, weight: 700, anchor: "middle", fill: p.accentText, font: "Georgia, Times New Roman, serif", spacing: -6 })}
-    </g>
-    <path d="M159 367h239v17a14 14 0 0 0 0 28v17H159v-17a14 14 0 0 0 0-28Z" fill="${p.surface}" stroke="${p.accent}" stroke-width="2"/>
-    ${text(278, 406, "READY TO RUN", { size: 24, weight: 700, anchor: "middle", spacing: 2 })}
-  </svg>`;
+  return renderHalloweenHeader("soundcheck", mode);
 }
 
 function soundcheck(p, { text, path }) {
@@ -231,8 +178,8 @@ function soundcheck(p, { text, path }) {
     ${text(x + 150, 499, title, { size: 31, weight: 700, anchor: "middle", font: "Georgia, Times New Roman, serif" })}
     ${text(x + 150, 550, lines, { size: 23, anchor: "middle", fill: p.muted })}`;
   return {
-    title: "Soundcheck: get ready",
-    description: "A concert poster with three numbered tickets: 1 Check tools and Copilot access; 2 Open the BookCatalog solution in a learner copy; 3 Run the app, add a sample book, and edit it. Already set up? Go straight to running BookCatalog. Flowing ribbons connect the tickets, but the body instructions remain plain and readable.",
+    title: "Trick-or-treat: get ready",
+    description: "Three trick-or-treat tickets show the setup sequence: 1 Check tools and Copilot access; 2 Open the BookCatalog solution in a learner copy; 3 Run the app, add a sample book, and edit it. Already set up? Go straight to running BookCatalog. Friendly ghosts and candy colors decorate the tickets, but the body instructions remain plain and readable.",
     art: `<rect x="24" y="24" width="1052" height="802" rx="38" fill="none" stroke="${p.accent}" stroke-width="3"/>
       <g transform="translate(0 48)">
       ${path("M-30 312C118 163 218 417 409 310S706 89 868 258 1027 321 1140 259", { stroke: p.a, width: 27 })}
@@ -241,10 +188,9 @@ function soundcheck(p, { text, path }) {
       </g>
       ${text(69, 71, "BEFORE THE FIRST REPORT", { size: 23, weight: 700, spacing: 3, fill: p.muted })}
       <g transform="rotate(-4 455 174)">
-        ${text(61, 214, "Soundcheck", { size: 105, weight: 700, font: "Georgia, Times New Roman, serif", spacing: -5, fill: p.accent })}
+        ${text(61, 214, "Trick or treat?", { size: 85, weight: 700, font: "Georgia, Times New Roman, serif", spacing: -3, fill: p.accent })}
       </g>
-      ${starburst(948, 153, 82, p.b)}
-      ${starburst(948, 153, 42, p.c)}
+      ${halloweenMotifs(p).pumpkin(947, 193, 1.2)}
       ${ticket(60, "01", "Check tools", ["Installed tools", "+ Copilot access"])}
       ${ticket(400, "02", "Open the app", ["BookCatalog solution", "in your learner copy"])}
       ${ticket(740, "03", "Try the app", ["Run, add a book,", "then edit it"])}

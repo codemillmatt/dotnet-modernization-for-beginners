@@ -13,9 +13,9 @@ export const illustrations = [
   },
   {
     id: "soundcheck", document: "03-prerequisites/README.md", era: "soundcheck",
-    title: "Soundcheck: get ready",
+    title: "Trick-or-treat: get ready",
     caption: "Check your tools, open BookCatalog, and try the app before the assessment.",
-    description: "Three soundcheck tickets show the setup sequence: check your installed tools and Copilot access, open the BookCatalog solution in your learner copy, then run the app and try adding and editing a sample book. If your tools are ready, go straight to running BookCatalog."
+    description: "Three trick-or-treat tickets show the setup sequence: check your installed tools and Copilot access, open the BookCatalog solution in your learner copy, then run the app and try adding and editing a sample book. If your tools are ready, go straight to running BookCatalog."
   },
   {
     id: "investigation", document: "04-assessment/README.md", era: "1980s",

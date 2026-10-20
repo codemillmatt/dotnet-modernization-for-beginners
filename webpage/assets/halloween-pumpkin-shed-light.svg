@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="520" height="480" viewBox="0 0 520 480" role="img" aria-labelledby="title" data-scene="pumpkin-shed" data-theme="light">
+    <title id="title">Pumpkin shed</title>
+    <rect width="520" height="480" rx="26" fill="#ead5b8"/>
+    <path d="M45 178 258 37l216 141Z" fill="#cc783b" stroke="#835124" stroke-width="5"/>
+      <path d="M68 178h385v259H68Z" fill="#f1e2cc" stroke="#835124" stroke-width="5"/>
+      <path d="M100 181v250m64-250v250m64-250v250m64-250v250m64-250v250m64-250v250" stroke="#99849d" stroke-width="2"/>
+      <path d="M88 323h344" stroke="#835124" stroke-width="10"/>
+      <g transform="translate(155 285) scale(1)">
+    <path d="M-4-38q-4-20 12-26" fill="none" stroke="#899c56" stroke-width="9" stroke-linecap="round"/>
+    <ellipse rx="55" ry="43" fill="#cc783b" stroke="#291d30" stroke-width="3"/>
+    <ellipse rx="30" ry="43" fill="none" stroke="#291d30" stroke-width="2"/>
+    <path d="M-30-8l10-13 8 13M12-8l8-13 10 13" fill="#291d30"/>
+    <path d="M-21 9q21 26 42 0" fill="#d5b66e" stroke="#291d30" stroke-width="3" stroke-linejoin="round"/>
+  </g><g transform="translate(346 387) scale(1.1)">
+    <path d="M-4-38q-4-20 12-26" fill="none" stroke="#899c56" stroke-width="9" stroke-linecap="round"/>
+    <ellipse rx="55" ry="43" fill="#cc783b" stroke="#291d30" stroke-width="3"/>
+    <ellipse rx="30" ry="43" fill="none" stroke="#291d30" stroke-width="2"/>
+    <path d="M-30-8l10-13 8 13M12-8l8-13 10 13" fill="#291d30"/>
+    <path d="M-21 9q21 26 42 0" fill="#d5b66e" stroke="#291d30" stroke-width="3" stroke-linejoin="round"/>
+  </g>
+      <path d="M337 202v75m-19-75h38m-34 75h29" stroke="#835124" stroke-width="8" stroke-linecap="round"/>
+      <path transform="translate(259 126) scale(1.2)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#d5b66e"/>
+  </svg>

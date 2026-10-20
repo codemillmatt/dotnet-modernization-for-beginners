@@ -96,41 +96,41 @@ Recorded examples use exact filenames, including their images. Never allowlist a
 The sample ZIP includes these curated files and images.
 Links to lessons outside the ZIP, including Setup, point to `microsoft/dotnet-modernization-for-beginners` instead.
 
-The Start page uses the retro-resort design. The chapter controls the visual era. Your saved light/dark choice remains separate.
+The Start page welcomes learners into a friendly Halloween pumpkin patch. Each chapter has its own Halloween setting. Your saved light/dark choice remains separate.
 
-## Visual eras
+## Halloween journey
 
 The full interface changes with each chapter. Light/dark mode remains a separate choice.
 
-| Page | Era | Main accents |
+| Page | Setting | Visual language |
 | --- | --- | --- |
-| Start | 1960s | Resort-poster illustration and geometric sunbursts |
-| Meet the app and tools | 1970s | Broad curved stripes and warm layered panels |
-| Setup | Soundcheck interlude | Cream concert poster, plum lettering, orange and teal ribbons, starbursts, and tickets |
-| Assess the app | 1980s | Large angular shapes and bright geometric frames |
-| Choose the plan | 1990s | Beveled controls and desktop-style panels |
-| Upgrade and check | 2000s / 2010s | Glossy details and layered web-app surfaces |
-| Plan for Azure | 2020s | Sculptural shapes and quieter controls |
+| Start | Pumpkin patch | Harvest orange, pumpkin-shaped markers, an illustrated trail, and a smiling ghost |
+| Meet the app and tools | Haunted library | Moss-green book spines, serif type, double rules, and an arched reading room |
+| Setup | Trick-or-treat porch | Candy pink and plum, dashed tickets, porch lights, and friendly pumpkins |
+| Assess the app | Ghost detective bureau | Misty blue, case-file frames, typewriter headings, and a ghost under a magnifying glass |
+| Choose the plan | Witch's spellbook | Lilac, ornamental book covers, page-like panels, and an illustrated witch's hat |
+| Upgrade and check | Monster laboratory | Botanical green, bolted-looking controls, potion glassware, and a smiling monster |
+| Plan for Azure | Moonlit sky | Twilight blue, crescent moon, bats, stars, and cloud-shaped curves |
 
-`scripts/chapters.js` selects the era. `scripts/eras.js` supplies its palettes and typography.
+`scripts/chapters.js` selects a stable internal era ID. `scripts/eras.js` maps it to a Halloween scene, palettes, typography, and header assets. Keep those IDs unchanged; the seasonal theme doesn't change routes, chapter order, or saved progress.
 
-The reader sets `data-era` before it loads chapter content. `data-theme` retains the selected color mode.
+The reader sets `data-era` and `data-scene` before it loads chapter content. `data-theme` retains the selected color mode.
 
-Most references use a quiet 2020s treatment.
+Most references use the readable moonlit sky treatment.
 The overview's local **Samples and help** pages each use a theme tied to their purpose.
-The legacy quickstart has a workshop-manual theme with olive ink, brass accents, typewriter headings, and an illustrated parts cabinet.
-The instructor companion has a mission-briefing theme with navy and cyan, a planning-board illustration, and structured section markers.
+The legacy quickstart uses a pumpkin shed with timber colors and an illustrated tool shelf.
+The instructor companion uses a raven's lookout with slate-blue panels and an illustrated watchful bird.
 Each local Samples and help page has its own theme. None reuses a chapter theme.
-The previous BookCatalog sample run uses a 1950s test-flight-log theme: ivory, navy, orange accents, and an original illustrated logbook.
+The previous BookCatalog sample run uses a ghost story scrapbook with rose-brown paper, dashed frames, and a friendly ghost photograph.
 Dated tabs link to the September 18 launch and September 21 assessment and upgrade attempt.
 The theme doesn't imply a completed upgrade. The page keeps its unfinished checks explicit.
 Its linked excerpts retain the quiet reference style.
-The completed BookCatalog reference uses a 2050s archive theme, with an illuminated book and circuit-style details.
+The completed BookCatalog reference uses an enchanted conservatory with a greenhouse arch, climbing plants, and a ghost reading a book.
 Its light and dark modes keep the instructions and code readable.
 The theme applies to the course page, not to the BookCatalog application's forms.
 References look the same on direct access and after chapter navigation.
-Setup doesn't move the existing eras to other chapters.
-Its expressive lettering stays in the header and artwork. Instructions and code use readable fonts.
+The themes stay friendly: no jump scares, flashing, gore, or decoration behind lesson text.
+Expressive lettering stays in headings and artwork. Instructions and code use readable fonts.
 No page needs a visible decade badge.
 
 ## Course illustrations
@@ -141,7 +141,7 @@ The READMEs embed ordinary SVG images with descriptive alternative text. They wo
 The website switches between light and dark image files when the reader changes the theme.
 Each image has a full-size link and an expandable text explanation. These remain useful on small screens.
 
-Edit the artwork in `tools/illustration-art.mjs`. Edit captions and descriptions in `scripts/illustrations.js`.
+Edit lesson artwork in `tools/illustration-art.mjs` and Halloween header scenes in `tools/halloween-art.mjs`. Edit captions and descriptions in `scripts/illustrations.js`.
 Edit the shared colors in `scripts/eras.js`. Do not edit the generated SVG files by hand.
 
 After changing artwork or palettes, regenerate the images from the repository root:
@@ -151,7 +151,7 @@ npm run illustrations
 npm run build
 ```
 
-The generator also creates both soundcheck header variants in `assets/`.
+The generator also creates light and dark header variants for every Halloween scene in `assets/`.
 The build checks that the saved images match their source. It stops with regeneration instructions if an image is missing or outdated.
 Include both variants from `docs/illustrations/` when committing an artwork change.
 README wording changes need only a normal site build.

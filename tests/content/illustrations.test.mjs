@@ -7,6 +7,7 @@ import { illustrations, illustrationPath } from "../../webpage/scripts/illustrat
 import { eras } from "../../webpage/scripts/eras.js";
 import { renderIllustration, renderSoundcheckHeader } from "../../webpage/tools/illustration-art.mjs";
 import { renderIllustrations } from "../../webpage/tools/render-illustrations.mjs";
+import { renderHalloweenHeader } from "../../webpage/tools/halloween-art.mjs";
 
 const root = resolve(import.meta.dirname, "../..");
 
@@ -52,13 +53,25 @@ test("the tool-first artwork includes setup and keeps technical relationships ac
   assert.match(text("azure"), /creates the schema from the EF Core model and adds demo seed data/);
 });
 
-test("soundcheck headers are generated for both modes without external or animated artwork", async () => {
+test("Halloween headers are distinct and generated for every stop in both modes", async () => {
+  assert.equal(new Set(Object.values(eras).map(era => era.scene)).size, Object.keys(eras).length);
+  const variants = new Set();
+  for (const [id, era] of Object.entries(eras)) {
+    for (const [mode, file] of [["light", era.art], ["dark", era.artDark]]) {
+      const svg = renderHalloweenHeader(id, mode);
+      assert.equal((await readFile(resolve(root, "webpage/assets", file), "utf8")).trim(), svg.trim());
+      assert.ok(svg.includes(`data-scene="${era.scene}"`));
+      assert.ok(svg.includes(era[mode].paper));
+      assert.doesNotMatch(svg, /<image|<script|<animate|(?:href|src)=["']https?:/);
+      variants.add(svg);
+    }
+  }
+  assert.equal(variants.size, Object.keys(eras).length * 2);
   for (const [mode, file] of [["light", eras.soundcheck.art], ["dark", eras.soundcheck.artDark]]) {
     const svg = renderSoundcheckHeader(mode);
     assert.equal((await readFile(resolve(root, "webpage/assets", file), "utf8")).trim(),
       svg.trim().replace(/[ \t]+$/gm, ""));
-    assert.match(svg, /SOUND/);
-    assert.match(svg, /CHECK/);
+    assert.match(svg, /Trick-or-treat porch/);
     assert.ok(svg.includes(eras.soundcheck[mode].paper));
     assert.doesNotMatch(svg, /<image|<script|<animate|(?:href|src)=["']https?:|1960s|1970s/);
   }

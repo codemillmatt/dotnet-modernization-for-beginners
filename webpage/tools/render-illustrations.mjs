@@ -3,8 +3,9 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 import { illustrations, illustrationPath } from "../scripts/illustrations.js";
-import { renderIllustration, renderSoundcheckHeader } from "./illustration-art.mjs";
-import { getEra } from "../scripts/eras.js";
+import { renderIllustration } from "./illustration-art.mjs";
+import { renderHalloweenHeader } from "./halloween-art.mjs";
+import { eras } from "../scripts/eras.js";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 
@@ -15,9 +16,10 @@ export async function renderIllustrations({ check = false } = {}) {
       outputs.push([illustrationPath(illustration.id, mode), renderIllustration(illustration.id, mode)]);
     }
   }
-  const soundcheck = getEra("soundcheck");
-  for (const [mode, file] of [["light", soundcheck.art], ["dark", soundcheck.artDark]]) {
-    outputs.push([`webpage/assets/${file}`, renderSoundcheckHeader(mode)]);
+  for (const [id, era] of Object.entries(eras)) {
+    for (const [mode, file] of [["light", era.art], ["dark", era.artDark]]) {
+      outputs.push([`webpage/assets/${file}`, renderHalloweenHeader(id, mode)]);
+    }
   }
   for (const [path, artwork] of outputs) {
     const file = join(root, path);

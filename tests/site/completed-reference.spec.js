@@ -17,7 +17,8 @@ for (const [hosting, base] of [["subpath", "/workshop/"], ["root", "http://127.0
       await expect(page.locator("html")).toHaveAttribute("data-theme", mode);
       expect(await page.locator("html").evaluate(element => element.style.getPropertyValue("--paper")))
         .toBe(eraPalette("2050s", mode).paper);
-      await expect(page.locator(".future-kicker")).toHaveText("2050s / After the upgrade");
+      await expect(page.locator(".future-kicker")).toHaveText("After the upgrade");
+      await expect(page.locator("html")).toHaveAttribute("data-scene", "enchanted-garden");
       await expect(page.locator(".future-stack")).toContainText(".NET 10");
       await expect(page.locator("#article > p").first()).toContainText("You'll run a completed .NET 10 application");
       await expect(page.locator("#article")).toContainText("Docker");
@@ -25,8 +26,8 @@ for (const [hosting, base] of [["subpath", "/workshop/"], ["root", "http://127.0
       await expect(page.locator("[data-complete]")).toHaveCount(0);
       await expect(page.locator("#course-progress")).toHaveText("1 of 7 required steps complete");
       await expect(page.locator("#resume-link")).toHaveAttribute("href", "#/02-planning");
-      const art = page.locator(".future-intro .era-art");
-      await expect(art).toHaveAttribute("src", /\/assets\/era-2050s.svg$/);
+      const art = page.locator(".future-intro .era-art:visible");
+      await expect(art).toHaveAttribute("src", new RegExp(`/assets/halloween-enchanted-garden-${mode}.svg$`));
       await expect.poll(() => art.evaluate(image => image.complete && image.naturalWidth > 0)).toBeTruthy();
 
       for (const width of [1440, 390, 320]) {

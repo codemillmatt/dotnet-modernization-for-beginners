@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="520" height="480" viewBox="0 0 520 480" role="img" aria-labelledby="title" data-scene="monster-lab" data-theme="light">
+    <title id="title">Monster laboratory</title>
+    <rect width="520" height="480" rx="26" fill="#e0edc8"/>
+    <path d="M46 408H475M66 424v35m390-35v35" stroke="#426124" stroke-width="12"/>
+      <path d="M90 190V105h56v85l58 162q13 40-30 40H63q-40 0-26-40Z" fill="#f9fdeb" stroke="#426124" stroke-width="5"/>
+      <path d="M64 281h108l25 73q9 28-23 28H63q-27 0-18-28Z" fill="#96b45b"/>
+      <circle cx="115" cy="316" r="8" fill="#f9fdeb"/><circle cx="145" cy="352" r="12" fill="#f9fdeb"/>
+      <path d="M273 175h150v187q0 40-75 40t-75-40Z" fill="#96b45b" stroke="#426124" stroke-width="5"/>
+      <path d="M269 174v-43l29 14 25-21 25 18 30-17 28 17 22-13v45" fill="#426124"/>
+      <path d="M247 256h25m152 0h26" stroke="#99849d" stroke-width="16"/>
+      <circle cx="318" cy="248" r="9" fill="#291d30"/><circle cx="380" cy="248" r="9" fill="#291d30"/>
+      <path d="M320 301q29 30 58 0m-37 11v10m17-10v10" fill="none" stroke="#291d30" stroke-width="5"/>
+      <path transform="translate(238 91) scale(1)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#dcad60"/><path transform="translate(153 64) scale(0.6)" d="M0-14 4-4 14 0 4 4 0 14-4 4-14 0-4-4Z" fill="#dcad60"/>
+      <circle cx="112" cy="66" r="11" fill="#96b45b"/><circle cx="91" cy="37" r="6" fill="#96b45b"/>
+  </svg>
